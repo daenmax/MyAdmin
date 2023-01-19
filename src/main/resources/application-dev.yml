@@ -1,0 +1,6 @@
+# 测试环境
+server:
+  port: 8033
+  servlet:
+    context-path: /my
+
