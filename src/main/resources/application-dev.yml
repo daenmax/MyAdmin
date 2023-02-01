@@ -61,11 +61,11 @@ spring:
         password: myadmin
         driverClassName: com.mysql.cj.jdbc.Driver
       # 从数据库源
-      slave:
-        url: jdbc:mysql://127.0.0.1:3306/dbtest?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
-        username: dbtest
-        password: dbtest
-        driverClassName: com.mysql.cj.jdbc.Driver
+#      slave:
+#        url: jdbc:mysql://127.0.0.1:3306/dbtest?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
+#        username: dbtest
+#        password: dbtest
+#        driverClassName: com.mysql.cj.jdbc.Driver
       # 从数据库源-oracle，需要用的话就放开注释
 #      slave-oracle:
 #        url: jdbc:oracle:thin:@//172.16.111.181:1521/orcl
