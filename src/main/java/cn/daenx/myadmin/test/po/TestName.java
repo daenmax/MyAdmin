@@ -16,7 +16,7 @@ import java.io.Serializable;
 @TableName(value = "test_name")
 public class TestName implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
+    private Long id;
 
     @TableField(value = "`name`")
     private String name;

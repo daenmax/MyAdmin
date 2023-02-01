@@ -12,15 +12,17 @@ logging:
   config: classpath:logback.xml
 
 
-# mybatis-plus
+#mybatis plus 设置
 mybatis-plus:
-  mapper-locations: classpath:/mapper/**/*.xml
+  mapper-locations: classpath*:/mapper/**/*.xml
   type-aliases-package: cn.daenx.myadmin.*.po
   global-config:
-    id-type: ASSIGN_UUID
-    db-column-underline: true
-    # 刷新mapper
-    refresh-mapper: true
-  # sql日志输出
+    banner: false # 关闭MP3.0自带的banner
+    db-config:
+      id-type: ASSIGN_UUID #主键类型  0:"数据库ID自增",1:"该类型为未设置主键类型", 2:"用户输入ID",3:"全局唯一ID (数字类型唯一ID)", 4:"全局唯一ID UUID",5:"字符串全局唯一ID (idWorker 的字符串表示)";
+      table-underline: true # 默认数据库表下划线命名
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true #使用驼峰原模原样对应
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql打印，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl #关闭ql打印
+    call-setters-on-nulls: true # 返回类型为Map,显示null对应的字段
