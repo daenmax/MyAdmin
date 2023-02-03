@@ -54,20 +54,24 @@ spring:
           #        allow: 127.0.0.1
           # 禁止访问的IP列表，(deny优先于allow)
       #        deny: 192.168.1.100
+      # 默认使用的数据库
       primary: master
       datasource:
+        # 主数据源，master是自己取的名字，你想叫啥就叫啥
         master:
           url: jdbc:mysql://127.0.0.1:3306/myadmin?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
           username: myadmin
           password: myadmin
           driverClassName: com.mysql.cj.jdbc.Driver
           type: com.alibaba.druid.pool.DruidDataSource
+        # 第二个数据源（如果用不到，就注释掉即可），slave是自己取的名字，你想叫啥就叫啥
         slave:
           url: jdbc:mysql://127.0.0.1:3306/dbtest?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
           username: dbtest
           password: dbtest
           driverClassName: com.mysql.cj.jdbc.Driver
           type: com.alibaba.druid.pool.DruidDataSource
+        # ORACLE数据库使用例子
 #        slave-oracle:
 #          url: jdbc:oracle:thin:@//172.16.111.181:1521/orcl
 #          username: myadmin
