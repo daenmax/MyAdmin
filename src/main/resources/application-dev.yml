@@ -4,6 +4,14 @@ server:
   servlet:
     context-path: /my
 
+# springdoc配置
+springdoc:
+  api-docs:
+    # 是否启用，生产环境一定要关闭
+    enabled: true
+    # API路由，一般用于导入到第三方API管理工具，受到上面开关影响
+    path: /doc
+
 # 数据库配置
 spring:
   datasource:
