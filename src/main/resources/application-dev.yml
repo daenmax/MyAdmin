@@ -12,8 +12,9 @@ springdoc:
     # API路由，一般用于导入到第三方API管理工具，受到上面开关影响
     path: /doc
 
-# 数据库配置
+
 spring:
+  # 数据库配置
   datasource:
     dynamic:
       druid:
@@ -85,3 +86,28 @@ spring:
 #          username: myadmin
 #          password: myadmin
 #          driverClassName: oracle.jdbc.OracleDriver
+
+  # redis配置
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password:
+      timeout: 2000
+      # 数据源序号
+      database: 8
+      # 集群环境打开下面注释，单机不需要打开
+#      cluster:
+        # 集群信息
+#        nodes: xxx.xxx.xxx.xxx:xxxx,xxx.xxx.xxx.xxx:xxxx,xxx.xxx.xxx.xxx:xxxx
+        # 默认值是5 一般当此值设置过大时，容易报：Too many Cluster redirections
+#        maxRedirects: 3
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 0
