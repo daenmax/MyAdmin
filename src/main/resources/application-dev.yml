@@ -7,9 +7,9 @@ server:
 # springdoc配置
 springdoc:
   api-docs:
-    # 是否启用，生产环境一定要关闭
+    # 是否启用在线文档，生产环境一定要关闭
     enabled: true
-    # API路由，一般用于导入到第三方API管理工具，受到上面开关影响
+    # API路由，一般用于导入到第三方API管理工具（例如ApiFox），受到上面开关影响
     path: /doc
 
 

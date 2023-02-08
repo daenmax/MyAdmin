@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.test.controller;
 
 import cn.daenx.myadmin.common.utils.RedisUtil;
+import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.test.po.TbUser;
 import cn.daenx.myadmin.test.po.TestName;
 import cn.daenx.myadmin.test.service.TbUserService;
@@ -34,10 +35,10 @@ public class TestController {
     @Operation(method = "肯定是GET啦", summary = "获取数据源一的数据", description = "我是description")
     @Parameter
     @GetMapping("/list1")
-    public String list1() {
+    public Result list1() {
         List<TestName> list = testNameService.list();
         System.out.println(list);
-        return "aaa";
+        return Result.ok(list);
     }
 
     /**
@@ -46,10 +47,10 @@ public class TestController {
      * @return
      */
     @GetMapping("/list2")
-    public String list2() {
+    public Result list2() {
         List<TbUser> list = tbUserService.list();
         System.out.println(list);
-        return "bbb";
+        return Result.ok(list);
     }
 
     /**
@@ -57,12 +58,11 @@ public class TestController {
      *
      * @return
      */
-    @GetMapping("/test")
-    public String test() {
+    @GetMapping("/test1")
+    public Result test1() {
         redisUtil.del("test");
         redisUtil.set("test", "你好啊");
         String test = (String) redisUtil.get("test");
-        System.out.println(test);
-        return "test";
+        return Result.ok("查询成功",test);
     }
 }
