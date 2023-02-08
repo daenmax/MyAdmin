@@ -1,29 +1,26 @@
 package cn.daenx.myadmin.test.po;
 
+import cn.daenx.myadmin.common.vo.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
+@EqualsAndHashCode(callSuper=true)
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "test_name")
-public class TestName implements Serializable {
+@TableName(value = "test_data")
+public class TestData extends BaseEntity implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private Long id;
+    private String id;
 
-    @TableField(value = "`name`")
-    private String name;
-
-    private static final long serialVersionUID = 1L;
-
-    public static final String COL_ID = "id";
-
-    public static final String COL_NAME = "name";
+    @TableField(value = "content")
+    private String content;
 }
