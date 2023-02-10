@@ -16,4 +16,36 @@
     <!--@mbg.generated-->
     id, content, create_id, create_time, update_id, update_time, is_delete
   </sql>
+
+  <select id="getPage" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
+    SELECT td.id          AS id,
+           td.content     AS content,
+           td.create_id   AS createId,
+           td.create_time AS createTime,
+           td.update_id   AS updateId,
+           td.update_time AS updateTime
+    FROM test_data td
+    <where>
+      <if test="vo.content != null and vo.content != ''">
+        and td.content like CONCAT('%', #{vo.content}, '%')
+      </if>
+    </where>
+    <choose>
+      <when test='vo.orderByColumn != null and vo.orderByColumn != ""'>
+        order by td.${vo.orderByColumn}
+        <choose>
+          <when test='vo.isAsc == null or vo.isAsc == "" or vo.isAsc == "ASC" or vo.isAsc == "asc" or vo.isAsc == "ascending"'>
+            ASC
+          </when>
+          <otherwise>
+            DESC
+          </otherwise>
+        </choose>
+      </when>
+      <otherwise>
+        order by td.update_time DESC
+      </otherwise>
+    </choose>
+
+    </select>
 </mapper>
