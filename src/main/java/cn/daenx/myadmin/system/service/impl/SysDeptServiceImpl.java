@@ -5,7 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysDeptMapper;
 import cn.daenx.myadmin.system.po.SysDept;
 import cn.daenx.myadmin.system.service.SysDeptService;
+
 @Service
-public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> implements SysDeptService{
+public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> implements SysDeptService {
 
 }
