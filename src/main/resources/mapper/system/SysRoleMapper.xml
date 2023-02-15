@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.daenx.myadmin.system.mapper.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysRole">
+    <!--@mbg.generated-->
+    <!--@Table sys_role-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="data_scope" jdbcType="INTEGER" property="dataScope" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="VARCHAR" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, code, sort, data_scope, `status`, remark, create_id, create_time, update_id, 
+    update_time, is_delete
+  </sql>
+</mapper>

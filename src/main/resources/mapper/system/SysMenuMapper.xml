@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.daenx.myadmin.system.mapper.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysMenu">
+    <!--@mbg.generated-->
+    <!--@Table sys_menu-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="query_param" jdbcType="VARCHAR" property="queryParam" />
+    <result column="component" jdbcType="VARCHAR" property="component" />
+    <result column="permission" jdbcType="VARCHAR" property="permission" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="visible" jdbcType="INTEGER" property="visible" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="is_frame" jdbcType="INTEGER" property="isFrame" />
+    <result column="is_cache" jdbcType="INTEGER" property="isCache" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="VARCHAR" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, parent_id, `name`, sort, `path`, query_param, component, permission, icon, visible, 
+    `status`, `type`, is_frame, is_cache, remark, create_id, create_time, update_id, 
+    update_time, is_delete
+  </sql>
+</mapper>
