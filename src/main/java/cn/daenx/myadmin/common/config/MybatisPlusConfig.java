@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.common.config;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +15,30 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        //分页插件
+        interceptor.addInnerInterceptor(paginationInnerInterceptor());
+        //乐观锁插件
+        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
         return interceptor;
+    }
+
+    /**
+     * 分页插件
+     */
+    private PaginationInnerInterceptor paginationInnerInterceptor() {
+        PaginationInnerInterceptor interceptor = new PaginationInnerInterceptor();
+        //分页的最大尺寸，-1为不限制
+        interceptor.setMaxLimit(500L);
+        //溢出总页数后是否进行处理(默认不处理
+        interceptor.setOverflow(true);
+        return interceptor;
+    }
+
+    /**
+     * 乐观锁插件
+     */
+    public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
+        return new OptimisticLockerInnerInterceptor();
     }
 
 }
