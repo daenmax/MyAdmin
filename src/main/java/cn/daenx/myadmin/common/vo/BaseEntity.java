@@ -50,7 +50,7 @@ public class BaseEntity<T extends Model<T>> extends Model<T> {
     private LocalDateTime updateTime;
 
     /**
-     * 是否删除，0=正常，1=已删除
+     * 是否删除，0=正常，1=删除
      */
     @TableLogic(value = "0", delval = "1")
     @TableField(value = "is_delete")
