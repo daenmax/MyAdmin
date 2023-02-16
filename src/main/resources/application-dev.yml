@@ -10,7 +10,7 @@ springdoc:
     # 是否启用在线文档，生产环境一定要关闭
     enabled: true
     # API路由，一般用于导入到第三方API管理工具（例如ApiFox），受到上面开关影响
-    path: /doc
+    path: /api-docs
 
 
 spring:
@@ -140,8 +140,8 @@ sa-token:
 captcha:
   # 图片验证码
   img:
-    # 验证码类型，1=线段干扰的验证码，2=圆圈干扰验证码，3=扭曲干扰验证码，4=GIF，5=加减法（待实现）
-    type: 4
+    # 验证码类型，1=线段干扰的验证码，2=圆圈干扰验证码，3=扭曲干扰验证码，4=GIF，5=加减运算
+    type: 5
     # 宽度
     width: 200
     # 高度
@@ -151,3 +151,16 @@ captcha:
     # 线段干扰元素数/线段干扰元素数/扭曲干扰线宽度
     olCount: 10
   sms:
+# security配置
+security:
+  # 排除路径
+  excludes:
+    # 静态资源
+    - /*.html
+    - /**/*.html
+    - /**/*.css
+    - /**/*.js
+    # swagger 文档配置
+    - /favicon.ico
+    - /*/api-docs
+    - /*/api-docs/**

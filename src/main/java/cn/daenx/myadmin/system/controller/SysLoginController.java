@@ -6,6 +6,7 @@ import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.service.TestDataService;
 import cn.daenx.myadmin.test.vo.TestDataPageVo;
+import cn.dev33.satoken.annotation.SaIgnore;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +26,7 @@ public class SysLoginController {
      * @param vo
      * @return
      */
+    @SaIgnore
     @PostMapping("/login")
     public Result login(@RequestBody @Validated SysLoginVo vo) {
         String token = sysLoginService.login(vo);
