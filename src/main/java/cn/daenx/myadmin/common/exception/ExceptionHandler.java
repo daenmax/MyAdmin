@@ -10,7 +10,6 @@ import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
@@ -19,12 +18,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class ExceptionHandler {
 
     /**
      * 拦截未知的运行时异常
      */
-    @ExceptionHandler(RuntimeException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)
     public Result handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         String msg = e.getMessage();
         if (msg.contains("Required request body is missing")) {
@@ -37,7 +36,7 @@ public class GlobalExceptionHandler {
     /**
      * 系统异常
      */
-    @ExceptionHandler(Exception.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     public Result handleException(Exception e, HttpServletRequest request) {
         log.error("请求地址->{},发生系统异常.", request.getRequestURI(), e);
         return Result.error(e.getMessage());
@@ -46,7 +45,7 @@ public class GlobalExceptionHandler {
     /**
      * 认证失败或者未登录
      */
-    @ExceptionHandler(NotLoginException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(NotLoginException.class)
     public Result handleNotLoginException(NotLoginException e, HttpServletRequest request) {
         log.error("请求地址->{},认证失败->{},无法访问", request.getRequestURI(), e.getMessage());
         return Result.error("401", "请先登录再访问");
@@ -55,7 +54,7 @@ public class GlobalExceptionHandler {
     /**
      * 请求方式不支持
      */
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
         log.error("请求地址->{},不支持->{}请求模式", request.getRequestURI(), e.getMethod());
         return Result.error(e.getMessage());
@@ -64,7 +63,7 @@ public class GlobalExceptionHandler {
     /**
      * Mybatis异常
      */
-    @ExceptionHandler(MyBatisSystemException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(MyBatisSystemException.class)
     public Result handleCannotFindDataSourceException(MyBatisSystemException e, HttpServletRequest request) {
         String msg = e.getMessage();
         log.error("请求地址->{}, Mybatis系统异常", request.getRequestURI(), e);
@@ -72,10 +71,20 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * MyAdmin自定义异常
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(MyException.class)
+    public Result handleMyException(MyException e) {
+        log.error(e.getMessage(), e);
+        String msg = e.getMessage();
+        return Result.error(msg);
+    }
+
+    /**
      * 参数校验异常
      * 基于表单提交时,参数校验异常,会抛出:BindException
      */
-    @ExceptionHandler(BindException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(BindException.class)
     public Result handleBindException(BindException e) {
 //        log.error(e.getMessage(), e);
         String msg = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
@@ -86,7 +95,7 @@ public class GlobalExceptionHandler {
      * 参数校验异常
      * 基于json提交时,参数校验异常,会抛出:MethodArgumentNotValidException
      */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 //        log.error(e.getMessage(), e);
         String msg = e.getBindingResult().getFieldError().getDefaultMessage();
@@ -99,7 +108,7 @@ public class GlobalExceptionHandler {
      * @param e @RequestParam上validate失败后抛出的此异常
      * @return Object 同步返回500，异步返回JSON
      */
-    @ExceptionHandler(ConstraintViolationException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(ConstraintViolationException.class)
     public Object handleConstraintViolationException(ConstraintViolationException e) {
         ConstraintViolation<?> constraintViolation = e.getConstraintViolations().iterator().next();
         return Result.error(constraintViolation.getMessage());

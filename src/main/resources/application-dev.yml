@@ -135,3 +135,19 @@ sa-token:
   token-prefix: "Bearer"
   # jwt秘钥
   jwt-secret-key: abcdefghijklmnopqrstuvwxyz
+
+# 验证码
+captcha:
+  # 图片验证码
+  img:
+    # 验证码类型，1=线段干扰的验证码，2=圆圈干扰验证码，3=扭曲干扰验证码，4=GIF，5=加减法（待实现）
+    type: 4
+    # 宽度
+    width: 200
+    # 高度
+    height: 100
+    # 字符数
+    codeCount: 4
+    # 线段干扰元素数/线段干扰元素数/扭曲干扰线宽度
+    olCount: 10
+  sms:
