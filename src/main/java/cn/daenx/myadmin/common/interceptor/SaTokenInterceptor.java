@@ -7,11 +7,13 @@ import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.router.SaRouterStaff;
 import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@Slf4j
 public class SaTokenInterceptor implements WebMvcConfigurer {
     @Resource
     private SecurityProperties securityProperties;
@@ -33,10 +35,10 @@ public class SaTokenInterceptor implements WebMvcConfigurer {
                                 StpUtil.checkLogin();
 
                                 // 有效率影响 用于临时测试
-                                // if (log.isDebugEnabled()) {
-                                //     log.debug("剩余有效时间: {}", StpUtil.getTokenTimeout());
-                                //     log.debug("临时有效时间: {}", StpUtil.getTokenActivityTimeout());
-                                // }
+//                                if (log.isDebugEnabled()) {
+//                                    log.debug("剩余有效时间: {}", StpUtil.getTokenTimeout());
+//                                    log.debug("临时有效时间: {}", StpUtil.getTokenActivityTimeout());
+//                                }
 
                             });
                 })).addPathPatterns("/**")
