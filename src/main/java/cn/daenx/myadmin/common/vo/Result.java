@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class Result implements Serializable {
 
-    private String code;
+    private int code;
     private boolean success;
     private String msg;
     private Object data;
@@ -51,7 +51,7 @@ public class Result implements Serializable {
         return result;
     }
 
-    public static Result error(String code, String msg) {
+    public static Result error(int code, String msg) {
         Result result = new Result();
         result.setCode(code);
         result.setMsg(msg);
