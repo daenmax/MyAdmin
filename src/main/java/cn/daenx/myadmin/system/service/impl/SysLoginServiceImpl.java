@@ -21,6 +21,30 @@ public class SysLoginServiceImpl implements SysLoginService {
     private RedisUtil redisUtil;
 
     /**
+     * 校验图片验证码
+     *
+     * @param code
+     * @param uuid
+     */
+    private void validatedCaptchaImg(String code, String uuid) {
+        //TODO 校验验证码，读取系统参数
+        if (1 == 1) {
+            if (ObjectUtil.isEmpty(code) || ObjectUtil.isEmpty(uuid)) {
+                throw new MyException("验证码相关参数不能为空");
+            }
+            String codeReal = (String) redisUtil.get(RedisConstant.CAPTCHA_IMG + uuid);
+            if (ObjectUtil.isEmpty(codeReal)) {
+                throw new MyException("验证码已过期，请刷新验证码");
+            }
+            if (!codeReal.equals(code)) {
+                redisUtil.del(RedisConstant.CAPTCHA_IMG + uuid);
+                throw new MyException("验证码错误");
+            }
+            redisUtil.del(RedisConstant.CAPTCHA_IMG + uuid);
+        }
+    }
+
+    /**
      * 用户登录
      *
      * @param vo
@@ -28,24 +52,10 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public String login(SysLoginVo vo) {
-        //校验验证码，读取系统参数
-        if (1 == 1) {
-            if (ObjectUtil.isEmpty(vo.getCode()) || ObjectUtil.isEmpty(vo.getUuid())) {
-                throw new MyException("验证码相关参数不能为空");
-            }
-            String code = (String) redisUtil.get(RedisConstant.CAPTCHA_IMG + vo.getUuid());
-            if (ObjectUtil.isEmpty(code)) {
-                throw new MyException("验证码已过期，请刷新验证码");
-            }
-            if (!code.equals(vo.getCode())){
-                redisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
-                throw new MyException("验证码错误");
-            }
-            redisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
-        }
+        validatedCaptchaImg(vo.getCode(), vo.getUuid());
         SysUser sysUser = new SysUser();
         sysUser.setId("123");
-        SaHolder.getStorage().set("loginuser",sysUser);
+        SaHolder.getStorage().set("loginuser", sysUser);
         StpUtil.login(vo.getUsername(), DeviceType.PC.getCode());
         StpUtil.getTokenSession().set("loginuser", sysUser);
         System.out.println(StpUtil.getLoginId());
@@ -60,7 +70,12 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public void register(SysRegisterVo vo) {
+        validatedCaptchaImg(vo.getCode(), vo.getUuid());
         //TODO 检查系统是否开启了注册功能
-
+        //判空
+        if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
+            throw new MyException("账号和密码不能为空");
+        }
+        //查询账号是否已存在
     }
 }
