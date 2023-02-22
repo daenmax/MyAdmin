@@ -2,6 +2,7 @@ package cn.daenx.myadmin.system.service;
 
 
 import cn.daenx.myadmin.system.vo.SysLoginVo;
+import cn.daenx.myadmin.system.vo.SysRegisterVo;
 
 public interface SysLoginService {
 
@@ -12,4 +13,11 @@ public interface SysLoginService {
      * @return
      */
     String login(SysLoginVo vo);
+
+    /**
+     * 用户注册
+     *
+     * @param vo
+     */
+    void register(SysRegisterVo vo);
 }

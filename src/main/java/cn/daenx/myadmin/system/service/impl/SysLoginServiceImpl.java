@@ -7,6 +7,7 @@ import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.SysLoginService;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
+import cn.daenx.myadmin.system.vo.SysRegisterVo;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -50,5 +51,16 @@ public class SysLoginServiceImpl implements SysLoginService {
         System.out.println(StpUtil.getLoginId());
         System.out.println(StpUtil.getLoginDevice());
         return StpUtil.getTokenValue();
+    }
+
+    /**
+     * 用户注册
+     *
+     * @param vo
+     */
+    @Override
+    public void register(SysRegisterVo vo) {
+        //TODO 检查系统是否开启了注册功能
+
     }
 }

@@ -63,6 +63,18 @@ public class SysUser extends BaseEntity implements Serializable {
     private String email;
 
     /**
+     * 微信open_id
+     */
+    @TableField(value = "open_id")
+    private String openId;
+
+    /**
+     * 开放API key
+     */
+    @TableField(value = "api_key")
+    private String apiKey;
+
+    /**
      * 备注
      */
     @TableField(value = "remark")

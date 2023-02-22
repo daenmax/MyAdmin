@@ -11,6 +11,8 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="api_key" jdbcType="VARCHAR" property="apiKey" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -20,7 +22,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, dept_id, username, `password`, `status`, phone, email, remark, create_id, create_time, 
+    id, dept_id, username, `password`, `status`, phone, email, open_id, api_key, remark, create_id, create_time,
     update_id, update_time, is_delete
   </sql>
 </mapper>

@@ -16,7 +16,7 @@
     <properties>
         <java.version>17</java.version>
         <spring.boot.version>3.0.1</spring.boot.version>
-        <druid.version>1.2.15</druid.version>
+        <druid.version>1.2.16</druid.version>
         <aop.version>3.0.1</aop.version>
         <mybatis.plus.version>3.5.3.1</mybatis.plus.version>
         <mybatis.dynamic.datasource.version>3.6.1</mybatis.dynamic.datasource.version>
