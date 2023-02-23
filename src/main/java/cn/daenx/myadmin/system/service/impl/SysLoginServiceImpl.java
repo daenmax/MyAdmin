@@ -60,6 +60,8 @@ public class SysLoginServiceImpl implements SysLoginService {
         StpUtil.getTokenSession().set("loginuser", sysUser);
         System.out.println(StpUtil.getLoginId());
         System.out.println(StpUtil.getLoginDevice());
+        //密码校验用不可逆的算法
+
         return StpUtil.getTokenValue();
     }
 
