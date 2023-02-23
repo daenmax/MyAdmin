@@ -9,6 +9,7 @@ import cn.daenx.myadmin.system.service.SysLoginService;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.system.vo.SysRegisterVo;
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -61,7 +62,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         System.out.println(StpUtil.getLoginId());
         System.out.println(StpUtil.getLoginDevice());
         //密码校验用不可逆的算法
-
+        SaSecureUtil.sha256("");
         return StpUtil.getTokenValue();
     }
 
