@@ -2,10 +2,13 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.enums.DeviceType;
+import cn.daenx.myadmin.common.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.SysLoginService;
+import cn.daenx.myadmin.system.service.SysUserService;
+import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.system.vo.SysRegisterVo;
 import cn.dev33.satoken.context.SaHolder;
@@ -20,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private SysUserService sysUserService;
 
     /**
      * 校验图片验证码
@@ -46,28 +51,47 @@ public class SysLoginServiceImpl implements SysLoginService {
     }
 
     /**
-     * 用户登录
+     * PC登录
      *
      * @param vo
      * @return
      */
     @Override
     public String login(SysLoginVo vo) {
+        //校验验证码
         validatedCaptchaImg(vo.getCode(), vo.getUuid());
+        if (vo.getLoginType().equals(LoginType.ACCOUNT.getCode())) {
+            //账号密码登录
+            if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
+                throw new MyException("账号和密码不能为空");
+            }
+            SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
+            if(ObjectUtil.isEmpty(sysUser)){
+                throw new MyException("账号不存在");
+            }
+            String sha256 = SaSecureUtil.sha256(vo.getPassword());
+            if(!sha256.equals(sysUser.getPassword())){
+                throw new MyException("密码错误");
+            }
+            //校验账户状态
+            sysUserService.validatedUser(sysUser);
+
+
+        }
         SysUser sysUser = new SysUser();
         sysUser.setId("123");
-        SaHolder.getStorage().set("loginuser", sysUser);
-        StpUtil.login(vo.getUsername(), DeviceType.PC.getCode());
-        StpUtil.getTokenSession().set("loginuser", sysUser);
+        SysLoginUserVo loginUserVo = new SysLoginUserVo();
         System.out.println(StpUtil.getLoginId());
         System.out.println(StpUtil.getLoginDevice());
         //密码校验用不可逆的算法
-        SaSecureUtil.sha256("");
+
         return StpUtil.getTokenValue();
     }
 
     /**
-     * 用户注册
+     * 通用注册接口
+     * 只接受账号和密码
+     * 手机号、邮箱、openid需要另外单独绑定
      *
      * @param vo
      */

@@ -7,7 +7,7 @@ import cn.daenx.myadmin.system.vo.SysRegisterVo;
 public interface SysLoginService {
 
     /**
-     * 用户登录
+     * PC登录
      *
      * @param vo
      * @return
@@ -15,7 +15,9 @@ public interface SysLoginService {
     String login(SysLoginVo vo);
 
     /**
-     * 用户注册
+     * 通用注册接口
+     * 只接受账号和密码
+     * 手机号、邮箱、openid需要另外单独绑定
      *
      * @param vo
      */

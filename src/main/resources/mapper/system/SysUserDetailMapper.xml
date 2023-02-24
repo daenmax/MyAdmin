@@ -13,6 +13,7 @@
     <result column="profile" jdbcType="LONGVARCHAR" property="profile" />
     <result column="user_sign" jdbcType="VARCHAR" property="userSign" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="money" jdbcType="INTEGER" property="money" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_id" jdbcType="VARCHAR" property="updateId" />
@@ -21,7 +22,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, nick_name, real_name, age, sex, profile, user_sign, avatar, create_id, 
+    id, user_id, nick_name, real_name, age, sex, profile, user_sign, money, avatar, create_id,
     create_time, update_id, update_time, is_delete
   </sql>
 </mapper>

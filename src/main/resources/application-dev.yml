@@ -134,7 +134,7 @@ sa-token:
   # token前缀
   token-prefix: "Bearer"
   # jwt秘钥
-  jwt-secret-key: abcdefghijklmnopqrstuvwxyz
+  jwt-secret-key: 1qTJiBvZMaDloBOnRrngkzr5g7vuQyZA
 
 # 验证码
 captcha:

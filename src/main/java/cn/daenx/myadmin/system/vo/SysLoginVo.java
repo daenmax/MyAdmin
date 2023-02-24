@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.vo;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -16,6 +17,11 @@ public class SysLoginVo {
      * 验证码ID
      */
     private String uuid;
+    /**
+     * 登录方式
+     */
+    @NotBlank(message = "loginType不能为空")
+    private String loginType;
 
 
     /**
