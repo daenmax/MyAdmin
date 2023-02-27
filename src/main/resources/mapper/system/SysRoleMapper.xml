@@ -19,7 +19,19 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, code, sort, data_scope, `status`, remark, create_id, create_time, update_id, 
+    id, `name`, code, sort, data_scope, `status`, remark, create_id, create_time, update_id,
     update_time, is_delete
   </sql>
+
+  <select id="getSysRoleListByUserId" resultType="cn.daenx.myadmin.system.po.SysRole">
+    SELECT
+      sr.*
+    FROM
+      sys_role_user sru
+        LEFT JOIN sys_role sr ON sr.id = sru.role_id
+    WHERE
+      sru.user_id = #{userId}
+      AND sr.is_delete = 0
+      AND sr.`status` =0
+    </select>
 </mapper>

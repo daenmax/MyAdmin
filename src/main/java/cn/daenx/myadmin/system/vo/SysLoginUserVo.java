@@ -1,18 +1,14 @@
 package cn.daenx.myadmin.system.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import jakarta.validation.constraints.NotBlank;
+import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysRole;
+import cn.daenx.myadmin.system.po.SysUserType;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 登录用户
@@ -23,15 +19,42 @@ public class SysLoginUserVo implements Serializable {
     private String id;
 
     /**
-     * 部门ID
-     */
-    private String deptId;
-
-    /**
      * 用户账号
      */
     private String username;
 
+    /**
+     * 部门ID
+     */
+    private String deptId;
+    private SysUserType userType;
+
+
+    /**
+     * 菜单权限
+     */
+    private Set<String> menuPermission;
+
+    /**
+     * 角色权限
+     */
+    private Set<String> rolePermission;
+
+    /**
+     * 角色列表
+     */
+    private List<SysRole> roles;
+
+    public boolean isAdmin() {
+        return SystemConstant.IS_ADMIN_ID.equals(this.id);
+    }
+
+    /**
+     * 获取登录id
+     */
+    public String getLoginId() {
+        return this.userType + ":" + this.id;
+    }
 
 
 }

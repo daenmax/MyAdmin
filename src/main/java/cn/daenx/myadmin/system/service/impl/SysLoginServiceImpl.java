@@ -4,10 +4,10 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.enums.DeviceType;
 import cn.daenx.myadmin.common.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.po.SysUser;
-import cn.daenx.myadmin.system.service.SysLoginService;
-import cn.daenx.myadmin.system.service.SysUserService;
+import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.system.vo.SysRegisterVo;
@@ -19,12 +19,20 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private RedisUtil redisUtil;
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private SysUserTypeService sysUserTypeService;
+    @Resource
+    private SysRoleService sysRoleService;
+    @Resource
+    private SysMenuService sysMenuService;
 
     /**
      * 校验图片验证码
@@ -76,8 +84,17 @@ public class SysLoginServiceImpl implements SysLoginService {
             //校验账户状态
             sysUserService.validatedUser(sysUser);
 
-
+            SysLoginUserVo loginUserVo = new SysLoginUserVo();
+            loginUserVo.setId(sysUser.getId());
+            loginUserVo.setUsername(sysUser.getUsername());
+            loginUserVo.setUserType(sysUserTypeService.getSysUserTypeById(sysUser.getUserTypeId()));
+            loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
+            loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
+            loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
+            LoginUtil.login(loginUserVo,DeviceType.PC);
+            String tokenValue = StpUtil.getTokenValue();
         }
+
         SysUser sysUser = new SysUser();
         sysUser.setId("123");
         SysLoginUserVo loginUserVo = new SysLoginUserVo();
@@ -85,7 +102,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         System.out.println(StpUtil.getLoginDevice());
         //密码校验用不可逆的算法
 
-        return StpUtil.getTokenValue();
+        return "";
     }
 
     /**
