@@ -21,4 +21,12 @@ public interface SysUserService extends IService<SysUser> {
      */
     Boolean validatedUser(SysUser sysUser);
 
+    /**
+     * 更新用户登录信息
+     *
+     * @param userId
+     * @param ip
+     */
+    void updateUserLogin(String userId, String ip);
+
 }

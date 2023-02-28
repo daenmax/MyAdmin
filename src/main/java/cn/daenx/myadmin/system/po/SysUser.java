@@ -98,6 +98,20 @@ public class SysUser extends BaseEntity implements Serializable {
     private LocalDateTime expireToTime;
 
     /**
+     * 最后登录IP
+     */
+    @TableField(value = "login_ip")
+    private String loginIp;
+
+    /**
+     * 最后登录时间
+     */
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime loginTime;
+
+    /**
      * 备注
      */
     @TableField(value = "remark")

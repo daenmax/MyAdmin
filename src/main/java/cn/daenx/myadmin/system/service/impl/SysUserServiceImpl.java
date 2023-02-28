@@ -7,6 +7,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -66,5 +67,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
         }
         return true;
+    }
+
+    /**
+     * 更新用户登录信息
+     *
+     * @param userId
+     * @param ip
+     */
+    @Override
+    public void updateUserLogin(String userId, String ip) {
+        LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysUser::getId, userId);
+        wrapper.set(SysUser::getLoginIp, ip);
+        wrapper.set(SysUser::getLoginTime, LocalDateTime.now());
+        sysUserMapper.update(null, wrapper);
     }
 }

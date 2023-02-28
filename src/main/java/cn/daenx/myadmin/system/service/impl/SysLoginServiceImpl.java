@@ -6,6 +6,7 @@ import cn.daenx.myadmin.common.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
+import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
@@ -14,8 +15,10 @@ import cn.daenx.myadmin.system.vo.SysRegisterVo;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.net.Ipv4Util;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -74,11 +77,11 @@ public class SysLoginServiceImpl implements SysLoginService {
                 throw new MyException("账号和密码不能为空");
             }
             SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
-            if(ObjectUtil.isEmpty(sysUser)){
+            if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
             }
             String sha256 = SaSecureUtil.sha256(vo.getPassword());
-            if(!sha256.equals(sysUser.getPassword())){
+            if (!sha256.equals(sysUser.getPassword())) {
                 throw new MyException("密码错误");
             }
             //校验账户状态
@@ -91,8 +94,10 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
             loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
-            LoginUtil.login(loginUserVo,DeviceType.PC);
+            LoginUtil.login(loginUserVo, DeviceType.PC);
             String tokenValue = StpUtil.getTokenValue();
+            //更新最后登录信息
+            sysUserService.updateUserLogin(sysUser.getId(), ServletUtils.getClientIP());
         }
 
         SysUser sysUser = new SysUser();
