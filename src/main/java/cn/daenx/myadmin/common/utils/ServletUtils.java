@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.common.utils;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import cn.hutool.http.HttpStatus;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ import java.util.Map;
  * @author ruoyi
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ServletUtils extends ServletUtil {
+public class ServletUtils extends JakartaServletUtil {
 
     /**
      * 获取String参数
@@ -169,9 +169,7 @@ public class ServletUtils extends ServletUtil {
     }
 
     public static String getClientIP() {
-        //TODO，等HUTOOL支持springboot3.0
-//        return getClientIP(getRequest());
-        return "";
+        return getClientIP(getRequest());
     }
 
     /**
