@@ -5,7 +5,7 @@
               value="%yellow([%d{yyyy-MM-dd HH:mm:ss:SSS}]) %green([%thread]) %highlight([ %-5level ]) → %boldMagenta([%logger{36}]%n) %msg%n"/>
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
-    <!-- 控制台输出 -->
+    <!-- IDE控制台 输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${console.log.pattern}</pattern>
@@ -13,7 +13,7 @@
         </encoder>
     </appender>
 
-    <!-- 控制台输出 -->
+    <!-- 控制台 日志写出 -->
     <appender name="file_console" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/console.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -32,7 +32,7 @@
         </filter>
     </appender>
 
-    <!-- 系统日志输出 -->
+    <!-- info 日志写出 -->
     <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/info.log</file>
         <!-- 循环政策：基于时间创建日志文件 -->
@@ -55,6 +55,7 @@
         </filter>
     </appender>
 
+    <!-- warn 日志写出 -->
     <appender name="file_warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/warn.log</file>
         <!-- 循环政策：基于时间创建日志文件 -->
@@ -77,6 +78,7 @@
         </filter>
     </appender>
 
+    <!-- error 日志写出 -->
     <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/error.log</file>
         <!-- 循环政策：基于时间创建日志文件 -->
