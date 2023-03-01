@@ -38,7 +38,7 @@
         <!-- 循环政策：基于时间创建日志文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/info-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/info-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
             <!-- 日志最大的历史 30天 -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -61,7 +61,7 @@
         <!-- 循环政策：基于时间创建日志文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/warn-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/warn-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
             <!-- 日志最大的历史 45天 -->
             <maxHistory>45</maxHistory>
         </rollingPolicy>
@@ -84,7 +84,7 @@
         <!-- 循环政策：基于时间创建日志文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/error-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
