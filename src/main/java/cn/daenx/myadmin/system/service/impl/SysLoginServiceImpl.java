@@ -70,12 +70,14 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public String login(SysLoginVo vo) {
+        String remark = "PC登录";
         String clientIP = ServletUtils.getClientIP();
         HttpServletRequest request = ServletUtils.getRequest();
         UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
         //校验验证码
         validatedCaptchaImg(vo.getCode(), vo.getUuid());
         if (vo.getLoginType().equals(LoginType.ACCOUNT.getCode())) {
+            remark = remark + "/" + LoginType.ACCOUNT.getDesc();
             //账号密码登录
             if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
                 throw new MyException("账号和密码不能为空");
@@ -87,7 +89,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             String sha256 = SaSecureUtil.sha256(vo.getPassword());
             if (!sha256.equals(sysUser.getPassword())) {
                 //记录登录日志
-                sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_FAIL, "PC登录，账号密码", clientIP, userAgent);
+                sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_FAIL, remark, clientIP, userAgent);
                 throw new MyException("密码错误");
             }
             //校验账户状态
@@ -102,7 +104,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             //设置登录状态
             LoginUtil.login(loginUserVo, DeviceType.PC);
             //记录登录日志
-            sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, "PC登录，账号密码", clientIP, userAgent);
+            sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, remark, clientIP, userAgent);
             return StpUtil.getTokenValue();
         }
         return "";

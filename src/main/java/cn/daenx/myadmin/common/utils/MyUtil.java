@@ -15,6 +15,9 @@ public class MyUtil {
      * @return
      */
     public static String getIpLocation(String ip) {
+        if ("0:0:0:0:0:0:0:1".equals(ip) || "127.0.0.1".equals(ip)) {
+            return "内网IP";
+        }
         String res = HttpUtil.get("https://ip.useragentinfo.com/json?ip=" + ip);
         if (ObjectUtil.isNotEmpty(res)) {
             JSONObject jsonObject = JSONUtil.parseObj(res);
