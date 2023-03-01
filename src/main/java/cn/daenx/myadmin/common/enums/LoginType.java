@@ -21,7 +21,7 @@ public enum LoginType {
     SMS("sms", "短信验证码登录"),
 
     EMAIL("email", "邮箱验证码登录"),
-    WX("wx", "邮箱验证码登录"),
+    WX("wx", "微信授权登录"),
 
     API("apikey", "开放API登录");
 
