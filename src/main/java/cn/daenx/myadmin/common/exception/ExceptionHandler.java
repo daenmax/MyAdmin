@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.common.exception;
 
+import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.dev33.satoken.exception.NotLoginException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,7 +49,7 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(NotLoginException.class)
     public Result handleNotLoginException(NotLoginException e, HttpServletRequest request) {
         log.error("请求地址->{},认证失败->{},无法访问", request.getRequestURI(), e.getMessage());
-        return Result.error("401", "请先登录再访问");
+        return Result.error(Constant.CODE_401, "请先登录再访问");
     }
 
     /**

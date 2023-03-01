@@ -45,6 +45,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
+     * 通过ID获取用户
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public SysUser getUserByUserId(String userId) {
+        return sysUserMapper.selectById(userId);
+    }
+
+    /**
      * 校验用户状态是否正常
      *
      * @param sysUser

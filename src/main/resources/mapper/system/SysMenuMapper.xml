@@ -6,16 +6,16 @@
     <!--@Table sys_menu-->
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
     <result column="path" jdbcType="VARCHAR" property="path" />
     <result column="query_param" jdbcType="VARCHAR" property="queryParam" />
     <result column="component" jdbcType="VARCHAR" property="component" />
-    <result column="permission" jdbcType="VARCHAR" property="permission" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="visible" jdbcType="INTEGER" property="visible" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="menu_type" jdbcType="INTEGER" property="menuType" />
     <result column="is_frame" jdbcType="INTEGER" property="isFrame" />
     <result column="is_cache" jdbcType="INTEGER" property="isCache" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -27,14 +27,14 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, parent_id, `name`, sort, `path`, query_param, component, permission, icon, visible,
-    `status`, `type`, is_frame, is_cache, remark, create_id, create_time, update_id,
+    id, parent_id, `menu_name`, order_num, `path`, query_param, component, perms, icon, visible,
+    `status`, `menu_type`, is_frame, is_cache, remark, create_id, create_time, update_id,
     update_time, is_delete
   </sql>
 
   <select id="getMenuPermsByRoleId" resultType="java.lang.String">
     SELECT DISTINCT
-      sm.permission
+      sm.perms
     FROM
       sys_menu sm
         LEFT JOIN sys_role_menu srm ON sm.id = srm.menu_id
@@ -46,7 +46,7 @@
 
   <select id="getMenuPermsByUserId" resultType="java.lang.String">
     SELECT DISTINCT
-      sm.permission
+      sm.perms
     FROM
       sys_menu sm
         LEFT JOIN sys_role_menu srm ON sm.id = srm.menu_id
@@ -58,5 +58,34 @@
       AND sr.STATUS = '0'
       AND sr.is_delete = 0
       AND sru.user_id = #{userId}
+  </select>
+
+  <select id="getMenuTreeByUserId" resultMap="BaseResultMap">
+      SELECT DISTINCT sm.id,
+                      sm.parent_id,
+                      sm.menu_name,
+                      sm.path,
+                      sm.component,
+                      sm.query_param,
+                      sm.visible,
+                      sm.STATUS,
+                      sm.perms,
+                      sm.is_frame,
+                      sm.is_cache,
+                      sm.menu_type,
+                      sm.icon,
+                      sm.order_num,
+                      sm.create_time
+      FROM sys_menu sm
+               LEFT JOIN sys_role_menu srm ON sm.id = srm.menu_id
+               LEFT JOIN sys_role_user sru ON srm.role_id = sru.role_id
+               LEFT JOIN sys_role sr ON sru.role_id = sr.id
+               LEFT JOIN sys_user su ON sru.user_id = su.id
+      WHERE su.id = #{userId}
+        AND sm.menu_type IN (1, 2)
+        AND sm.STATUS = 0
+        AND sr.STATUS = 0
+      ORDER BY sm.parent_id,
+               sm.order_num
   </select>
 </mapper>

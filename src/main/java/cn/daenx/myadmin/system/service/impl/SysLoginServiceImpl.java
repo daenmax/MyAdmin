@@ -7,20 +7,25 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
+import cn.daenx.myadmin.common.utils.StreamUtils;
+import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysMenu;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.*;
-import cn.daenx.myadmin.system.vo.SysLoginUserVo;
-import cn.daenx.myadmin.system.vo.SysLoginVo;
-import cn.daenx.myadmin.system.vo.SysRegisterVo;
+import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 
 @Service
@@ -144,5 +149,44 @@ public class SysLoginServiceImpl implements SysLoginService {
         sysUser.setStatus(SystemConstant.USER_STATUS_NORMAL);
         sysUser.setUserTypeId(userTypeId);
         sysUserService.registerUser(sysUser, roleId);
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @return
+     */
+    @Override
+    public Map<String, Object> getInfo() {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysUser sysUser = sysUserService.getUserByUserId(loginUser.getId());
+        if (sysUser == null) {
+            throw new MyException("用户不存在");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("user", sysUser);
+        map.put("roles", loginUser.getRolePermission());
+        map.put("permissions", loginUser.getMenuPermission());
+        return map;
+    }
+
+    /**
+     * 根据用户获取菜单树
+     *
+     * @return
+     */
+    @Override
+    public List<RouterVo> getRouters() {
+        String userId = LoginUtil.getLoginUserId();
+        List<SysMenu> menuList = sysMenuService.getMenuTreeByUserId(userId);
+        return sysMenuService.buildMenus(menuList);
+    }
+
+    /**
+     * 退出登录
+     */
+    @Override
+    public void logout() {
+        LoginUtil.logout();
     }
 }

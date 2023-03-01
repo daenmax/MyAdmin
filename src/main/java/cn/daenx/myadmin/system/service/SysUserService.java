@@ -14,6 +14,14 @@ public interface SysUserService extends IService<SysUser> {
     SysUser getUserByUsername(String username);
 
     /**
+     * 通过ID获取用户
+     *
+     * @param userId
+     * @return
+     */
+    SysUser getUserByUserId(String userId);
+
+    /**
      * 校验用户状态是否正常
      *
      * @param sysUser
@@ -28,6 +36,6 @@ public interface SysUserService extends IService<SysUser> {
      * @param roleId
      * @return
      */
-    Boolean registerUser(SysUser sysUser,String roleId);
+    Boolean registerUser(SysUser sysUser, String roleId);
 
 }

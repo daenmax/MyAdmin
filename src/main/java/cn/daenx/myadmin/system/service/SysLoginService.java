@@ -1,8 +1,14 @@
 package cn.daenx.myadmin.system.service;
 
 
+import cn.daenx.myadmin.common.vo.Result;
+import cn.daenx.myadmin.system.po.SysMenu;
+import cn.daenx.myadmin.system.vo.RouterVo;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.system.vo.SysRegisterVo;
+
+import java.util.List;
+import java.util.Map;
 
 public interface SysLoginService {
 
@@ -22,4 +28,25 @@ public interface SysLoginService {
      * @param vo
      */
     void register(SysRegisterVo vo);
+
+    /**
+     * 获取用户信息
+     *
+     * @return
+     */
+    Map<String, Object> getInfo();
+
+    /**
+     * 根据用户获取菜单树
+     *
+     * @return
+     */
+
+    List<RouterVo> getRouters();
+
+    /**
+     * 退出登录
+     */
+    void logout();
+
 }

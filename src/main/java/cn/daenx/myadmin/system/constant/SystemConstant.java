@@ -25,5 +25,43 @@ public class SystemConstant {
      */
     public static final Integer LOGIN_FAIL = 1;
 
+    /**
+     * 菜单类型（目录）
+     */
+    public static final Integer MENU_TYPE_DIR = 1;
+    /**
+     * 菜单类型（菜单）
+     */
+    public static final Integer MENU_TYPE_MENU = 2;
+    /**
+     * 菜单类型（按钮）
+     */
+    public static final Integer MENU_TYPE_BUTTON = 3;
+
+    /**
+     * 是否菜单外链（是）
+     */
+    public static final Integer  YES_FRAME = 0;
+
+    /**
+     * 是否菜单外链（否）
+     */
+    public static final Integer  NO_FRAME = 1;
+
+    /**
+     * Layout组件标识
+     */
+    public static final String LAYOUT = "Layout";
+
+    /**
+     * ParentView组件标识
+     */
+    public static final String PARENT_VIEW = "ParentView";
+
+    /**
+     * InnerLink组件标识
+     */
+    public static final String INNER_LINK = "InnerLink";
+
 
 }

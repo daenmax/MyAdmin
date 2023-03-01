@@ -1,7 +1,11 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.vo.Result;
+import cn.daenx.myadmin.system.po.SysMenu;
 import cn.daenx.myadmin.system.service.SysLoginService;
+import cn.daenx.myadmin.system.vo.RouterVo;
+import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.system.vo.SysRegisterVo;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
@@ -14,6 +18,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("")
@@ -65,4 +71,31 @@ public class SysLoginController {
     /**
      * 绑定openid
      */
+
+    /**
+     * 退出登录
+     */
+    @SaIgnore
+    @PostMapping("/logout")
+    public Result logout() {
+        sysLoginService.logout();
+        return Result.ok("退出成功");
+    }
+
+    @GetMapping("/getInfo")
+    public Result getInfo() {
+        Map<String, Object> map = sysLoginService.getInfo();
+        return Result.ok(map);
+    }
+
+    /**
+     * 获取路由信息
+     *
+     * @return 路由信息
+     */
+    @GetMapping("/getRouters")
+    public Result getRouters() {
+        List<RouterVo> routers = sysLoginService.getRouters();
+        return Result.ok(routers);
+    }
 }

@@ -27,7 +27,6 @@ import java.util.Map;
 /**
  * 客户端工具类
  *
- * @author ruoyi
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ServletUtils extends JakartaServletUtil {
