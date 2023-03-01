@@ -16,4 +16,14 @@ public class SystemConstant {
     public static final String IS_ADMIN_ID = "1";
 
 
+    /**
+     * 登录结果：成功
+     */
+    public static final Integer LOGIN_SUCCESS = 0;
+    /**
+     * 登录结果：失败
+     */
+    public static final Integer LOGIN_FAIL = 1;
+
+
 }

@@ -51,7 +51,7 @@ public class SysUserDetail extends BaseEntity implements Serializable {
     private String age;
 
     /**
-     * 性别，0=女，1=男
+     * 性别，0=女，1=男，2=未知
      */
     @TableField(value = "sex")
     private String sex;

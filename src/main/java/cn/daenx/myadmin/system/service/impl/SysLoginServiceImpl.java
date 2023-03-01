@@ -7,6 +7,8 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
+import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysLogLogin;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
@@ -16,10 +18,15 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.net.Ipv4Util;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -36,6 +43,8 @@ public class SysLoginServiceImpl implements SysLoginService {
     private SysRoleService sysRoleService;
     @Resource
     private SysMenuService sysMenuService;
+    @Resource
+    private SysLogLoginService sysLogLoginService;
 
     /**
      * 校验图片验证码
@@ -69,6 +78,9 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public String login(SysLoginVo vo) {
+        String clientIP = ServletUtils.getClientIP();
+        HttpServletRequest request = ServletUtils.getRequest();
+        UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
         //校验验证码
         validatedCaptchaImg(vo.getCode(), vo.getUuid());
         if (vo.getLoginType().equals(LoginType.ACCOUNT.getCode())) {
@@ -82,11 +94,12 @@ public class SysLoginServiceImpl implements SysLoginService {
             }
             String sha256 = SaSecureUtil.sha256(vo.getPassword());
             if (!sha256.equals(sysUser.getPassword())) {
+                //记录登录日志
+                sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_FAIL, "PC登录，账号密码", clientIP, userAgent);
                 throw new MyException("密码错误");
             }
             //校验账户状态
             sysUserService.validatedUser(sysUser);
-
             SysLoginUserVo loginUserVo = new SysLoginUserVo();
             loginUserVo.setId(sysUser.getId());
             loginUserVo.setUsername(sysUser.getUsername());
@@ -96,17 +109,10 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
             LoginUtil.login(loginUserVo, DeviceType.PC);
             String tokenValue = StpUtil.getTokenValue();
-            //更新最后登录信息
-            sysUserService.updateUserLogin(sysUser.getId(), ServletUtils.getClientIP());
+            //记录登录日志
+            sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, "PC登录，账号密码", clientIP, userAgent);
+            return tokenValue;
         }
-
-        SysUser sysUser = new SysUser();
-        sysUser.setId("123");
-        SysLoginUserVo loginUserVo = new SysLoginUserVo();
-        System.out.println(StpUtil.getLoginId());
-        System.out.println(StpUtil.getLoginDevice());
-        //密码校验用不可逆的算法
-
         return "";
     }
 
@@ -125,6 +131,24 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
             throw new MyException("账号和密码不能为空");
         }
+        //TODO 查询默认用户类型user_type_id
+        String userTypeId = "2";
+        //TODO 查询默认部门ID
+        String deptId = "105";
+        //TODO 查询默认角色ID
+        String roleId = "2";
         //查询账号是否已存在
+        SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
+        if (ObjectUtil.isNotEmpty(sysUser)) {
+            throw new MyException("账号已存在");
+        }
+        String sha256 = SaSecureUtil.sha256(vo.getPassword());
+        sysUser = new SysUser();
+        sysUser.setDeptId(deptId);
+        sysUser.setUsername(vo.getUsername());
+        sysUser.setPassword(sha256);
+        sysUser.setStatus(SystemConstant.USER_STATUS_NORMAL);
+        sysUser.setUserTypeId(userTypeId);
+        sysUserService.registerUser(sysUser, roleId);
     }
 }

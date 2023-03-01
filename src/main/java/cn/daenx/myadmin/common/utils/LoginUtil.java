@@ -14,4 +14,18 @@ public class LoginUtil {
         StpUtil.getTokenSession().set(USER, sysLoginUserVo);
 
     }
+
+
+    /**
+     * 获取用户
+     */
+    public static SysLoginUserVo getLoginUser() {
+        SysLoginUserVo loginUser = (SysLoginUserVo) SaHolder.getStorage().get(USER);
+        if (loginUser != null) {
+            return loginUser;
+        }
+        loginUser = (SysLoginUserVo) StpUtil.getTokenSession().get(USER);
+        SaHolder.getStorage().set(USER, loginUser);
+        return loginUser;
+    }
 }

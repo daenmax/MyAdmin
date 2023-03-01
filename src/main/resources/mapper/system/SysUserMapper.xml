@@ -15,8 +15,6 @@
     <result column="api_key" jdbcType="VARCHAR" property="apiKey" />
     <result column="ban_to_time" jdbcType="TIMESTAMP" property="banToTime" />
     <result column="expire_to_time" jdbcType="TIMESTAMP" property="expireToTime" />
-    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
-    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="user_type_id" jdbcType="VARCHAR" property="userTypeId" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
@@ -27,7 +25,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, dept_id, username, `password`, `status`, phone, email, open_id, api_key, ban_to_time, expire_to_time,login_ip, login_time, remark, user_type_id, create_id, create_time,
+    id, dept_id, username, `password`, `status`, phone, email, open_id, api_key, ban_to_time, expire_to_time, remark, user_type_id, create_id, create_time,
     update_id, update_time, is_delete
   </sql>
 </mapper>

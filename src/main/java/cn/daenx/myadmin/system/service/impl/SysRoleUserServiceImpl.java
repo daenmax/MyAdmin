@@ -17,5 +17,18 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
     @Resource
     private SysRoleUserMapper sysRoleUserMapper;
 
-
+    /**
+     * 创建用户、角色关联
+     *
+     * @param roleId
+     * @param userId
+     * @return
+     */
+    @Override
+    public Boolean createRoleUser(String roleId, String userId) {
+        SysRoleUser sysRoleUser = new SysRoleUser();
+        sysRoleUser.setRoleId(roleId);
+        sysRoleUser.setUserId(userId);
+        return sysRoleUserMapper.insert(sysRoleUser) > 0;
+    }
 }

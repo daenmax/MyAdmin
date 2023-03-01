@@ -49,12 +49,5 @@ public class SysLoginUserVo implements Serializable {
         return SystemConstant.IS_ADMIN_ID.equals(this.id);
     }
 
-    /**
-     * 获取登录id
-     */
-    public String getLoginId() {
-        return this.userType + ":" + this.id;
-    }
-
 
 }

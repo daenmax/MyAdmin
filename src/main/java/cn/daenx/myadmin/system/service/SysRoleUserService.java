@@ -6,9 +6,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
-public interface SysRoleUserService extends IService<SysRoleUser>{
+public interface SysRoleUserService extends IService<SysRoleUser> {
 
-
-
+    /**
+     * 创建用户、角色关联
+     *
+     * @param roleId
+     * @param userId
+     * @return
+     */
+    Boolean createRoleUser(String roleId, String userId);
 
 }
