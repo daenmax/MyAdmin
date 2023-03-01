@@ -8,28 +8,20 @@ import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysLogLogin;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.system.vo.SysRegisterVo;
-import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.net.Ipv4Util;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
 
 @Service
 public class SysLoginServiceImpl implements SysLoginService {
@@ -107,11 +99,11 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
             loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
+            //设置登录状态
             LoginUtil.login(loginUserVo, DeviceType.PC);
-            String tokenValue = StpUtil.getTokenValue();
             //记录登录日志
             sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, "PC登录，账号密码", clientIP, userAgent);
-            return tokenValue;
+            return StpUtil.getTokenValue();
         }
         return "";
     }

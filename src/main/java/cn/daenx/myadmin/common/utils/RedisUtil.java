@@ -14,7 +14,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Reids工具类
+ * Redis工具类
+ *
  * @author DaenMax
  */
 @Component
@@ -25,7 +26,7 @@ public class RedisUtil {
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
-    //=============================common============================  
+    //=============================common============================
 
     /**
      * 指定缓存失效时间
@@ -81,7 +82,7 @@ public class RedisUtil {
         redisTemplate.delete(key);
     }
 
-    //============================String=============================  
+    //============================String=============================
 
     /**
      * 普通缓存获取
@@ -161,7 +162,7 @@ public class RedisUtil {
         return redisTemplate.opsForValue().increment(key, -delta);
     }
 
-    //================================Map=================================  
+    //================================Map=================================
 
     /**
      * HashGet
@@ -307,7 +308,7 @@ public class RedisUtil {
         return redisTemplate.opsForHash().increment(key, item, -by);
     }
 
-    //============================set=============================  
+    //============================set=============================
 
     /**
      * 根据key获取Set中的所有值
@@ -408,7 +409,7 @@ public class RedisUtil {
             return 0;
         }
     }
-    //===============================list=================================  
+    //===============================list=================================
 
     /**
      * 获取list缓存的内容

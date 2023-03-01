@@ -51,7 +51,7 @@ public class SysLoginController {
     @PostMapping("/register")
     public Result register(@RequestBody @Validated SysRegisterVo vo) {
         sysLoginService.register(vo);
-        return Result.ok();
+        return Result.ok("注册成功");
     }
 
     /**
