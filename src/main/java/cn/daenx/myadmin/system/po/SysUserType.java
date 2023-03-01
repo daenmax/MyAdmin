@@ -15,11 +15,10 @@ import lombok.NoArgsConstructor;
     * 用户类型表
     */
 @Data
-@EqualsAndHashCode(callSuper=true)
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "sys_user_type")
-public class SysUserType extends BaseEntity implements Serializable {
+public class SysUserType implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 

@@ -17,11 +17,10 @@ import lombok.NoArgsConstructor;
  * 角色菜单关联表
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "sys_role_menu")
-public class SysRoleMenu extends BaseEntity implements Serializable {
+public class SysRoleMenu implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 

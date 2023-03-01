@@ -17,11 +17,10 @@ import lombok.NoArgsConstructor;
  * 角色用户关联表
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "sys_role_user")
-public class SysRoleUser extends BaseEntity implements Serializable {
+public class SysRoleUser implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 

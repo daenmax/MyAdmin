@@ -17,11 +17,10 @@ import lombok.NoArgsConstructor;
  * 角色部门关联表
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "sys_role_dept")
-public class SysRoleDept extends BaseEntity implements Serializable {
+public class SysRoleDept implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
