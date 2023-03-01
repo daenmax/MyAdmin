@@ -125,7 +125,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public void register(SysRegisterVo vo) {
-//        validatedCaptchaImg(vo.getCode(), vo.getUuid());
+        validatedCaptchaImg(vo.getCode(), vo.getUuid());
         //TODO 检查系统是否开启了注册功能
         //判空
         if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
