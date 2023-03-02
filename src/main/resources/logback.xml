@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="log.path" value="./logs"/>
+    <property name="log.path" value="./log"/>
     <property name="console.log.pattern"
               value="%yellow([%d{yyyy-MM-dd HH:mm:ss:SSS}]) %green([%thread]) %highlight([ %-5level ]) → %boldMagenta([%logger{36}]%n) %msg%n"/>
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
@@ -18,7 +18,7 @@
         <file>${log.path}/console.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/console.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/console.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
             <!-- 日志最大 1天 -->
             <maxHistory>1</maxHistory>
         </rollingPolicy>
@@ -139,7 +139,6 @@
         <appender-ref ref="async_warn" />
         <appender-ref ref="async_error" />
         <appender-ref ref="file_console" />
-<!--        <appender-ref ref="sky_log"/>-->
     </root>
 
 </configuration>
