@@ -6,6 +6,7 @@ import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysUserDetail;
 import cn.daenx.myadmin.system.service.SysRoleUserService;
 import cn.daenx.myadmin.system.service.SysUserDetailService;
+import cn.daenx.myadmin.system.vo.SysUserVo;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -53,6 +54,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser getUserByUserId(String userId) {
         return sysUserMapper.selectById(userId);
+    }
+
+    /**
+     * 通过ID获取用户信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public SysUserVo getUserInfoByUserId(String userId) {
+        SysUserVo userInfoByUserId = sysUserMapper.getUserInfoByUserId(userId);
+        if (userInfoByUserId != null) {
+            userInfoByUserId.setAdmin(SystemConstant.IS_ADMIN_ID.equals(userInfoByUserId.getId()));
+        }
+        return userInfoByUserId;
     }
 
     /**

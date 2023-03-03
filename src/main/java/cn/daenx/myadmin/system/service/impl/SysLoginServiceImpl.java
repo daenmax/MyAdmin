@@ -159,12 +159,12 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Override
     public Map<String, Object> getInfo() {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        SysUser sysUser = sysUserService.getUserByUserId(loginUser.getId());
-        if (sysUser == null) {
+        SysUserVo sysUserVo = sysUserService.getUserInfoByUserId(loginUser.getId());
+        if (sysUserVo == null) {
             throw new MyException("用户不存在");
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("user", sysUser);
+        map.put("user", sysUserVo);
         map.put("roles", loginUser.getRolePermission());
         map.put("permissions", loginUser.getMenuPermission());
         return map;

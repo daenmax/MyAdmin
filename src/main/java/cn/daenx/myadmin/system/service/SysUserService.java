@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.system.po.SysUser;
+import cn.daenx.myadmin.system.vo.SysUserVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface SysUserService extends IService<SysUser> {
@@ -20,6 +21,14 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     SysUser getUserByUserId(String userId);
+
+    /**
+     * 通过ID获取用户信息
+     *
+     * @param userId
+     * @return
+     */
+    SysUserVo getUserInfoByUserId(String userId);
 
     /**
      * 校验用户状态是否正常
