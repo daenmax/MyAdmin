@@ -42,12 +42,6 @@
         LEFT JOIN sys_role sr ON sru.role_id = sr.id
         WHERE sru.user_id = #{id}
     </select>
-    <select id="queryUserRoles" resultType="cn.daenx.myadmin.system.po.SysRole">
-        SELECT sr.*
-        FROM sys_role_user sru
-        LEFT JOIN sys_role sr ON sru.role_id = sr.id
-        WHERE sru.user_id = #{id}
-    </select>
   <select id="getUserInfoByUserId" resultMap="userIncludeRolesMap">
       SELECT su.id             AS id,
              su.dept_id        AS deptId,

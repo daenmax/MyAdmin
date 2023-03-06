@@ -16,11 +16,15 @@
     <!-- 控制台 日志写出 -->
     <appender name="file_console" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/console.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/console.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/%d{yyyyMM}/console.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <!-- 日志最大 1天 -->
             <maxHistory>1</maxHistory>
+            <!-- 单个文件最大大小 -->
+            <maxFileSize>500MB</maxFileSize>
+            <!-- 所有归档日志文件的总大小 -->
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${log.pattern}</pattern>
@@ -36,11 +40,15 @@
     <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/info.log</file>
         <!-- 循环政策：基于时间创建日志文件 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/info-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/%d{yyyyMM}/info-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <!-- 日志最大的历史 30天 -->
             <maxHistory>30</maxHistory>
+            <!-- 单个文件最大大小 -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 所有归档日志文件的总大小 -->
+            <totalSizeCap>2GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${log.pattern}</pattern>
@@ -59,11 +67,15 @@
     <appender name="file_warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/warn.log</file>
         <!-- 循环政策：基于时间创建日志文件 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/warn-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/%d{yyyyMM}/warn-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <!-- 日志最大的历史 45天 -->
             <maxHistory>45</maxHistory>
+            <!-- 单个文件最大大小 -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 所有归档日志文件的总大小 -->
+            <totalSizeCap>5GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${log.pattern}</pattern>
@@ -82,11 +94,15 @@
     <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/error.log</file>
         <!-- 循环政策：基于时间创建日志文件 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件名格式 -->
-            <fileNamePattern>${log.path}/logs/${date:yyyy-MM}/error-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <fileNamePattern>${log.path}/logs/%d{yyyyMM}/error-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
+            <!-- 单个文件最大大小 -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 所有归档日志文件的总大小 -->
+            <totalSizeCap>10GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>${log.pattern}</pattern>
