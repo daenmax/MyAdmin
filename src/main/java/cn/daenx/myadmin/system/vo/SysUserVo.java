@@ -1,6 +1,5 @@
 package cn.daenx.myadmin.system.vo;
 
-import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysPosition;
 import cn.daenx.myadmin.system.po.SysRole;
 import com.baomidou.mybatisplus.annotation.*;

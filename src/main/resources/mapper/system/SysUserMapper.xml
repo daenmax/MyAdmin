@@ -1,84 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.daenx.myadmin.system.mapper.SysUserMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysUser">
-    <!--@mbg.generated-->
-    <!--@Table sys_user-->
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="dept_id" jdbcType="VARCHAR" property="deptId" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="api_key" jdbcType="VARCHAR" property="apiKey" />
-    <result column="ban_to_time" jdbcType="TIMESTAMP" property="banToTime" />
-    <result column="expire_to_time" jdbcType="TIMESTAMP" property="expireToTime" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="user_type_id" jdbcType="VARCHAR" property="userTypeId" />
-    <result column="create_id" jdbcType="VARCHAR" property="createId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_id" jdbcType="VARCHAR" property="updateId" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, dept_id, username, `password`, `status`, phone, email, open_id, api_key, ban_to_time, expire_to_time, remark, user_type_id, create_id, create_time,
-    update_id, update_time, is_delete
-  </sql>
+    <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysUser">
+        <!--@mbg.generated-->
+        <!--@Table sys_user-->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="dept_id" jdbcType="VARCHAR" property="deptId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="api_key" jdbcType="VARCHAR" property="apiKey"/>
+        <result column="ban_to_time" jdbcType="TIMESTAMP" property="banToTime"/>
+        <result column="expire_to_time" jdbcType="TIMESTAMP" property="expireToTime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="user_type_id" jdbcType="VARCHAR" property="userTypeId"/>
+        <result column="create_id" jdbcType="VARCHAR" property="createId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_id" jdbcType="VARCHAR" property="updateId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_delete" jdbcType="INTEGER" property="isDelete"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        dept_id,
+        username,
+        `password`,
+        `status`,
+        phone,
+        email,
+        open_id,
+        api_key,
+        ban_to_time,
+        expire_to_time,
+        remark,
+        user_type_id,
+        create_id,
+        create_time,
+        update_id,
+        update_time,
+        is_delete
+    </sql>
+    <select id="getUserInfoByUserId" resultMap="userInfoMap">
+        SELECT su.id             AS id,
+               su.dept_id        AS deptId,
+               sd.`name`         AS deptName,
+               sud.real_name     AS realName,
+               sud.age           AS age,
+               sud.sex           AS sex,
+               sud.`profile`     AS `profile`,
+               sud.user_sign     AS userSign,
+               sud.avatar        AS avatar,
+               sud.money         AS money,
+               sud.nick_name     AS nickName,
+               su.username       AS username,
+               su.`status`       AS `status`,
+               su.phone          AS phone,
+               su.email          AS email,
+               su.open_id        AS openId,
+               su.ban_to_time    AS banToTime,
+               su.expire_to_time AS expireToTime,
+               su.remark         AS remark,
+               su.user_type_id   AS userTypeId,
+               sut.`name`        AS userTypeName,
+               su.create_time    AS createTime,
+               su.update_time    AS updateTime,
+               su1.username      AS createName,
+               su.create_id      AS createId,
+               su2.username      AS updateName,
+               su.update_id      AS updateId
+        FROM sys_user su
+                 LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
+                 LEFT JOIN sys_dept sd ON sd.id = su.dept_id
+                 LEFT JOIN sys_user_type sut ON sut.id = su.user_type_id
+                 LEFT JOIN sys_user su1 ON su1.id = su.create_id
+                 LEFT JOIN sys_user su2 ON su2.id = su.update_id
+        WHERE su.is_delete = 0
+        <if test="userId != null and userId != ''">
+            AND su.id = #{userId}
+        </if>
+    </select>
 
-    <resultMap id="userIncludeRolesMap" type="cn.daenx.myadmin.system.vo.SysUserVo">
-        <result column="id" jdbcType="VARCHAR" property="id" />
-        <result column="deptId" jdbcType="VARCHAR" property="deptId" />
-        <result column="deptName" jdbcType="VARCHAR" property="deptName" />
-        <collection property="roles" column="id"  select="queryUserRoles">
-        </collection>
+    <resultMap id="userInfoMap" type="cn.daenx.myadmin.system.vo.SysUserVo">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <collection property="roles" column="id" select="queryUserRoles"></collection>
+        <collection property="positions" column="id" select="queryUserPositions"></collection>
     </resultMap>
     <select id="queryUserRoles" resultType="cn.daenx.myadmin.system.po.SysRole">
         SELECT sr.*
         FROM sys_role_user sru
-        LEFT JOIN sys_role sr ON sru.role_id = sr.id
+                 LEFT JOIN sys_role sr ON sru.role_id = sr.id
         WHERE sru.user_id = #{id}
     </select>
-  <select id="getUserInfoByUserId" resultMap="userIncludeRolesMap">
-      SELECT su.id             AS id,
-             su.dept_id        AS deptId,
-             sd.`name`         AS deptName,
-             sud.real_name     AS realName,
-             sud.age           AS age,
-             sud.sex           AS sex,
-             sud.`profile`     AS `profile`,
-             sud.user_sign     AS userSign,
-             sud.avatar        AS avatar,
-             sud.money         AS money,
-             sud.nick_name     AS nickName,
-             su.username       AS username,
-             su.`status`       AS `status`,
-             su.phone          AS phone,
-             su.email          AS email,
-             su.open_id        AS openId,
-             su.ban_to_time    AS banToTime,
-             su.expire_to_time AS expireToTime,
-             su.remark         AS remark,
-             su.user_type_id   AS userTypeId,
-             sut.`name`        AS userTypeName,
-             su.create_time    AS createTime,
-             su.update_time    AS updateTime,
-             su1.username      AS createName,
-             su.create_id      AS createId,
-             su2.username      AS updateName,
-             su.update_id      AS updateId
-      FROM sys_user su
-               LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
-               LEFT JOIN sys_dept sd ON sd.id = su.dept_id
-               LEFT JOIN sys_user_type sut ON sut.id = su.user_type_id
-               LEFT JOIN sys_user su1 ON su1.id = su.create_id
-               LEFT JOIN sys_user su2 ON su2.id = su.update_id
-      WHERE su.is_delete = 0
-      <if test="userId != null and userId != ''">
-          AND su.id = #{userId}
-      </if>
-  </select>
+    <select id="queryUserPositions" resultType="cn.daenx.myadmin.system.po.SysPosition">
+        SELECT sp.*
+        FROM sys_position_user spu
+                 LEFT JOIN sys_position sp ON spu.position_id = sp.id
+        WHERE spu.user_id = #{id}
+    </select>
 </mapper>
