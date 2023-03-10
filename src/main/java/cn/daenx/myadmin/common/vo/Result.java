@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.common.vo;
 
 import cn.daenx.myadmin.common.constant.Constant;
+import cn.hutool.http.HttpStatus;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public class Result implements Serializable {
 
     public static Result ok() {
         Result result = new Result();
-        result.setCode(Constant.CODE_200);
+        result.setCode(HttpStatus.HTTP_OK);
         result.setMsg(Constant.MSG_200);
         result.setSuccess(true);
         return result;
@@ -27,7 +28,7 @@ public class Result implements Serializable {
 
     public static Result ok(Object data) {
         Result result = new Result();
-        result.setCode(Constant.CODE_200);
+        result.setCode(HttpStatus.HTTP_OK);
         result.setMsg(Constant.MSG_200);
         result.setSuccess(true);
         result.setData(data);
@@ -36,7 +37,7 @@ public class Result implements Serializable {
 
     public static Result ok(String msg, Object data) {
         Result result = new Result();
-        result.setCode(Constant.CODE_200);
+        result.setCode(HttpStatus.HTTP_OK);
         result.setMsg(msg);
         result.setSuccess(true);
         result.setData(data);
@@ -45,7 +46,7 @@ public class Result implements Serializable {
 
     public static Result error() {
         Result result = new Result();
-        result.setCode(Constant.CODE_500);
+        result.setCode(HttpStatus.HTTP_INTERNAL_ERROR);
         result.setMsg(Constant.MSG_500);
         result.setSuccess(false);
         return result;
@@ -61,7 +62,7 @@ public class Result implements Serializable {
 
     public static Result error(String msg) {
         Result result = new Result();
-        result.setCode(Constant.CODE_500);
+        result.setCode(HttpStatus.HTTP_INTERNAL_ERROR);
         result.setMsg(msg);
         result.setSuccess(false);
         return result;
@@ -69,7 +70,7 @@ public class Result implements Serializable {
 
     public static Result error(String msg, Object data) {
         Result result = new Result();
-        result.setCode(Constant.CODE_500);
+        result.setCode(HttpStatus.HTTP_INTERNAL_ERROR);
         result.setMsg(msg);
         result.setSuccess(false);
         result.setData(data);

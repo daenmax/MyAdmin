@@ -5,7 +5,7 @@ import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.service.TestDataService;
 import cn.daenx.myadmin.test.vo.TestDataPageVo;
-import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
@@ -25,9 +25,18 @@ public class TestDataController {
      * @param vo
      * @return
      */
-//    @SaCheckLogin()
+    @SaCheckPermission("system:dict:list")
     @GetMapping("/list")
     public Result list(TestDataPageVo vo) {
+        boolean login = StpUtil.isLogin();
+        System.out.println(login);
+        IPage<TestDataPageDto> page = testDataService.getPage(vo);
+        return Result.ok(page);
+    }
+
+    @SaCheckPermission("system:dict:test")
+    @GetMapping("/list2")
+    public Result list2(TestDataPageVo vo) {
         boolean login = StpUtil.isLogin();
         System.out.println(login);
         IPage<TestDataPageDto> page = testDataService.getPage(vo);

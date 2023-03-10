@@ -3,6 +3,9 @@ package cn.daenx.myadmin.common.exception;
 import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
+import cn.hutool.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -43,14 +46,7 @@ public class ExceptionHandler {
         return Result.error(e.getMessage());
     }
 
-    /**
-     * 认证失败或者未登录
-     */
-    @org.springframework.web.bind.annotation.ExceptionHandler(NotLoginException.class)
-    public Result handleNotLoginException(NotLoginException e, HttpServletRequest request) {
-        log.error("请求地址->{},认证失败->{},无法访问", request.getRequestURI(), e.getMessage());
-        return Result.error(Constant.CODE_401, "请先登录再访问");
-    }
+
 
     /**
      * 请求方式不支持
@@ -113,5 +109,32 @@ public class ExceptionHandler {
     public Object handleConstraintViolationException(ConstraintViolationException e) {
         ConstraintViolation<?> constraintViolation = e.getConstraintViolations().iterator().next();
         return Result.error(constraintViolation.getMessage());
+    }
+
+    /**
+     * 权限码异常
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(NotPermissionException.class)
+    public Result handleNotPermissionException(NotPermissionException e, HttpServletRequest request) {
+        log.error("请求地址->{},权限码校验失败->{}", request.getRequestURI(), e.getMessage());
+        return Result.error(HttpStatus.HTTP_FORBIDDEN, "无访问权限");
+    }
+
+    /**
+     * 角色权限异常
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(NotRoleException.class)
+    public Result handleNotRoleException(NotRoleException e, HttpServletRequest request) {
+        log.error("请求地址->{},角色权限校验失败->{}", request.getRequestURI(), e.getMessage());
+        return Result.error(HttpStatus.HTTP_FORBIDDEN, "无访问权限");
+    }
+
+    /**
+     * 认证失败或者未登录
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(NotLoginException.class)
+    public Result handleNotLoginException(NotLoginException e, HttpServletRequest request) {
+        log.error("请求地址->{},认证失败->{},无法访问", request.getRequestURI(), e.getMessage());
+        return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "未登录或登录失效");
     }
 }
