@@ -5,17 +5,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * Security 配置属性
+ * 设置忽略鉴权的地址
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "security")
-public class SecurityProperties {
+@ConfigurationProperties(prefix = "check-login")
+public class checkLoginIgnoresProperties {
 
     /**
-     * 排除路径
+     * 忽略以下接口，不鉴权
      */
-    private String[] excludes;
-
-
+    private String[] ignores;
 }

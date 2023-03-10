@@ -42,7 +42,7 @@ spring:
         test-on-return: false
         # 基础监控配置
         web-stat-filter:
-          enabled: true
+          enabled: false
           url-pattern: /*
           #设置不统计哪些URL
           exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
@@ -151,16 +151,13 @@ captcha:
     # 线段干扰元素数/线段干扰元素数/扭曲干扰线宽度
     olCount: 10
   sms:
-# security配置
-security:
-  # 排除路径
-  excludes:
-    # 静态资源
-    - /*.html
-    - /**/*.html
-    - /**/*.css
-    - /**/*.js
-    # swagger 文档配置
-    - /favicon.ico
-    - /*/api-docs
-    - /*/api-docs/**
+
+# 设置忽略鉴权的地址
+check-login:
+  # 忽略以下接口，不鉴权，路径不包含 server.servlet.context-path，即不用考虑
+  ignores:
+    # swagger接口文档
+    - /swagger-ui.html
+    - /swagger-ui/**
+    - /api-docs
+    - /api-docs/**

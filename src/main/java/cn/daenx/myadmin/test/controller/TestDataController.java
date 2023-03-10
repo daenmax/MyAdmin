@@ -25,7 +25,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @SaCheckLogin()
+//    @SaCheckLogin()
     @GetMapping("/list")
     public Result list(TestDataPageVo vo) {
         boolean login = StpUtil.isLogin();
