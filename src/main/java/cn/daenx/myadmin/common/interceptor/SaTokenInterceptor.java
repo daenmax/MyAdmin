@@ -27,17 +27,13 @@ public class SaTokenInterceptor implements WebMvcConfigurer {
         SaInterceptor saInterceptor = new SaInterceptor(new SaParamFunction<Object>() {
             @Override
             public void run(Object o) {
-                System.out.println("我阿萨德");
                 //检查所有的路径
                 SaRouter.match("/**").check(new SaParamFunction<SaRouterStaff>() {
                     //以下是检查代码
                     @Override
                     public void run(SaRouterStaff saRouterStaff) {
-                        System.out.println("123");
-                        // 检查是否登录 是否有token
+                        // 检查是否登录
                         StpUtil.checkLogin();
-                        log.info("剩余有效时间: {}", StpUtil.getTokenTimeout());
-                        log.info("临时有效时间: {}", StpUtil.getTokenActivityTimeout());
                     }
                 });
             }
