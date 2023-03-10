@@ -3,6 +3,8 @@ package cn.daenx.myadmin.common.exception;
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.vo.DataScopeParam;
+import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.List;
 
 /**
  * 数据权限拦截器
@@ -71,7 +74,7 @@ public class DataScopeInterceptor implements DataPermissionHandler {
     /**
      * 拦截器，用于修改SQL，加入数据权限where条件
      *
-     * @param where
+     * @param where             注意，这个where只能获取到你sql最外层的where
      * @param mappedStatementId
      * @return
      */
@@ -105,11 +108,48 @@ public class DataScopeInterceptor implements DataPermissionHandler {
      * @return
      */
     private String makeScopeSql(DataScopeParam dataScopeParam, SysLoginUserVo loginUser) {
-        //修改SQL，待完成………………
-        String sql = "";
-
-
-        sql = "(" + sql + ")";
-        return sql;
+        String alias = dataScopeParam.getAlias();
+        String field = dataScopeParam.getField();
+        List<SysRole> roleList = loginUser.getRoles();
+        String userId = loginUser.getId();
+        String deptId = loginUser.getDeptId();
+        StringBuilder sql = new StringBuilder();
+        String prex = alias + "." + field;
+        Boolean init = false;
+        for (SysRole sysRole : roleList) {
+            if (init) {
+                sql.append(" or ");
+            }
+            sql.append(prex);
+            //数据权限，0=本人数据，1=本部门数据，2=本部门及以下数据，3=全部数据，4=自定义权限
+            Integer dataScope = sysRole.getDataScope();
+            if (SystemConstant.DATA_SCOPE_SELF.equals(dataScope)) {
+                //本人数据
+                sql.append(" in ")
+                        .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id ='")
+                        .append(deptId).append("')");
+            } else if (SystemConstant.DATA_SCOPE_DEPT.equals(dataScope)) {
+                //本部门数据
+                sql.append(" in ")
+                        .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id ='")
+                        .append(deptId).append("')");
+            } else if (SystemConstant.DATA_SCOPE_DEPT_DOWN.equals(dataScope)) {
+                //本部门及以下数据
+                sql.append(" in ")
+                        .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id='").append(deptId).append("' OR  FIND_IN_SET('")
+                        .append(deptId).append("',all_parent_id))");
+            } else if (SystemConstant.DATA_SCOPE_ALL.equals(dataScope)) {
+                //全部数据
+                return new StringBuilder().toString();
+            } else if (SystemConstant.DATA_SCOPE_CUSTOM.equals(dataScope)) {
+                //自定义权限
+                sql.append("='").append(userId).append("'").append(" or "+prex).append(" in ")
+                        .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id in")
+                        .append("( select sys_role_dept.dept_id from sys_role_dept where sys_role_dept.role_id='").append(sysRole.getId())
+                        .append("'))");
+            }
+            init = true;
+        }
+        return sql.toString();
     }
 }
