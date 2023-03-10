@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.test.mapper;
 
+import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.po.TestData;
 import cn.daenx.myadmin.test.vo.TestDataPageVo;
@@ -18,5 +19,6 @@ public interface TestDataMapper extends BaseMapper<TestData> {
      * @param vo
      * @return
      */
+    @DataScope(alias = "td")
     IPage<TestDataPageDto> getPage(Page<TestDataPageDto> page, @Param("vo") TestDataPageVo vo);
 }
