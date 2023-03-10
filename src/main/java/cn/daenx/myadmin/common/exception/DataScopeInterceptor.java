@@ -4,9 +4,12 @@ import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.vo.DataScopeParam;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import lombok.SneakyThrows;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
+import net.sf.jsqlparser.schema.Column;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.plugin.Intercepts;
@@ -82,10 +85,31 @@ public class DataScopeInterceptor implements DataPermissionHandler {
         }
         //判断是否是管理员，如果是的话，直接放行，不修改SQL
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        if(loginUser.isAdmin()){
+        if (loginUser.isAdmin()) {
             return where;
         }
-        //开始修改SQL
-        return where;
+        //生成权限SQL
+        String sql = makeScopeSql(dataScopeParam, loginUser);
+        if (ObjectUtil.isEmpty(sql)) {
+            return where;
+        }
+        AndExpression andExpression = new AndExpression(where, new Column(sql));
+        return andExpression;
+    }
+
+    /**
+     * 生成权限SQL
+     *
+     * @param dataScopeParam
+     * @param loginUser
+     * @return
+     */
+    private String makeScopeSql(DataScopeParam dataScopeParam, SysLoginUserVo loginUser) {
+        //修改SQL，待完成………………
+        String sql = "";
+
+
+        sql = "(" + sql + ")";
+        return sql;
     }
 }
