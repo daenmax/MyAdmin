@@ -16,10 +16,4 @@
 
 `2023年2月1日10:58:11`
 
-关于druid的监控页
-
-spring6与spring boot3会采用Jakarta作为新的命名空间，由于Druid没有实现Jakarta导致监控页面不能用
-
-`2023年2月10日18:06:04`
-
-暂时不要用JRebel热部署插件启动，会报错，应该是我用的盗版JRebel，版本低，不支持springboot3……
+druid未兼容springboo3，所以 `监控页面`、`密码加密功能`暂时无法使用
