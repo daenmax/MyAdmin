@@ -17,6 +17,7 @@
         <java.version>17</java.version>
         <spring.boot.version>3.0.1</spring.boot.version>
         <druid.version>1.2.16</druid.version>
+        <fastjson2.version>2.0.24</fastjson2.version>
         <aop.version>3.0.1</aop.version>
         <mybatis.plus.version>3.5.3.1</mybatis.plus.version>
         <mybatis.dynamic.datasource.version>3.6.1</mybatis.dynamic.datasource.version>
@@ -90,6 +91,13 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
+        <!-- 阿里巴巴fastjson2 -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
+        </dependency>
+
         <!--redis依赖包-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

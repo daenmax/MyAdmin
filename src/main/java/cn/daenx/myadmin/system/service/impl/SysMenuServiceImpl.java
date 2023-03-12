@@ -75,7 +75,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (LoginUtil.isAdmin(userId)) {
             LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<SysMenu>()
                     .in(SysMenu::getMenuType, SystemConstant.MENU_TYPE_DIR, SystemConstant.MENU_TYPE_MENU)
-                    .eq(SysMenu::getStatus, "0")
+                    .eq(SysMenu::getStatus, SystemConstant.STATUS_NORMAL)
                     .orderByAsc(SysMenu::getParentId)
                     .orderByAsc(SysMenu::getOrderNum);
             menus = sysMenuMapper.selectList(wrapper);

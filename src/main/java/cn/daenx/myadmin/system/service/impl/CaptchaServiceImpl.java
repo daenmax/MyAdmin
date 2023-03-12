@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
@@ -103,7 +104,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             base64 = ImgUtil.toBase64(image, ImgUtil.IMAGE_TYPE_PNG);
         }
         String uuid = IdUtil.randomUUID();
-        redisUtil.set(RedisConstant.CAPTCHA_IMG + uuid, code, 300);
+        redisUtil.setValue(RedisConstant.CAPTCHA_IMG + uuid, code, 300L, TimeUnit.SECONDS);
         map.put("uuid", uuid);
         map.put("img", base64);
         return map;

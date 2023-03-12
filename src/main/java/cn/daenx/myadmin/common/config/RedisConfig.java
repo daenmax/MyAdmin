@@ -3,31 +3,48 @@ package cn.daenx.myadmin.common.config;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
 /**
- * Redis配置类
+ * Redis序列化配置
+ *
  * @author DaenMax
  */
 @Configuration
 public class RedisConfig {
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisConnectionFactory redisConnectionFactory;
 
-    /**
-     * 解决redis插入中文乱码
-     * @return
-     */
     @Bean
-    public RedisTemplate redisTemplateInit() {
-        //设置序列化Key的实例化对象
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+
+        //使用Jackson2JsonRedisSerialize 替换默认序列化
+        Jackson2JsonRedisSerializer redisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+
+        // key采用String的序列化方式
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        //设置序列化Value的实例化对象
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        // string的value采用fastJson序列化方式
+        redisTemplate.setValueSerializer(redisSerializer);
+        // hash的key也采用String的序列化方式
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        // hash的value采用fastJson序列化方式
+        redisTemplate.setHashValueSerializer(redisSerializer);
+        redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisMessageListenerContainer container() {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory);
+        return container;
     }
 }

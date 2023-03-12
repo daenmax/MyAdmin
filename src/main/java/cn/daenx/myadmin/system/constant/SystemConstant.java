@@ -89,4 +89,13 @@ public class SystemConstant {
      */
     public static final Integer  DATA_SCOPE_CUSTOM = 4;
 
+    /**
+     * 通用状态：正常
+     */
+    public static final Integer STATUS_NORMAL = 0;
+    /**
+     * 通用状态：禁用
+     */
+    public static final Integer STATUS_DISABLE = 1;
+
 }

@@ -55,7 +55,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             if (ObjectUtil.isEmpty(code) || ObjectUtil.isEmpty(uuid)) {
                 throw new MyException("验证码相关参数不能为空");
             }
-            String codeReal = (String) redisUtil.get(RedisConstant.CAPTCHA_IMG + uuid);
+            String codeReal = (String) redisUtil.getValue(RedisConstant.CAPTCHA_IMG + uuid);
             if (ObjectUtil.isEmpty(codeReal)) {
                 throw new MyException("验证码已过期，请刷新验证码");
             }
