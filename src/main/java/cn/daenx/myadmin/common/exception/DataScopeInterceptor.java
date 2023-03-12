@@ -96,6 +96,9 @@ public class DataScopeInterceptor implements DataPermissionHandler {
         if (ObjectUtil.isEmpty(sql)) {
             return where;
         }
+        if (where == null) {
+            return new Column(sql);
+        }
         AndExpression andExpression = new AndExpression(where, new Column(sql));
         return andExpression;
     }
@@ -125,9 +128,8 @@ public class DataScopeInterceptor implements DataPermissionHandler {
             Integer dataScope = sysRole.getDataScope();
             if (SystemConstant.DATA_SCOPE_SELF.equals(dataScope)) {
                 //本人数据
-                sql.append(" in ")
-                        .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id ='")
-                        .append(deptId).append("')");
+                sql.append(" = ")
+                        .append("'").append(userId).append("'");
             } else if (SystemConstant.DATA_SCOPE_DEPT.equals(dataScope)) {
                 //本部门数据
                 sql.append(" in ")

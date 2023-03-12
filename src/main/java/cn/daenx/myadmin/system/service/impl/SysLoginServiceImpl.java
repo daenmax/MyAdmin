@@ -101,6 +101,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             sysUserService.validatedUser(sysUser);
             SysLoginUserVo loginUserVo = new SysLoginUserVo();
             loginUserVo.setId(sysUser.getId());
+            loginUserVo.setDeptId(sysUser.getDeptId());
             loginUserVo.setUsername(sysUser.getUsername());
             loginUserVo.setUserType(sysUserTypeService.getSysUserTypeById(sysUser.getUserTypeId()));
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
