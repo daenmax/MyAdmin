@@ -64,6 +64,25 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     }
 
     /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<SysDict> getAll(SysDictPageVo vo) {
+        LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
+        Object beginTime = vo.getParams().get("beginTime");
+        Object endTime = vo.getParams().get("endTime");
+        wrapper.between(ObjectUtil.isNotEmpty(beginTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, beginTime, endTime);
+        List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
+        return sysDictList;
+    }
+
+    /**
      * +
      * 新增
      *

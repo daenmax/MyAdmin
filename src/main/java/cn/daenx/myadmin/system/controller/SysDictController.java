@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysDictDetail;
@@ -14,6 +15,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaIgnore;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +39,17 @@ public class SysDictController {
         IPage<SysDict> page = sysDictService.getPage(vo);
         return Result.ok(page);
     }
+
+    /**
+     * 导出
+     */
+    @SaCheckPermission("system:dict:export")
+    @PostMapping("/export")
+    public void export(SysDictPageVo vo, HttpServletResponse response) {
+        List<SysDict> list = sysDictService.getAll(vo);
+        MyUtil.exportXlsx(response, "字典", "字典编码", list, SysDict.class);
+    }
+
 
     /**
      * 新增
@@ -89,4 +102,5 @@ public class SysDictController {
         sysDictService.deleteByIds(ids);
         return Result.ok();
     }
+
 }

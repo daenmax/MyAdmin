@@ -24,6 +24,14 @@ public interface SysDictService extends IService<SysDict> {
     IPage<SysDict> getPage(SysDictPageVo vo);
 
     /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    List<SysDict> getAll(SysDictPageVo vo);
+
+    /**
      * +
      * 新增
      *
