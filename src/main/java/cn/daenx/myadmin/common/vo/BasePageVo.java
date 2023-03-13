@@ -1,6 +1,19 @@
 package cn.daenx.myadmin.common.vo;
 
+import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.SqlUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 分页参数
@@ -18,14 +31,71 @@ public class BasePageVo {
     private Integer pageSize = 10;
 
     /**
-     * 排序字段
+     * 排序字段，多个用,隔开
      */
     private String orderByColumn;
 
     /**
-     * 排序方向：desc、asc
+     * 排序方向：desc、asc，多个用,隔开
      */
     private String isAsc;
 
 
+    private Map<String, Object> params = new HashMap<>();
+
+
+    public <T> Page<T> getPage() {
+        Integer pageNum = ObjectUtil.defaultIfNull(getPageNum(), 1);
+        Integer pageSize = ObjectUtil.defaultIfNull(getPageSize(), Integer.MAX_VALUE);
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        Page<T> page = new Page<>(pageNum, pageSize);
+        List<OrderItem> orderItems = buildOrderItem();
+        if (CollUtil.isNotEmpty(orderItems)) {
+            page.addOrder(orderItems);
+        }
+        return page;
+    }
+
+    /**
+     * 构建排序
+     *
+     * 支持的用法如下:
+     * {isAsc:"asc",orderByColumn:"id"} order by id asc
+     * {isAsc:"asc",orderByColumn:"id,createTime"} order by id asc,create_time asc
+     * {isAsc:"desc",orderByColumn:"id,createTime"} order by id desc,create_time desc
+     * {isAsc:"asc,desc",orderByColumn:"id,createTime"} order by id asc,create_time desc
+     */
+    private List<OrderItem> buildOrderItem() {
+        if (!(ObjectUtil.isNotEmpty(orderByColumn) && ObjectUtil.isNotEmpty(isAsc))) {
+            return null;
+        }
+        String orderBy = SqlUtil.escapeOrderBySql(orderByColumn);
+        orderBy = StrUtil.toUnderlineCase(orderBy);
+
+        // 兼容前端排序类型
+        isAsc = StringUtils.replaceEach(isAsc, new String[]{"ascending", "descending"}, new String[]{"asc", "desc"});
+
+        String[] orderByArr = orderBy.split(",");
+        String[] isAscArr = isAsc.split(",");
+        if (isAscArr.length != 1 && isAscArr.length != orderByArr.length) {
+            throw new MyException("排序参数有误");
+        }
+
+        List<OrderItem> list = new ArrayList<>();
+        // 每个字段各自排序
+        for (int i = 0; i < orderByArr.length; i++) {
+            String orderByStr = orderByArr[i];
+            String isAscStr = isAscArr.length == 1 ? isAscArr[0] : isAscArr[i];
+            if ("asc".equals(isAscStr)) {
+                list.add(OrderItem.asc(orderByStr));
+            } else if ("desc".equals(isAscStr)) {
+                list.add(OrderItem.desc(orderByStr));
+            } else {
+                throw new MyException("排序参数有误");
+            }
+        }
+        return list;
+    }
 }

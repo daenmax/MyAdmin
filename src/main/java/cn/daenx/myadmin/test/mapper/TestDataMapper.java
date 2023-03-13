@@ -21,4 +21,5 @@ public interface TestDataMapper extends BaseMapper<TestData> {
      */
     @DataScope(alias = "td")
     IPage<TestDataPageDto> getPage(Page<TestDataPageDto> page, @Param("vo") TestDataPageVo vo);
+
 }
