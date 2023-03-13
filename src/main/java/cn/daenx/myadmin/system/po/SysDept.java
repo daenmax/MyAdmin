@@ -54,7 +54,7 @@ public class SysDept extends BaseEntity implements Serializable {
      * 部门状态，0=正常，1=停用
      */
     @TableField(value = "`status`")
-    private Integer status;
+    private String status;
 
     /**
      * 部门负责人 关联用户ID

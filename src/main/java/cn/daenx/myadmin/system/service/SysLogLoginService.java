@@ -16,6 +16,6 @@ public interface SysLogLoginService extends IService<SysLogLogin> {
      * @param ip
      * @param userAgent
      */
-    void saveLogin(String userId, String userName, Integer status, String remark, String ip, UserAgent userAgent);
+    void saveLogin(String userId, String userName, String status, String remark, String ip, UserAgent userAgent);
 
 }

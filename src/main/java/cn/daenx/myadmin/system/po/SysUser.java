@@ -55,7 +55,7 @@ public class SysUser extends BaseEntity implements Serializable {
      * 账号状态，0=正常，1=停用，2=注销
      */
     @TableField(value = "`status`")
-    private Integer status;
+    private String status;
 
     /**
      * 用户手机号

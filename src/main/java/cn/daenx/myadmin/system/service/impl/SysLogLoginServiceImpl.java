@@ -35,7 +35,7 @@ public class SysLogLoginServiceImpl extends ServiceImpl<SysLogLoginMapper, SysLo
      */
     @Override
     @Async
-    public void saveLogin(String userId, String userName, Integer status, String remark, String ip, UserAgent userAgent) {
+    public void saveLogin(String userId, String userName, String status, String remark, String ip, UserAgent userAgent) {
         SysLogLogin sysLogLogin = new SysLogLogin();
         sysLogLogin.setUsername(userName);
         if (ObjectUtil.isNotEmpty(ip)) {

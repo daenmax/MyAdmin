@@ -64,7 +64,7 @@ public class SysDictDetail extends BaseEntity implements Serializable {
      * 字典状态，0=正常，1=禁用
      */
     @TableField(value = "`status`")
-    private Integer status;
+    private String status;
 
     /**
      * 备注

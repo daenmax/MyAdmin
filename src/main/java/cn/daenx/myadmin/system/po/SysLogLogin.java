@@ -58,7 +58,7 @@ public class SysLogLogin extends BaseEntity implements Serializable {
      * 登录结果，0=成功，1=失败
      */
     @TableField(value = "`status`")
-    private Integer status;
+    private String status;
 
     /**
      * 备注

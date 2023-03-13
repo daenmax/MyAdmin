@@ -76,31 +76,31 @@ public class SysMenu extends TreeEntity<SysMenu> {
      * 显示状态，0=正常，1=隐藏
      */
     @TableField(value = "visible")
-    private Integer visible;
+    private String visible;
 
     /**
      * 菜单状态，0=正常，1=禁用
      */
     @TableField(value = "`status`")
-    private Integer status;
+    private String status;
 
     /**
      * 菜单类型，1=目录，2=菜单，3=按钮
      */
     @TableField(value = "`menu_type`")
-    private Integer menuType;
+    private String menuType;
 
     /**
      * 是否外链，0=是，1=否
      */
     @TableField(value = "is_frame")
-    private Integer isFrame;
+    private String isFrame;
 
     /**
      * 是否缓存，0=缓存，1=不缓存
      */
     @TableField(value = "is_cache")
-    private Integer isCache;
+    private String isCache;
 
     /**
      * 备注

@@ -75,7 +75,7 @@ public class SysUserDetail extends BaseEntity implements Serializable {
     private String avatar;
 
     /**
-     * 账户余额
+     * 账户余额，单位分
      */
     @TableField(value = "`money`")
     private Integer money;

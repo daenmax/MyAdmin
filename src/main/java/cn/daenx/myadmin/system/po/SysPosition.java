@@ -54,7 +54,7 @@ public class SysPosition extends BaseEntity implements Serializable {
      * 岗位状态，0=正常，1=禁用
      */
     @TableField(value = "`status`")
-    private Integer status;
+    private String status;
 
     /**
      * 备注
