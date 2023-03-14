@@ -56,9 +56,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
-        Object beginTime = vo.getParams().get("beginTime");
-        Object endTime = vo.getParams().get("endTime");
-        wrapper.between(ObjectUtil.isNotEmpty(beginTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, beginTime, endTime);
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
         Page<SysDict> sysDictPage = sysDictMapper.selectPage(vo.getPage(), wrapper);
         return sysDictPage;
     }
@@ -75,9 +75,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
-        Object beginTime = vo.getParams().get("beginTime");
-        Object endTime = vo.getParams().get("endTime");
-        wrapper.between(ObjectUtil.isNotEmpty(beginTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, beginTime, endTime);
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
         List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
         return sysDictList;
     }

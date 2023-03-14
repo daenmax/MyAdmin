@@ -7,12 +7,20 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface TestDataService extends IService<TestData> {
+
     /**
-     * 测试数据分页列表
+     * 测试数据分页列表_MybatisPlus
      *
      * @param vo
      * @return
      */
-    IPage<TestDataPageDto> getPage(TestDataPageVo vo);
+    IPage<TestData> getPage1(TestDataPageVo vo);
 
+    /**
+     * 测试数据分页列表_自写SQL
+     *
+     * @param vo
+     * @return
+     */
+    IPage<TestDataPageDto> getPage2(TestDataPageVo vo);
 }

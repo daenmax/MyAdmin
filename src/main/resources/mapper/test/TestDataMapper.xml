@@ -18,34 +18,43 @@
   </sql>
 
   <select id="getPage" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
-    SELECT td.id          AS id,
-           td.content     AS content,
-           td.create_id   AS createId,
-           td.create_time AS createTime,
-           td.update_id   AS updateId,
-           td.update_time AS updateTime
-    FROM test_data td
-    <where>
-      <if test="vo.content != null and vo.content != ''">
-        and td.content like CONCAT('%', #{vo.content}, '%')
-      </if>
-    </where>
-    <choose>
-      <when test='vo.orderByColumn != null and vo.orderByColumn != ""'>
-        order by td.${vo.orderByColumn}
-        <choose>
-          <when test='vo.isAsc == null or vo.isAsc == "" or vo.isAsc == "ASC" or vo.isAsc == "asc" or vo.isAsc == "ascending"'>
-            ASC
+      SELECT td.*,
+      su1.username as createName,
+      su2.username as updateName,
+      sd.NAME as createDept
+      FROM test_data td
+      LEFT JOIN sys_user su1 on su1.id = td.create_id
+      LEFT JOIN sys_user su2 on su2.id = td.update_id
+      LEFT JOIN sys_dept sd on sd.id = su1.dept_id
+      <where>
+          <if test="vo.title != null and vo.title != ''">
+              and td.title = #{vo.title}
+          </if>
+          <if test="vo.content != null and vo.content != ''">
+              and td.content like CONCAT('%', #{vo.content}, '%')
+          </if>
+          <if test="vo.remark != null and vo.remark != ''">
+              and td.remark like CONCAT('%', #{vo.remark}, '%')
+          </if>
+          <if test="vo.startTime != null and vo.startTime != '' and vo.endTime != null and vo.endTime != ''">
+              and td.create_time between #{vo.startTime} and #{vo.endTime}
+          </if>
+      </where>
+      <choose>
+          <when test='vo.orderByColumn != null and vo.orderByColumn != ""'>
+              order by td.${vo.orderByColumn}
+              <choose>
+                  <when test='vo.isAsc == null or vo.isAsc == "" or vo.isAsc == "ASC" or vo.isAsc == "asc" or vo.isAsc == "ascending"'>
+                      ASC
+                  </when>
+                  <otherwise>
+                      DESC
+                  </otherwise>
+              </choose>
           </when>
           <otherwise>
-            DESC
+              order by td.update_time DESC
           </otherwise>
-        </choose>
-      </when>
-      <otherwise>
-        order by td.update_time DESC
-      </otherwise>
-    </choose>
-
-    </select>
+      </choose>
+  </select>
 </mapper>

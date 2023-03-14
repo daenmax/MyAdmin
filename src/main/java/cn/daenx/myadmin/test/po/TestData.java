@@ -24,6 +24,12 @@ public class TestData extends BaseEntity implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
+    @TableField(value = "title")
+    private String title;
+
     @TableField(value = "content")
     private String content;
+
+    @TableField(value = "remark")
+    private String remark;
 }

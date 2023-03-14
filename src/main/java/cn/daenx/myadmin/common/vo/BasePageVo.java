@@ -39,9 +39,8 @@ public class BasePageVo {
      * 排序方向：desc、asc，多个用,隔开
      */
     private String isAsc;
-
-
-    private Map<String, Object> params = new HashMap<>();
+    private String startTime;
+    private String endTime;
 
 
     public <T> Page<T> getPage() {
