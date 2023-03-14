@@ -3,13 +3,11 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysDict;
-import cn.hutool.core.convert.Convert;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,7 +31,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     @Override
     public List<SysDictDetail> getDictDetailByCodeFromRedis(String dictCode) {
         Object value = redisUtil.getValue(RedisConstant.DICT + dictCode);
-        List<SysDictDetail> list = Convert.convert(ArrayList.class, value);
+        List<SysDictDetail> list = JSON.parseArray(JSON.toJSONString(value), SysDictDetail.class);
         return list;
     }
 
