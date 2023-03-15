@@ -22,7 +22,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     private TestDataMapper testDataMapper;
 
     /**
-     * 测试数据分页列表_MybatisPlus
+     * 测试数据分页列表_MP分页插件
      *
      * @param vo
      * @return
@@ -42,7 +42,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     }
 
     /**
-     * 测试数据分页列表_自写SQL
+     * 测试数据分页列表_自己写的SQL
      *
      * @param vo
      * @return
@@ -55,7 +55,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     }
 
     /**
-     * 测试数据分页列表_半自写SQL
+     * 测试数据分页列表_MP自定义SQL
      *
      * @param vo
      * @return

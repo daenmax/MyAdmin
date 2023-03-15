@@ -41,6 +41,14 @@ public class BasePageVo {
     private String isAsc;
     private String startTime;
     private String endTime;
+    /**
+     * 默认排序字段
+     */
+    private String DEFAULT_ORDER_BY_COLUMN = "create_time";
+    /**
+     * 默认排序方向
+     */
+    private Boolean DEFAULT_ORDER_BY_ASC = Boolean.FALSE;
 
 
     public <T> Page<T> getPage() {
@@ -53,13 +61,16 @@ public class BasePageVo {
         List<OrderItem> orderItems = buildOrderItem();
         if (CollUtil.isNotEmpty(orderItems)) {
             page.addOrder(orderItems);
+        } else {
+            //默认排序字段
+            page.addOrder(new OrderItem(DEFAULT_ORDER_BY_COLUMN,DEFAULT_ORDER_BY_ASC));
         }
         return page;
     }
 
     /**
      * 构建排序
-     *
+     * <p>
      * 支持的用法如下:
      * {isAsc:"asc",orderByColumn:"id"} order by id asc
      * {isAsc:"asc",orderByColumn:"id,createTime"} order by id asc,create_time asc

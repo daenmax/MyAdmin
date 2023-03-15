@@ -20,7 +20,7 @@ public class TestDataController {
     private TestDataService testDataService;
 
     /**
-     * 测试数据分页列表_MybatisPlus
+     * 测试数据分页列表_MP分页插件
      *
      * @param vo
      * @return
@@ -33,7 +33,7 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据分页列表_自写SQL
+     * 测试数据分页列表_自己写的SQL
      *
      * @param vo
      * @return
@@ -46,7 +46,7 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据分页列表_半自写SQL
+     * 测试数据分页列表_MP自定义SQL
      *
      * @param vo
      * @return

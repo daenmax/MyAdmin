@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface TestDataService extends IService<TestData> {
 
     /**
-     * 测试数据分页列表_MybatisPlus
+     * 测试数据分页列表_MP分页插件
      *
      * @param vo
      * @return
@@ -17,7 +17,7 @@ public interface TestDataService extends IService<TestData> {
     IPage<TestData> getPage1(TestDataPageVo vo);
 
     /**
-     * 测试数据分页列表_自写SQL
+     * 测试数据分页列表_自己写的SQL
      *
      * @param vo
      * @return
@@ -25,7 +25,7 @@ public interface TestDataService extends IService<TestData> {
     IPage<TestDataPageDto> getPage2(TestDataPageVo vo);
 
     /**
-     * 测试数据分页列表_半自写SQL
+     * 测试数据分页列表_MP自定义SQL
      *
      * @param vo
      * @return
