@@ -173,7 +173,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         queryWrapper.in(SysDictDetail::getDictCode, codeList);
         sysDictDetailMapper.delete(queryWrapper);
         //删除主表
-        sysDictMapper.deleteBatchIds(Arrays.asList(ids));
+        sysDictMapper.deleteBatchIds(idList);
         //TODO 刷新redis缓存
     }
 

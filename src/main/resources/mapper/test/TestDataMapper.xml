@@ -27,6 +27,7 @@
                LEFT JOIN sys_user su2 on su2.id = td.update_id
                LEFT JOIN sys_dept sd on sd.id = su1.dept_id
       <where>
+          and td.is_delete = 0
           <if test="vo.title != null and vo.title != ''">
               and td.title = #{vo.title}
           </if>
