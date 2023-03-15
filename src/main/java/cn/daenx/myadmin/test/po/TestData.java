@@ -30,6 +30,15 @@ public class TestData extends BaseEntity implements Serializable {
     @TableField(value = "content")
     private String content;
 
+    /**
+     * 文章类型，0=民生，1=科技
+     */
+    @TableField(value = "type")
+    private String type;
+
+    /**
+     * 备注
+     */
     @TableField(value = "remark")
     private String remark;
 }

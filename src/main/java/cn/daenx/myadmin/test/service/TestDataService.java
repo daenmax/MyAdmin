@@ -2,11 +2,14 @@ package cn.daenx.myadmin.test.service;
 
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.po.TestData;
+import cn.daenx.myadmin.test.vo.TestDataImportVo;
 import cn.daenx.myadmin.test.vo.TestDataPageVo;
 import cn.daenx.myadmin.test.vo.TestDataUpdVo;
-import cn.daenx.myadmin.test.vo.add.TestDataAddVo;
+import cn.daenx.myadmin.test.vo.TestDataAddVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 public interface TestDataService extends IService<TestData> {
 
@@ -62,4 +65,20 @@ public interface TestDataService extends IService<TestData> {
      * @param ids
      */
     void deleteByIds(String[] ids);
+
+    /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    List<TestDataPageDto> getAll(TestDataPageVo vo);
+
+    /**
+     * 导入数据
+     *
+     * @param dataList
+     * @return
+     */
+    Integer importData(List<TestDataImportVo> dataList);
 }

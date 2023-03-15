@@ -7,5 +7,6 @@ import lombok.Data;
 public class TestDataPageVo extends BasePageVo {
     private String title;
     private String content;
+    private String type;
     private String remark;
 }

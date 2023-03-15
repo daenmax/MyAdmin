@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface TestDataMapper extends BaseMapper<TestData> {
     /**
@@ -32,5 +34,14 @@ public interface TestDataMapper extends BaseMapper<TestData> {
      */
     @DataScope(alias = "td")
     IPage<TestDataPageDto> getPageWrapper(Page<TestDataPageDto> page, @Param("ew") Wrapper<TestData> wrapper);
+
+    /**
+     * 测试数据列表_MP自定义SQL
+     *
+     * @param wrapper
+     * @return
+     */
+    @DataScope(alias = "td")
+    List<TestDataPageDto> getAll(@Param("ew") Wrapper<TestData> wrapper);
 
 }

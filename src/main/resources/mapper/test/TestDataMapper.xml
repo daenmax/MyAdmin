@@ -5,7 +5,10 @@
     <!--@mbg.generated-->
     <!--@Table test_data-->
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_id" jdbcType="VARCHAR" property="updateId" />
@@ -14,7 +17,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, content, create_id, create_time, update_id, update_time, is_delete
+    id, title, content, type, remark, create_id, create_time, update_id, update_time, is_delete
   </sql>
 
   <select id="getPage" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
@@ -33,6 +36,9 @@
           </if>
           <if test="vo.content != null and vo.content != ''">
               and td.content like CONCAT('%', #{vo.content}, '%')
+          </if>
+          <if test="vo.type != null and vo.type != ''">
+              and td.type = #{vo.type}
           </if>
           <if test="vo.remark != null and vo.remark != ''">
               and td.remark like CONCAT('%', #{vo.remark}, '%')
@@ -60,6 +66,18 @@
   </select>
 
   <select id="getPageWrapper" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
+      SELECT td.*,
+             su1.username as createName,
+             su2.username as updateName,
+             sd.NAME      as createDept
+      FROM test_data td
+               LEFT JOIN sys_user su1 on su1.id = td.create_id
+               LEFT JOIN sys_user su2 on su2.id = td.update_id
+               LEFT JOIN sys_dept sd on sd.id = su1.dept_id
+      ${ew.customSqlSegment}
+  </select>
+
+  <select id="getAll" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
       SELECT td.*,
              su1.username as createName,
              su2.username as updateName,

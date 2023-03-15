@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.test.dto;
+package cn.daenx.myadmin.test.vo;
 
 import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.annotation.DictDetail;
@@ -10,12 +10,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 //导出时忽略没有@ExcelProperty的字段
 @ExcelIgnoreUnannotated
-public class TestDataPageDto extends BaseDto {
-    @ExcelProperty(value = "id")
-    private String id;
+public class TestDataImportVo {
+
     @ExcelProperty(value = "标题")
     private String title;
     @ExcelProperty(value = "内容")
@@ -23,7 +21,7 @@ public class TestDataPageDto extends BaseDto {
     @ExcelProperty(value = "类型", converter = DictConverter.class)
     //使用自定义字典进行翻译，意思是直接写死在代码里的
     @Dict(custom = {@DictDetail(value = "0", label = "民生"), @DictDetail(value = "1", label = "科技")})
-//    @Dict(dictCode = "sys_normal_disable", custom = {})
+//    @Dict(dictCode = "test_data_type", custom = {})
     private String type;
     @ExcelProperty(value = "备注")
     private String remark;

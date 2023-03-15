@@ -9,5 +9,6 @@ public class TestDataUpdVo {
     private String id;
     private String title;
     private String content;
+    private String type;
     private String remark;
 }
