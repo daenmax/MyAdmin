@@ -104,4 +104,28 @@ public class SysDictController {
         return Result.ok();
     }
 
+
+    /**
+     * 刷新字典缓存
+     *
+     * @return
+     */
+    @SaCheckPermission("system:dict:refreshCache")
+    @PostMapping("/refreshCache")
+    public Result refreshCache() {
+        sysDictService.refreshCache();
+        return Result.ok();
+    }
+
+
+    /**
+     * 获取字典选择框列表
+     *
+     * @return
+     */
+    @GetMapping(value = "/optionSelect")
+    public Result optionSelect() {
+        List<SysDict> list = sysDictService.getAll(null);
+        return Result.ok(list);
+    }
 }

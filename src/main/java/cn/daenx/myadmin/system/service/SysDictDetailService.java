@@ -1,7 +1,8 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysDictDetail;
+import cn.daenx.myadmin.system.vo.SysDictDetailPageVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface SysDictDetailService extends IService<SysDictDetail>{
      */
     List<SysDictDetail> getDictDetailByCodeFromRedis(String dictCode);
 
-    List<SysDictDetail> getSysDictDetailList();
+    IPage<SysDictDetail> getPage(SysDictDetailPageVo vo);
 }

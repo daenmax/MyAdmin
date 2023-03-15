@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
@@ -72,12 +73,14 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     public List<SysDict> getAll(SysDictPageVo vo) {
         LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
-        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
+        if (vo != null) {
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
+            wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
+            String startTime = vo.getStartTime();
+            String endTime = vo.getEndTime();
+            wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
+        }
         List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
         return sysDictList;
     }
@@ -192,4 +195,19 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         return exists;
     }
 
+    /**
+     * 刷新字典缓存
+     */
+    @Override
+    public void refreshCache() {
+        redisUtil.delBatch(RedisConstant.DICT + "*");
+        List<SysDict> sysDictList = getSysDictList();
+        LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysDictDetail::getStatus, SystemConstant.STATUS_NORMAL);
+        List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
+        for (SysDict sysDict : sysDictList) {
+            List<SysDictDetail> collect = sysDictDetailList.stream().filter(dictDetail -> sysDict.getCode().equals(dictDetail.getDictCode())).collect(Collectors.toList());
+            redisUtil.setValue(RedisConstant.DICT + sysDict.getCode(), collect, null, null);
+        }
+    }
 }

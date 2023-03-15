@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.common.vo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -30,6 +31,7 @@ public class BaseEntity<T extends Model<T>> extends Model<T> {
     /**
      * 创建时间
      */
+    @ExcelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

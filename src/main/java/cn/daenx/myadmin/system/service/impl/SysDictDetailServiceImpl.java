@@ -3,8 +3,13 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysDict;
+import cn.daenx.myadmin.system.vo.SysDictDetailPageVo;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -36,10 +41,17 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     }
 
     @Override
-    public List<SysDictDetail> getSysDictDetailList() {
+    public IPage<SysDictDetail> getPage(SysDictDetailPageVo vo) {
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDictDetail::getStatus, SystemConstant.STATUS_NORMAL);
-        List<SysDictDetail> sysDictList = sysDictDetailMapper.selectList(wrapper);
-        return sysDictList;
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getDictCode()), SysDictDetail::getDictCode, vo.getDictCode());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getLabel()), SysDictDetail::getLabel, vo.getLabel());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysDictDetail::getValue, vo.getValue());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDictDetail::getStatus, vo.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getRemark()), SysDictDetail::getRemark, vo.getRemark());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDictDetail::getCreateTime, startTime, endTime);
+        Page<SysDictDetail> sysDictDetailPage = sysDictDetailMapper.selectPage(vo.getPage(), wrapper);
+        return sysDictDetailPage;
     }
 }
