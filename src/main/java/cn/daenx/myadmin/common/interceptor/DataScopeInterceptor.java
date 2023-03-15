@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.exception;
+package cn.daenx.myadmin.common.interceptor;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.utils.LoginUtil;

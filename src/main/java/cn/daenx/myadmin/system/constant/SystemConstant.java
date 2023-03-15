@@ -67,27 +67,27 @@ public class SystemConstant {
     /**
      * 数据权限，0=本人数据
      */
-    public static final Integer  DATA_SCOPE_SELF = 0;
+    public static final String  DATA_SCOPE_SELF = "0";
 
     /**
      * 数据权限，1=本部门数据
      */
-    public static final Integer  DATA_SCOPE_DEPT = 1;
+    public static final String  DATA_SCOPE_DEPT = "1";
 
     /**
      * 数据权限，2=本部门及以下数据
      */
-    public static final Integer  DATA_SCOPE_DEPT_DOWN = 2;
+    public static final String  DATA_SCOPE_DEPT_DOWN = "2";
 
     /**
      * 数据权限，3=全部数据
      */
-    public static final Integer  DATA_SCOPE_ALL = 3;
+    public static final String  DATA_SCOPE_ALL = "3";
 
     /**
      * 数据权限，4=自定义权限
      */
-    public static final Integer  DATA_SCOPE_CUSTOM = 4;
+    public static final String  DATA_SCOPE_CUSTOM = "4";
 
     /**
      * 通用状态：正常

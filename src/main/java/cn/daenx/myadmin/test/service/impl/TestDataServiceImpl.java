@@ -9,6 +9,7 @@ import cn.daenx.myadmin.test.service.TestDataService;
 import cn.daenx.myadmin.test.vo.TestDataPageVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -50,6 +51,25 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     public IPage<TestDataPageDto> getPage2(TestDataPageVo vo) {
         Page<TestDataPageDto> page = new Page<>(vo.getPageNum(), vo.getPageSize());
         IPage<TestDataPageDto> iPage = testDataMapper.getPage(page, vo);
+        return iPage;
+    }
+
+    /**
+     * 测试数据分页列表_半自写SQL
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public IPage<TestDataPageDto> getPage3(TestDataPageVo vo) {
+        QueryWrapper<TestData> wrapper = new QueryWrapper<>();
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
+        IPage<TestDataPageDto> iPage = testDataMapper.getPageWrapper(vo.getPage(), wrapper);
         return iPage;
     }
 }

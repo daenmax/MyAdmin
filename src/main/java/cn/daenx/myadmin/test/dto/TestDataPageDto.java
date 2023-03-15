@@ -8,5 +8,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class TestDataPageDto extends BaseDto {
     private String id;
+    private String title;
     private String content;
+    private String remark;
 }

@@ -45,4 +45,17 @@ public class TestDataController {
         return Result.ok(page);
     }
 
+    /**
+     * 测试数据分页列表_半自写SQL
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("test:data:list")
+    @GetMapping("/list3")
+    public Result list3(TestDataPageVo vo) {
+        IPage<TestDataPageDto> page = testDataService.getPage3(vo);
+        return Result.ok(page);
+    }
+
 }

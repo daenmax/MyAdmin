@@ -23,4 +23,12 @@ public interface TestDataService extends IService<TestData> {
      * @return
      */
     IPage<TestDataPageDto> getPage2(TestDataPageVo vo);
+
+    /**
+     * 测试数据分页列表_半自写SQL
+     *
+     * @param vo
+     * @return
+     */
+    IPage<TestDataPageDto> getPage3(TestDataPageVo vo);
 }
