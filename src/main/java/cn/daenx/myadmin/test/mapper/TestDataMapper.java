@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface TestDataMapper extends BaseMapper<TestData> {
     /**
-     * 测试数据分页列表
+     * 测试数据分页列表_自己写的SQL
      *
      * @param page
      * @param vo
@@ -24,7 +24,7 @@ public interface TestDataMapper extends BaseMapper<TestData> {
     IPage<TestDataPageDto> getPage(Page<TestDataPageDto> page, @Param("vo") TestDataPageVo vo);
 
     /**
-     * 测试数据分页列表
+     * 测试数据分页列表_MP自定义SQL
      *
      * @param page
      * @param wrapper
