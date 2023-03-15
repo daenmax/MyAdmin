@@ -2,12 +2,10 @@ package cn.daenx.myadmin.test.vo;
 
 import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.annotation.DictDetail;
-import cn.daenx.myadmin.common.service.DictConverter;
-import cn.daenx.myadmin.common.vo.BaseDto;
+import cn.daenx.myadmin.common.excel.DictConverter;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 //导出时忽略没有@ExcelProperty的字段

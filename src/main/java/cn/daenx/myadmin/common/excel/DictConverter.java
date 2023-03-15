@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.service;
+package cn.daenx.myadmin.common.excel;
 
 import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.annotation.DictDetail;

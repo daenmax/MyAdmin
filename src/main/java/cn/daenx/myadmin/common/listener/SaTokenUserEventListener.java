@@ -7,12 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- * 用户事件侦听器
+ * SaToken用户事件监听器
  */
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class UserEventListener implements SaTokenListener {
+public class SaTokenUserEventListener implements SaTokenListener {
     /**
      * 每次登录时触发
      */

@@ -4,7 +4,7 @@ package cn.daenx.myadmin.common.annotation;
 import java.lang.annotation.*;
 
 /**
- * 字典翻译
+ * 字典翻译注解
  * 导出导入时，与@ExcelProperty一起使用，可以实现翻译功能
  */
 @Target(ElementType.FIELD)

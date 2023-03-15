@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.test.controller;
 
 import cn.daenx.myadmin.common.excel.ExcelResult;
+import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.po.SysDict;
@@ -132,7 +133,7 @@ public class TestDataController {
     @PostMapping("/export")
     public void export(TestDataPageVo vo, HttpServletResponse response) {
         List<TestDataPageDto> list = testDataService.getAll(vo);
-        MyUtil.exportXlsx(response, "测试数据", "测试数据", list, TestDataPageDto.class);
+        ExcelUtil.exportXlsx(response, "测试数据", "测试数据", list, TestDataPageDto.class);
     }
 
 
@@ -142,7 +143,7 @@ public class TestDataController {
     @SaCheckPermission("test:data:import")
     @PostMapping("/importData")
     public Result importData(@RequestPart("file") MultipartFile file) throws IOException {
-        ExcelResult<TestDataImportVo> excelResult = MyUtil.importExcel(file.getInputStream(), TestDataImportVo.class, true);
+        ExcelResult<TestDataImportVo> excelResult = ExcelUtil.importExcel(file.getInputStream(), TestDataImportVo.class, true);
         List<TestDataImportVo> dataList = excelResult.getList();
         Integer num = testDataService.importData(dataList);
         return Result.ok("成功导入" + num + "条");
@@ -153,6 +154,6 @@ public class TestDataController {
      */
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
-        MyUtil.exportXlsx(response, "测试数据", "测试数据", new ArrayList<>(), TestDataImportVo.class);
+        ExcelUtil.exportXlsx(response, "测试数据", "测试数据", new ArrayList<>(), TestDataImportVo.class);
     }
 }

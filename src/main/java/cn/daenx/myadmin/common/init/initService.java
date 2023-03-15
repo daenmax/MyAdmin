@@ -13,6 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 项目启动初始化代码
+ */
 @Configuration
 public class initService {
     @Resource
@@ -22,6 +25,9 @@ public class initService {
     @Resource
     private SysDictDetailService sysDictDetailService;
 
+    /**
+     * 初始化字典
+     */
     @PostConstruct
     public void initDict() {
         redisUtil.delBatch(RedisConstant.DICT + "*");

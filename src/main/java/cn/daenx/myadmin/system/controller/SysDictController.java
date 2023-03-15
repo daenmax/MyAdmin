@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.po.SysDict;
@@ -47,7 +48,7 @@ public class SysDictController {
     @PostMapping("/export")
     public void export(SysDictPageVo vo, HttpServletResponse response) {
         List<SysDict> list = sysDictService.getAll(vo);
-        MyUtil.exportXlsx(response, "字典", "字典编码", list, SysDict.class);
+        ExcelUtil.exportXlsx(response, "字典", "字典编码", list, SysDict.class);
     }
 
 

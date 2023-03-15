@@ -2,7 +2,7 @@ package cn.daenx.myadmin.test.dto;
 
 import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.annotation.DictDetail;
-import cn.daenx.myadmin.common.service.DictConverter;
+import cn.daenx.myadmin.common.excel.DictConverter;
 import cn.daenx.myadmin.common.vo.BaseDto;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
