@@ -50,8 +50,14 @@ public class BasePageVo {
      */
     private Boolean DEFAULT_ORDER_BY_ASC = Boolean.FALSE;
 
-
-    public <T> Page<T> getPage() {
+    /**
+     * 获取分页数据
+     *
+     * @param defaultOrderBy 是否使用默认排序
+     * @param <T>
+     * @return
+     */
+    public <T> Page<T> getPage(Boolean defaultOrderBy) {
         Integer pageNum = ObjectUtil.defaultIfNull(getPageNum(), 1);
         Integer pageSize = ObjectUtil.defaultIfNull(getPageSize(), Integer.MAX_VALUE);
         if (pageNum <= 0) {
@@ -62,8 +68,10 @@ public class BasePageVo {
         if (CollUtil.isNotEmpty(orderItems)) {
             page.addOrder(orderItems);
         } else {
-            //默认排序字段
-            page.addOrder(new OrderItem(DEFAULT_ORDER_BY_COLUMN,DEFAULT_ORDER_BY_ASC));
+            if (defaultOrderBy) {
+                //默认排序字段
+                page.addOrder(new OrderItem(DEFAULT_ORDER_BY_COLUMN, DEFAULT_ORDER_BY_ASC));
+            }
         }
         return page;
     }

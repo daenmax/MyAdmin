@@ -60,7 +60,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
-        Page<SysDict> sysDictPage = sysDictMapper.selectPage(vo.getPage(), wrapper);
+        Page<SysDict> sysDictPage = sysDictMapper.selectPage(vo.getPage(true), wrapper);
         return sysDictPage;
     }
 
@@ -103,7 +103,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         sysDict.setRemark(vo.getRemark());
         int insert = sysDictMapper.insert(sysDict);
         if (insert > 0) {
-            //TODO 刷新redis缓存
+            //刷新redis缓存
+            refreshCache();
             return;
         }
         throw new MyException("新增失败");
@@ -149,11 +150,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                 updateWrapper.set(SysDictDetail::getDictCode, vo.getCode());
                 updateWrapper.eq(SysDictDetail::getDictCode, info.getCode());
                 int update = sysDictDetailMapper.update(null, updateWrapper);
-                if (update == 0) {
+                if (update < 1) {
                     throw new MyException("修改字典明细失败");
                 }
             }
-            //TODO 刷新redis缓存
+            //刷新redis缓存
+            refreshCache();
         } else {
             throw new MyException("修改字典失败");
         }
@@ -177,17 +179,19 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         sysDictDetailMapper.delete(queryWrapper);
         //删除主表
         sysDictMapper.deleteBatchIds(idList);
-        //TODO 刷新redis缓存
+        //刷新redis缓存
+        refreshCache();
     }
 
     /**
-     * 检查是否已存在，已存在返回true
+     * 检查是否存在，已存在返回true
      *
      * @param code
-     * @param nowId 如果是修改时，那么需要传此值
+     * @param nowId 排除ID
      * @return
      */
-    private Boolean checkDictExist(String code, String nowId) {
+    @Override
+    public Boolean checkDictExist(String code, String nowId) {
         LambdaUpdateWrapper<SysDict> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysDict::getCode, code);
         wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysDict::getId, nowId);

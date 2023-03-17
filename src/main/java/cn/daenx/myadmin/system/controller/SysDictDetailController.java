@@ -1,17 +1,18 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.Result;
+import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysDictDetail;
 import cn.daenx.myadmin.system.service.SysDictDetailService;
-import cn.daenx.myadmin.system.vo.SysDictDetailPageVo;
+import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaIgnore;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ public class SysDictDetailController {
      *
      * @param dictCode 字典编码
      */
-    @SaIgnore
     @GetMapping(value = "/type/{dictCode}")
     public Result dictType(@PathVariable String dictCode) {
         List<SysDictDetail> data = sysDictDetailService.getDictDetailByCodeFromRedis(dictCode);
@@ -44,5 +44,68 @@ public class SysDictDetailController {
     public Result list(SysDictDetailPageVo vo) {
         IPage<SysDictDetail> page = sysDictDetailService.getPage(vo);
         return Result.ok(page);
+    }
+
+    /**
+     * 导出
+     */
+    @SaCheckPermission("system:dict:export")
+    @PostMapping("/export")
+    public void export(SysDictDetailPageVo vo, HttpServletResponse response) {
+        List<SysDictDetail> list = sysDictDetailService.getAll(vo);
+        ExcelUtil.exportXlsx(response, "字典明细", vo.getDictCode() + "字典明细", list, SysDictDetail.class);
+    }
+
+
+    /**
+     * 新增
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:dict:add")
+    @PostMapping
+    public Result add(@Validated @RequestBody SysDictDetailAddVo vo) {
+        sysDictDetailService.addInfo(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @SaCheckPermission("system:dict:query")
+    @GetMapping(value = "/{id}")
+    public Result query(@PathVariable String id) {
+        SysDictDetail sysDictDetail = sysDictDetailService.getInfo(id);
+        return Result.ok(sysDictDetail);
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:dict:edit")
+    @PutMapping
+    public Result edit(@Validated @RequestBody SysDictDetailUpdVo vo) {
+        sysDictDetailService.editInfo(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     * @return
+     */
+    @SaCheckPermission("system:dict:remove")
+    @DeleteMapping("/{ids}")
+    public Result remove(@PathVariable String[] ids) {
+        sysDictDetailService.deleteByIds(ids);
+        return Result.ok();
     }
 }

@@ -48,7 +48,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), TestData::getCreateTime, startTime, endTime);
-        Page<TestData> testDataPage = testDataMapper.selectPage(vo.getPage(), wrapper);
+        Page<TestData> testDataPage = testDataMapper.selectPage(vo.getPage(true), wrapper);
         return testDataPage;
     }
 
@@ -84,7 +84,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
         wrapper.eq("td.is_delete", SystemConstant.IS_DELETE_NO);
-        IPage<TestDataPageDto> iPage = testDataMapper.getPageWrapper(vo.getPage(), wrapper);
+        IPage<TestDataPageDto> iPage = testDataMapper.getPageWrapper(vo.getPage(true), wrapper);
         return iPage;
     }
 

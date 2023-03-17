@@ -11,6 +11,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 public interface SysDictService extends IService<SysDict> {
+    /**
+     * 检查是否存在，已存在返回true
+     *
+     * @param code
+     * @param nowId 排除ID
+     * @return
+     */
+    Boolean checkDictExist(String code, String nowId);
 
 
     List<SysDict> getSysDictList();
