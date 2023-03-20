@@ -19,7 +19,16 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, code, summary, sort, `status`, remark, create_id, create_time, update_id, 
+    id, `name`, code, summary, sort, `status`, remark, create_id, create_time, update_id,
     update_time, is_delete
   </sql>
+
+  <select id="getSysPositionListByUserId" resultMap="BaseResultMap">
+    SELECT sp.*
+    FROM sys_position_user spu
+           LEFT JOIN sys_position sp ON sp.id = spu.position_id
+    WHERE spu.user_id = #{userId}
+      AND sp.is_delete = 0
+      AND sp.`status` = 0
+    </select>
 </mapper>

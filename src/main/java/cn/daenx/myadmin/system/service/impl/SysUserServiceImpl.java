@@ -2,10 +2,14 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.LoginUtil;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysPosition;
+import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.po.SysUserDetail;
-import cn.daenx.myadmin.system.service.SysRoleUserService;
-import cn.daenx.myadmin.system.service.SysUserDetailService;
+import cn.daenx.myadmin.system.service.*;
+import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.daenx.myadmin.system.vo.SysUserVo;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
@@ -17,10 +21,12 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.mapper.SysUserMapper;
-import cn.daenx.myadmin.system.service.SysUserService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
@@ -30,6 +36,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUserDetailService sysUserDetailService;
     @Resource
     private SysRoleUserService sysRoleUserService;
+    @Resource
+    private SysRoleService sysRoleService;
+    @Resource
+    private SysPositionService sysPositionService;
 
 
     /**
@@ -129,5 +139,26 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("创建用户角色失败");
         }
         return true;
+    }
+
+    /**
+     * 个人信息
+     *
+     * @return
+     */
+    @Override
+    public Map<String, Object> profile() {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysUserVo sysUserVo = getUserInfoByUserId(loginUser.getId());
+        if (sysUserVo == null) {
+            throw new MyException("用户不存在");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("user", sysUserVo);
+        List<SysRole> roleList = sysRoleService.getSysRoleListByUserId(sysUserVo.getId());
+        List<SysPosition> positionList = sysPositionService.getSysPositionListByUserId(sysUserVo.getId());
+        map.put("roleGroup", MyUtil.join(roleList, SysRole::getName, ","));
+        map.put("postGroup", MyUtil.join(positionList, SysPosition::getName, ","));
+        return map;
     }
 }

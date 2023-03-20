@@ -1,11 +1,17 @@
 package cn.daenx.myadmin.common.utils;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collection;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class MyUtil {
@@ -40,4 +46,21 @@ public class MyUtil {
         }
         return "XXX XXX XXX";
     }
+
+    /**
+     * 拼接List<对象>中指定字段
+     *
+     * @param collection
+     * @param function
+     * @param flag       拼接符号
+     * @param <E>
+     * @return
+     */
+    public static <E> String join(Collection<E> collection, Function<E, String> function, String flag) {
+        if (CollUtil.isEmpty(collection)) {
+            return "";
+        }
+        return collection.stream().map(function).filter(Objects::nonNull).collect(Collectors.joining(flag));
+    }
+
 }

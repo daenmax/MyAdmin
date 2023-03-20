@@ -4,6 +4,8 @@ import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.vo.SysUserVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 public interface SysUserService extends IService<SysUser> {
 
     /**
@@ -46,5 +48,12 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     Boolean registerUser(SysUser sysUser, String roleId);
+
+    /**
+     * 个人信息
+     *
+     * @return
+     */
+    Map<String, Object> profile();
 
 }
