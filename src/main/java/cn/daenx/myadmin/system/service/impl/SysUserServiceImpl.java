@@ -5,13 +5,16 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
 import cn.daenx.myadmin.system.po.SysPosition;
 import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.po.SysUserDetail;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.SysUserUpdInfoVo;
+import cn.daenx.myadmin.system.vo.SysUserUpdPwdVo;
 import cn.daenx.myadmin.system.vo.SysUserVo;
-import cn.hutool.core.date.DateUtil;
+import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -32,6 +35,8 @@ import java.util.Map;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
     @Resource
     private SysUserMapper sysUserMapper;
+    @Resource
+    private SysUserDetailMapper sysUserDetailMapper;
     @Resource
     private SysUserDetailService sysUserDetailService;
     @Resource
@@ -157,8 +162,57 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         map.put("user", sysUserVo);
         List<SysRole> roleList = sysRoleService.getSysRoleListByUserId(sysUserVo.getId());
         List<SysPosition> positionList = sysPositionService.getSysPositionListByUserId(sysUserVo.getId());
-        map.put("roleGroup", MyUtil.join(roleList, SysRole::getName, ","));
-        map.put("postGroup", MyUtil.join(positionList, SysPosition::getName, ","));
+        map.put("roleGroup", MyUtil.joinToList(roleList, SysRole::getName));
+        map.put("postGroup", MyUtil.joinToList(positionList, SysPosition::getName));
         return map;
+    }
+
+    /**
+     * 修改个人资料
+     *
+     * @param vo
+     */
+    @Override
+    public void editInfo(SysUserUpdInfoVo vo) {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysUserDetail::getUserId, loginUser.getId());
+        wrapper.set(SysUserDetail::getNickName, vo.getNickName());
+        wrapper.set(SysUserDetail::getRealName, vo.getRealName());
+        wrapper.set(SysUserDetail::getAge, vo.getAge());
+        wrapper.set(SysUserDetail::getSex, vo.getSex());
+        wrapper.set(SysUserDetail::getProfile, vo.getProfile());
+        wrapper.set(SysUserDetail::getUserSign, vo.getUserSign());
+        int update = sysUserDetailMapper.update(null, wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+    }
+
+    /**
+     * 修改个人密码
+     *
+     * @param vo
+     */
+    @Override
+    public void updatePwd(SysUserUpdPwdVo vo) {
+        if (vo.getNewPassword().equals(vo.getOldPassword())) {
+            throw new MyException("新密码不能与旧密码一样");
+        }
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysUser sysUser = getUserByUserId(loginUser.getId());
+        String sha256 = SaSecureUtil.sha256(vo.getOldPassword());
+        if (!sha256.equals(sysUser.getPassword())) {
+            throw new MyException("旧密码输入错误");
+        }
+        String newPwd = SaSecureUtil.sha256(vo.getNewPassword());
+        LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysUser::getId, sysUser.getId());
+        wrapper.set(SysUser::getPassword, newPwd);
+        int update = sysUserMapper.update(null, wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+        LoginUtil.logout();
     }
 }

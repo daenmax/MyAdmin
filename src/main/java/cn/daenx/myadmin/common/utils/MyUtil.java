@@ -8,7 +8,9 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -61,6 +63,21 @@ public class MyUtil {
             return "";
         }
         return collection.stream().map(function).filter(Objects::nonNull).collect(Collectors.joining(flag));
+    }
+
+    /**
+     * 拼接List<对象>中指定字段
+     *
+     * @param collection
+     * @param function
+     * @param <E>
+     * @return
+     */
+    public static <E> List<String> joinToList(Collection<E> collection, Function<E, String> function) {
+        if (CollUtil.isEmpty(collection)) {
+            return new ArrayList<>();
+        }
+        return collection.stream().map(function).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 }
