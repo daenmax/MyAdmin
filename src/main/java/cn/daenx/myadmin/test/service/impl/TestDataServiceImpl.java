@@ -78,8 +78,6 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "td.type", vo.getType());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
-        String customSqlSegment = wrapper.getCustomSqlSegment();
-        System.out.println(customSqlSegment);
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);

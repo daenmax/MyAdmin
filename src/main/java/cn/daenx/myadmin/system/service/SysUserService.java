@@ -1,9 +1,12 @@
 package cn.daenx.myadmin.system.service;
 
+import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysUser;
+import cn.daenx.myadmin.system.vo.SysUserPageVo;
 import cn.daenx.myadmin.system.vo.SysUserUpdInfoVo;
 import cn.daenx.myadmin.system.vo.SysUserUpdPwdVo;
 import cn.daenx.myadmin.system.vo.SysUserVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
@@ -71,4 +74,12 @@ public interface SysUserService extends IService<SysUser> {
      * @param vo
      */
     void updatePwd(SysUserUpdPwdVo vo);
+
+    /**
+     * 分页列表
+     *
+     * @param vo
+     * @return
+     */
+    IPage<SysUserPageDto> getPage(SysUserPageVo vo);
 }

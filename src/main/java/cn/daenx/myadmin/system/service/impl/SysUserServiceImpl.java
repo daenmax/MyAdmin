@@ -5,24 +5,22 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
-import cn.daenx.myadmin.system.po.SysPosition;
-import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.po.SysUserDetail;
+import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.*;
-import cn.daenx.myadmin.system.vo.SysLoginUserVo;
-import cn.daenx.myadmin.system.vo.SysUserUpdInfoVo;
-import cn.daenx.myadmin.system.vo.SysUserUpdPwdVo;
-import cn.daenx.myadmin.system.vo.SysUserVo;
+import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -214,5 +212,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("修改失败");
         }
         LoginUtil.logout();
+    }
+
+    /**
+     * 分页列表
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public IPage<SysUserPageDto> getPage(SysUserPageVo vo) {
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getDeptId()), "su.dept_id", vo.getDeptId());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getUsername()), "su.username", vo.getUsername());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "su.status", vo.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getPhone()), "su.phone", vo.getPhone());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getEmail()), "su.email", vo.getEmail());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "su.remark", vo.getRemark());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getUserTypeId()), "su.user_type_id", vo.getUserTypeId());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getNickName()), "sud.nick_name", vo.getNickName());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getRealName()), "sud.real_name", vo.getRealName());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getAge()), "sud.age", vo.getAge());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getSex()), "sud.sex", vo.getSex());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getProfile()), "sud.profile", vo.getProfile());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getUserSign()), "sud.user_sign", vo.getUserSign());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "su.create_time", startTime, endTime);
+        wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
+        IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        return sysUserPage;
     }
 }

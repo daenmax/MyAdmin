@@ -101,4 +101,25 @@
                  LEFT JOIN sys_position sp ON spu.position_id = sp.id
         WHERE spu.user_id = #{id}
     </select>
+
+    <select id="getPageWrapper" resultType="cn.daenx.myadmin.system.dto.SysUserPageDto">
+        SELECT
+            su.*,
+            sud.nick_name,
+            sud.real_name,
+            sud.age,
+            sud.sex,
+            sud.`profile`,
+            sud.user_sign,
+            sud.avatar,
+            sud.money,
+            sut.`name` AS userTypeName,
+            sd.`name`  AS deptName
+        FROM
+            sys_user su
+                LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
+                LEFT JOIN sys_user_type sut ON sut.id = su.user_type_id
+                LEFT JOIN sys_dept sd ON sd.id = su.dept_id
+        ${ew.customSqlSegment}
+    </select>
 </mapper>
