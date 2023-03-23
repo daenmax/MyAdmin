@@ -35,8 +35,6 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private SysUserService sysUserService;
     @Resource
-    private SysUserTypeService sysUserTypeService;
-    @Resource
     private SysRoleService sysRoleService;
     @Resource
     private SysMenuService sysMenuService;
@@ -103,7 +101,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setId(sysUser.getId());
             loginUserVo.setDeptId(sysUser.getDeptId());
             loginUserVo.setUsername(sysUser.getUsername());
-            loginUserVo.setUserType(sysUserTypeService.getSysUserTypeById(sysUser.getUserTypeId()));
+            loginUserVo.setUserType(sysUser.getUserType());
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
             loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
@@ -131,8 +129,8 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
             throw new MyException("账号和密码不能为空");
         }
-        //TODO 查询默认用户类型user_type_id
-        String userTypeId = "2";
+        //TODO 查询默认用户类型user_type
+        String userType = "2";
         //TODO 查询默认部门ID
         String deptId = "105";
         //TODO 查询默认角色ID
@@ -148,7 +146,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         sysUser.setUsername(vo.getUsername());
         sysUser.setPassword(sha256);
         sysUser.setStatus(SystemConstant.USER_STATUS_NORMAL);
-        sysUser.setUserTypeId(userTypeId);
+        sysUser.setUserType(userType);
         sysUserService.registerUser(sysUser, roleId);
     }
 

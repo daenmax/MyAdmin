@@ -38,9 +38,9 @@ public class SysUserPageVo extends BasePageVo {
     private String remark;
 
     /**
-     * 用户类型ID
+     * 用户类型，具体看字典
      */
-    private String userTypeId;
+    private String userType;
 
     private String nickName;
 

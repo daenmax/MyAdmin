@@ -99,11 +99,14 @@ public class SysUserPageDto extends BaseDto {
     private String remark;
 
     /**
-     * 用户类型ID
+     * 用户类型，具体看字典
      */
-    private String userTypeId;
     @ExcelProperty(value = "用户类型")
-    private String userTypeName;
+    //使用自定义字典进行翻译，意思是直接写死在代码里的
+//    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "停用"), @DictDetail(value = "2", label = "注销")})
+    @Dict(dictCode = "sys_user_type", custom = {})
+    private String userType;
+
 
     /**
      * 用户昵称

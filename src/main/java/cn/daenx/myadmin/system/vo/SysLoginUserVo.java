@@ -2,11 +2,9 @@ package cn.daenx.myadmin.system.vo;
 
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.po.SysUserType;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +25,7 @@ public class SysLoginUserVo implements Serializable {
      * 部门ID
      */
     private String deptId;
-    private SysUserType userType;
+    private String userType;
 
 
     /**

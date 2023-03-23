@@ -104,10 +104,10 @@ public class SysUser extends BaseEntity implements Serializable {
     private String remark;
 
     /**
-     * 用户类型ID
+     * 用户类型，具体看字典
      */
-    @TableField(value = "user_type_id")
-    private String userTypeId;
+    @TableField(value = "user_type")
+    private String userType;
 
     public boolean isAdmin() {
         return SystemConstant.IS_ADMIN_ID.equals(this.id);
