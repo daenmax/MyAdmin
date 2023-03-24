@@ -84,6 +84,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<Tree<String>> trees = buildDeptTreeSelect(all);
         return trees;
     }
+
     /**
      * 构建前端所需要下拉树结构
      *
@@ -99,5 +100,17 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
                         .setParentId(dept.getParentId())
                         .setName(dept.getName())
                         .setWeight(dept.getSort()));
+    }
+
+    /**
+     * 通过父ID获取子成员
+     *
+     * @param parentId
+     * @param keepSelf 是否包含自己
+     * @return
+     */
+    @Override
+    public List<SysDept> getListByParentId(String parentId, Boolean keepSelf) {
+        return sysDeptMapper.getListByParentId(parentId, keepSelf ? null : "1");
     }
 }

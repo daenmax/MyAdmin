@@ -43,6 +43,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysRoleService sysRoleService;
     @Resource
     private SysPositionService sysPositionService;
+    @Resource
+    private SysDeptService sysDeptService;
 
 
     /**
@@ -223,7 +225,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public IPage<SysUserPageDto> getPage(SysUserPageVo vo) {
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getDeptId()), "su.dept_id", vo.getDeptId());
+        if (ObjectUtil.isNotEmpty(vo.getDeptId())) {
+            List<SysDept> listByParentId = sysDeptService.getListByParentId(vo.getDeptId(), true);
+            List<String> ids = MyUtil.joinToList(listByParentId, SysDept::getId);
+            wrapper.in(ObjectUtil.isNotEmpty(vo.getDeptId()), "su.dept_id", ids);
+        }
         wrapper.like(ObjectUtil.isNotEmpty(vo.getUsername()), "su.username", vo.getUsername());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "su.status", vo.getStatus());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getPhone()), "su.phone", vo.getPhone());

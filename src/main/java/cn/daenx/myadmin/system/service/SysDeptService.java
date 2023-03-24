@@ -32,4 +32,13 @@ public interface SysDeptService extends IService<SysDept> {
      * @return
      */
     List<SysDept> getAll(SysDeptPageVo vo);
+
+    /**
+     * 通过父ID获取子成员
+     *
+     * @param parentId
+     * @param keepSelf 是否包含自己
+     * @return
+     */
+    List<SysDept> getListByParentId(String parentId, Boolean keepSelf);
 }

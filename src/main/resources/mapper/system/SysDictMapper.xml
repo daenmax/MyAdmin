@@ -20,8 +20,4 @@
     id, `name`, code, `status`, remark, create_id, create_time, update_id, update_time,
     is_delete
   </sql>
-
-  <select id="getPage" resultMap="BaseResultMap">
-
-    </select>
 </mapper>

@@ -9,12 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface SysDictMapper extends BaseMapper<SysDict> {
-    /**
-     * 分页列表
-     *
-     * @param page
-     * @param vo
-     * @return
-     */
-    IPage<SysDict> getPage(Page<SysDict> page, SysDictPageVo vo);
+
 }

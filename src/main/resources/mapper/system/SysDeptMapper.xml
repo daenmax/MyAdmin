@@ -21,7 +21,33 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, parent_id, all_parent_id, `name`, summary, `status`, leader_user_id, sort, remark, 
+    id, parent_id, all_parent_id, `name`, summary, `status`, leader_user_id, sort, remark,
     create_id, create_time, update_id, update_time, is_delete
   </sql>
+
+  <select id="getListByParentId" resultMap="BaseResultMap">
+    WITH RECURSIVE recursion AS (
+      SELECT
+        sd1.*
+      FROM
+        sys_dept sd1
+      WHERE
+        sd1.is_delete = 0
+        AND sd1.id = #{parentId} UNION ALL
+      SELECT
+        sd2.*
+      FROM
+        sys_dept sd2,
+        recursion t2
+      WHERE
+        sd2.is_delete = 0
+        AND sd2.parent_id = t2.id
+    ) SELECT
+      t1.*
+    FROM
+      recursion t1
+      <if test="keepSelf != null and keepSelf != ''">
+        WHERE t1.id != #{parentId}
+      </if>
+    </select>
 </mapper>
