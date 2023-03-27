@@ -132,23 +132,23 @@ public class DataScopeInterceptor implements DataPermissionHandler {
                         .append("'").append(userId).append("'");
             } else if (SystemConstant.DATA_SCOPE_DEPT.equals(dataScope)) {
                 //本部门数据
-                sql.append(" in ")
+                sql.append(" in ").append("(select x1.id from ")
                         .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id ='")
-                        .append(deptId).append("')");
+                        .append(deptId).append("')").append(" x1)");
             } else if (SystemConstant.DATA_SCOPE_DEPT_DOWN.equals(dataScope)) {
                 //本部门及以下数据
-                sql.append(" in ")
+                sql.append(" in ").append("(select x1.id from ")
                         .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id='").append(deptId).append("' OR  FIND_IN_SET('")
-                        .append(deptId).append("',all_parent_id))");
+                        .append(deptId).append("',all_parent_id))").append(" x1)");
             } else if (SystemConstant.DATA_SCOPE_ALL.equals(dataScope)) {
                 //全部数据
                 return new StringBuilder().toString();
             } else if (SystemConstant.DATA_SCOPE_CUSTOM.equals(dataScope)) {
                 //自定义权限
-                sql.append("='").append(userId).append("'").append(" or "+prex).append(" in ")
+                sql.append("='").append(userId).append("'").append(" or "+prex).append(" in ").append("(select x1.id from ")
                         .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id in")
                         .append("( select sys_role_dept.dept_id from sys_role_dept where sys_role_dept.role_id='").append(sysRole.getId())
-                        .append("'))");
+                        .append("'))").append(" x1)");
             }
             init = true;
         }
