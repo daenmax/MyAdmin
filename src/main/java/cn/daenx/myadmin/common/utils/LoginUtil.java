@@ -29,6 +29,13 @@ public class LoginUtil {
     }
 
     /**
+     * 退出登录
+     */
+    public static void logout(String username) {
+        StpUtil.logout(username);
+    }
+
+    /**
      * 获取登录用户
      */
     public static SysLoginUserVo getLoginUser() {

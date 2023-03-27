@@ -51,6 +51,23 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     }
 
     /**
+     * 根据字典编码和键值查询字典详细信息
+     *
+     * @param dictCode
+     * @param value
+     * @return
+     */
+    @Override
+    public SysDictDetail getDictDetailValueByCodeFromRedis(String dictCode, String value) {
+        List<SysDictDetail> sysUserType = getDictDetailByCodeFromRedis(dictCode);
+        List<SysDictDetail> collect = sysUserType.stream().filter(detail -> value.equals(detail.getValue())).collect(Collectors.toList());
+        if (collect.size() > 0) {
+            return collect.get(0);
+        }
+        return new SysDictDetail();
+    }
+
+    /**
      * 分页列表
      *
      * @param vo

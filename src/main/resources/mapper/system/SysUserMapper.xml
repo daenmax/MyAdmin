@@ -44,45 +44,33 @@
         update_time,
         is_delete
     </sql>
-    <select id="getUserInfoByUserId" resultMap="userInfoMap">
-        SELECT su.id             AS id,
-               su.dept_id        AS deptId,
-               sd.`name`         AS deptName,
-               sud.real_name     AS realName,
-               sud.age           AS age,
-               sud.sex           AS sex,
-               sud.`profile`     AS `profile`,
-               sud.user_sign     AS userSign,
-               sud.avatar        AS avatar,
-               sud.money         AS money,
-               sud.nick_name     AS nickName,
-               su.username       AS username,
-               su.`status`       AS `status`,
-               su.phone          AS phone,
-               su.email          AS email,
-               su.open_id        AS openId,
-               su.ban_to_time    AS banToTime,
-               su.expire_to_time AS expireToTime,
-               su.remark         AS remark,
-               su.user_type   AS userType,
-               su.create_time    AS createTime,
-               su.update_time    AS updateTime,
-               su1.username      AS createName,
-               su.create_id      AS createId,
-               su2.username      AS updateName,
-               su.update_id      AS updateId
+    <sql id="userInfo">
+        SELECT su.*,
+               sud.nick_name,
+               sud.real_name,
+               sud.age,
+               sud.sex,
+               sud.`profile`,
+               sud.user_sign,
+               sud.avatar,
+               sud.money,
+               sd.`name`    AS deptName,
+               su1.username AS createName,
+               su2.username AS updateName,
+               IF( su.id = '1', TRUE, FALSE ) as admin
         FROM sys_user su
                  LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
                  LEFT JOIN sys_dept sd ON sd.id = su.dept_id
                  LEFT JOIN sys_user su1 ON su1.id = su.create_id
                  LEFT JOIN sys_user su2 ON su2.id = su.update_id
-        WHERE su.is_delete = 0
-        <if test="userId != null and userId != ''">
-            AND su.id = #{userId}
-        </if>
+    </sql>
+    <select id="getUserInfoByUserId" resultMap="userInfoMap">
+        <include refid="userInfo">
+        </include>
+        ${ew.customSqlSegment}
     </select>
 
-    <resultMap id="userInfoMap" type="cn.daenx.myadmin.system.vo.SysUserVo">
+    <resultMap id="userInfoMap" type="cn.daenx.myadmin.system.dto.SysUserPageDto">
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <collection property="roles" column="id" select="queryUserRoles"></collection>
         <collection property="positions" column="id" select="queryUserPositions"></collection>
@@ -101,21 +89,14 @@
     </select>
 
     <select id="getPageWrapper" resultType="cn.daenx.myadmin.system.dto.SysUserPageDto">
-        SELECT
-            su.*,
-            sud.nick_name,
-            sud.real_name,
-            sud.age,
-            sud.sex,
-            sud.`profile`,
-            sud.user_sign,
-            sud.avatar,
-            sud.money,
-            sd.`name`  AS deptName
-        FROM
-            sys_user su
-                LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
-                LEFT JOIN sys_dept sd ON sd.id = su.dept_id
+        <include refid="userInfo">
+        </include>
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="getInfo" resultMap="userInfoMap">
+        <include refid="userInfo">
+        </include>
         ${ew.customSqlSegment}
     </select>
 </mapper>

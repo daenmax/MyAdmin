@@ -18,7 +18,7 @@ public class SysUserPageVo extends BasePageVo {
     private String username;
 
     /**
-     * 账号状态，0=正常，1=停用，2=注销
+     * 账号状态，0=正常，1=停用
      */
     private String status;
 

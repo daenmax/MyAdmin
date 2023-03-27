@@ -9,5 +9,6 @@ import java.util.List;
 public interface SysPositionService extends IService<SysPosition>{
 
     List<SysPosition> getSysPositionListByUserId(String userId);
+    List<SysPosition> getSysPositionList();
 
 }

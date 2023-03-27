@@ -1,7 +1,9 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
+import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
@@ -41,7 +43,7 @@ public class SysUserController {
      */
     @PutMapping("/profile")
     public Result edit(@Validated @RequestBody SysUserUpdInfoVo vo) {
-        sysUserService.editInfo(vo);
+        sysUserService.updInfo(vo);
         return Result.ok();
     }
 
@@ -81,4 +83,43 @@ public class SysUserController {
         return Result.ok(page);
     }
 
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @SaCheckPermission("system:user:query")
+    @GetMapping(value = {"/", "/{id}"})
+    public Result query(@PathVariable(value = "id", required = false) String id) {
+        Map<String, Object> map = sysUserService.getInfo(id);
+        return Result.ok(map);
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:user:edit")
+    @PutMapping
+    public Result edit(@Validated @RequestBody SysUserUpdVo vo) {
+        sysUserService.editInfo(vo);
+        return Result.ok();
+    }
+
+
+    /**
+     * 修改状态
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:user:edit")
+    @PutMapping("/changeStatus")
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+        sysUserService.changeStatus(vo);
+        return Result.ok();
+    }
 }

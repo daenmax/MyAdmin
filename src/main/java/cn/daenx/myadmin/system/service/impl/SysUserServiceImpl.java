@@ -1,15 +1,19 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
+import cn.daenx.myadmin.system.mapper.SysPositionMapper;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
 import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
+import cn.daenx.myadmin.test.po.TestData;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -25,9 +29,11 @@ import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
@@ -44,7 +50,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private SysPositionService sysPositionService;
     @Resource
+    private SysPositionUserService sysPositionUserService;
+    @Resource
     private SysDeptService sysDeptService;
+    @Resource
+    private SysDictDetailService sysDictDetailService;
 
 
     /**
@@ -78,11 +88,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public SysUserVo getUserInfoByUserId(String userId) {
-        SysUserVo userInfoByUserId = sysUserMapper.getUserInfoByUserId(userId);
-        if (userInfoByUserId != null) {
-            userInfoByUserId.setAdmin(SystemConstant.IS_ADMIN_ID.equals(userInfoByUserId.getId()));
-        }
+    public SysUserPageDto getUserInfoByUserId(String userId) {
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("su.id", userId);
+        wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
+        SysUserPageDto userInfoByUserId = sysUserMapper.getUserInfoByUserId(wrapper);
         return userInfoByUserId;
     }
 
@@ -113,7 +123,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 return true;
             } else {
                 if (LocalDateTime.now().isAfter(sysUser.getExpireToTime())) {
-                    throw new MyException("账号已到期");
+                    String expireToTime = LocalDateTimeUtil.format(sysUser.getExpireToTime(), Constant.DATE_TIME_FORMAT);
+                    throw new MyException("账号已到期，到期时间：" + expireToTime);
                 }
             }
         }
@@ -138,11 +149,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!detail) {
             throw new MyException("创建用户信息失败");
         }
+        List<String> roleIds = new ArrayList<>();
+        roleIds.add(roleId);
         //创建用户、角色关联
-        Boolean role = sysRoleUserService.createRoleUser(roleId, sysUser.getId());
-        if (!role) {
-            throw new MyException("创建用户角色失败");
-        }
+        sysRoleUserService.handleUserRole(sysUser.getId(), roleIds);
         return true;
     }
 
@@ -154,10 +164,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Map<String, Object> profile() {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        SysUserVo sysUserVo = getUserInfoByUserId(loginUser.getId());
+        SysUserPageDto sysUserVo = getUserInfoByUserId(loginUser.getId());
         if (sysUserVo == null) {
             throw new MyException("用户不存在");
         }
+        sysUserVo.setUserTypeName(sysDictDetailService.getDictDetailValueByCodeFromRedis("sys_user_type", sysUserVo.getUserType()).getLabel());
         Map<String, Object> map = new HashMap<>();
         map.put("user", sysUserVo);
         List<SysRole> roleList = sysRoleService.getSysRoleListByUserId(sysUserVo.getId());
@@ -173,7 +184,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param vo
      */
     @Override
-    public void editInfo(SysUserUpdInfoVo vo) {
+    public void updInfo(SysUserUpdInfoVo vo) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUserDetail::getUserId, loginUser.getId());
@@ -248,5 +259,111 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
         return sysUserPage;
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Map<String, Object> getInfo(String id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("roles", sysRoleService.getSysRoleList());
+        map.put("positions", sysPositionService.getSysPositionList());
+        if (ObjectUtil.isNotEmpty(id)) {
+            SysUserPageDto sysUserByPermissions = getSysUserByPermissions(id);
+            map.put("user", sysUserByPermissions);
+            map.put("roleIds", MyUtil.joinToList(sysUserByPermissions.getRoles(), SysRole::getId));
+            map.put("positionIds", MyUtil.joinToList(sysUserByPermissions.getPositions(), SysPosition::getId));
+        }
+        return map;
+    }
+
+    /**
+     * 获取权限范围内的该用户，无权限则抛出异常
+     *
+     * @param id
+     * @return
+     */
+    private SysUserPageDto getSysUserByPermissions(String id) {
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("su.id", id);
+        wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
+        SysUserPageDto info = sysUserMapper.getInfo(wrapper);
+        if (ObjectUtil.isEmpty(info)) {
+            throw new MyException("你无权限修改该数据");
+        }
+        return info;
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void editInfo(SysUserUpdVo vo) {
+        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+            throw new MyException("禁止操作管理员");
+        }
+        SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, vo.getId());
+        updateWrapper.set(SysUser::getDeptId, vo.getDeptId());
+        updateWrapper.set(SysUser::getStatus, vo.getStatus());
+        updateWrapper.set(SysUser::getPhone, vo.getPhone());
+        updateWrapper.set(SysUser::getEmail, vo.getEmail());
+        updateWrapper.set(SysUser::getOpenId, vo.getOpenId());
+        updateWrapper.set(SysUser::getApiKey, vo.getApiKey());
+        updateWrapper.set(SysUser::getBanToTime, vo.getBanToTime());
+        updateWrapper.set(SysUser::getExpireToTime, vo.getExpireToTime());
+        updateWrapper.set(SysUser::getUserType, vo.getUserType());
+        updateWrapper.set(SysUser::getRemark, vo.getRemark());
+        int rows = sysUserMapper.update(null, updateWrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
+        //修改detail
+        LambdaUpdateWrapper<SysUserDetail> updateWrapperDetail = new LambdaUpdateWrapper<>();
+        updateWrapperDetail.eq(SysUserDetail::getUserId, vo.getId());
+        updateWrapperDetail.set(SysUserDetail::getNickName, vo.getNickName());
+        updateWrapperDetail.set(SysUserDetail::getRealName, vo.getRealName());
+        updateWrapperDetail.set(SysUserDetail::getAge, vo.getAge());
+        updateWrapperDetail.set(SysUserDetail::getSex, vo.getSex());
+        updateWrapperDetail.set(SysUserDetail::getProfile, vo.getProfile());
+        updateWrapperDetail.set(SysUserDetail::getUserSign, vo.getUserSign());
+        updateWrapperDetail.set(SysUserDetail::getMoney, vo.getMoney());
+        int rowsDetail = sysUserDetailMapper.update(null, updateWrapperDetail);
+        if (rowsDetail < 1) {
+            throw new MyException("修改失败");
+        }
+        //修改关联数据
+        sysRoleUserService.handleUserRole(vo.getId(), vo.getRoleIds());
+        sysPositionUserService.handleUserPosition(vo.getId(), vo.getPositionIds());
+        //注销该账户的登录
+        LoginUtil.logout(sysUserByPermissions.getUsername());
+    }
+
+    /**
+     * 修改状态
+     *
+     * @param vo
+     */
+    @Override
+    @DataScope(alias = "sys_user")
+    public void changeStatus(ComStatusUpdVo vo) {
+        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+            throw new MyException("禁止操作管理员");
+        }
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, vo.getId());
+        updateWrapper.set(SysUser::getStatus, vo.getStatus());
+        int rows = sysUserMapper.update(null, updateWrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
     }
 }

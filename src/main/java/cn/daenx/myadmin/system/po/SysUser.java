@@ -52,7 +52,7 @@ public class SysUser extends BaseEntity implements Serializable {
     private String password;
 
     /**
-     * 账号状态，0=正常，1=停用，2=注销
+     * 账号状态，0=正常，1=停用
      */
     @TableField(value = "`status`")
     private String status;

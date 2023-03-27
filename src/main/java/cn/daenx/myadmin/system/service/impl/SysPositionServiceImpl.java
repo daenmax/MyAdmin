@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,5 +19,10 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     @Override
     public List<SysPosition> getSysPositionListByUserId(String userId) {
         return sysPositionMapper.getSysPositionListByUserId(userId);
+    }
+
+    @Override
+    public List<SysPosition> getSysPositionList() {
+        return sysPositionMapper.selectList(new LambdaQueryWrapper<>());
     }
 }

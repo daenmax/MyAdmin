@@ -1,11 +1,12 @@
 package cn.daenx.myadmin.system.service;
 
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.vo.SysUserPageVo;
 import cn.daenx.myadmin.system.vo.SysUserUpdInfoVo;
 import cn.daenx.myadmin.system.vo.SysUserUpdPwdVo;
-import cn.daenx.myadmin.system.vo.SysUserVo;
+import cn.daenx.myadmin.system.vo.SysUserUpdVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -35,7 +36,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param userId
      * @return
      */
-    SysUserVo getUserInfoByUserId(String userId);
+    SysUserPageDto getUserInfoByUserId(String userId);
 
     /**
      * 校验用户状态是否正常
@@ -66,7 +67,7 @@ public interface SysUserService extends IService<SysUser> {
      *
      * @param vo
      */
-    void editInfo(SysUserUpdInfoVo vo);
+    void updInfo(SysUserUpdInfoVo vo);
 
     /**
      * 修改个人密码
@@ -82,4 +83,26 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     IPage<SysUserPageDto> getPage(SysUserPageVo vo);
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    Map<String, Object> getInfo(String id);
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    void editInfo(SysUserUpdVo vo);
+
+    /**
+     * 修改状态
+     *
+     * @param vo
+     */
+    void changeStatus(ComStatusUpdVo vo);
 }

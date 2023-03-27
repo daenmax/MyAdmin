@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import cn.daenx.myadmin.system.po.SysRoleUser;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
@@ -25,6 +26,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
+    public List<SysRole> getSysRoleList() {
+        return sysRoleMapper.selectList(new LambdaQueryWrapper<>());
+    }
+
+    @Override
     public Set<String> getRolePermissionListByUserId(String userId) {
         List<SysRole> roleList = sysRoleMapper.getSysRoleListByUserId(userId);
         Set<String> permsSet = new HashSet<>();
@@ -35,4 +41,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         return permsSet;
     }
+
+
 }

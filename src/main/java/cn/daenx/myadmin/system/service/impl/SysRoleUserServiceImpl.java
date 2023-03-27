@@ -1,6 +1,5 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.system.po.SysRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -17,18 +16,23 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
     @Resource
     private SysRoleUserMapper sysRoleUserMapper;
 
+
     /**
-     * 创建用户、角色关联
+     * 更新用户角色关联信息
      *
-     * @param roleId
      * @param userId
-     * @return
+     * @param roleIds
      */
     @Override
-    public Boolean createRoleUser(String roleId, String userId) {
-        SysRoleUser sysRoleUser = new SysRoleUser();
-        sysRoleUser.setRoleId(roleId);
-        sysRoleUser.setUserId(userId);
-        return sysRoleUserMapper.insert(sysRoleUser) > 0;
+    public void handleUserRole(String userId, List<String> roleIds) {
+        LambdaQueryWrapper<SysRoleUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRoleUser::getUserId, userId);
+        sysRoleUserMapper.delete(wrapper);
+        for (String roleId : roleIds) {
+            SysRoleUser sysRoleUser = new SysRoleUser();
+            sysRoleUser.setRoleId(roleId);
+            sysRoleUser.setUserId(userId);
+            sysRoleUserMapper.insert(sysRoleUser);
+        }
     }
 }

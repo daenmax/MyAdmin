@@ -20,6 +20,15 @@ public interface SysDictDetailService extends IService<SysDictDetail> {
     List<SysDictDetail> getDictDetailByCodeFromRedis(String dictCode);
 
     /**
+     * 根据字典编码和键值查询字典详细信息
+     *
+     * @param dictCode
+     * @param value
+     * @return
+     */
+    SysDictDetail getDictDetailValueByCodeFromRedis(String dictCode, String value);
+
+    /**
      * 分页列表
      *
      * @param vo

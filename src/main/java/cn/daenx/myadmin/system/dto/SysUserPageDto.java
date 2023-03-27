@@ -4,6 +4,8 @@ import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.annotation.DictDetail;
 import cn.daenx.myadmin.common.excel.DictConverter;
 import cn.daenx.myadmin.common.vo.BaseDto;
+import cn.daenx.myadmin.system.po.SysPosition;
+import cn.daenx.myadmin.system.po.SysRole;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -18,6 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -42,7 +45,7 @@ public class SysUserPageDto extends BaseDto {
     private String username;
 
     /**
-     * 账号状态，0=正常，1=停用，2=注销
+     * 账号状态，0=正常，1=停用
      */
     @ExcelProperty(value = "账号状态", converter = DictConverter.class)
     //使用自定义字典进行翻译，意思是直接写死在代码里的
@@ -106,6 +109,7 @@ public class SysUserPageDto extends BaseDto {
 //    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "停用"), @DictDetail(value = "2", label = "注销")})
     @Dict(dictCode = "sys_user_type", custom = {})
     private String userType;
+    private String userTypeName;
 
 
     /**
@@ -158,4 +162,20 @@ public class SysUserPageDto extends BaseDto {
      */
     @ExcelProperty(value = "账户余额，单位分")
     private Integer money;
+
+
+    /**
+     * 用户角色列表
+     */
+    private List<SysRole> roles;
+
+    /**
+     * 用户岗位列表
+     */
+    private List<SysPosition> positions;
+
+    /**
+     * 是否是管理员
+     */
+    private Boolean admin;
 }

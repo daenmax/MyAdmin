@@ -10,6 +10,7 @@ import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.common.utils.StreamUtils;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysMenu;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.*;
@@ -158,7 +159,7 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Override
     public Map<String, Object> getInfo() {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        SysUserVo sysUserVo = sysUserService.getUserInfoByUserId(loginUser.getId());
+        SysUserPageDto sysUserVo = sysUserService.getUserInfoByUserId(loginUser.getId());
         if (sysUserVo == null) {
             throw new MyException("用户不存在");
         }
