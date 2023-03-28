@@ -99,4 +99,10 @@
         </include>
         ${ew.customSqlSegment}
     </select>
+
+    <select id="getUserList" resultType="cn.daenx.myadmin.system.po.SysUser">
+        SELECT su.*
+        FROM sys_user su
+        ${ew.customSqlSegment}
+    </select>
 </mapper>

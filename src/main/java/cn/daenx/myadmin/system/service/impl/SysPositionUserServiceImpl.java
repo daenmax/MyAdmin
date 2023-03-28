@@ -35,4 +35,16 @@ public class SysPositionUserServiceImpl extends ServiceImpl<SysPositionUserMappe
             }
         }
     }
+
+    /**
+     * 删除用户岗位关联信息
+     *
+     * @param userIds
+     */
+    @Override
+    public void delUserPosition(List<String> userIds) {
+        LambdaQueryWrapper<SysPositionUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(SysPositionUser::getUserId, userIds);
+        sysPositionUserMapper.delete(wrapper);
+    }
 }

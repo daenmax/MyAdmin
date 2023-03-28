@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {
     /**
@@ -27,7 +29,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param wrapper
      * @return
      */
-    @DataScope(alias = "su")
+    @DataScope(alias = "su", field = "id")
     IPage<SysUserPageDto> getPageWrapper(Page<SysUserPageDto> page, @Param("ew") Wrapper<SysUser> wrapper);
 
     /**
@@ -36,6 +38,15 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param wrapper
      * @return
      */
-    @DataScope(alias = "su")
+    @DataScope(alias = "su", field = "id")
     SysUserPageDto getInfo(@Param("ew") Wrapper<SysUser> wrapper);
+
+    /**
+     * 获取列表
+     *
+     * @param wrapper
+     * @return
+     */
+    @DataScope(alias = "su", field = "id")
+    List<SysUser> getUserList(@Param("ew") Wrapper<SysUser> wrapper);
 }

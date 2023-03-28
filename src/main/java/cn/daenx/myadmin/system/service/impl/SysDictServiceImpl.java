@@ -3,6 +3,7 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysDictDetailMapper;
@@ -173,7 +174,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
         wrapper.in(SysDict::getId, idList);
         List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
-        List<String> codeList = sysDictList.stream().map(SysDict::getCode).collect(Collectors.toList());
+        List<String> codeList = MyUtil.joinToList(sysDictList, SysDict::getCode);
         LambdaQueryWrapper<SysDictDetail> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysDictDetail::getDictCode, codeList);
         sysDictDetailMapper.delete(queryWrapper);

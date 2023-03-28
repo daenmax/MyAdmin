@@ -16,6 +16,7 @@ import cn.daenx.myadmin.system.vo.*;
 import cn.daenx.myadmin.test.po.TestData;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -30,10 +31,7 @@ import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -283,6 +281,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LoginUtil.logout();
     }
 
+
     /**
      * 分页列表
      *
@@ -364,6 +363,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void editInfo(SysUserUpdVo vo) {
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
+        }
+        String userId = LoginUtil.getLoginUserId();
+        if (userId.equals(vo.getId())) {
+            throw new MyException("禁止操作自己");
         }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
@@ -478,10 +481,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param vo
      */
     @Override
-    @DataScope(alias = "sys_user")
+    @DataScope(alias = "sys_user", field = "id")
     public void changeStatus(ComStatusUpdVo vo) {
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
+        }
+        String userId = LoginUtil.getLoginUserId();
+        if (userId.equals(vo.getId())) {
+            throw new MyException("禁止操作自己");
         }
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, vo.getId());
@@ -490,5 +497,69 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (rows < 1) {
             throw new MyException("修改失败");
         }
+    }
+
+    /**
+     * 重置用户密码
+     *
+     * @param vo
+     */
+    @Override
+    @DataScope(alias = "sys_user", field = "id")
+    public void resetPwd(SysUserResetPwdVo vo) {
+        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+            throw new MyException("禁止操作管理员");
+        }
+        String userId = LoginUtil.getLoginUserId();
+        if (userId.equals(vo.getId())) {
+            throw new MyException("禁止操作自己");
+        }
+        SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
+        String newPwd = SaSecureUtil.sha256(vo.getPassword());
+        LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysUser::getId, vo.getId());
+        updateWrapper.set(SysUser::getPassword, newPwd);
+        int rows = sysUserMapper.update(null, updateWrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
+        //注销该账户的登录
+        LoginUtil.logout(sysUserByPermissions.getUsername());
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    @Override
+    @DataScope(alias = "sys_user", field = "id")
+    public void deleteByIds(String[] ids) {
+        List<String> idList = Arrays.asList(ids);
+        String userId = LoginUtil.getLoginUserId();
+        if (idList.contains(userId)) {
+            throw new MyException("不能删除自己");
+        }
+        if (idList.contains(SystemConstant.IS_ADMIN_ID)) {
+            throw new MyException("禁止操作管理员");
+        }
+        //获取有权限操作的用户
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("su.id", idList);
+        List<SysUser> sysUsers = sysUserMapper.getUserList(queryWrapper);
+        for (SysUser sysUser : sysUsers) {
+            //注销账户的登录
+            LoginUtil.logout(sysUser.getUsername());
+        }
+        List<String> realList = MyUtil.joinToList(sysUsers, SysUser::getId);
+        //删除主表
+        sysUserMapper.deleteBatchIds(realList);
+        //删除详细表
+        LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.in(SysUserDetail::getUserId, realList);
+        sysUserDetailMapper.delete(wrapper);
+        //删除关联数据
+        sysRoleUserService.delUserRole(realList);
+        sysPositionUserService.delUserPosition(realList);
     }
 }

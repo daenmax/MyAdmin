@@ -140,4 +140,18 @@ public interface SysUserService extends IService<SysUser> {
      * @param vo
      */
     void changeStatus(ComStatusUpdVo vo);
+
+    /**
+     * 重置用户密码
+     *
+     * @param vo
+     */
+    void resetPwd(SysUserResetPwdVo vo);
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    void deleteByIds(String[] ids);
 }

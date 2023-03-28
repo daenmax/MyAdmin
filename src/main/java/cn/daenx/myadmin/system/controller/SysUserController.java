@@ -134,4 +134,30 @@ public class SysUserController {
         sysUserService.changeStatus(vo);
         return Result.ok();
     }
+
+
+    /**
+     * 重置用户密码
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:user:resetPwd")
+    @PutMapping("/resetPwd")
+    public Result resetPwd(@Validated @RequestBody SysUserResetPwdVo vo) {
+        sysUserService.resetPwd(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 删除
+     * @param ids
+     * @return
+     */
+    @SaCheckPermission("system:user:remove")
+    @DeleteMapping("/{ids}")
+    public Result remove(@PathVariable String[] ids) {
+        sysUserService.deleteByIds(ids);
+        return Result.ok();
+    }
 }

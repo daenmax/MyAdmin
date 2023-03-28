@@ -8,7 +8,6 @@ import java.util.List;
 public interface SysRoleUserService extends IService<SysRoleUser> {
 
 
-
     /**
      * 更新用户角色关联信息
      *
@@ -16,4 +15,11 @@ public interface SysRoleUserService extends IService<SysRoleUser> {
      * @param roleIds
      */
     void handleUserRole(String userId, List<String> roleIds);
+
+    /**
+     * 删除用户角色关联信息
+     *
+     * @param userIds
+     */
+    void delUserRole(List<String> userIds);
 }

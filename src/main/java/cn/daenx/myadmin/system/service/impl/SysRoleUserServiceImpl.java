@@ -37,4 +37,16 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
             }
         }
     }
+
+    /**
+     * 删除用户角色关联信息
+     *
+     * @param userIds
+     */
+    @Override
+    public void delUserRole(List<String> userIds) {
+        LambdaQueryWrapper<SysRoleUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(SysRoleUser::getUserId, userIds);
+        sysRoleUserMapper.delete(wrapper);
+    }
 }

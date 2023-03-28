@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
-public interface SysPositionUserService extends IService<SysPositionUser>{
+public interface SysPositionUserService extends IService<SysPositionUser> {
     /**
      * 更新用户岗位关联信息
      *
@@ -13,5 +13,12 @@ public interface SysPositionUserService extends IService<SysPositionUser>{
      * @param positionIds
      */
     void handleUserPosition(String userId, List<String> positionIds);
+
+    /**
+     * 删除用户岗位关联信息
+     *
+     * @param userIds
+     */
+    void delUserPosition(List<String> userIds);
 
 }
