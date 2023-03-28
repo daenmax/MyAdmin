@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysUserMapper;
@@ -56,6 +57,61 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private SysDictDetailService sysDictDetailService;
 
+    /**
+     * 通过手机号检查用户是否存在
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public Boolean checkUserByPhone(String phone) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getPhone, phone);
+        wrapper.eq(SysUser::getStatus, SystemConstant.STATUS_NORMAL);
+        return sysUserMapper.exists(wrapper);
+    }
+
+    /**
+     * 通过邮箱检查用户是否存在
+     *
+     * @param email
+     * @return
+     */
+    @Override
+    public Boolean checkUserByEmail(String email) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getEmail, email);
+        wrapper.eq(SysUser::getStatus, SystemConstant.STATUS_NORMAL);
+        return sysUserMapper.exists(wrapper);
+    }
+
+    /**
+     * 通过openId检查用户是否存在
+     *
+     * @param openId
+     * @return
+     */
+    @Override
+    public Boolean checkUserByOpenId(String openId) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getOpenId, openId);
+        wrapper.eq(SysUser::getStatus, SystemConstant.STATUS_NORMAL);
+        return sysUserMapper.exists(wrapper);
+    }
+
+    /**
+     * 通过apiKey检查用户是否存在
+     *
+     * @param apiKey
+     * @return
+     */
+    @Override
+    public Boolean checkUserByApiKey(String apiKey) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getApiKey, apiKey);
+        wrapper.eq(SysUser::getStatus, SystemConstant.STATUS_NORMAL);
+        return sysUserMapper.exists(wrapper);
+    }
 
     /**
      * 通过账号获取用户
@@ -345,6 +401,75 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysPositionUserService.handleUserPosition(vo.getId(), vo.getPositionIds());
         //注销该账户的登录
         LoginUtil.logout(sysUserByPermissions.getUsername());
+    }
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addInfo(SysUserAddVo vo) {
+        if (StringUtils.isNotBlank(vo.getPhone())) {
+            if (checkUserByPhone(vo.getPhone())) {
+                throw new MyException("手机号已存在");
+            }
+        }
+        if (StringUtils.isNotBlank(vo.getEmail())) {
+            if (checkUserByEmail(vo.getEmail())) {
+                throw new MyException("邮箱已存在");
+            }
+        }
+        if (StringUtils.isNotBlank(vo.getOpenId())) {
+            if (checkUserByOpenId(vo.getOpenId())) {
+                throw new MyException("openId已存在");
+            }
+        }
+        if (StringUtils.isNotBlank(vo.getApiKey())) {
+            if (checkUserByApiKey(vo.getApiKey())) {
+                throw new MyException("apiKey已存在");
+            }
+        }
+        SysUser userByUsername = getUserByUsername(vo.getUsername());
+        if (ObjectUtil.isNotEmpty(userByUsername)) {
+            throw new MyException("用户账号已存在");
+        }
+        SysUser sysUser = new SysUser();
+        sysUser.setDeptId(vo.getDeptId());
+        sysUser.setUsername(vo.getUsername());
+        String newPwd = SaSecureUtil.sha256(vo.getPassword());
+        sysUser.setPassword(newPwd);
+        sysUser.setStatus(vo.getStatus());
+        sysUser.setPhone(vo.getPhone());
+        sysUser.setEmail(vo.getEmail());
+        sysUser.setOpenId(vo.getOpenId());
+        sysUser.setApiKey(vo.getApiKey());
+        sysUser.setBanToTime(vo.getBanToTime());
+        sysUser.setExpireToTime(vo.getExpireToTime());
+        sysUser.setRemark(vo.getRemark());
+        sysUser.setUserType(vo.getUserType());
+        int rows = sysUserMapper.insert(sysUser);
+        if (rows < 1) {
+            throw new MyException("新增失败");
+        }
+        SysUserDetail sysUserDetail = new SysUserDetail();
+        sysUserDetail.setUserId(sysUser.getId());
+        sysUserDetail.setNickName(vo.getNickName());
+        sysUserDetail.setRealName(vo.getRealName());
+        sysUserDetail.setAge(vo.getAge());
+        sysUserDetail.setSex(vo.getSex());
+        sysUserDetail.setProfile(vo.getProfile());
+        sysUserDetail.setUserSign(vo.getUserSign());
+        sysUserDetail.setAvatar(vo.getAvatar());
+        sysUserDetail.setMoney(vo.getMoney());
+        int rowsDetail = sysUserDetailMapper.insert(sysUserDetail);
+        if (rowsDetail < 1) {
+            throw new MyException("新增失败");
+        }
+        //新增关联数据
+        sysRoleUserService.handleUserRole(sysUser.getId(), vo.getRoleIds());
+        sysPositionUserService.handleUserPosition(sysUser.getId(), vo.getPositionIds());
     }
 
     /**

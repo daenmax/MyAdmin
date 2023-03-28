@@ -28,11 +28,13 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
         LambdaQueryWrapper<SysRoleUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysRoleUser::getUserId, userId);
         sysRoleUserMapper.delete(wrapper);
-        for (String roleId : roleIds) {
-            SysRoleUser sysRoleUser = new SysRoleUser();
-            sysRoleUser.setRoleId(roleId);
-            sysRoleUser.setUserId(userId);
-            sysRoleUserMapper.insert(sysRoleUser);
+        if (roleIds != null) {
+            for (String roleId : roleIds) {
+                SysRoleUser sysRoleUser = new SysRoleUser();
+                sysRoleUser.setRoleId(roleId);
+                sysRoleUser.setUserId(userId);
+                sysRoleUserMapper.insert(sysRoleUser);
+            }
         }
     }
 }

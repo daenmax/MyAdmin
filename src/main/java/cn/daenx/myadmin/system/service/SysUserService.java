@@ -3,16 +3,44 @@ package cn.daenx.myadmin.system.service;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysUser;
-import cn.daenx.myadmin.system.vo.SysUserPageVo;
-import cn.daenx.myadmin.system.vo.SysUserUpdInfoVo;
-import cn.daenx.myadmin.system.vo.SysUserUpdPwdVo;
-import cn.daenx.myadmin.system.vo.SysUserUpdVo;
+import cn.daenx.myadmin.system.vo.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
 
 public interface SysUserService extends IService<SysUser> {
+    /**
+     * 通过手机号检查用户是否存在
+     *
+     * @param phone
+     * @return
+     */
+    Boolean checkUserByPhone(String phone);
+
+    /**
+     * 通过邮箱检查用户是否存在
+     *
+     * @param email
+     * @return
+     */
+    Boolean checkUserByEmail(String email);
+
+    /**
+     * 通过openId检查用户是否存在
+     *
+     * @param openId
+     * @return
+     */
+    Boolean checkUserByOpenId(String openId);
+
+    /**
+     * 通过apiKey检查用户是否存在
+     *
+     * @param apiKey
+     * @return
+     */
+    Boolean checkUserByApiKey(String apiKey);
 
     /**
      * 通过账号获取用户
@@ -98,6 +126,13 @@ public interface SysUserService extends IService<SysUser> {
      * @param vo
      */
     void editInfo(SysUserUpdVo vo);
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    void addInfo(SysUserAddVo vo);
 
     /**
      * 修改状态

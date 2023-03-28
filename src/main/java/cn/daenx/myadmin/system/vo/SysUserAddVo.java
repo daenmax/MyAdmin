@@ -13,11 +13,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class SysUserUpdVo {
+public class SysUserAddVo {
     //----------------------- user 开始
-    @NotBlank(message = "ID不能为空")
-    private String id;
-
+    /**
+     * 账号
+     */
+    @NotBlank(message = "账号不能为空")
+    private String username;
+    /**
+     * 密码
+     */
+    @NotBlank(message = "密码不能为空")
+    private String password;
     /**
      * 部门ID
      */

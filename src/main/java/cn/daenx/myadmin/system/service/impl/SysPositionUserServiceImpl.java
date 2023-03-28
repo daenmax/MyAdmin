@@ -26,11 +26,13 @@ public class SysPositionUserServiceImpl extends ServiceImpl<SysPositionUserMappe
         LambdaQueryWrapper<SysPositionUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysPositionUser::getUserId, userId);
         sysPositionUserMapper.delete(wrapper);
-        for (String positionId : positionIds) {
-            SysPositionUser sysPositionUser = new SysPositionUser();
-            sysPositionUser.setPositionId(positionId);
-            sysPositionUser.setUserId(userId);
-            sysPositionUserMapper.insert(sysPositionUser);
+        if (positionIds != null) {
+            for (String positionId : positionIds) {
+                SysPositionUser sysPositionUser = new SysPositionUser();
+                sysPositionUser.setPositionId(positionId);
+                sysPositionUser.setUserId(userId);
+                sysPositionUserMapper.insert(sysPositionUser);
+            }
         }
     }
 }

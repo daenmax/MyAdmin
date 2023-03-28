@@ -108,6 +108,19 @@ public class SysUserController {
         return Result.ok();
     }
 
+    /**
+     * 新增
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:user:add")
+    @PostMapping
+    public Result add(@Validated @RequestBody SysUserAddVo vo) {
+        sysUserService.addInfo(vo);
+        return Result.ok();
+    }
+
 
     /**
      * 修改状态
