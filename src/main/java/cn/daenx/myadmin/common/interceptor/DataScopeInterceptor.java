@@ -126,6 +126,9 @@ public class DataScopeInterceptor implements DataPermissionHandler {
             sql.append(prex);
             //数据权限，0=本人数据，1=本部门数据，2=本部门及以下数据，3=全部数据，4=自定义权限
             String dataScope = sysRole.getDataScope();
+            //下面之所以多拼接了一层 select x1.id from ()x1，是为了解决当更新sys_user和sys_dept表时，会报'You can’t specify target table ‘xxx’ for update in FROM clause'
+            //意思是：不能在同一语句中，先select出同一表中的某些值，再update这个表，即不能依据某字段值做判断再来更新某字段的值。
+            //解决方案就是，再套一层娃，相当于先把where查询结果放到了临时表x1里
             if (SystemConstant.DATA_SCOPE_SELF.equals(dataScope)) {
                 //本人数据
                 sql.append(" = ")
