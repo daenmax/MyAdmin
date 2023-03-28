@@ -63,6 +63,12 @@ public class SysDept extends BaseEntity implements Serializable {
     private String leaderUserId;
 
     /**
+     * 层级，顶级为0
+     */
+    @TableField(value = "`level`")
+    private Integer level;
+
+    /**
      * 排序
      */
     @TableField(value = "sort")
