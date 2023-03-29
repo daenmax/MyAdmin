@@ -105,4 +105,10 @@
         FROM sys_user su
         ${ew.customSqlSegment}
     </select>
+
+    <select id="getAll" resultType="cn.daenx.myadmin.system.dto.SysUserPageDto">
+        <include refid="userInfo">
+        </include>
+        ${ew.customSqlSegment}
+    </select>
 </mapper>

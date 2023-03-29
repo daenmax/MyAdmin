@@ -7,6 +7,7 @@ import cn.daenx.myadmin.system.vo.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SysUserService extends IService<SysUser> {
@@ -111,6 +112,14 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     IPage<SysUserPageDto> getPage(SysUserPageVo vo);
+
+    /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    List<SysUserPageDto> getAll(SysUserPageVo vo);
 
     /**
      * 查询

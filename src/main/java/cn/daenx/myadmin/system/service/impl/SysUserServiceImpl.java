@@ -317,6 +317,42 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<SysUserPageDto> getAll(SysUserPageVo vo) {
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        if (vo != null) {
+            if (ObjectUtil.isNotEmpty(vo.getDeptId())) {
+                List<SysDept> listByParentId = sysDeptService.getListByParentId(vo.getDeptId(), true);
+                List<String> ids = MyUtil.joinToList(listByParentId, SysDept::getId);
+                wrapper.in(ObjectUtil.isNotEmpty(vo.getDeptId()), "su.dept_id", ids);
+            }
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getUsername()), "su.username", vo.getUsername());
+            wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "su.status", vo.getStatus());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getPhone()), "su.phone", vo.getPhone());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getEmail()), "su.email", vo.getEmail());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "su.remark", vo.getRemark());
+            wrapper.eq(ObjectUtil.isNotEmpty(vo.getUserType()), "su.user_type", vo.getUserType());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getNickName()), "sud.nick_name", vo.getNickName());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getRealName()), "sud.real_name", vo.getRealName());
+            wrapper.eq(ObjectUtil.isNotEmpty(vo.getAge()), "sud.age", vo.getAge());
+            wrapper.eq(ObjectUtil.isNotEmpty(vo.getSex()), "sud.sex", vo.getSex());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getProfile()), "sud.profile", vo.getProfile());
+            wrapper.like(ObjectUtil.isNotEmpty(vo.getUserSign()), "sud.user_sign", vo.getUserSign());
+            String startTime = vo.getStartTime();
+            String endTime = vo.getEndTime();
+            wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "su.create_time", startTime, endTime);
+        }
+        wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
+        List<SysUserPageDto> list = sysUserMapper.getAll(wrapper);
+        return list;
+    }
+
+    /**
      * 查询
      *
      * @param id

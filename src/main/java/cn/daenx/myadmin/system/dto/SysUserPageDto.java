@@ -48,9 +48,7 @@ public class SysUserPageDto extends BaseDto {
      * 账号状态，0=正常，1=停用
      */
     @ExcelProperty(value = "账号状态", converter = DictConverter.class)
-    //使用自定义字典进行翻译，意思是直接写死在代码里的
-    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "停用"), @DictDetail(value = "2", label = "注销")})
-//    @Dict(dictCode = "sys_normal_disable", custom = {})
+    @Dict(dictCode = "sys_normal_disable", custom = {})
     private String status;
 
     /**
@@ -104,9 +102,7 @@ public class SysUserPageDto extends BaseDto {
     /**
      * 用户类型，具体看字典
      */
-    @ExcelProperty(value = "用户类型")
-    //使用自定义字典进行翻译，意思是直接写死在代码里的
-//    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "停用"), @DictDetail(value = "2", label = "注销")})
+    @ExcelProperty(value = "用户类型", converter = DictConverter.class)
     @Dict(dictCode = "sys_user_type", custom = {})
     private String userType;
     private String userTypeName;
@@ -133,10 +129,8 @@ public class SysUserPageDto extends BaseDto {
     /**
      * 性别，0=女，1=男，2=未知
      */
-    @ExcelProperty(value = "性别")
-    //使用自定义字典进行翻译，意思是直接写死在代码里的
-    @Dict(custom = {@DictDetail(value = "0", label = "女"), @DictDetail(value = "1", label = "男"), @DictDetail(value = "2", label = "未知")})
-//    @Dict(dictCode = "sys_normal_disable", custom = {})
+    @ExcelProperty(value = "性别", converter = DictConverter.class)
+    @Dict(dictCode = "sys_user_sex", custom = {})
     private String sex;
 
     /**

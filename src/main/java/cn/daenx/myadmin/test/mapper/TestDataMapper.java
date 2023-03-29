@@ -36,7 +36,7 @@ public interface TestDataMapper extends BaseMapper<TestData> {
     IPage<TestDataPageDto> getPageWrapper(Page<TestDataPageDto> page, @Param("ew") Wrapper<TestData> wrapper);
 
     /**
-     * 测试数据列表_MP自定义SQL
+     * 获取所有列表，用于导出
      *
      * @param wrapper
      * @return

@@ -18,7 +18,7 @@ public class TestDataImportVo {
     private String content;
     @ExcelProperty(value = "类型", converter = DictConverter.class)
     //使用自定义字典进行翻译，意思是直接写死在代码里的
-    @Dict(custom = {@DictDetail(value = "0", label = "民生"), @DictDetail(value = "1", label = "科技")})
+    @Dict(custom = {@DictDetail(value = "0", label = "民生"), @DictDetail(value = "1", label = "科技"), @DictDetail(value = "2", label = "农业"), @DictDetail(value = "3", label = "其他")})
 //    @Dict(dictCode = "test_data_type", custom = {})
     private String type;
     @ExcelProperty(value = "备注")

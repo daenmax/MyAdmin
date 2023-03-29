@@ -1,8 +1,11 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
+import cn.daenx.myadmin.system.po.SysDict;
+import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
@@ -10,6 +13,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,6 +84,16 @@ public class SysUserController {
     public Result list(SysUserPageVo vo) {
         IPage<SysUserPageDto> page = sysUserService.getPage(vo);
         return Result.ok(page);
+    }
+
+    /**
+     * 导出
+     */
+    @SaCheckPermission("system:user:export")
+    @PostMapping("/export")
+    public void export(SysUserPageVo vo, HttpServletResponse response) {
+        List<SysUserPageDto> list = sysUserService.getAll(vo);
+        ExcelUtil.exportXlsx(response, "用户", "系统用户", list, SysUserPageDto.class);
     }
 
     /**

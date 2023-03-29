@@ -33,6 +33,15 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
     IPage<SysUserPageDto> getPageWrapper(Page<SysUserPageDto> page, @Param("ew") Wrapper<SysUser> wrapper);
 
     /**
+     * 获取所有列表，用于导出
+     *
+     * @param wrapper
+     * @return
+     */
+    @DataScope(alias = "su", field = "id")
+    List<SysUserPageDto> getAll(@Param("ew") Wrapper<SysUser> wrapper);
+
+    /**
      * 查询
      *
      * @param wrapper
