@@ -4,8 +4,6 @@ import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
-import cn.daenx.myadmin.system.po.SysDict;
-import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
@@ -165,6 +163,7 @@ public class SysUserController {
 
     /**
      * 删除
+     *
      * @param ids
      * @return
      */
@@ -172,6 +171,33 @@ public class SysUserController {
     @DeleteMapping("/{ids}")
     public Result remove(@PathVariable String[] ids) {
         sysUserService.deleteByIds(ids);
+        return Result.ok();
+    }
+
+
+    /**
+     * 根据用户编号获取授权角色
+     *
+     * @param id
+     * @return
+     */
+    @SaCheckPermission("system:user:query")
+    @GetMapping(value = {"/authRole/{id}"})
+    public Result authRole(@PathVariable(value = "id", required = false) String id) {
+        Map<String, Object> map = sysUserService.authRole(id);
+        return Result.ok(map);
+    }
+
+    /**
+     * 保存用户授权角色
+     *
+     * @param id      用户Id
+     * @param roleIds 角色ID数组
+     */
+    @SaCheckPermission("system:user:edit")
+    @PutMapping("/authRole")
+    public Result saveAuthRole(String id, String[] roleIds) {
+        sysUserService.saveAuthRole(id, roleIds);
         return Result.ok();
     }
 }

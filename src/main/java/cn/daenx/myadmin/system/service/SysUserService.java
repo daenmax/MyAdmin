@@ -163,4 +163,20 @@ public interface SysUserService extends IService<SysUser> {
      * @param ids
      */
     void deleteByIds(String[] ids);
+
+    /**
+     * 根据用户编号获取授权角色
+     *
+     * @param id
+     * @return
+     */
+    Map<String, Object> authRole(String id);
+
+    /**
+     * 保存用户授权角色
+     *
+     * @param id
+     * @param roleIds
+     */
+    void saveAuthRole(String id, String[] roleIds);
 }

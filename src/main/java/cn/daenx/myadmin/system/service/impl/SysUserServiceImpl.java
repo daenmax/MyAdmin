@@ -384,7 +384,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
         SysUserPageDto info = sysUserMapper.getInfo(wrapper);
         if (ObjectUtil.isEmpty(info)) {
-            throw new MyException("你无权限修改该数据");
+            throw new MyException("你无权限操作该数据");
         }
         return info;
     }
@@ -597,5 +597,51 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //删除关联数据
         sysRoleUserService.delUserRole(realList);
         sysPositionUserService.delUserPosition(realList);
+    }
+
+    /**
+     * 根据用户编号获取授权角色
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Map<String, Object> authRole(String id) {
+        Map<String, Object> map = new HashMap<>();
+        List<SysRole> sysRoleList = sysRoleService.getSysRoleList();
+        SysUserPageDto sysUserByPermissions = getSysUserByPermissions(id);
+        List<SysRole> userRoles = sysUserByPermissions.getRoles();
+        for (SysRole sysRole : sysRoleList) {
+            for (SysRole userRole : userRoles) {
+                if(sysRole.getId().equals(userRole.getId())){
+                    sysRole.setFlag(true);
+                }
+            }
+        }
+        map.put("roles", sysRoleList);
+        map.put("user", sysUserByPermissions);
+        return map;
+    }
+
+    /**
+     * 保存用户授权角色
+     *
+     * @param id
+     * @param roleIds
+     */
+    @Override
+    public void saveAuthRole(String id, String[] roleIds) {
+        if (SystemConstant.IS_ADMIN_ID.equals(id)) {
+            throw new MyException("禁止操作管理员");
+        }
+        String userId = LoginUtil.getLoginUserId();
+        if (userId.equals(id)) {
+            throw new MyException("禁止操作自己");
+        }
+        SysUserPageDto sysUserByPermissions = getSysUserByPermissions(id);
+        //修改关联数据
+        sysRoleUserService.handleUserRole(id, Arrays.asList(roleIds));
+        //注销该账户的登录
+        LoginUtil.logout(sysUserByPermissions.getUsername());
     }
 }

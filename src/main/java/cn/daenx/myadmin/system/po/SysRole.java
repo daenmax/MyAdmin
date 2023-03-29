@@ -61,4 +61,10 @@ public class SysRole extends BaseEntity implements Serializable {
      */
     @TableField(value = "remark")
     private String remark;
+
+    /**
+     * 用户是否有此角色
+     */
+    @TableField(exist = false)
+    private boolean flag = false;
 }
