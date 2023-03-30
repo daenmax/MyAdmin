@@ -51,6 +51,18 @@ public class SysRole extends BaseEntity implements Serializable {
     private String dataScope;
 
     /**
+     * 菜单树选择项是否关联显示
+     */
+    @TableField(value = "menu_check_strictly")
+    private Integer menuCheckStrictly;
+
+    /**
+     * 部门树选择项是否关联显示
+     */
+    @TableField(value = "dept_check_strictly")
+    private Integer deptCheckStrictly;
+
+    /**
      * 角色状态，0=正常，1=禁用
      */
     @TableField(value = "`status`")

@@ -5,6 +5,8 @@ import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.vo.RouterVo;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.SysMenuPageVo;
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -14,6 +16,7 @@ public interface SysMenuService extends IService<SysMenu> {
     Set<String> getMenuPermissionByUser(SysLoginUserVo loginUserVo);
 
     List<SysMenu> getMenuTreeByUserId(String userId);
+
     /**
      * 构建前端路由所需要的菜单
      *
@@ -21,5 +24,13 @@ public interface SysMenuService extends IService<SysMenu> {
      * @return 路由列表
      */
     List<RouterVo> buildMenus(List<SysMenu> menus);
+
+    /**
+     * 获取菜单下拉树列表
+     *
+     * @param vo
+     * @return
+     */
+    List<Tree<String>> treeSelect(SysMenuPageVo vo);
 
 }

@@ -8,6 +8,7 @@ import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysDictDetailMapper;
 import cn.daenx.myadmin.system.po.SysDictDetail;
+import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.vo.SysDictAddVo;
 import cn.daenx.myadmin.system.vo.SysDictPageVo;
 import cn.daenx.myadmin.system.vo.SysDictUpdVo;
@@ -208,6 +209,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         List<SysDict> sysDictList = getSysDictList();
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysDictDetail::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.orderBy(true, true, SysDictDetail::getSort);
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         for (SysDict sysDict : sysDictList) {
             List<SysDictDetail> collect = sysDictDetailList.stream().filter(dictDetail -> sysDict.getCode().equals(dictDetail.getDictCode())).collect(Collectors.toList());

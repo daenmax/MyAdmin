@@ -9,6 +9,8 @@
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="data_scope" jdbcType="INTEGER" property="dataScope" />
+    <result column="menu_check_strictly" jdbcType="INTEGER" property="menuCheckStrictly" />
+    <result column="dept_check_strictly" jdbcType="INTEGER" property="deptCheckStrictly" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
@@ -19,7 +21,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, code, sort, data_scope, `status`, remark, create_id, create_time, update_id,
+    id, `name`, code, sort, data_scope, menu_check_strictly, dept_check_strictly, `status`, remark, create_id, create_time, update_id,
     update_time, is_delete
   </sql>
 

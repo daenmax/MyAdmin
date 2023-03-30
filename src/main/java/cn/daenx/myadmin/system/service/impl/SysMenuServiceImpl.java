@@ -2,20 +2,23 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.StreamUtils;
+import cn.daenx.myadmin.common.utils.TreeBuildUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.po.SysUser;
+import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.vo.MetaVo;
 import cn.daenx.myadmin.system.vo.RouterVo;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.SysMenuPageVo;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.myadmin.system.po.SysMenu;
 import cn.daenx.myadmin.system.mapper.SysMenuMapper;
 import cn.daenx.myadmin.system.service.SysMenuService;
 
@@ -282,5 +285,52 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             routers.add(router);
         }
         return routers;
+    }
+
+    /**
+     * 获取菜单下拉树列表
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<Tree<String>> treeSelect(SysMenuPageVo vo) {
+        List<SysMenu> menus = null;
+        if (LoginUtil.isAdmin()) {
+            LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.like(ObjectUtil.isNotEmpty(vo.getMenuName()), SysMenu::getMenuName, vo.getMenuName());
+            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getVisible()), SysMenu::getVisible, vo.getVisible());
+            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysMenu::getStatus, vo.getStatus());
+            queryWrapper.orderByAsc(SysMenu::getParentId);
+            queryWrapper.orderByAsc(SysMenu::getOrderNum);
+            menus = sysMenuMapper.selectList(queryWrapper);
+        } else {
+            QueryWrapper<SysMenu> wrapper1 = new QueryWrapper<>();
+            wrapper1.eq("sru.user_id", LoginUtil.getLoginUserId());
+            wrapper1.like(ObjectUtil.isNotEmpty(vo.getMenuName()), "sm.menu_name", vo.getMenuName());
+            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getVisible()), "sm.visible", vo.getVisible());
+            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sm.status", vo.getStatus());
+            wrapper1.orderByAsc("sm.parent_id");
+            wrapper1.orderByAsc("sm.order_num");
+            menus = sysMenuMapper.getMenuList(wrapper1);
+        }
+        return buildMenuTreeSelect(menus);
+    }
+
+    /**
+     * 构建前端所需要下拉树结构
+     *
+     * @param all 菜单列表
+     * @return 下拉树结构列表
+     */
+    public List<Tree<String>> buildMenuTreeSelect(List<SysMenu> all) {
+        if (CollUtil.isEmpty(all)) {
+            return CollUtil.newArrayList();
+        }
+        return TreeBuildUtils.build(all, (menu, tree) ->
+                tree.setId(menu.getId())
+                        .setParentId(menu.getParentId())
+                        .setName(menu.getMenuName())
+                        .setWeight(menu.getOrderNum()));
     }
 }

@@ -60,7 +60,7 @@
       AND sru.user_id = #{userId}
   </select>
 
-  <select id="getMenuTreeByUserId" resultMap="BaseResultMap">
+  <select id="getMenuTreeByUserId" resultType="cn.daenx.myadmin.system.po.SysMenu">
       SELECT DISTINCT sm.id,
                       sm.parent_id,
                       sm.menu_name,
@@ -68,7 +68,7 @@
                       sm.component,
                       sm.query_param,
                       sm.visible,
-                      sm.STATUS,
+                      sm.status,
                       sm.perms,
                       sm.is_frame,
                       sm.is_cache,
@@ -88,4 +88,27 @@
       ORDER BY sm.parent_id,
                sm.order_num
   </select>
+
+  <select id="getMenuList" resultType="cn.daenx.myadmin.system.po.SysMenu">
+      SELECT DISTINCT sm.id,
+                      sm.parent_id,
+                      sm.menu_name,
+                      sm.path,
+                      sm.component,
+                      sm.query_param,
+                      sm.visible,
+                      sm.status,
+                      sm.perms,
+                      sm.is_frame,
+                      sm.is_cache,
+                      sm.menu_type,
+                      sm.icon,
+                      sm.order_num,
+                      sm.create_time
+      FROM sys_menu sm
+               LEFT JOIN sys_role_menu srm ON sm.id = srm.menu_id
+               LEFT JOIN sys_role_user sru ON srm.role_id = sru.role_id
+               LEFT JOIN sys_role sr ON sru.role_id = sr.id
+      ${ew.getCustomSqlSegment}
+    </select>
 </mapper>
