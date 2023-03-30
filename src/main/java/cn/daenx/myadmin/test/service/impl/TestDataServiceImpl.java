@@ -144,9 +144,8 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      */
     @DataScope(alias = "test_data")
     @Override
-    public void deleteByIds(String[] ids) {
-        List<String> idList = Arrays.asList(ids);
-        int i = testDataMapper.deleteBatchIds(idList);
+    public void deleteByIds(List<String> ids) {
+        int i = testDataMapper.deleteBatchIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

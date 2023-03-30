@@ -71,5 +71,5 @@ public interface SysDictDetailService extends IService<SysDictDetail> {
      *
      * @param ids
      */
-    void deleteByIds(String[] ids);
+    void deleteByIds(List<String> ids);
 }

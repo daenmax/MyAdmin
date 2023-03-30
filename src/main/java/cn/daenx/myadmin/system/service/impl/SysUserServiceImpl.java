@@ -570,33 +570,34 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     @DataScope(alias = "sys_user", field = "id")
-    public void deleteByIds(String[] ids) {
-        List<String> idList = Arrays.asList(ids);
+    public void deleteByIds(List<String> ids) {
         String userId = LoginUtil.getLoginUserId();
-        if (idList.contains(userId)) {
+        if (ids.contains(userId)) {
             throw new MyException("不能删除自己");
         }
-        if (idList.contains(SystemConstant.IS_ADMIN_ID)) {
+        if (ids.contains(SystemConstant.IS_ADMIN_ID)) {
             throw new MyException("禁止操作管理员");
         }
         //获取有权限操作的用户
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("su.id", idList);
+        queryWrapper.in("su.id", ids);
         List<SysUser> sysUsers = sysUserMapper.getUserList(queryWrapper);
-        for (SysUser sysUser : sysUsers) {
-            //注销账户的登录
-            LoginUtil.logout(sysUser.getUsername());
+        if (sysUsers.size() > 0) {
+            for (SysUser sysUser : sysUsers) {
+                //注销账户的登录
+                LoginUtil.logout(sysUser.getUsername());
+            }
+            List<String> realList = MyUtil.joinToList(sysUsers, SysUser::getId);
+            //删除主表
+            sysUserMapper.deleteBatchIds(realList);
+            //删除详细表
+            LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
+            wrapper.in(SysUserDetail::getUserId, realList);
+            sysUserDetailMapper.delete(wrapper);
+            //删除关联数据
+            sysRoleUserService.delUserRole(realList);
+            sysPositionUserService.delUserPosition(realList);
         }
-        List<String> realList = MyUtil.joinToList(sysUsers, SysUser::getId);
-        //删除主表
-        sysUserMapper.deleteBatchIds(realList);
-        //删除详细表
-        LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.in(SysUserDetail::getUserId, realList);
-        sysUserDetailMapper.delete(wrapper);
-        //删除关联数据
-        sysRoleUserService.delUserRole(realList);
-        sysPositionUserService.delUserPosition(realList);
     }
 
     /**
@@ -613,7 +614,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysRole> userRoles = sysUserByPermissions.getRoles();
         for (SysRole sysRole : sysRoleList) {
             for (SysRole userRole : userRoles) {
-                if(sysRole.getId().equals(userRole.getId())){
+                if (sysRole.getId().equals(userRole.getId())) {
                     sysRole.setFlag(true);
                 }
             }
@@ -626,21 +627,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 保存用户授权角色
      *
-     * @param id
-     * @param roleIds
+     * @param vo
      */
     @Override
-    public void saveAuthRole(String id, String[] roleIds) {
-        if (SystemConstant.IS_ADMIN_ID.equals(id)) {
+    public void saveAuthRole(SysUserUpdAuthRoleVo vo) {
+        if (SystemConstant.IS_ADMIN_ID.equals(vo.getUserId())) {
             throw new MyException("禁止操作管理员");
         }
         String userId = LoginUtil.getLoginUserId();
-        if (userId.equals(id)) {
+        if (userId.equals(vo.getUserId())) {
             throw new MyException("禁止操作自己");
         }
-        SysUserPageDto sysUserByPermissions = getSysUserByPermissions(id);
+        SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getUserId());
         //修改关联数据
-        sysRoleUserService.handleUserRole(id, Arrays.asList(roleIds));
+        sysRoleUserService.handleUserRole(vo.getUserId(), vo.getRoleIds());
         //注销该账户的登录
         LoginUtil.logout(sysUserByPermissions.getUsername());
     }

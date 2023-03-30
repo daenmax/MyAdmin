@@ -1,18 +1,11 @@
 package cn.daenx.myadmin.system.controller;
 
-import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.po.SysMenu;
 import cn.daenx.myadmin.system.service.SysLoginService;
 import cn.daenx.myadmin.system.vo.RouterVo;
-import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.daenx.myadmin.system.vo.SysRegisterVo;
-import cn.daenx.myadmin.test.dto.TestDataPageDto;
-import cn.daenx.myadmin.test.service.TestDataService;
-import cn.daenx.myadmin.test.vo.TestDataPageVo;
 import cn.dev33.satoken.annotation.SaIgnore;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

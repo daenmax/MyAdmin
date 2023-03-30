@@ -168,18 +168,17 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      * @param ids
      */
     @Override
-    public void deleteByIds(String[] ids) {
-        List<String> idList = Arrays.asList(ids);
+    public void deleteByIds(List<String> ids) {
         //删除明细
         LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        wrapper.in(SysDict::getId, idList);
+        wrapper.in(SysDict::getId, ids);
         List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
         List<String> codeList = MyUtil.joinToList(sysDictList, SysDict::getCode);
         LambdaQueryWrapper<SysDictDetail> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(SysDictDetail::getDictCode, codeList);
         sysDictDetailMapper.delete(queryWrapper);
         //删除主表
-        sysDictMapper.deleteBatchIds(idList);
+        sysDictMapper.deleteBatchIds(ids);
         //刷新redis缓存
         refreshCache();
     }

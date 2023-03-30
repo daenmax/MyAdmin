@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
@@ -8,6 +9,7 @@ import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
@@ -168,8 +170,11 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:remove")
-    @DeleteMapping("/{ids}")
-    public Result remove(@PathVariable String[] ids) {
+    @DeleteMapping()
+    public Result remove(@RequestBody List<String> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            throw new MyException("参数错误");
+        }
         sysUserService.deleteByIds(ids);
         return Result.ok();
     }
@@ -191,13 +196,12 @@ public class SysUserController {
     /**
      * 保存用户授权角色
      *
-     * @param id      用户Id
-     * @param roleIds 角色ID数组
+     * @param vo
      */
     @SaCheckPermission("system:user:edit")
     @PutMapping("/authRole")
-    public Result saveAuthRole(String id, String[] roleIds) {
-        sysUserService.saveAuthRole(id, roleIds);
+    public Result saveAuthRole(@Validated @RequestBody SysUserUpdAuthRoleVo vo) {
+        sysUserService.saveAuthRole(vo);
         return Result.ok();
     }
 }

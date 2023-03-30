@@ -64,7 +64,7 @@ public interface TestDataService extends IService<TestData> {
      *
      * @param ids
      */
-    void deleteByIds(String[] ids);
+    void deleteByIds(List<String> ids);
 
     /**
      * 获取所有列表，用于导出

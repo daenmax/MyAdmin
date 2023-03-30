@@ -162,7 +162,7 @@ public interface SysUserService extends IService<SysUser> {
      *
      * @param ids
      */
-    void deleteByIds(String[] ids);
+    void deleteByIds(List<String> ids);
 
     /**
      * 根据用户编号获取授权角色
@@ -175,8 +175,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 保存用户授权角色
      *
-     * @param id
-     * @param roleIds
+     * @param vo
      */
-    void saveAuthRole(String id, String[] roleIds);
+    void saveAuthRole(SysUserUpdAuthRoleVo vo);
 }

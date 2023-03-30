@@ -67,7 +67,7 @@ public interface SysDictService extends IService<SysDict> {
      *
      * @param ids
      */
-    void deleteByIds(String[] ids);
+    void deleteByIds(List<String> ids);
 
     /**
      * 刷新字典缓存

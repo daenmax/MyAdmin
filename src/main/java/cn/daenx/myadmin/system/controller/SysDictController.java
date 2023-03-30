@@ -1,19 +1,15 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.ExcelUtil;
-import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.po.SysDict;
-import cn.daenx.myadmin.system.po.SysDictDetail;
-import cn.daenx.myadmin.system.service.SysDictDetailService;
 import cn.daenx.myadmin.system.service.SysDictService;
 import cn.daenx.myadmin.system.vo.SysDictAddVo;
 import cn.daenx.myadmin.system.vo.SysDictPageVo;
 import cn.daenx.myadmin.system.vo.SysDictUpdVo;
-import cn.daenx.myadmin.test.vo.TestDataPageVo;
-import cn.daenx.myadmin.test.vo.TestDataUpdVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.annotation.SaIgnore;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -98,8 +94,11 @@ public class SysDictController {
      * @return
      */
     @SaCheckPermission("system:dict:remove")
-    @DeleteMapping("/{ids}")
-    public Result remove(@PathVariable String[] ids) {
+    @DeleteMapping()
+    public Result remove(@RequestBody List<String> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            throw new MyException("参数错误");
+        }
         sysDictService.deleteByIds(ids);
         return Result.ok();
     }

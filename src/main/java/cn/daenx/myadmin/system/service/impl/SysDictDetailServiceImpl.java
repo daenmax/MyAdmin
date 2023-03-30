@@ -200,10 +200,9 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
      * @param ids
      */
     @Override
-    public void deleteByIds(String[] ids) {
-        List<String> idList = Arrays.asList(ids);
+    public void deleteByIds(List<String> ids) {
         //删除明细
-        sysDictDetailMapper.deleteBatchIds(idList);
+        sysDictDetailMapper.deleteBatchIds(ids);
         //刷新redis缓存
         sysDictService.refreshCache();
     }

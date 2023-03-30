@@ -2,11 +2,8 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.CaptchaService;
-import cn.daenx.myadmin.system.service.SysLoginService;
-import cn.daenx.myadmin.system.vo.SysLoginVo;
 import cn.dev33.satoken.annotation.SaIgnore;
 import jakarta.annotation.Resource;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
