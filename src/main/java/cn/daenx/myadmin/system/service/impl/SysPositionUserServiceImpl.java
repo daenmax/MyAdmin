@@ -8,6 +8,7 @@ import cn.daenx.myadmin.system.mapper.SysPositionUserMapper;
 import cn.daenx.myadmin.system.po.SysPositionUser;
 import cn.daenx.myadmin.system.service.SysPositionUserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,12 +28,14 @@ public class SysPositionUserServiceImpl extends ServiceImpl<SysPositionUserMappe
         wrapper.eq(SysPositionUser::getUserId, userId);
         sysPositionUserMapper.delete(wrapper);
         if (positionIds != null) {
+            List<SysPositionUser> list = new ArrayList<>();
             for (String positionId : positionIds) {
                 SysPositionUser sysPositionUser = new SysPositionUser();
                 sysPositionUser.setPositionId(positionId);
                 sysPositionUser.setUserId(userId);
-                sysPositionUserMapper.insert(sysPositionUser);
+                list.add(sysPositionUser);
             }
+            saveBatch(list);
         }
     }
 

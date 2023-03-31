@@ -1,13 +1,17 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysDictDetail;
 import cn.daenx.myadmin.system.po.SysRoleUser;
-import cn.daenx.myadmin.system.vo.SysRolePageVo;
-import cn.daenx.myadmin.system.vo.SysUserPageVo;
+import cn.daenx.myadmin.system.service.SysRoleMenuService;
+import cn.daenx.myadmin.system.vo.*;
 import cn.daenx.myadmin.test.po.TestData;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
@@ -26,6 +30,8 @@ import java.util.Set;
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
     @Resource
     private SysRoleMapper sysRoleMapper;
+    @Resource
+    private SysRoleMenuService sysRoleMenuService;
 
     @Override
     public List<SysRole> getSysRoleListByUserId(String userId) {
@@ -70,5 +76,101 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysRole::getCreateTime, startTime, endTime);
         Page<SysRole> sysRolePage = sysRoleMapper.selectPage(vo.getPage(false), wrapper);
         return sysRolePage;
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    @DataScope(alias = "sys_role")
+    public SysRole getInfo(String id) {
+        return sysRoleMapper.selectById(id);
+    }
+
+    /**
+     * 检查是否存在，已存在返回true
+     *
+     * @param code
+     * @param nowId 排除ID
+     * @return
+     */
+    @Override
+    public Boolean checkRoleExist(String code, String nowId) {
+        LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysRole::getCode, code);
+        wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysRole::getId, nowId);
+        boolean exists = sysRoleMapper.exists(wrapper);
+        return exists;
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    @Override
+    public void editInfo(SysRoleUpdVo vo) {
+        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+            throw new MyException("禁止操作超级管理员角色");
+        }
+        if (checkRoleExist(vo.getCode(), vo.getId())) {
+            throw new MyException("角色编码已存在");
+        }
+        LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysRole::getId, vo.getId());
+        wrapper.set(SysRole::getName, vo.getName());
+        wrapper.set(SysRole::getCode, vo.getCode());
+        wrapper.set(SysRole::getSort, vo.getSort());
+        wrapper.set(SysRole::getMenuCheckStrictly, vo.getMenuCheckStrictly());
+        wrapper.set(SysRole::getDeptCheckStrictly, vo.getDeptCheckStrictly());
+        wrapper.set(SysRole::getRemark, vo.getRemark());
+        int update = sysRoleMapper.update(null, wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+        //更新角色菜单关联信息
+        sysRoleMenuService.handleRoleMenu(vo.getId(), vo.getMenuIds());
+    }
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    @Override
+    public void addInfo(SysRoleAddVo vo) {
+        if (checkRoleExist(vo.getCode(), null)) {
+            throw new MyException("角色编码已存在");
+        }
+        SysRole sysRole = new SysRole();
+        sysRole.setName(vo.getName());
+        sysRole.setCode(vo.getCode());
+        sysRole.setSort(vo.getSort());
+        sysRole.setMenuCheckStrictly(vo.getMenuCheckStrictly());
+        sysRole.setDeptCheckStrictly(vo.getDeptCheckStrictly());
+        sysRole.setStatus(vo.getStatus());
+        sysRole.setRemark(vo.getRemark());
+        int insert = sysRoleMapper.insert(sysRole);
+        if (insert < 1) {
+            throw new MyException("新增失败");
+        }
+        //更新角色菜单关联信息
+        sysRoleMenuService.handleRoleMenu(sysRole.getId(), vo.getMenuIds());
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    @Override
+    public void deleteByIds(List<String> ids) {
+        int i = sysRoleMapper.deleteBatchIds(ids);
+        if (i < 1) {
+            throw new MyException("删除失败");
+        }
     }
 }

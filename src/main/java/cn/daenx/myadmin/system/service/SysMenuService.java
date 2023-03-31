@@ -29,8 +29,18 @@ public interface SysMenuService extends IService<SysMenu> {
      * 获取菜单下拉树列表
      *
      * @param vo
+     * @param userId
+     * @param isAdmin
      * @return
      */
-    List<Tree<String>> treeSelect(SysMenuPageVo vo);
+    List<Tree<String>> treeSelect(SysMenuPageVo vo, String userId, Boolean isAdmin);
+
+    /**
+     * 根据角色ID查询菜单树信息
+     *
+     * @param roleId 角色ID
+     * @return 选中菜单列表
+     */
+    List<String> selectMenuListByRoleId(String roleId);
 
 }

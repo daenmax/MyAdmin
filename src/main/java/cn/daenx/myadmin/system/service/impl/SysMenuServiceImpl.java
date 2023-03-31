@@ -1,9 +1,11 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.utils.LoginUtil;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.StreamUtils;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.mapper.SysRoleMapper;
 import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.vo.MetaVo;
 import cn.daenx.myadmin.system.vo.RouterVo;
@@ -28,6 +30,8 @@ import java.util.*;
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
     @Resource
     private SysMenuMapper sysMenuMapper;
+    @Resource
+    private SysRoleMapper sysRoleMapper;
 
     @Override
     public Set<String> getMenuPermissionByUser(SysLoginUserVo loginUserVo) {
@@ -294,9 +298,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return
      */
     @Override
-    public List<Tree<String>> treeSelect(SysMenuPageVo vo) {
+    public List<Tree<String>> treeSelect(SysMenuPageVo vo, String userId, Boolean isAdmin) {
         List<SysMenu> menus = null;
-        if (LoginUtil.isAdmin()) {
+        if (isAdmin) {
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.like(ObjectUtil.isNotEmpty(vo.getMenuName()), SysMenu::getMenuName, vo.getMenuName());
             queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getVisible()), SysMenu::getVisible, vo.getVisible());
@@ -306,7 +310,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menus = sysMenuMapper.selectList(queryWrapper);
         } else {
             QueryWrapper<SysMenu> wrapper1 = new QueryWrapper<>();
-            wrapper1.eq("sru.user_id", LoginUtil.getLoginUserId());
+            wrapper1.eq("sru.user_id", userId);
             wrapper1.like(ObjectUtil.isNotEmpty(vo.getMenuName()), "sm.menu_name", vo.getMenuName());
             wrapper1.eq(ObjectUtil.isNotEmpty(vo.getVisible()), "sm.visible", vo.getVisible());
             wrapper1.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sm.status", vo.getStatus());
@@ -315,6 +319,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menus = sysMenuMapper.getMenuList(wrapper1);
         }
         return buildMenuTreeSelect(menus);
+    }
+
+    @Override
+    public List<String> selectMenuListByRoleId(String roleId) {
+        SysRole sysRole = sysRoleMapper.selectById(roleId);
+        List<SysMenu> menuListByRoleId = sysMenuMapper.getMenuListByRoleId(sysRole.getId(), sysRole.getMenuCheckStrictly());
+        List<String> strings = MyUtil.joinToList(menuListByRoleId, SysMenu::getId);
+        return strings;
     }
 
     /**

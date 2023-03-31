@@ -517,7 +517,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param vo
      */
     @Override
-    @DataScope(alias = "sys_user", field = "id")
     public void changeStatus(ComStatusUpdVo vo) {
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
@@ -541,7 +540,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param vo
      */
     @Override
-    @DataScope(alias = "sys_user", field = "id")
     public void resetPwd(SysUserResetPwdVo vo) {
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
@@ -569,7 +567,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @param ids
      */
     @Override
-    @DataScope(alias = "sys_user", field = "id")
     public void deleteByIds(List<String> ids) {
         String userId = LoginUtil.getLoginUserId();
         if (ids.contains(userId)) {

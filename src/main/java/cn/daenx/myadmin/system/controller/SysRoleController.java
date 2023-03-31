@@ -5,6 +5,7 @@ import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
+import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysRoleService;
@@ -40,6 +41,61 @@ public class SysRoleController {
     public Result list(SysRolePageVo vo) {
         IPage<SysRole> page = sysRoleService.getPage(vo);
         return Result.ok(page);
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @SaCheckPermission("system:role:query")
+    @GetMapping(value = "/{id}")
+    public Result query(@PathVariable String id) {
+        SysRole sysRole = sysRoleService.getInfo(id);
+        return Result.ok(sysRole);
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping
+    public Result edit(@Validated @RequestBody SysRoleUpdVo vo) {
+        sysRoleService.editInfo(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 新增
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:role:add")
+    @PostMapping
+    public Result add(@Validated @RequestBody SysRoleAddVo vo) {
+        sysRoleService.addInfo(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     * @return
+     */
+    @SaCheckPermission("system:role:remove")
+    @DeleteMapping()
+    public Result remove(@RequestBody List<String> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            throw new MyException("参数错误");
+        }
+        sysRoleService.deleteByIds(ids);
+        return Result.ok();
     }
 
 }

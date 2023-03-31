@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import cn.daenx.myadmin.system.po.SysRoleMenu;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import cn.daenx.myadmin.system.po.SysRoleUser;
 import cn.daenx.myadmin.system.mapper.SysRoleUserMapper;
 import cn.daenx.myadmin.system.service.SysRoleUserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,12 +31,14 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
         wrapper.eq(SysRoleUser::getUserId, userId);
         sysRoleUserMapper.delete(wrapper);
         if (roleIds != null) {
+            List<SysRoleUser> list = new ArrayList<>();
             for (String roleId : roleIds) {
                 SysRoleUser sysRoleUser = new SysRoleUser();
                 sysRoleUser.setRoleId(roleId);
                 sysRoleUser.setUserId(userId);
-                sysRoleUserMapper.insert(sysRoleUser);
+                list.add(sysRoleUser);
             }
+            saveBatch(list);
         }
     }
 

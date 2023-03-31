@@ -1,8 +1,7 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.vo.SysRolePageVo;
-import cn.daenx.myadmin.system.vo.SysUserPageVo;
+import cn.daenx.myadmin.system.vo.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -24,4 +23,42 @@ public interface SysRoleService extends IService<SysRole> {
      * @return
      */
     IPage<SysRole> getPage(SysRolePageVo vo);
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    SysRole getInfo(String id);
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    void editInfo(SysRoleUpdVo vo);
+
+    /**
+     * 检查是否存在，已存在返回true
+     *
+     * @param code
+     * @param nowId 排除ID
+     * @return
+     */
+    Boolean checkRoleExist(String code, String nowId);
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    void addInfo(SysRoleAddVo vo);
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    void deleteByIds(List<String> ids);
 }

@@ -30,4 +30,5 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @return
      */
     List<SysMenu> getMenuList(@Param("ew") Wrapper<SysMenu> wrapper);
+    List<SysMenu> getMenuListByRoleId(@Param("roleId") String roleId, @Param("menuCheckStrictly") boolean menuCheckStrictly);
 }
