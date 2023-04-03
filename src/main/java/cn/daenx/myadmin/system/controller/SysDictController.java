@@ -124,7 +124,7 @@ public class SysDictController {
      */
     @GetMapping(value = "/optionSelect")
     public Result optionSelect() {
-        List<SysDict> list = sysDictService.getAll(null);
+        List<SysDict> list = sysDictService.getAll(new SysDictPageVo());
         return Result.ok(list);
     }
 }

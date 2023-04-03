@@ -76,7 +76,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     @Override
     public IPage<SysDictDetail> getPage(SysDictDetailPageVo vo) {
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderBy(true, true, SysDictDetail::getSort);
+        wrapper.orderByAsc(SysDictDetail::getSort);
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getDictCode()), SysDictDetail::getDictCode, vo.getDictCode());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getLabel()), SysDictDetail::getLabel, vo.getLabel());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysDictDetail::getValue, vo.getValue());
@@ -98,17 +98,15 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     @Override
     public List<SysDictDetail> getAll(SysDictDetailPageVo vo) {
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderBy(true, true, SysDictDetail::getSort);
-        if (vo != null) {
-            wrapper.eq(ObjectUtil.isNotEmpty(vo.getDictCode()), SysDictDetail::getDictCode, vo.getDictCode());
-            wrapper.like(ObjectUtil.isNotEmpty(vo.getLabel()), SysDictDetail::getLabel, vo.getLabel());
-            wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysDictDetail::getValue, vo.getValue());
-            wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDictDetail::getStatus, vo.getStatus());
-            wrapper.eq(ObjectUtil.isNotEmpty(vo.getRemark()), SysDictDetail::getRemark, vo.getRemark());
-            String startTime = vo.getStartTime();
-            String endTime = vo.getEndTime();
-            wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDictDetail::getCreateTime, startTime, endTime);
-        }
+        wrapper.orderByAsc(SysDictDetail::getSort);
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getDictCode()), SysDictDetail::getDictCode, vo.getDictCode());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getLabel()), SysDictDetail::getLabel, vo.getLabel());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysDictDetail::getValue, vo.getValue());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDictDetail::getStatus, vo.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getRemark()), SysDictDetail::getRemark, vo.getRemark());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDictDetail::getCreateTime, startTime, endTime);
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         return sysDictDetailList;
     }

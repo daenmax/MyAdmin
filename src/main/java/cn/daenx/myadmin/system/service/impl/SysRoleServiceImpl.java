@@ -65,7 +65,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public IPage<SysRole> getPage(SysRolePageVo vo) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderBy(true, true, SysRole::getSort);
+        wrapper.orderByAsc(SysRole::getSort);
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysRole::getName, vo.getName());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysRole::getCode, vo.getCode());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getDataScope()), SysRole::getDataScope, vo.getDataScope());

@@ -1,25 +1,20 @@
 package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.ExcelUtil;
-import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.dto.SysUserPageDto;
-import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysRoleService;
-import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +23,8 @@ import java.util.Map;
 public class SysRoleController {
     @Resource
     private SysRoleService sysRoleService;
+    @Resource
+    private SysDeptService sysDeptService;
 
 
     /**
@@ -98,4 +95,18 @@ public class SysRoleController {
         return Result.ok();
     }
 
+    /**
+     * 获取对应角色部门列表树
+     *
+     * @param roleId
+     * @return
+     */
+    @GetMapping(value = "/roleDeptTreeSelect/{roleId}")
+    public Result roleDeptTreeSelect(@PathVariable("roleId") String roleId) {
+        List<Tree<String>> list = sysDeptService.deptTree(new SysDeptPageVo());
+        Map<String, Object> map = new HashMap<>();
+        map.put("checkedKeys", sysDeptService.selectDeptListByRoleId(roleId));
+        map.put("depts", list);
+        return Result.ok(map);
+    }
 }

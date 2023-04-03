@@ -26,7 +26,7 @@
     create_id, create_time, update_id, update_time, is_delete
   </sql>
 
-  <select id="getListByParentId" resultMap="BaseResultMap">
+  <select id="getListByParentId" resultType="cn.daenx.myadmin.system.po.SysDept">
     WITH RECURSIVE recursion AS (
       SELECT
         sd1.*
@@ -51,4 +51,21 @@
         WHERE t1.id != #{parentId}
       </if>
     </select>
+
+  <select id="getDeptListByRoleId" resultType="cn.daenx.myadmin.system.po.SysDept">
+    SELECT
+      sd.*
+    FROM
+      sys_dept sd
+        LEFT JOIN sys_role_dept srd ON sd.id = srd.dept_id
+    WHERE
+      sd.is_delete = 0
+      AND srd.role_id = 2
+      <if test="deptCheckStrictly">
+        AND sd.id NOT IN ( SELECT sd2.parent_id FROM sys_dept sd2 INNER JOIN sys_role_dept srd ON sd2.id = srd.dept_id AND srd.role_id = 2 )
+      </if>
+    ORDER BY
+      sd.parent_id,
+      sd.sort
+  </select>
 </mapper>

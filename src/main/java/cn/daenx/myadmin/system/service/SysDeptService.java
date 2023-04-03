@@ -2,6 +2,7 @@ package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.system.po.SysDept;
 import cn.daenx.myadmin.system.vo.SysDeptPageVo;
+import cn.daenx.myadmin.system.vo.SysMenuPageVo;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -15,7 +16,7 @@ public interface SysDeptService extends IService<SysDept> {
      *
      * @return
      */
-    List<Tree<String>> deptTree();
+    List<Tree<String>> deptTree(SysDeptPageVo vo);
 
     /**
      * 分页列表
@@ -41,4 +42,12 @@ public interface SysDeptService extends IService<SysDept> {
      * @return
      */
     List<SysDept> getListByParentId(String parentId, Boolean keepSelf);
+
+    /**
+     * 根据角色ID查询部门树信息
+     *
+     * @param roleId 角色ID
+     * @return 选中菜单列表
+     */
+    List<String> selectDeptListByRoleId(String roleId);
 }

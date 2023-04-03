@@ -75,14 +75,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     public List<SysDict> getAll(SysDictPageVo vo) {
         LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        if (vo != null) {
-            wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
-            wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
-            wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
-            String startTime = vo.getStartTime();
-            String endTime = vo.getEndTime();
-            wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
-        }
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
         List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
         return sysDictList;
     }
@@ -209,7 +207,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         List<SysDict> sysDictList = getSysDictList();
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysDictDetail::getStatus, SystemConstant.STATUS_NORMAL);
-        wrapper.orderBy(true, true, SysDictDetail::getSort);
+        wrapper.orderByAsc(SysDictDetail::getSort);
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         for (SysDict sysDict : sysDictList) {
             List<SysDictDetail> collect = sysDictDetailList.stream().filter(dictDetail -> sysDict.getCode().equals(dictDetail.getDictCode())).collect(Collectors.toList());

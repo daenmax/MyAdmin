@@ -160,14 +160,12 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     @Override
     public List<TestDataPageDto> getAll(TestDataPageVo vo) {
         QueryWrapper<TestData> wrapper = new QueryWrapper<>();
-        if (vo != null) {
-            wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
-            wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
-            wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
-            String startTime = vo.getStartTime();
-            String endTime = vo.getEndTime();
-            wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
-        }
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
         wrapper.eq("td.is_delete", SystemConstant.IS_DELETE_NO);
         List<TestDataPageDto> list = testDataMapper.getAll(wrapper);
         return list;
