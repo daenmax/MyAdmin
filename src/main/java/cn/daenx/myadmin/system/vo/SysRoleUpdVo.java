@@ -50,5 +50,6 @@ public class SysRoleUpdVo {
     private String status;
     private String remark;
     private List<String> menuIds;
+    private List<String> deptIds;
 
 }

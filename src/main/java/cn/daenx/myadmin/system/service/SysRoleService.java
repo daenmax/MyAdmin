@@ -61,4 +61,11 @@ public interface SysRoleService extends IService<SysRole> {
      * @param ids
      */
     void deleteByIds(List<String> ids);
+
+    /**
+     * 修改数据权限
+     *
+     * @param vo
+     */
+    void dataScope(SysRoleDataScopeUpdVo vo);
 }

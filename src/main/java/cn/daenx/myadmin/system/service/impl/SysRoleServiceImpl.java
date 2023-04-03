@@ -6,6 +6,7 @@ import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysDictDetail;
 import cn.daenx.myadmin.system.po.SysRoleUser;
+import cn.daenx.myadmin.system.service.SysRoleDeptService;
 import cn.daenx.myadmin.system.service.SysRoleMenuService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.daenx.myadmin.test.po.TestData;
@@ -32,6 +33,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRoleMapper sysRoleMapper;
     @Resource
     private SysRoleMenuService sysRoleMenuService;
+    @Resource
+    private SysRoleDeptService sysRoleDeptService;
 
     @Override
     public List<SysRole> getSysRoleListByUserId(String userId) {
@@ -172,5 +175,28 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (i < 1) {
             throw new MyException("删除失败");
         }
+    }
+
+
+    /**
+     * 修改数据权限
+     *
+     * @param vo
+     */
+    @Override
+    public void dataScope(SysRoleDataScopeUpdVo vo) {
+        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+            throw new MyException("禁止操作超级管理员角色");
+        }
+        LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysRole::getId, vo.getId());
+        wrapper.set(SysRole::getDeptCheckStrictly, vo.getDeptCheckStrictly());
+        wrapper.set(SysRole::getDataScope, vo.getDataScope());
+        int update = sysRoleMapper.update(null, wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+        //更新角色菜单关联信息
+        sysRoleDeptService.handleRoleDept(vo.getId(), vo.getDeptIds());
     }
 }

@@ -109,4 +109,18 @@ public class SysRoleController {
         map.put("depts", list);
         return Result.ok(map);
     }
+
+
+    /**
+     * 修改数据权限
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/dataScope")
+    public Result dataScope(@Validated @RequestBody SysRoleDataScopeUpdVo vo) {
+        sysRoleService.dataScope(vo);
+        return Result.ok();
+    }
 }
