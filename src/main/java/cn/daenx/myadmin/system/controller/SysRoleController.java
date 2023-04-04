@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysRole;
@@ -14,6 +15,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +45,16 @@ public class SysRoleController {
     public Result list(SysRolePageVo vo) {
         IPage<SysRole> page = sysRoleService.getPage(vo);
         return Result.ok(page);
+    }
+
+    /**
+     * 导出
+     */
+    @SaCheckPermission("system:role:export")
+    @PostMapping("/export")
+    public void export(SysRolePageVo vo, HttpServletResponse response) {
+        List<SysRole> list = sysRoleService.getAll(vo);
+        ExcelUtil.exportXlsx(response, "角色", "角色数据", list, SysRole.class);
     }
 
     /**

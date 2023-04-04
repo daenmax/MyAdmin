@@ -25,6 +25,14 @@ public interface SysRoleService extends IService<SysRole> {
     IPage<SysRole> getPage(SysRolePageVo vo);
 
     /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    List<SysRole> getAll(SysRolePageVo vo);
+
+    /**
      * 查询
      *
      * @param id

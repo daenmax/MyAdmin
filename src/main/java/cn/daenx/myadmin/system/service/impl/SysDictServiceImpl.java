@@ -12,6 +12,7 @@ import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.vo.SysDictAddVo;
 import cn.daenx.myadmin.system.vo.SysDictPageVo;
 import cn.daenx.myadmin.system.vo.SysDictUpdVo;
+import cn.daenx.myadmin.system.vo.SysRolePageVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -55,13 +56,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      */
     @Override
     public IPage<SysDict> getPage(SysDictPageVo vo) {
-        LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
-        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
+        LambdaQueryWrapper<SysDict> wrapper = getWrapper(vo);
         Page<SysDict> sysDictPage = sysDictMapper.selectPage(vo.getPage(true), wrapper);
         return sysDictPage;
     }
@@ -74,6 +69,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      */
     @Override
     public List<SysDict> getAll(SysDictPageVo vo) {
+        LambdaQueryWrapper<SysDict> wrapper = getWrapper(vo);
+        List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
+        return sysDictList;
+    }
+
+    private LambdaQueryWrapper<SysDict> getWrapper(SysDictPageVo vo) {
         LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
@@ -81,8 +82,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
-        List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
-        return sysDictList;
+        return wrapper;
     }
 
     /**

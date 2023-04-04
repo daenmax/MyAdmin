@@ -3,12 +3,14 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.service.SysRoleDeptService;
 import cn.daenx.myadmin.system.service.SysRoleMenuService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -66,6 +68,25 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @DataScope(alias = "sys_role")
     @Override
     public IPage<SysRole> getPage(SysRolePageVo vo) {
+        LambdaQueryWrapper<SysRole> wrapper = getWrapper(vo);
+        Page<SysRole> sysRolePage = sysRoleMapper.selectPage(vo.getPage(false), wrapper);
+        return sysRolePage;
+    }
+
+    /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<SysRole> getAll(SysRolePageVo vo) {
+        LambdaQueryWrapper<SysRole> wrapper = getWrapper(vo);
+        List<SysRole> sysRoleList = sysRoleMapper.selectList( wrapper);
+        return sysRoleList;
+    }
+
+    private LambdaQueryWrapper<SysRole> getWrapper(SysRolePageVo vo) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByAsc(SysRole::getSort);
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysRole::getName, vo.getName());
@@ -76,8 +97,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysRole::getCreateTime, startTime, endTime);
-        Page<SysRole> sysRolePage = sysRoleMapper.selectPage(vo.getPage(false), wrapper);
-        return sysRolePage;
+        return wrapper;
     }
 
     /**
