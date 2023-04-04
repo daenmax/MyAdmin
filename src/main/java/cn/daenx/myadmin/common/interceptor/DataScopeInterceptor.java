@@ -1,13 +1,14 @@
 package cn.daenx.myadmin.common.interceptor;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
-import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.vo.DataScopeParam;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysRole;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
+import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
@@ -36,6 +37,10 @@ import java.util.List;
 //@Intercepts注解用于拦截StatementHandler对象的预编译方法。类似的还有：拦截Executor对象的查找方法，自行百度
 @Intercepts(@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}))
 public class DataScopeInterceptor implements DataPermissionHandler {
+
+    @Resource
+    private LoginUtilService loginUtilService;
+
     //线程局部变量
     //ThreadLocal的作用主要是做数据隔离，填充的数据只属于当前线程
     //用于实现以下功能：虽然每次执行SQL都会进入该拦截器，但是拦截器里可以判断mapper方法上是否有@DataScope注解，如果没有，那就直接放行，不进行修改SQL
@@ -87,7 +92,7 @@ public class DataScopeInterceptor implements DataPermissionHandler {
             return where;
         }
         //判断是否是管理员，如果是的话，直接放行，不修改SQL
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         if (loginUser.isAdmin()) {
             return where;
         }

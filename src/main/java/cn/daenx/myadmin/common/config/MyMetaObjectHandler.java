@@ -1,8 +1,9 @@
 package cn.daenx.myadmin.common.config;
 
-import cn.daenx.myadmin.common.utils.LoginUtil;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,9 @@ import java.time.LocalDateTime;
 @Slf4j
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
+
+    @Resource
+    private LoginUtilService loginUtilService;
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -82,7 +86,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private String getLoginUserId() {
         SysLoginUserVo loginUser;
         try {
-            loginUser = LoginUtil.getLoginUser();
+            loginUser = loginUtilService.getLoginUser();
         } catch (Exception e) {
             return null;
         }

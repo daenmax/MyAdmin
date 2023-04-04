@@ -1,12 +1,12 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.StreamUtils;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
 import cn.daenx.myadmin.system.po.*;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.MetaVo;
 import cn.daenx.myadmin.system.vo.RouterVo;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
@@ -32,6 +32,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private SysMenuMapper sysMenuMapper;
     @Resource
     private SysRoleMapper sysRoleMapper;
+    @Resource
+    private LoginUtilService loginUtilService;
 
     @Override
     public Set<String> getMenuPermissionByUser(SysLoginUserVo loginUserVo) {
@@ -79,7 +81,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<SysMenu> getMenuTreeByUserId(String userId) {
         List<SysMenu> menus = null;
-        if (LoginUtil.isAdmin(userId)) {
+        if (loginUtilService.isAdmin(userId)) {
             LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<SysMenu>()
                     .in(SysMenu::getMenuType, SystemConstant.MENU_TYPE_DIR, SystemConstant.MENU_TYPE_MENU)
                     .eq(SysMenu::getStatus, SystemConstant.STATUS_NORMAL)

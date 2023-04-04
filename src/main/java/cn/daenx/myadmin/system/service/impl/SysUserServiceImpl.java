@@ -1,28 +1,22 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
-import cn.daenx.myadmin.system.mapper.SysPositionMapper;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
 import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
-import cn.daenx.myadmin.test.po.TestData;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -32,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
@@ -54,6 +47,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysDeptService sysDeptService;
     @Resource
     private SysDictDetailService sysDictDetailService;
+    @Resource
+    private LoginUtilService loginUtilService;
 
     /**
      * 通过手机号检查用户是否存在
@@ -217,7 +212,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Map<String, Object> profile() {
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         SysUserPageDto sysUserVo = getUserInfoByUserId(loginUser.getId());
         if (sysUserVo == null) {
             throw new MyException("用户不存在");
@@ -239,7 +234,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void updInfo(SysUserUpdInfoVo vo) {
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUserDetail::getUserId, loginUser.getId());
         wrapper.set(SysUserDetail::getNickName, vo.getNickName());
@@ -264,7 +259,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (vo.getNewPassword().equals(vo.getOldPassword())) {
             throw new MyException("新密码不能与旧密码一样");
         }
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         SysUser sysUser = getUserByUserId(loginUser.getId());
         String sha256 = SaSecureUtil.sha256(vo.getOldPassword());
         if (!sha256.equals(sysUser.getPassword())) {
@@ -278,7 +273,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (update < 1) {
             throw new MyException("修改失败");
         }
-        LoginUtil.logout();
+        loginUtilService.logout();
     }
 
 
@@ -382,7 +377,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = LoginUtil.getLoginUserId();
+        String userId = loginUtilService.getLoginUserId();
         if (userId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
@@ -421,7 +416,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysRoleUserService.handleUserRole(vo.getId(), vo.getRoleIds());
         sysPositionUserService.handleUserPosition(vo.getId(), vo.getPositionIds());
         //注销该账户的登录
-        LoginUtil.logout(sysUserByPermissions.getUsername());
+        loginUtilService.logoutByUsername(sysUserByPermissions.getUsername());
     }
 
     /**
@@ -503,7 +498,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = LoginUtil.getLoginUserId();
+        String userId = loginUtilService.getLoginUserId();
         if (userId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
@@ -526,7 +521,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = LoginUtil.getLoginUserId();
+        String userId = loginUtilService.getLoginUserId();
         if (userId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
@@ -540,7 +535,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("修改失败");
         }
         //注销该账户的登录
-        LoginUtil.logout(sysUserByPermissions.getUsername());
+        loginUtilService.logoutByUsername(sysUserByPermissions.getUsername());
     }
 
     /**
@@ -550,7 +545,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void deleteByIds(List<String> ids) {
-        String userId = LoginUtil.getLoginUserId();
+        String userId = loginUtilService.getLoginUserId();
         if (ids.contains(userId)) {
             throw new MyException("不能删除自己");
         }
@@ -564,7 +559,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (sysUsers.size() > 0) {
             for (SysUser sysUser : sysUsers) {
                 //注销该账户的登录
-                LoginUtil.logout(sysUser.getUsername());
+                loginUtilService.logoutByUsername(sysUser.getUsername());
             }
             List<String> realList = MyUtil.joinToList(sysUsers, SysUser::getId);
             //删除主表
@@ -613,7 +608,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getUserId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = LoginUtil.getLoginUserId();
+        String userId = loginUtilService.getLoginUserId();
         if (userId.equals(vo.getUserId())) {
             throw new MyException("禁止操作自己");
         }
@@ -621,7 +616,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //修改关联数据
         sysRoleUserService.handleUserRole(vo.getUserId(), vo.getRoleIds());
         //注销该账户的登录
-        LoginUtil.logout(sysUserByPermissions.getUsername());
+        loginUtilService.logoutByUsername(sysUserByPermissions.getUsername());
     }
 
     /**

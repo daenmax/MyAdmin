@@ -1,16 +1,10 @@
 package cn.daenx.myadmin.system.controller;
 
-import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.po.SysMenu;
-import cn.daenx.myadmin.system.po.SysRole;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.service.SysMenuService;
-import cn.daenx.myadmin.system.service.SysRoleService;
 import cn.daenx.myadmin.system.vo.SysMenuPageVo;
-import cn.daenx.myadmin.system.vo.SysRolePageVo;
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +20,8 @@ import java.util.Map;
 public class SysMenuController {
     @Resource
     private SysMenuService sysMenuService;
+    @Resource
+    private LoginUtilService loginUtilService;
 
 
     /**
@@ -36,7 +32,7 @@ public class SysMenuController {
      */
     @GetMapping(value = "/treeSelect")
     public Result treeSelect(SysMenuPageVo vo) {
-        List<Tree<String>> list = sysMenuService.treeSelect(vo, LoginUtil.getLoginUserId(), LoginUtil.isAdmin());
+        List<Tree<String>> list = sysMenuService.treeSelect(vo, loginUtilService.getLoginUserId(), loginUtilService.isAdmin());
         return Result.ok(list);
     }
 
@@ -49,7 +45,7 @@ public class SysMenuController {
      */
     @GetMapping(value = "/roleMenuTreeSelect/{roleId}")
     public Result roleMenuTreeSelect(@PathVariable("roleId") String roleId) {
-        List<Tree<String>> list = sysMenuService.treeSelect(new SysMenuPageVo(), LoginUtil.getLoginUserId(), LoginUtil.isAdmin());
+        List<Tree<String>> list = sysMenuService.treeSelect(new SysMenuPageVo(), loginUtilService.getLoginUserId(), loginUtilService.isAdmin());
         Map<String, Object> map = new HashMap<>();
         map.put("checkedKeys", sysMenuService.selectMenuListByRoleId(roleId));
         map.put("menus", list);

@@ -1,37 +1,99 @@
 package cn.daenx.myadmin.system.service;
 
 
+import cn.daenx.myadmin.common.enums.DeviceType;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 
 import java.util.List;
 
 public interface LoginUtilService {
+
+    /**
+     * 登录
+     *
+     * @param sysLoginUserVo
+     * @param deviceType
+     */
+    void login(SysLoginUserVo sysLoginUserVo, DeviceType deviceType);
+
+    /**
+     * 退出登录
+     */
+    void logout();
+
+    /**
+     * 退出登录
+     */
+    void logoutByUsername(String username);
+
+    /**
+     * 退出登录
+     */
+    void logoutByToken(String token);
+
     /**
      * 下线相关用户
      *
      * @param roleId
      */
-    void offLineUserByRoleId(String roleId);
+    void logoutByRoleId(String roleId);
 
     /**
      * 下线相关用户
      *
      * @param roleIds
      */
-    void offLineUserByRoleId(List<String> roleIds);
+    void logoutByRoleId(List<String> roleIds);
 
     /**
      * 下线相关用户
      *
      * @param userId
      */
-    void offLineUserByUserId(String userId);
+    void logoutByUserId(String userId);
 
     /**
-     * 记录登录缓存
+     * 获取登录用户
+     */
+    SysLoginUserVo getLoginUser();
+
+    /**
+     * 获取登录用户
+     */
+    SysLoginUserVo getLoginUserByToken(String token);
+
+    /**
+     * 获取登录用户ID
+     */
+    String getLoginUserId();
+
+    /**
+     * 是否为管理员
      *
      * @param userId
-     * @param username
+     * @return
      */
-    void saveLoginCache(String userId, String username);
+    boolean isAdmin(String userId);
+
+    /**
+     * 是否为管理员
+     *
+     * @return
+     */
+    boolean isAdmin();
+
+    /**
+     * 获取登录用户的token列表获取登录用户的token列表
+     *
+     * @return
+     */
+    List<String> getLoginTokenList();
+
+    /**
+     * 获取token的有效期
+     *
+     * @param token
+     * @return
+     */
+    long getTokenActivityTimeoutByToken(String token);
 }

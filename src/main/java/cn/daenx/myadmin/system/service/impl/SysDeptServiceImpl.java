@@ -1,24 +1,21 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
-import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysRoleDeptMapper;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
 import cn.daenx.myadmin.system.po.*;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.SysDeptPageVo;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysDeptMapper;
@@ -40,6 +37,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Resource
     private SysRoleDeptMapper sysRoleDeptMapper;
 
+    @Resource
+    private LoginUtilService loginUtilService;
+
     /**
      * 分页列表
      *
@@ -54,7 +54,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     private LambdaQueryWrapper<SysDept> getWrapper(SysDeptPageVo vo) {
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         List<SysRole> roleList = loginUser.getRoles();
         Map<String, List<SysRole>> roleMap = roleList.stream().collect(Collectors.groupingBy(SysRole::getDataScope));
         LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();

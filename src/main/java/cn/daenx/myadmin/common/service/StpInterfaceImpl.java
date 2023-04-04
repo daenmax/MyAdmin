@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.common.service;
 
-import cn.daenx.myadmin.common.utils.LoginUtil;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.dev33.satoken.stp.StpInterface;
 import jakarta.annotation.Resource;
@@ -14,13 +14,14 @@ import java.util.List;
  */
 @Component
 public class StpInterfaceImpl implements StpInterface {
-
+    @Resource
+    private LoginUtilService loginUtilService;
     /**
      * 返回一个账号所拥有的权限码集合
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         return new ArrayList<>(loginUser.getMenuPermission());
     }
 
@@ -29,7 +30,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         return new ArrayList<>(loginUser.getRolePermission());
     }
 

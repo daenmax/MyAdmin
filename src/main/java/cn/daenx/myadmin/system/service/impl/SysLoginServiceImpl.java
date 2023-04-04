@@ -4,11 +4,8 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.enums.DeviceType;
 import cn.daenx.myadmin.common.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
-import cn.daenx.myadmin.common.utils.StreamUtils;
-import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysMenu;
@@ -17,13 +14,11 @@ import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -109,8 +104,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
             //设置登录状态
-            LoginUtil.login(loginUserVo, DeviceType.PC);
-            loginUtilService.saveLoginCache(sysUser.getId(), sysUser.getUsername());
+            loginUtilService.login(loginUserVo, DeviceType.PC);
             //记录登录日志
             sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, remark, clientIP, userAgent);
             return StpUtil.getTokenValue();
@@ -161,7 +155,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public Map<String, Object> getInfo() {
-        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         SysUserPageDto sysUserVo = sysUserService.getUserInfoByUserId(loginUser.getId());
         if (sysUserVo == null) {
             throw new MyException("用户不存在");
@@ -180,7 +174,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public List<RouterVo> getRouters() {
-        String userId = LoginUtil.getLoginUserId();
+        String userId = loginUtilService.getLoginUserId();
         List<SysMenu> menuList = sysMenuService.getMenuTreeByUserId(userId);
         return sysMenuService.buildMenus(menuList);
     }
@@ -190,6 +184,6 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public void logout() {
-        LoginUtil.logout();
+        loginUtilService.logout();
     }
 }
