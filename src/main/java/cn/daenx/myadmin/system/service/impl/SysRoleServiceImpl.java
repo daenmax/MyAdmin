@@ -3,13 +3,10 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysDict;
-import cn.daenx.myadmin.system.po.SysDictDetail;
-import cn.daenx.myadmin.system.po.SysRoleUser;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.service.SysRoleDeptService;
 import cn.daenx.myadmin.system.service.SysRoleMenuService;
 import cn.daenx.myadmin.system.vo.*;
-import cn.daenx.myadmin.test.po.TestData;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -35,6 +32,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRoleMenuService sysRoleMenuService;
     @Resource
     private SysRoleDeptService sysRoleDeptService;
+    @Resource
+    private LoginUtilService loginUtilService;
 
     @Override
     public List<SysRole> getSysRoleListByUserId(String userId) {
@@ -136,6 +135,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         //更新角色菜单关联信息
         sysRoleMenuService.handleRoleMenu(vo.getId(), vo.getMenuIds());
+        //下线相关用户
+        loginUtilService.offLineUser(vo.getId());
     }
 
     /**
@@ -175,6 +176,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (i < 1) {
             throw new MyException("删除失败");
         }
+        //下线相关用户
+        loginUtilService.offLineUser(ids);
     }
 
 
@@ -198,9 +201,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         //更新角色部门关联信息
         sysRoleDeptService.handleRoleDept(vo.getId(), vo.getDeptIds());
-    }
-
-    private void offLineUser(String roleId) {
-
+        //下线相关用户
+        loginUtilService.offLineUser(vo.getId());
     }
 }

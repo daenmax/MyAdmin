@@ -579,7 +579,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysUser> sysUsers = sysUserMapper.getUserList(queryWrapper);
         if (sysUsers.size() > 0) {
             for (SysUser sysUser : sysUsers) {
-                //注销账户的登录
+                //注销该账户的登录
                 LoginUtil.logout(sysUser.getUsername());
             }
             List<String> realList = MyUtil.joinToList(sysUsers, SysUser::getId);

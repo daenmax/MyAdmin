@@ -38,6 +38,13 @@ public class LoginUtil {
     }
 
     /**
+     * 退出登录
+     */
+    public static void logoutByToken(String token) {
+        StpUtil.logoutByTokenValue(token);
+    }
+
+    /**
      * 获取登录用户
      */
     public static SysLoginUserVo getLoginUser() {
@@ -48,6 +55,13 @@ public class LoginUtil {
         loginUser = (SysLoginUserVo) StpUtil.getTokenSession().get(LOGIN_KEY);
         SaHolder.getStorage().set(LOGIN_KEY, loginUser);
         return loginUser;
+    }
+
+    /**
+     * 获取登录用户
+     */
+    public static SysLoginUserVo getLoginUserByToken(String token) {
+        return (SysLoginUserVo) StpUtil.getTokenSessionByToken(token).get(LOGIN_KEY);
     }
 
     /**
@@ -65,7 +79,11 @@ public class LoginUtil {
         return SystemConstant.IS_ADMIN_ID.equals(getLoginUserId());
     }
 
-//    public static List<String> getLoginUserList(){
-//
-//    }
+    public static List<String> getLoginTokenList(){
+        List<String> keys = StpUtil.searchTokenValue("", 0, -1, false);
+        return keys;
+    }
+    public static long getTokenActivityTimeoutByToken(String token){
+        return StpUtil.stpLogic.getTokenActivityTimeoutByToken(token);
+    }
 }
