@@ -196,7 +196,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (update < 1) {
             throw new MyException("修改失败");
         }
-        //更新角色菜单关联信息
+        //更新角色部门关联信息
         sysRoleDeptService.handleRoleDept(vo.getId(), vo.getDeptIds());
+    }
+
+    private void offLineUser(String roleId) {
+
     }
 }

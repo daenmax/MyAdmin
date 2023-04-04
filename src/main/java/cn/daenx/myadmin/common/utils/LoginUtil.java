@@ -6,6 +6,8 @@ import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
 
+import java.util.List;
+
 public class LoginUtil {
     public static String LOGIN_KEY = "system";
 
@@ -62,4 +64,8 @@ public class LoginUtil {
     public static boolean isAdmin() {
         return SystemConstant.IS_ADMIN_ID.equals(getLoginUserId());
     }
+
+//    public static List<String> getLoginUserList(){
+//
+//    }
 }
