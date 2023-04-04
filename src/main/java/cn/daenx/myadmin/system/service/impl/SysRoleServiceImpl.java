@@ -119,7 +119,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public Boolean checkRoleExist(String code, String nowId) {
-        LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
+        LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysRole::getCode, code);
         wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysRole::getId, nowId);
         boolean exists = sysRoleMapper.exists(wrapper);

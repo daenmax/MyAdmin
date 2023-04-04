@@ -191,7 +191,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      */
     @Override
     public Boolean checkDictExist(String code, String nowId) {
-        LambdaUpdateWrapper<SysDict> wrapper = new LambdaUpdateWrapper<>();
+        LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysDict::getCode, code);
         wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysDict::getId, nowId);
         boolean exists = sysDictMapper.exists(wrapper);
