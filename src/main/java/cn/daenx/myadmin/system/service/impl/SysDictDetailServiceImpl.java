@@ -184,7 +184,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
         updateWrapper.set(SysDictDetail::getListClass, vo.getListClass());
         updateWrapper.set(SysDictDetail::getStatus, vo.getStatus());
         updateWrapper.set(SysDictDetail::getRemark, vo.getRemark());
-        int update = sysDictDetailMapper.update(null, updateWrapper);
+        int update = sysDictDetailMapper.update(new SysDictDetail(), updateWrapper);
         if (update < 1) {
             throw new MyException("修改字典明细失败");
         }

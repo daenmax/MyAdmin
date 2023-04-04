@@ -243,7 +243,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         wrapper.set(SysUserDetail::getSex, vo.getSex());
         wrapper.set(SysUserDetail::getProfile, vo.getProfile());
         wrapper.set(SysUserDetail::getUserSign, vo.getUserSign());
-        int update = sysUserDetailMapper.update(null, wrapper);
+        int update = sysUserDetailMapper.update(new SysUserDetail(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
@@ -269,7 +269,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUser::getId, sysUser.getId());
         wrapper.set(SysUser::getPassword, newPwd);
-        int update = sysUserMapper.update(null, wrapper);
+        int update = sysUserMapper.update(new SysUser(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
@@ -394,7 +394,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateWrapper.set(SysUser::getExpireToTime, vo.getExpireToTime());
         updateWrapper.set(SysUser::getUserType, vo.getUserType());
         updateWrapper.set(SysUser::getRemark, vo.getRemark());
-        int rows = sysUserMapper.update(null, updateWrapper);
+        int rows = sysUserMapper.update(new SysUser(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
@@ -408,7 +408,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateWrapperDetail.set(SysUserDetail::getProfile, vo.getProfile());
         updateWrapperDetail.set(SysUserDetail::getUserSign, vo.getUserSign());
         updateWrapperDetail.set(SysUserDetail::getMoney, vo.getMoney());
-        int rowsDetail = sysUserDetailMapper.update(null, updateWrapperDetail);
+        int rowsDetail = sysUserDetailMapper.update(new SysUserDetail(), updateWrapperDetail);
         if (rowsDetail < 1) {
             throw new MyException("修改失败");
         }
@@ -505,7 +505,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, vo.getId());
         updateWrapper.set(SysUser::getStatus, vo.getStatus());
-        int rows = sysUserMapper.update(null, updateWrapper);
+        int rows = sysUserMapper.update(new SysUser(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
@@ -530,7 +530,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, vo.getId());
         updateWrapper.set(SysUser::getPassword, newPwd);
-        int rows = sysUserMapper.update(null, updateWrapper);
+        int rows = sysUserMapper.update(new SysUser(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }

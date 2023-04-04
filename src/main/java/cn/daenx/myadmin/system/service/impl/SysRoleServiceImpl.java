@@ -147,7 +147,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         wrapper.set(SysRole::getMenuCheckStrictly, vo.getMenuCheckStrictly());
         wrapper.set(SysRole::getDeptCheckStrictly, vo.getDeptCheckStrictly());
         wrapper.set(SysRole::getRemark, vo.getRemark());
-        int update = sysRoleMapper.update(null, wrapper);
+        int update = sysRoleMapper.update(new SysRole(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
@@ -213,7 +213,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         wrapper.eq(SysRole::getId, vo.getId());
         wrapper.set(SysRole::getDeptCheckStrictly, vo.getDeptCheckStrictly());
         wrapper.set(SysRole::getDataScope, vo.getDataScope());
-        int update = sysRoleMapper.update(null, wrapper);
+        int update = sysRoleMapper.update(new SysRole(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
@@ -280,7 +280,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysRole::getId, vo.getId());
         wrapper.set(SysRole::getStatus, vo.getStatus());
-        int update = sysRoleMapper.update(null, wrapper);
+        int update = sysRoleMapper.update(new SysRole(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }

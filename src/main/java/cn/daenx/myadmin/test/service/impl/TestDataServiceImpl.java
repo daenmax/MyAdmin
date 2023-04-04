@@ -131,7 +131,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         updateWrapper.set(TestData::getContent, vo.getContent());
         updateWrapper.set(TestData::getType, vo.getType());
         updateWrapper.set(TestData::getRemark, vo.getRemark());
-        int rows = testDataMapper.update(null, updateWrapper);
+        int rows = testDataMapper.update(new TestData(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }

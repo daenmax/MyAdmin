@@ -139,7 +139,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         wrapper.set(SysDict::getCode, vo.getCode());
         wrapper.set(SysDict::getStatus, vo.getStatus());
         wrapper.set(SysDict::getRemark, vo.getRemark());
-        int rows = sysDictMapper.update(null, wrapper);
+        int rows = sysDictMapper.update(new SysDict(), wrapper);
         if (rows > 0) {
             LambdaQueryWrapper<SysDictDetail> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(SysDictDetail::getDictCode, info.getCode());
@@ -149,7 +149,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                 LambdaUpdateWrapper<SysDictDetail> updateWrapper = new LambdaUpdateWrapper<>();
                 updateWrapper.set(SysDictDetail::getDictCode, vo.getCode());
                 updateWrapper.eq(SysDictDetail::getDictCode, info.getCode());
-                int update = sysDictDetailMapper.update(null, updateWrapper);
+                int update = sysDictDetailMapper.update(new SysDictDetail(), updateWrapper);
                 if (update < 1) {
                     throw new MyException("修改字典明细失败");
                 }
