@@ -2,11 +2,10 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysUser;
-import cn.daenx.myadmin.system.service.LoginUtilService;
-import cn.daenx.myadmin.system.service.SysRoleDeptService;
-import cn.daenx.myadmin.system.service.SysRoleMenuService;
+import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
 import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.service.SysRoleService;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -34,6 +32,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRoleMenuService sysRoleMenuService;
     @Resource
     private SysRoleDeptService sysRoleDeptService;
+    @Resource
+    private SysRoleUserService sysRoleUserService;
     @Resource
     private LoginUtilService loginUtilService;
 
@@ -82,7 +82,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<SysRole> getAll(SysRolePageVo vo) {
         LambdaQueryWrapper<SysRole> wrapper = getWrapper(vo);
-        List<SysRole> sysRoleList = sysRoleMapper.selectList( wrapper);
+        List<SysRole> sysRoleList = sysRoleMapper.selectList(wrapper);
         return sysRoleList;
     }
 
@@ -223,5 +223,26 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         sysRoleDeptService.handleRoleDept(vo.getId(), vo.getDeptIds());
         //下线相关用户
         loginUtilService.offLineUser(vo.getId());
+    }
+
+    /**
+     * 取消授权用户
+     *
+     * @param vo
+     */
+    @Override
+    public void cancelAuthUser(SysRoleUpdAuthUserVo vo) {
+        String loginUserId = LoginUtil.getLoginUserId();
+        for (String userId : vo.getUserIds()) {
+            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
+                throw new MyException("禁止操作管理员");
+            }
+            if (loginUserId.equals(userId)) {
+                throw new MyException("禁止操作自己");
+            }
+        }
+        for (String userId : vo.getUserIds()) {
+            sysRoleUserService.delUserRole(userId, vo.getRoleId());
+        }
     }
 }

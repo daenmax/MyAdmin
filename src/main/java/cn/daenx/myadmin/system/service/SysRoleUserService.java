@@ -17,9 +17,18 @@ public interface SysRoleUserService extends IService<SysRoleUser> {
     void handleUserRole(String userId, List<String> roleIds);
 
     /**
-     * 删除用户角色关联信息
+     * 删除用户的所有角色关联信息
      *
      * @param userIds
      */
     void delUserRole(List<String> userIds);
+
+    /**
+     * 删除用户的指定角色
+     * 如果是最后一个角色，那么将不会删除
+     *
+     * @param userId
+     * @param roleId
+     */
+    Boolean delUserRole(String userId, String roleId);
 }

@@ -164,4 +164,16 @@ public class SysRoleController {
         IPage<SysUserPageDto> page = sysUserService.unallocatedList(vo, roleId);
         return Result.ok(page);
     }
+
+    /**
+     * 取消授权用户
+     *
+     * @param vo
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/authUser/cancel")
+    public Result saveAuthRole(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
+        sysRoleService.cancelAuthUser(vo);
+        return Result.ok();
+    }
 }

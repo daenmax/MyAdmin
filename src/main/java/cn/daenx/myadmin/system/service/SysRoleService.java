@@ -76,4 +76,11 @@ public interface SysRoleService extends IService<SysRole> {
      * @param vo
      */
     void dataScope(SysRoleDataScopeUpdVo vo);
+
+    /**
+     * 取消授权用户
+     *
+     * @param vo
+     */
+    void cancelAuthUser(SysRoleUpdAuthUserVo vo);
 }

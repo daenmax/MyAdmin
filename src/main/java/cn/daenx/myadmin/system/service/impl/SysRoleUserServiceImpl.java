@@ -43,7 +43,7 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
     }
 
     /**
-     * 删除用户角色关联信息
+     * 删除用户的所有角色关联信息
      *
      * @param userIds
      */
@@ -52,5 +52,26 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
         LambdaQueryWrapper<SysRoleUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.in(SysRoleUser::getUserId, userIds);
         sysRoleUserMapper.delete(wrapper);
+    }
+
+    /**
+     * 删除用户的指定角色
+     * 如果是最后一个角色，那么将不会删除
+     *
+     * @param userId
+     * @param roleId
+     */
+    @Override
+    public Boolean delUserRole(String userId, String roleId) {
+        LambdaQueryWrapper<SysRoleUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRoleUser::getUserId, userId);
+        Long aLong = sysRoleUserMapper.selectCount(wrapper);
+        if (aLong <= 1) {
+            return false;
+        }
+        LambdaQueryWrapper<SysRoleUser> wrapperDel = new LambdaQueryWrapper<>();
+        wrapperDel.eq(SysRoleUser::getUserId, userId);
+        wrapperDel.eq(SysRoleUser::getRoleId, roleId);
+        return sysRoleUserMapper.delete(wrapperDel) > 0;
     }
 }
