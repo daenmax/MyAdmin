@@ -2,6 +2,7 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.ExcelUtil;
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysRole;
@@ -172,8 +173,34 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:edit")
     @PutMapping("/authUser/cancel")
-    public Result saveAuthRole(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
+    public Result cancelAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
         sysRoleService.cancelAuthUser(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 保存授权用户
+     *
+     * @param vo
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/authUser/save")
+    public Result saveAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
+        sysRoleService.saveAuthUser(vo);
+        return Result.ok();
+    }
+
+
+    /**
+     * 修改状态
+     *
+     * @param vo
+     * @return
+     */
+    @SaCheckPermission("system:role:edit")
+    @PutMapping("/changeStatus")
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+        sysRoleService.changeStatus(vo);
         return Result.ok();
     }
 }

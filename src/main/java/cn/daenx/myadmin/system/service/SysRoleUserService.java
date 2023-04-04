@@ -31,4 +31,14 @@ public interface SysRoleUserService extends IService<SysRoleUser> {
      * @param roleId
      */
     Boolean delUserRole(String userId, String roleId);
+
+    /**
+     * 给用户添加指定角色
+     *
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    Boolean addUserRole(String userId, String roleId);
+
 }

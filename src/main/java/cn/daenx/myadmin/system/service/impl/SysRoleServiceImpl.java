@@ -3,6 +3,7 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.LoginUtil;
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.*;
@@ -156,7 +157,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         //更新角色菜单关联信息
         sysRoleMenuService.handleRoleMenu(vo.getId(), vo.getMenuIds());
         //下线相关用户
-        loginUtilService.offLineUser(vo.getId());
+        loginUtilService.offLineUserByRoleId(vo.getId());
     }
 
     /**
@@ -197,7 +198,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             throw new MyException("删除失败");
         }
         //下线相关用户
-        loginUtilService.offLineUser(ids);
+        loginUtilService.offLineUserByRoleId(ids);
     }
 
 
@@ -222,7 +223,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         //更新角色部门关联信息
         sysRoleDeptService.handleRoleDept(vo.getId(), vo.getDeptIds());
         //下线相关用户
-        loginUtilService.offLineUser(vo.getId());
+        loginUtilService.offLineUserByRoleId(vo.getId());
     }
 
     /**
@@ -243,6 +244,50 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         for (String userId : vo.getUserIds()) {
             sysRoleUserService.delUserRole(userId, vo.getRoleId());
+            loginUtilService.offLineUserByUserId(userId);
         }
+    }
+
+    /**
+     * 保存授权用户
+     *
+     * @param vo
+     */
+    @Override
+    public void saveAuthUser(SysRoleUpdAuthUserVo vo) {
+        String loginUserId = LoginUtil.getLoginUserId();
+        for (String userId : vo.getUserIds()) {
+            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
+                throw new MyException("禁止操作管理员");
+            }
+            if (loginUserId.equals(userId)) {
+                throw new MyException("禁止操作自己");
+            }
+        }
+        for (String userId : vo.getUserIds()) {
+            sysRoleUserService.addUserRole(userId, vo.getRoleId());
+            loginUtilService.offLineUserByUserId(userId);
+        }
+    }
+
+    /**
+     * 修改状态
+     *
+     * @param vo
+     */
+    @Override
+    public void changeStatus(ComStatusUpdVo vo) {
+        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+            throw new MyException("禁止操作超级管理员角色");
+        }
+        LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysRole::getId, vo.getId());
+        wrapper.set(SysRole::getStatus, vo.getStatus());
+        int update = sysRoleMapper.update(null, wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+        //下线相关用户
+        loginUtilService.offLineUserByRoleId(vo.getId());
     }
 }

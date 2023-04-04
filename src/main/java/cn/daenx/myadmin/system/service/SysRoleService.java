@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.service;
 
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.vo.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -83,4 +84,18 @@ public interface SysRoleService extends IService<SysRole> {
      * @param vo
      */
     void cancelAuthUser(SysRoleUpdAuthUserVo vo);
+
+    /**
+     * 保存授权用户
+     *
+     * @param vo
+     */
+    void saveAuthUser(SysRoleUpdAuthUserVo vo);
+
+    /**
+     * 修改状态
+     *
+     * @param vo
+     */
+    void changeStatus(ComStatusUpdVo vo);
 }

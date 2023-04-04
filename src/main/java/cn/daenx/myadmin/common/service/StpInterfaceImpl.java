@@ -3,6 +3,7 @@ package cn.daenx.myadmin.common.service;
 import cn.daenx.myadmin.common.utils.LoginUtil;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.dev33.satoken.stp.StpInterface;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

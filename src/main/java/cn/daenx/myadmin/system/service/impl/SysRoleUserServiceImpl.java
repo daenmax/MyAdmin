@@ -74,4 +74,19 @@ public class SysRoleUserServiceImpl extends ServiceImpl<SysRoleUserMapper, SysRo
         wrapperDel.eq(SysRoleUser::getRoleId, roleId);
         return sysRoleUserMapper.delete(wrapperDel) > 0;
     }
+
+    /**
+     * 给用户添加指定角色
+     *
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    @Override
+    public Boolean addUserRole(String userId, String roleId) {
+        SysRoleUser sysRoleUser = new SysRoleUser();
+        sysRoleUser.setRoleId(roleId);
+        sysRoleUser.setUserId(userId);
+        return sysRoleUserMapper.insert(sysRoleUser) > 0;
+    }
 }

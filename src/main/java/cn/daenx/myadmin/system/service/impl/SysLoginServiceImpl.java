@@ -41,6 +41,8 @@ public class SysLoginServiceImpl implements SysLoginService {
     private SysMenuService sysMenuService;
     @Resource
     private SysLogLoginService sysLogLoginService;
+    @Resource
+    private LoginUtilService loginUtilService;
 
     /**
      * 校验图片验证码
@@ -108,6 +110,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
             //设置登录状态
             LoginUtil.login(loginUserVo, DeviceType.PC);
+            loginUtilService.saveLoginCache(sysUser.getId(), sysUser.getUsername());
             //记录登录日志
             sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, remark, clientIP, userAgent);
             return StpUtil.getTokenValue();
