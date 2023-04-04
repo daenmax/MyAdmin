@@ -178,4 +178,22 @@ public interface SysUserService extends IService<SysUser> {
      * @param vo
      */
     void saveAuthRole(SysUserUpdAuthRoleVo vo);
+
+    /**
+     * 查询已分配该角色的用户列表
+     *
+     * @param vo
+     * @param roleId
+     * @return
+     */
+    IPage<SysUserPageDto> allocatedList(SysUserPageVo vo, String roleId);
+
+    /**
+     * 查询未分配该角色的用户列表
+     *
+     * @param vo
+     * @param roleId
+     * @return
+     */
+    IPage<SysUserPageDto> unallocatedList(SysUserPageVo vo, String roleId);
 }

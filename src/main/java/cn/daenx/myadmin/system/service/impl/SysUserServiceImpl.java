@@ -290,28 +290,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public IPage<SysUserPageDto> getPage(SysUserPageVo vo) {
-        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
-        if (ObjectUtil.isNotEmpty(vo.getDeptId())) {
-            List<SysDept> listByParentId = sysDeptService.getListByParentId(vo.getDeptId(), true);
-            List<String> ids = MyUtil.joinToList(listByParentId, SysDept::getId);
-            wrapper.in(ObjectUtil.isNotEmpty(vo.getDeptId()), "su.dept_id", ids);
-        }
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getUsername()), "su.username", vo.getUsername());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "su.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getPhone()), "su.phone", vo.getPhone());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getEmail()), "su.email", vo.getEmail());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "su.remark", vo.getRemark());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getUserType()), "su.user_type", vo.getUserType());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getNickName()), "sud.nick_name", vo.getNickName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRealName()), "sud.real_name", vo.getRealName());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getAge()), "sud.age", vo.getAge());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getSex()), "sud.sex", vo.getSex());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getProfile()), "sud.profile", vo.getProfile());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getUserSign()), "sud.user_sign", vo.getUserSign());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
-        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "su.create_time", startTime, endTime);
-        wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
+        QueryWrapper<SysUser> wrapper = getWrapper(vo);
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
         return sysUserPage;
     }
@@ -324,6 +303,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public List<SysUserPageDto> getAll(SysUserPageVo vo) {
+        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+        List<SysUserPageDto> list = sysUserMapper.getAll(wrapper);
+        return list;
+    }
+
+    private QueryWrapper<SysUser> getWrapper(SysUserPageVo vo) {
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotEmpty(vo.getDeptId())) {
             List<SysDept> listByParentId = sysDeptService.getListByParentId(vo.getDeptId(), true);
@@ -346,8 +331,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "su.create_time", startTime, endTime);
         wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
-        List<SysUserPageDto> list = sysUserMapper.getAll(wrapper);
-        return list;
+        return wrapper;
     }
 
     /**
@@ -638,5 +622,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysRoleUserService.handleUserRole(vo.getUserId(), vo.getRoleIds());
         //注销该账户的登录
         LoginUtil.logout(sysUserByPermissions.getUsername());
+    }
+
+    /**
+     * 查询已分配该角色的用户列表
+     *
+     * @param vo
+     * @param roleId
+     * @return
+     */
+    @Override
+    public IPage<SysUserPageDto> allocatedList(SysUserPageVo vo, String roleId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+        wrapper.exists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
+        IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        return sysUserPage;
+    }
+
+    /**
+     * 查询未分配该角色的用户列表
+     *
+     * @param vo
+     * @param roleId
+     * @return
+     */
+    @Override
+    public IPage<SysUserPageDto> unallocatedList(SysUserPageVo vo, String roleId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+        wrapper.notExists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
+        IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        return sysUserPage;
     }
 }

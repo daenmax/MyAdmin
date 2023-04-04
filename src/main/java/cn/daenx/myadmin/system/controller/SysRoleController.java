@@ -2,13 +2,16 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.Result;
+import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysRoleService;
+import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +28,8 @@ public class SysRoleController {
     private SysRoleService sysRoleService;
     @Resource
     private SysDeptService sysDeptService;
+    @Resource
+    private SysUserService sysUserService;
 
 
     /**
@@ -122,5 +127,29 @@ public class SysRoleController {
     public Result dataScope(@Validated @RequestBody SysRoleDataScopeUpdVo vo) {
         sysRoleService.dataScope(vo);
         return Result.ok();
+    }
+
+
+    /**
+     * 查询已分配该角色的用户列表
+     */
+    @SaCheckPermission("system:role:list")
+    @GetMapping("/authUser/allocatedList")
+    public Result allocatedList(SysUserPageVo vo, String roleId) {
+        IPage<SysUserPageDto> page = sysUserService.allocatedList(vo, roleId);
+        return Result.ok(page);
+    }
+
+    /**
+     * 查询未分配该角色的用户列表
+     */
+    @SaCheckPermission("system:role:list")
+    @GetMapping("/authUser/unallocatedList")
+    public Result unallocatedList(SysUserPageVo vo, String roleId) {
+        if (ObjectUtil.isEmpty(roleId)) {
+            throw new MyException("roleId不能为空");
+        }
+        IPage<SysUserPageDto> page = sysUserService.unallocatedList(vo, roleId);
+        return Result.ok(page);
     }
 }
