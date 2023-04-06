@@ -1,22 +1,22 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.StreamUtils;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
+import cn.daenx.myadmin.system.mapper.SysRoleMenuMapper;
 import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.LoginUtilService;
-import cn.daenx.myadmin.system.vo.MetaVo;
-import cn.daenx.myadmin.system.vo.RouterVo;
-import cn.daenx.myadmin.system.vo.SysLoginUserVo;
-import cn.daenx.myadmin.system.vo.SysMenuPageVo;
+import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,185 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Resource
     private SysRoleMapper sysRoleMapper;
     @Resource
+    private SysRoleMenuMapper sysRoleMenuMapper;
+    @Resource
     private LoginUtilService loginUtilService;
+
+    /**
+     * 列表
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<SysMenu> getList(SysMenuPageVo vo) {
+        String userId = loginUtilService.getLoginUserId();
+        Boolean isAdmin = loginUtilService.isAdmin();
+        List<SysMenu> menus = null;
+        if (isAdmin) {
+            LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.like(ObjectUtil.isNotEmpty(vo.getMenuName()), SysMenu::getMenuName, vo.getMenuName());
+            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getVisible()), SysMenu::getVisible, vo.getVisible());
+            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysMenu::getStatus, vo.getStatus());
+            queryWrapper.orderByAsc(SysMenu::getParentId);
+            queryWrapper.orderByAsc(SysMenu::getOrderNum);
+            menus = sysMenuMapper.selectList(queryWrapper);
+        } else {
+            QueryWrapper<SysMenu> wrapper1 = new QueryWrapper<>();
+            wrapper1.eq("sru.user_id", userId);
+            wrapper1.like(ObjectUtil.isNotEmpty(vo.getMenuName()), "sm.menu_name", vo.getMenuName());
+            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getVisible()), "sm.visible", vo.getVisible());
+            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sm.status", vo.getStatus());
+            wrapper1.orderByAsc("sm.parent_id");
+            wrapper1.orderByAsc("sm.order_num");
+            menus = sysMenuMapper.getMenuList(wrapper1);
+        }
+        return menus;
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public SysMenu getInfo(String id) {
+        return sysMenuMapper.selectById(id);
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    @Override
+    public void editInfo(SysMenuUpdVo vo) {
+        if (checkMenuExist(vo.getMenuName(), vo.getId())) {
+            throw new MyException("字典名称已存在");
+        }
+        if ("0".equals(vo.getIsFrame()) && !Validator.isUrl(vo.getPath())) {
+            throw new MyException("地址必须以http(s)://开头");
+        }
+        if (vo.getId().equals(vo.getParentId())) {
+            throw new MyException("上级菜单不能选择自己");
+        }
+        LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysMenu::getId, vo.getId());
+        wrapper.set(SysMenu::getParentId, vo.getParentId());
+        wrapper.set(SysMenu::getMenuName, vo.getMenuName());
+        wrapper.set(SysMenu::getOrderNum, vo.getOrderNum());
+        wrapper.set(SysMenu::getPath, vo.getPath());
+        wrapper.set(SysMenu::getQueryParam, vo.getQueryParam());
+        wrapper.set(SysMenu::getComponent, vo.getComponent());
+        wrapper.set(SysMenu::getPerms, vo.getPerms());
+        wrapper.set(SysMenu::getIcon, vo.getIcon());
+        wrapper.set(SysMenu::getVisible, vo.getVisible());
+        wrapper.set(SysMenu::getStatus, vo.getStatus());
+        wrapper.set(SysMenu::getMenuType, vo.getMenuType());
+        wrapper.set(SysMenu::getIsFrame, vo.getIsFrame());
+        wrapper.set(SysMenu::getIsCache, vo.getIsCache());
+        wrapper.set(SysMenu::getRemark, vo.getRemark());
+        int update = sysMenuMapper.update(new SysMenu(), wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+    }
+
+    /**
+     * 检查是否有子菜单
+     *
+     * @param id
+     * @return
+     */
+    private Boolean checkHasChildren(String id) {
+        LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysMenu::getParentId, id);
+        boolean exists = sysMenuMapper.exists(queryWrapper);
+        return exists;
+    }
+
+    /**
+     * 检查是否被角色分配使用
+     *
+     * @param id
+     * @return
+     */
+    private Boolean checkHasMakeRole(String id) {
+        LambdaQueryWrapper<SysRoleMenu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysRoleMenu::getMenuId, id);
+        boolean exists = sysRoleMenuMapper.exists(queryWrapper);
+        return exists;
+    }
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    @Override
+    public void addInfo(SysMenuAddVo vo) {
+        if (checkMenuExist(vo.getMenuName(), null)) {
+            throw new MyException("字典名称已存在");
+        }
+        if ("0".equals(vo.getIsFrame()) && !Validator.isUrl(vo.getPath())) {
+            throw new MyException("地址必须以http(s)://开头");
+        }
+        SysMenu sysMenu = new SysMenu();
+        sysMenu.setParentId(vo.getParentId());
+        sysMenu.setMenuName(vo.getMenuName());
+        sysMenu.setOrderNum(vo.getOrderNum());
+        sysMenu.setPath(vo.getPath());
+        sysMenu.setQueryParam(vo.getQueryParam());
+        sysMenu.setComponent(vo.getComponent());
+        sysMenu.setPerms(vo.getPerms());
+        sysMenu.setIcon(vo.getIcon());
+        sysMenu.setVisible(vo.getVisible());
+        sysMenu.setStatus(vo.getStatus());
+        sysMenu.setMenuType(vo.getMenuType());
+        sysMenu.setIsFrame(vo.getIsFrame());
+        sysMenu.setIsCache(vo.getIsCache());
+        sysMenu.setRemark(vo.getRemark());
+        int insert = sysMenuMapper.insert(sysMenu);
+        if (insert < 1) {
+            throw new MyException("新增失败");
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    @Override
+    public void deleteById(String id) {
+        if (checkHasChildren(id)) {
+            throw new MyException("存在子菜单，请先删除子菜单");
+        }
+        if (checkHasMakeRole(id)) {
+            throw new MyException("已被角色分配，请先删除分配");
+        }
+        int i = sysMenuMapper.deleteById(id);
+        if (i < 1) {
+            throw new MyException("删除失败");
+        }
+    }
+
+    /**
+     * 检查是否存在，已存在返回true
+     *
+     * @param name
+     * @param nowId 排除ID
+     * @return
+     */
+    @Override
+    public Boolean checkMenuExist(String name, String nowId) {
+        LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysMenu::getMenuName, name);
+        wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysMenu::getId, nowId);
+        boolean exists = sysMenuMapper.exists(wrapper);
+        return exists;
+    }
 
     @Override
     public Set<String> getMenuPermissionByUser(SysLoginUserVo loginUserVo) {
@@ -300,26 +478,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * @return
      */
     @Override
-    public List<Tree<String>> treeSelect(SysMenuPageVo vo, String userId, Boolean isAdmin) {
-        List<SysMenu> menus = null;
-        if (isAdmin) {
-            LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.like(ObjectUtil.isNotEmpty(vo.getMenuName()), SysMenu::getMenuName, vo.getMenuName());
-            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getVisible()), SysMenu::getVisible, vo.getVisible());
-            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysMenu::getStatus, vo.getStatus());
-            queryWrapper.orderByAsc(SysMenu::getParentId);
-            queryWrapper.orderByAsc(SysMenu::getOrderNum);
-            menus = sysMenuMapper.selectList(queryWrapper);
-        } else {
-            QueryWrapper<SysMenu> wrapper1 = new QueryWrapper<>();
-            wrapper1.eq("sru.user_id", userId);
-            wrapper1.like(ObjectUtil.isNotEmpty(vo.getMenuName()), "sm.menu_name", vo.getMenuName());
-            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getVisible()), "sm.visible", vo.getVisible());
-            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sm.status", vo.getStatus());
-            wrapper1.orderByAsc("sm.parent_id");
-            wrapper1.orderByAsc("sm.order_num");
-            menus = sysMenuMapper.getMenuList(wrapper1);
-        }
+    public List<Tree<String>> treeSelect(SysMenuPageVo vo) {
+        List<SysMenu> menus = getList(vo);
         return buildMenuTreeSelect(menus);
     }
 
