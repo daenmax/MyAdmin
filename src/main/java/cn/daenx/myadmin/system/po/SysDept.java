@@ -33,12 +33,6 @@ public class SysDept extends BaseEntity implements Serializable {
     private String parentId;
 
     /**
-     * 所有上级列表，顶级填0
-     */
-    @TableField(value = "all_parent_id")
-    private String allParentId;
-
-    /**
      * 部门名称
      */
     @TableField(value = "`name`")
