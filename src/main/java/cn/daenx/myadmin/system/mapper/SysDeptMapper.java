@@ -23,6 +23,5 @@ public interface SysDeptMapper extends BaseMapper<SysDept> {
 
     List<SysDept> getDeptListByRoleId(@Param("roleId") String roleId, @Param("deptCheckStrictly") boolean deptCheckStrictly);
 
-    @Override
-    List<SysDept> selectList(@Param(Constants.WRAPPER) Wrapper<SysDept> queryWrapper);
+    List<SysDept> selectListX(@Param(Constants.WRAPPER) Wrapper<SysDept> queryWrapper);
 }

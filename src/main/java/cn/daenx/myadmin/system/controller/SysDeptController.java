@@ -36,7 +36,7 @@ public class SysDeptController {
     @SaCheckPermission("system:dept:list")
     @GetMapping(value = "/list")
     public Result list(SysDeptPageVo vo) {
-        List<SysDept> list = sysDeptService.getList(vo);
+        List<SysDept> list = sysDeptService.getAll(vo);
         return Result.ok(list);
     }
 

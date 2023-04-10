@@ -67,7 +67,38 @@
       sd.parent_id,
       sd.sort
   </select>
-
-  <select id="selectList" resultMap="BaseResultMap">
+  <resultMap id="deptMap" type="cn.daenx.myadmin.system.po.SysDept">
+    <result column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="leader_user_id" jdbcType="VARCHAR" property="leaderUserId"/>
+    <association property="leaderUser"
+                 column="leader_user_id"
+                 javaType="cn.daenx.myadmin.system.dto.LeaderUserDto"
+                 select="queryUser"/>
+  </resultMap>
+  <select id="queryUser" resultType="cn.daenx.myadmin.system.dto.LeaderUserDto">
+    SELECT su.*,
+           sud.nick_name,
+           sud.real_name,
+           sud.age,
+           sud.sex,
+           sud.`profile`,
+           sud.user_sign,
+           sud.avatar,
+           sud.money,
+           sd.`name`    AS deptName,
+           su1.username AS createName,
+           su2.username AS updateName,
+           IF( su.id = '1', TRUE, FALSE ) as admin
+    FROM sys_user su
+           LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
+           LEFT JOIN sys_dept sd ON sd.id = su.dept_id
+           LEFT JOIN sys_user su1 ON su1.id = su.create_id
+           LEFT JOIN sys_user su2 ON su2.id = su.update_id
+    WHERE su.id = #{leaderUserId}
+  </select>
+  <select id="selectListX" resultMap="deptMap">
+    SELECT sd.*
+    FROM sys_dept sd
+    ${ew.customSqlSegment}
     </select>
 </mapper>

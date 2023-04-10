@@ -1,13 +1,13 @@
 package cn.daenx.myadmin.system.po;
 
 import cn.daenx.myadmin.common.vo.BaseEntity;
+import cn.daenx.myadmin.system.dto.LeaderUserDto;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -73,4 +73,7 @@ public class SysDept extends BaseEntity implements Serializable {
      */
     @TableField(value = "remark")
     private String remark;
+
+    @TableField(exist = false)
+    private LeaderUserDto leaderUser;
 }

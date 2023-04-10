@@ -29,12 +29,21 @@ public interface SysDeptService extends IService<SysDept> {
     IPage<SysDept> getPage(SysDeptPageVo vo);
 
     /**
-     * 获取所有列表，用于导出
+     * 获取所有列表
      *
      * @param vo
      * @return
      */
     List<SysDept> getAll(SysDeptPageVo vo);
+
+    /**
+     * 获取所有列表
+     * 不翻译leaderUser
+     *
+     * @param vo
+     * @return
+     */
+    List<SysDept> getList(SysDeptPageVo vo);
 
     /**
      * 通过父ID获取子成员
@@ -52,14 +61,6 @@ public interface SysDeptService extends IService<SysDept> {
      * @return 选中菜单列表
      */
     List<String> selectDeptListByRoleId(String roleId);
-
-    /**
-     * 列表
-     *
-     * @param vo
-     * @return
-     */
-    List<SysDept> getList(SysDeptPageVo vo);
 
     /**
      * 查询

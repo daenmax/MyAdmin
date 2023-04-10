@@ -102,13 +102,27 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     /**
-     * 获取所有列表，用于导出
+     * 获取所有列表
      *
      * @param vo
      * @return
      */
     @Override
     public List<SysDept> getAll(SysDeptPageVo vo) {
+        LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
+        List<SysDept> sysDeptList = sysDeptMapper.selectListX(wrapper);
+        return sysDeptList;
+    }
+
+    /**
+     * 获取所有列表
+     * 不翻译leaderUser
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<SysDept> getList(SysDeptPageVo vo) {
         LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
         List<SysDept> sysDeptList = sysDeptMapper.selectList(wrapper);
         return sysDeptList;
@@ -167,19 +181,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<SysDept> deptListByRoleId = sysDeptMapper.getDeptListByRoleId(sysRole.getId(), sysRole.getDeptCheckStrictly());
         List<String> strings = MyUtil.joinToList(deptListByRoleId, SysDept::getId);
         return strings;
-    }
-
-    /**
-     * 列表
-     *
-     * @param vo
-     * @return
-     */
-    @Override
-    public List<SysDept> getList(SysDeptPageVo vo) {
-        LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
-        List<SysDept> sysDeptList = sysDeptMapper.selectList(wrapper);
-        return sysDeptList;
     }
 
     private Boolean checkScope(String id) {
