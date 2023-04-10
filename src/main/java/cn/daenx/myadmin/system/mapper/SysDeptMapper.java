@@ -22,4 +22,7 @@ public interface SysDeptMapper extends BaseMapper<SysDept> {
     List<SysDept> getListByParentId(@Param("parentId") String parentId, @Param("keepSelf") String keepSelf);
 
     List<SysDept> getDeptListByRoleId(@Param("roleId") String roleId, @Param("deptCheckStrictly") boolean deptCheckStrictly);
+
+    @Override
+    List<SysDept> selectList(@Param(Constants.WRAPPER) Wrapper<SysDept> queryWrapper);
 }

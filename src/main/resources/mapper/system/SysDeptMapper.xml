@@ -67,4 +67,7 @@
       sd.parent_id,
       sd.sort
   </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    </select>
 </mapper>

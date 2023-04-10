@@ -1,18 +1,20 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysRoleDeptMapper;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
+import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.LoginUtilService;
-import cn.daenx.myadmin.system.vo.SysDeptPageVo;
-import cn.daenx.myadmin.system.vo.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
@@ -36,6 +38,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     private SysRoleMapper sysRoleMapper;
     @Resource
     private SysRoleDeptMapper sysRoleDeptMapper;
+    @Resource
+    private SysUserMapper sysUserMapper;
 
     @Resource
     private LoginUtilService loginUtilService;
@@ -58,9 +62,11 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<SysRole> roleList = loginUser.getRoles();
         Map<String, List<SysRole>> roleMap = roleList.stream().collect(Collectors.groupingBy(SysRole::getDataScope));
         LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getId()), SysDept::getId, vo.getId());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDept::getName, vo.getName());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getSummary()), SysDept::getSummary, vo.getSummary());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDept::getStatus, vo.getStatus());
+        wrapper.eq(SysDept::getIsDelete, 0);
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDept::getCreateTime, startTime, endTime);
@@ -161,5 +167,155 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<SysDept> deptListByRoleId = sysDeptMapper.getDeptListByRoleId(sysRole.getId(), sysRole.getDeptCheckStrictly());
         List<String> strings = MyUtil.joinToList(deptListByRoleId, SysDept::getId);
         return strings;
+    }
+
+    /**
+     * 列表
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<SysDept> getList(SysDeptPageVo vo) {
+        LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
+        List<SysDept> sysDeptList = sysDeptMapper.selectList(wrapper);
+        return sysDeptList;
+    }
+
+    private Boolean checkScope(String id) {
+        SysDeptPageVo sysDeptPageVo = new SysDeptPageVo();
+        sysDeptPageVo.setId(id);
+        LambdaQueryWrapper<SysDept> wrapper = getWrapper(sysDeptPageVo);
+        List<SysDept> sysDeptList = sysDeptMapper.selectList(wrapper);
+        for (SysDept sysDept : sysDeptList) {
+            if (sysDept.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean checkChild(String id) {
+        LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysDept::getParentId, id);
+        return sysDeptMapper.exists(wrapper);
+    }
+
+    private Boolean checkHasUser(String id) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getDeptId, id);
+        return sysUserMapper.exists(wrapper);
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public SysDept getInfo(String id) {
+        if (!checkScope(id)) {
+            throw new MyException("你无权限操作此数据");
+        }
+        return sysDeptMapper.selectById(id);
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    @Override
+    public void editInfo(SysDeptUpdVo vo) {
+        if (!checkScope(vo.getId())) {
+            throw new MyException("你无权限操作此数据");
+        }
+        //校验父ID
+        SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
+        if (sysDeptParent == null) {
+            throw new MyException("父级错误");
+        }
+        LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysDept::getId, vo.getId());
+        wrapper.set(SysDept::getParentId, vo.getParentId());
+        wrapper.set(SysDept::getName, vo.getName());
+        wrapper.set(SysDept::getSummary, vo.getSummary());
+        wrapper.set(SysDept::getLeaderUserId, vo.getLeaderUserId());
+        wrapper.set(SysDept::getSort, vo.getSort());
+        wrapper.set(SysDept::getStatus, vo.getStatus());
+        wrapper.set(SysDept::getRemark, vo.getRemark());
+        //修改level
+        wrapper.set(SysDept::getLevel, sysDeptParent.getLevel() + 1);
+        int update = sysDeptMapper.update(new SysDept(), wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+    }
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    @Override
+    public void addInfo(SysDeptAddVo vo) {
+        //校验父ID
+        SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
+        if (sysDeptParent == null) {
+            throw new MyException("父级错误");
+        }
+        SysDept sysDept = new SysDept();
+        sysDept.setParentId(vo.getParentId());
+        sysDept.setName(vo.getName());
+        sysDept.setSummary(vo.getSummary());
+        sysDept.setLeaderUserId(vo.getLeaderUserId());
+        sysDept.setSort(vo.getSort());
+        sysDept.setStatus(vo.getStatus());
+        sysDept.setRemark(vo.getRemark());
+        //设置level
+        sysDept.setLevel(sysDeptParent.getLevel() + 1);
+        int insert = sysDeptMapper.insert(sysDept);
+        if (insert < 1) {
+            throw new MyException("新增失败");
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    @Override
+    public void deleteById(String id) {
+        if (!checkScope(id)) {
+            throw new MyException("你无权限操作此数据");
+        }
+        if (checkChild(id)) {
+            throw new MyException("存在下级部门，请先删除下级部门");
+        }
+        if (checkHasUser(id)) {
+            throw new MyException("该部门存在用户，请先处理相关用户");
+        }
+        int i = sysDeptMapper.deleteById(id);
+        if (i < 1) {
+            throw new MyException("删除失败");
+        }
+    }
+
+    /**
+     * 删除列表中的某一个部门及以下部门
+     *
+     * @param list
+     * @param waitRemoveList
+     */
+    @Override
+    public void     removeList(List<SysDept> list, List<SysDept> waitRemoveList) {
+        if (waitRemoveList == null || waitRemoveList.size() == 0) {
+            return;
+        }
+        list.removeAll(waitRemoveList);
+        List<SysDept> collect = list.stream().filter(item -> item.getParentId().equals(waitRemoveList.get(0).getId())).collect(Collectors.toList());
+        removeList(list, collect);
     }
 }

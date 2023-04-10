@@ -1,7 +1,9 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.system.po.SysDept;
+import cn.daenx.myadmin.system.vo.SysDeptAddVo;
 import cn.daenx.myadmin.system.vo.SysDeptPageVo;
+import cn.daenx.myadmin.system.vo.SysDeptUpdVo;
 import cn.daenx.myadmin.system.vo.SysMenuPageVo;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -50,4 +52,49 @@ public interface SysDeptService extends IService<SysDept> {
      * @return 选中菜单列表
      */
     List<String> selectDeptListByRoleId(String roleId);
+
+    /**
+     * 列表
+     *
+     * @param vo
+     * @return
+     */
+    List<SysDept> getList(SysDeptPageVo vo);
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    SysDept getInfo(String id);
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    void editInfo(SysDeptUpdVo vo);
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    void addInfo(SysDeptAddVo vo);
+
+    /**
+     * 删除
+     *
+     * @param id
+     */
+    void deleteById(String id);
+
+    /**
+     * 删除列表中的某一个部门及以下部门
+     *
+     * @param list
+     * @param waitRemoveList
+     */
+    void removeList(List<SysDept> list, List<SysDept> waitRemoveList);
 }
