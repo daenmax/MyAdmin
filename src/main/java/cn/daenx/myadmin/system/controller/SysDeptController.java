@@ -2,23 +2,18 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.Result;
+import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysDept;
-import cn.daenx.myadmin.system.po.SysMenu;
-import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.service.SysDeptService;
-import cn.daenx.myadmin.system.service.SysMenuService;
+import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.lang.tree.Tree;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,6 +21,8 @@ import java.util.stream.Collectors;
 public class SysDeptController {
     @Resource
     private SysDeptService sysDeptService;
+    @Resource
+    private SysUserService sysUserService;
 
     /**
      * 列表
@@ -54,6 +51,7 @@ public class SysDeptController {
         sysDeptService.removeList(list, collect);
         return Result.ok(list);
     }
+
     /**
      * 查询
      *
@@ -109,4 +107,16 @@ public class SysDeptController {
         return Result.ok();
     }
 
+    /**
+     * 获取用户列表
+     *
+     * @param keyword
+     * @return
+     */
+    @SaCheckPermission("system:user:list")
+    @GetMapping(value = "/userList")
+    public Result getUserList(String id, String keyword) {
+        List<SysUserPageDto> userList = sysUserService.getUserList(id, keyword, keyword, keyword, keyword);
+        return Result.ok(userList);
+    }
 }
