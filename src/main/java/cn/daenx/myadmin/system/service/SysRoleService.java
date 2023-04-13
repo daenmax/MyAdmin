@@ -13,8 +13,6 @@ public interface SysRoleService extends IService<SysRole> {
 
     List<SysRole> getSysRoleListByUserId(String userId);
 
-    List<SysRole> getSysRoleList();
-
     Set<String> getRolePermissionListByUserId(String userId);
 
     /**

@@ -1,6 +1,5 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.MyUtil;
@@ -8,11 +7,9 @@ import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysDictDetailMapper;
 import cn.daenx.myadmin.system.po.SysDictDetail;
-import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.vo.SysDictAddVo;
 import cn.daenx.myadmin.system.vo.SysDictPageVo;
 import cn.daenx.myadmin.system.vo.SysDictUpdVo;
-import cn.daenx.myadmin.system.vo.SysRolePageVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -21,7 +18,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

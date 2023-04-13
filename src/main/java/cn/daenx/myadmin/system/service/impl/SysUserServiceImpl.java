@@ -338,8 +338,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Map<String, Object> getInfo(String id) {
         Map<String, Object> map = new HashMap<>();
-        map.put("roles", sysRoleService.getSysRoleList());
-        map.put("positions", sysPositionService.getSysPositionList());
+        map.put("roles", sysRoleService.getAll(new SysRolePageVo()));
+        map.put("positions", sysPositionService.getAll(new SysPositionPageVo()));
         if (ObjectUtil.isNotEmpty(id)) {
             SysUserPageDto sysUserByPermissions = getSysUserByPermissions(id);
             map.put("user", sysUserByPermissions);
@@ -583,7 +583,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Map<String, Object> authRole(String id) {
         Map<String, Object> map = new HashMap<>();
-        List<SysRole> sysRoleList = sysRoleService.getSysRoleList();
+        List<SysRole> sysRoleList = sysRoleService.getAll(new SysRolePageVo());
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(id);
         List<SysRole> userRoles = sysUserByPermissions.getRoles();
         for (SysRole sysRole : sysRoleList) {

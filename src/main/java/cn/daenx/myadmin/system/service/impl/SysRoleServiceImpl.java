@@ -4,6 +4,7 @@ import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysRoleUser;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.util.ObjectUtil;
@@ -40,10 +41,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return sysRoleMapper.getSysRoleListByUserId(userId);
     }
 
-    @Override
-    public List<SysRole> getSysRoleList() {
-        return sysRoleMapper.selectList(new LambdaQueryWrapper<>());
-    }
 
     @Override
     public Set<String> getRolePermissionListByUserId(String userId) {
@@ -63,8 +60,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @param vo
      * @return
      */
-    @DataScope(alias = "sys_role")
     @Override
+    @DataScope(alias = "sys_role")
     public IPage<SysRole> getPage(SysRolePageVo vo) {
         LambdaQueryWrapper<SysRole> wrapper = getWrapper(vo);
         Page<SysRole> sysRolePage = sysRoleMapper.selectPage(vo.getPage(false), wrapper);
@@ -78,6 +75,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      * @return
      */
     @Override
+    @DataScope(alias = "sys_role")
     public List<SysRole> getAll(SysRolePageVo vo) {
         LambdaQueryWrapper<SysRole> wrapper = getWrapper(vo);
         List<SysRole> sysRoleList = sysRoleMapper.selectList(wrapper);
@@ -184,12 +182,34 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     /**
+     * 获取指定角色的用户数量
+     *
+     * @param id
+     * @return
+     */
+    private Long getPositionUserCount(String id) {
+        LambdaQueryWrapper<SysRoleUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRoleUser::getRoleId, id);
+        Long count = sysRoleUserService.count(wrapper);
+        return count;
+    }
+
+    /**
      * 删除
      *
      * @param ids
      */
     @Override
     public void deleteByIds(List<String> ids) {
+        for (String id : ids) {
+            if (SystemConstant.IS_ADMIN_ID.equals(id)) {
+                throw new MyException("禁止操作超级管理员角色");
+            }
+            if (getPositionUserCount(id) > 0) {
+                SysRole info = getInfo(id);
+                throw new MyException("角色[" + info.getName() + "]已经被分配给用户，请先处理分配关系");
+            }
+        }
         int i = sysRoleMapper.deleteBatchIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");

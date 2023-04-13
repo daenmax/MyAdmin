@@ -61,8 +61,8 @@ public class SysDeptController {
     @SaCheckPermission("system:dept:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
-        SysDept sysMenu = sysDeptService.getInfo(id);
-        return Result.ok(sysMenu);
+        SysDept sysDept = sysDeptService.getInfo(id);
+        return Result.ok(sysDept);
     }
 
     /**
