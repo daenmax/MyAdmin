@@ -1,6 +1,5 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.system.po.SysRoleMenu;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;

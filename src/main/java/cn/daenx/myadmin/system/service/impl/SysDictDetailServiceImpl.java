@@ -3,8 +3,6 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
-import cn.daenx.myadmin.system.mapper.SysDictMapper;
-import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.service.SysDictService;
 import cn.daenx.myadmin.system.vo.SysDictDetailAddVo;
 import cn.daenx.myadmin.system.vo.SysDictDetailPageVo;
@@ -18,7 +16,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
