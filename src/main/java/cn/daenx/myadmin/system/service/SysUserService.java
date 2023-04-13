@@ -202,10 +202,11 @@ public interface SysUserService extends IService<SysUser> {
      *
      * @param id       如果传ID，则会忽略其他全部参数
      * @param username
+     * @param nickName
      * @param realName
      * @param phone
      * @param email
      * @return
      */
-    List<SysUserPageDto> getUserList(String id, String username, String realName, String phone, String email);
+    List<SysUserPageDto> getUserList(String id, String username, String nickName, String realName, String phone, String email);
 }

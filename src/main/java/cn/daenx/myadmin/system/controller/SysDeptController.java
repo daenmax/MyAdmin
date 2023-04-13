@@ -110,13 +110,14 @@ public class SysDeptController {
     /**
      * 获取用户列表
      *
+     * @param id        如果传ID，则会忽略其他全部参数
      * @param keyword
      * @return
      */
     @SaCheckPermission("system:user:list")
     @GetMapping(value = "/userList")
     public Result getUserList(String id, String keyword) {
-        List<SysUserPageDto> userList = sysUserService.getUserList(id, keyword, keyword, keyword, keyword);
+        List<SysUserPageDto> userList = sysUserService.getUserList(id, keyword, keyword, keyword, keyword, keyword);
         return Result.ok(userList);
     }
 }

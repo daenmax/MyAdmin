@@ -654,13 +654,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      *
      * @param id       如果传ID，则会忽略其他全部参数
      * @param username
-     * @param realName
+     * @param nickName
      * @param phone
      * @param email
      * @return
      */
     @Override
-    public List<SysUserPageDto> getUserList(String id, String username, String realName, String phone, String email) {
+    public List<SysUserPageDto> getUserList(String id, String username, String nickName, String realName, String phone, String email) {
         List<SysUserPageDto> list = new ArrayList<>();
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
@@ -673,6 +673,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             wrapper.and(wq -> {
                 // 拼接sql
                 wq.like(ObjectUtil.isNotEmpty(username), "su.username", username).or();
+                wq.like(ObjectUtil.isNotEmpty(nickName), "sud.nick_name", nickName).or();
                 wq.like(ObjectUtil.isNotEmpty(realName), "sud.real_name", realName).or();
                 wq.like(ObjectUtil.isNotEmpty(phone), "su.phone", phone).or();
                 wq.like(ObjectUtil.isNotEmpty(email), "su.email", email).or();
