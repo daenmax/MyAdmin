@@ -111,7 +111,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      */
     @Override
     @Async
-    public void logoutByRoleId(List<String> roleIds) {
+    public void logoutByRoleIds(List<String> roleIds) {
         List<String> loginTokenList = getLoginTokenList();
         if (CollUtil.isEmpty(loginTokenList)) {
             return;
@@ -125,6 +125,62 @@ public class LoginUtilServiceImpl implements LoginUtilService {
             }
             SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
             if (loginUserByToken.getRoles().stream().anyMatch(r -> roleIds.contains(r.getId()))) {
+                try {
+                    logoutByToken(token);
+                } catch (NotLoginException ignored) {
+                }
+            }
+        });
+    }
+
+    /**
+     * 下线相关用户
+     *
+     * @param positionIds
+     */
+    @Override
+    @Async
+    public void logoutByPositionIds(List<String> positionIds) {
+        List<String> loginTokenList = getLoginTokenList();
+        if (CollUtil.isEmpty(loginTokenList)) {
+            return;
+        }
+        // 角色关联的在线用户量过大会导致redis阻塞卡顿 谨慎操作
+        loginTokenList.parallelStream().forEach(key -> {
+            String token = key.replace("Authorization:login:token:", "");
+            // 如果已经过期则跳过
+            if (getTokenActivityTimeoutByToken(token) < -1) {
+                return;
+            }
+            SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
+            if (loginUserByToken.getPositions().stream().anyMatch(r -> positionIds.contains(r.getId()))) {
+                try {
+                    logoutByToken(token);
+                } catch (NotLoginException ignored) {
+                }
+            }
+        });
+    }
+
+    /**
+     * 下线相关用户
+     *
+     * @param positionId
+     */
+    @Override
+    public void logoutByPositionId(String positionId) {
+        List<String> loginTokenList = getLoginTokenList();
+        if (CollUtil.isEmpty(loginTokenList)) {
+            return;
+        }
+        loginTokenList.parallelStream().forEach(key -> {
+            String token = key.replace("Authorization:login:token:", "");
+            // 如果已经过期则跳过
+            if (getTokenActivityTimeoutByToken(token) < -1) {
+                return;
+            }
+            SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
+            if (loginUserByToken.getPositions().stream().anyMatch(r -> r.getId().equals(positionId))) {
                 try {
                     logoutByToken(token);
                 } catch (NotLoginException ignored) {

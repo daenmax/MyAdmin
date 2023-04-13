@@ -4,6 +4,7 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.system.mapper.SysPositionUserMapper;
 import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysPositionUser;
+import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.SysDictPageVo;
 import cn.daenx.myadmin.system.vo.SysPositionAddVo;
 import cn.daenx.myadmin.system.vo.SysPositionPageVo;
@@ -29,6 +30,8 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     private SysPositionMapper sysPositionMapper;
     @Resource
     private SysPositionUserMapper sysPositionUserMapper;
+    @Resource
+    private LoginUtilService loginUtilService;
 
     @Override
     public List<SysPosition> getSysPositionListByUserId(String userId) {
@@ -143,6 +146,8 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         if (rows < 1) {
             throw new MyException("修改失败");
         }
+        //下线相关用户
+        loginUtilService.logoutByPositionId(vo.getId());
     }
 
     /**
@@ -188,6 +193,8 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         if (i < 1) {
             throw new MyException("删除失败");
         }
+        //下线相关用户
+        loginUtilService.logoutByPositionIds(ids);
     }
 
     /**

@@ -215,7 +215,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             throw new MyException("删除失败");
         }
         //下线相关用户
-        loginUtilService.logoutByRoleId(ids);
+        loginUtilService.logoutByRoleIds(ids);
     }
 
 

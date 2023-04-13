@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.vo;
 
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysPosition;
 import cn.daenx.myadmin.system.po.SysRole;
 import lombok.Data;
 
@@ -42,6 +43,11 @@ public class SysLoginUserVo implements Serializable {
      * 角色列表
      */
     private List<SysRole> roles;
+
+    /**
+     * 岗位列表
+     */
+    private List<SysPosition> positions;
 
     public boolean isAdmin() {
         return SystemConstant.IS_ADMIN_ID.equals(this.id);

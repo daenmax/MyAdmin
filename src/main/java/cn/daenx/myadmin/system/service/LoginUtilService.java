@@ -43,7 +43,21 @@ public interface LoginUtilService {
      *
      * @param roleIds
      */
-    void logoutByRoleId(List<String> roleIds);
+    void logoutByRoleIds(List<String> roleIds);
+
+    /**
+     * 下线相关用户
+     *
+     * @param positionIds
+     */
+    void logoutByPositionIds(List<String> positionIds);
+
+    /**
+     * 下线相关用户
+     *
+     * @param positionId
+     */
+    void logoutByPositionId(String positionId);
 
     /**
      * 下线相关用户

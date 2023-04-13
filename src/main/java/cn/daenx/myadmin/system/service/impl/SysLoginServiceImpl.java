@@ -9,6 +9,8 @@ import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysMenu;
+import cn.daenx.myadmin.system.po.SysPosition;
+import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
@@ -36,6 +38,8 @@ public class SysLoginServiceImpl implements SysLoginService {
     private SysMenuService sysMenuService;
     @Resource
     private SysLogLoginService sysLogLoginService;
+    @Resource
+    private SysPositionService sysPositionService;
     @Resource
     private LoginUtilService loginUtilService;
 
@@ -101,6 +105,29 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setUsername(sysUser.getUsername());
             loginUserVo.setUserType(sysUser.getUserType());
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
+            Boolean isRoleOk = false;
+            for (SysRole role : loginUserVo.getRoles()) {
+                if (role.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+                    isRoleOk = true;
+                    break;
+                }
+            }
+            if (!isRoleOk) {
+                //用户绑定的角色全部被禁用了
+                throw new MyException("用户角色全部不可用");
+            }
+            loginUserVo.setPositions(sysPositionService.getSysPositionListByUserId(sysUser.getId()));
+            Boolean isPositionOk = false;
+            for (SysPosition sysPosition : loginUserVo.getPositions()) {
+                if (sysPosition.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+                    isPositionOk = true;
+                    break;
+                }
+            }
+            if (!isPositionOk) {
+                //用户绑定的岗位全部被禁用了
+                throw new MyException("用户岗位全部不可用");
+            }
             loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
             //设置登录状态
