@@ -75,4 +75,19 @@ public interface SysPositionService extends IService<SysPosition> {
      */
     void deleteByIds(List<String> ids);
 
+
+    /**
+     * 取消授权用户
+     *
+     * @param vo
+     */
+    void cancelAuthUser(SysPositionUpdAuthUserVo vo);
+
+    /**
+     * 保存授权用户
+     *
+     * @param vo
+     */
+    void saveAuthUser(SysPositionUpdAuthUserVo vo);
+
 }

@@ -186,7 +186,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param roleId
      * @return
      */
-    IPage<SysUserPageDto> allocatedList(SysUserPageVo vo, String roleId);
+    IPage<SysUserPageDto> getUserListByRoleId(SysUserPageVo vo, String roleId);
 
     /**
      * 查询未分配该角色的用户列表
@@ -195,7 +195,25 @@ public interface SysUserService extends IService<SysUser> {
      * @param roleId
      * @return
      */
-    IPage<SysUserPageDto> unallocatedList(SysUserPageVo vo, String roleId);
+    IPage<SysUserPageDto> getUserListByUnRoleId(SysUserPageVo vo, String roleId);
+
+    /**
+     * 查询已分配该岗位的用户列表
+     *
+     * @param vo
+     * @param positionId
+     * @return
+     */
+    IPage<SysUserPageDto> getUserListByPositionId(SysUserPageVo vo, String positionId);
+
+    /**
+     * 查询未分配该岗位的用户列表
+     *
+     * @param vo
+     * @param positionId
+     * @return
+     */
+    IPage<SysUserPageDto> getUserListByUnPositionId(SysUserPageVo vo, String positionId);
 
     /**
      * 获取用户列表

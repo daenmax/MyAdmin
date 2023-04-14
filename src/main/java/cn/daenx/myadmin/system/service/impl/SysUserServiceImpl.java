@@ -627,7 +627,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public IPage<SysUserPageDto> allocatedList(SysUserPageVo vo, String roleId) {
+    public IPage<SysUserPageDto> getUserListByRoleId(SysUserPageVo vo, String roleId) {
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         wrapper.exists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
@@ -642,9 +642,39 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return
      */
     @Override
-    public IPage<SysUserPageDto> unallocatedList(SysUserPageVo vo, String roleId) {
+    public IPage<SysUserPageDto> getUserListByUnRoleId(SysUserPageVo vo, String roleId) {
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         wrapper.notExists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
+        IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        return sysUserPage;
+    }
+
+    /**
+     * 查询已分配该岗位的用户列表
+     *
+     * @param vo
+     * @param positionId
+     * @return
+     */
+    @Override
+    public IPage<SysUserPageDto> getUserListByPositionId(SysUserPageVo vo, String positionId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+        wrapper.exists("SELECT * FROM sys_position_user spr WHERE spr.position_id = '" + positionId + "' AND spr.user_id = su.id");
+        IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        return sysUserPage;
+    }
+
+    /**
+     * 查询未分配该岗位的用户列表
+     *
+     * @param vo
+     * @param positionId
+     * @return
+     */
+    @Override
+    public IPage<SysUserPageDto> getUserListByUnPositionId(SysUserPageVo vo, String positionId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+        wrapper.notExists("SELECT * FROM sys_position_user spr WHERE spr.position_id = '" + positionId + "' AND spr.user_id = su.id");
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
         return sysUserPage;
     }

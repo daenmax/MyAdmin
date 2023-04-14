@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import cn.daenx.myadmin.system.po.SysRoleUser;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,34 @@ public class SysPositionUserServiceImpl extends ServiceImpl<SysPositionUserMappe
         LambdaQueryWrapper<SysPositionUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.in(SysPositionUser::getUserId, userIds);
         sysPositionUserMapper.delete(wrapper);
+    }
+
+    /**
+     * 删除用户的指定岗位
+     *
+     * @param userId
+     * @param positionId
+     */
+    @Override
+    public Boolean delUserPosition(String userId, String positionId) {
+        LambdaQueryWrapper<SysPositionUser> wrapperDel = new LambdaQueryWrapper<>();
+        wrapperDel.eq(SysPositionUser::getUserId, userId);
+        wrapperDel.eq(SysPositionUser::getPositionId, positionId);
+        return sysPositionUserMapper.delete(wrapperDel) > 0;
+    }
+
+    /**
+     * 给用户添加指定岗位
+     *
+     * @param userId
+     * @param positionId
+     * @return
+     */
+    @Override
+    public Boolean addUserPosition(String userId, String positionId) {
+        SysPositionUser sysPositionUser = new SysPositionUser();
+        sysPositionUser.setPositionId(positionId);
+        sysPositionUser.setUserId(userId);
+        return sysPositionUserMapper.insert(sysPositionUser) > 0;
     }
 }

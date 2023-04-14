@@ -149,7 +149,10 @@ public class SysRoleController {
     @SaCheckPermission("system:role:list")
     @GetMapping("/authUser/allocatedList")
     public Result allocatedList(SysUserPageVo vo, String roleId) {
-        IPage<SysUserPageDto> page = sysUserService.allocatedList(vo, roleId);
+        if (ObjectUtil.isEmpty(roleId)) {
+            throw new MyException("roleId不能为空");
+        }
+        IPage<SysUserPageDto> page = sysUserService.getUserListByRoleId(vo, roleId);
         return Result.ok(page);
     }
 
@@ -162,7 +165,7 @@ public class SysRoleController {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }
-        IPage<SysUserPageDto> page = sysUserService.unallocatedList(vo, roleId);
+        IPage<SysUserPageDto> page = sysUserService.getUserListByUnRoleId(vo, roleId);
         return Result.ok(page);
     }
 
