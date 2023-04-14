@@ -142,7 +142,10 @@ public class ExceptionHandler {
             return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "账号在别处登录，请重新登录");
         }
         if(e.getMessage().contains("Token无效")){
-            return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "登录已失效，请重新登录");
+            return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "登录无效，请重新登录");
+        }
+        if(e.getMessage().contains("Token已过期")){
+            return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "登录已过期，请重新登录");
         }
         return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "请先登录");
     }
