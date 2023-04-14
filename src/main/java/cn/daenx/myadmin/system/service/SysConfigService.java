@@ -64,6 +64,7 @@ public interface SysConfigService extends IService<SysConfig> {
 
     /**
      * 根据参数键名查询参数键值
+     * 未查询到或者被禁用了返回""
      *
      * @param key
      * @return

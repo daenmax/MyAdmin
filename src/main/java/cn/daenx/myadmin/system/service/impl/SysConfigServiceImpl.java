@@ -4,7 +4,6 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysDictDetail;
 import cn.daenx.myadmin.system.vo.SysConfigAddVo;
 import cn.daenx.myadmin.system.vo.SysConfigPageVo;
 import cn.daenx.myadmin.system.vo.SysConfigUpdVo;
@@ -178,6 +177,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     /**
      * 根据参数键名查询参数键值
+     * 未查询到或者被禁用了返回""
      *
      * @param key
      * @return

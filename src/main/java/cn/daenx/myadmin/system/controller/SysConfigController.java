@@ -23,7 +23,6 @@ public class SysConfigController {
     @Resource
     private SysConfigService sysConfigService;
 
-
     /**
      * 列表
      *
