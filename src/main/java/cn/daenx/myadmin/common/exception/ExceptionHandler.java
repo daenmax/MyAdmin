@@ -135,6 +135,15 @@ public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler(NotLoginException.class)
     public Result handleNotLoginException(NotLoginException e, HttpServletRequest request) {
         log.error("请求地址->{},认证失败->{},无法访问", request.getRequestURI(), e.getMessage());
-        return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "未登录或登录失效");
+        if(e.getMessage().contains("Token已被踢下线")){
+            return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "已被踢下线，请重新登录");
+        }
+        if(e.getMessage().contains("Token已被顶下线")){
+            return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "账号在别处登录，请重新登录");
+        }
+        if(e.getMessage().contains("Token无效")){
+            return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "登录已失效，请重新登录");
+        }
+        return Result.error(HttpStatus.HTTP_UNAUTHORIZED, "请先登录");
     }
 }

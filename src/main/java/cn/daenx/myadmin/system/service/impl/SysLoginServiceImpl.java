@@ -105,6 +105,10 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setUsername(sysUser.getUsername());
             loginUserVo.setUserType(sysUser.getUserType());
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
+            if (loginUserVo.getRoles().size() < 1) {
+                //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
+                throw new MyException("用户角色");
+            }
             Boolean isRoleOk = false;
             for (SysRole role : loginUserVo.getRoles()) {
                 if (role.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
@@ -117,16 +121,18 @@ public class SysLoginServiceImpl implements SysLoginService {
                 throw new MyException("用户角色全部不可用");
             }
             loginUserVo.setPositions(sysPositionService.getSysPositionListByUserId(sysUser.getId()));
-            Boolean isPositionOk = false;
-            for (SysPosition sysPosition : loginUserVo.getPositions()) {
-                if (sysPosition.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
-                    isPositionOk = true;
-                    break;
+            if (loginUserVo.getPositions().size() > 0) {
+                Boolean isPositionOk = false;
+                for (SysPosition sysPosition : loginUserVo.getPositions()) {
+                    if (sysPosition.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+                        isPositionOk = true;
+                        break;
+                    }
                 }
-            }
-            if (!isPositionOk) {
-                //用户绑定的岗位全部被禁用了
-                throw new MyException("用户岗位全部不可用");
+                if (!isPositionOk) {
+                    //用户绑定的岗位全部被禁用了
+                    throw new MyException("用户岗位全部不可用");
+                }
             }
             loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
             loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));

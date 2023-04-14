@@ -64,7 +64,8 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      */
     @Override
     public void logoutByUsername(String username) {
-        StpUtil.logout(username);
+        StpUtil.kickout(username);
+//        StpUtil.logout(username);
     }
 
     /**
@@ -72,7 +73,8 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      */
     @Override
     public void logoutByToken(String token) {
-        StpUtil.logoutByTokenValue(token);
+        StpUtil.kickoutByTokenValue(token);
+//        StpUtil.logoutByTokenValue(token);
     }
 
 
