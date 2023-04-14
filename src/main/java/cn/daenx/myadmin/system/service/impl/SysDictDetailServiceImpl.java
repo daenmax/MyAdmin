@@ -42,8 +42,8 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
      */
     @Override
     public List<SysDictDetail> getDictDetailByCodeFromRedis(String dictCode) {
-        Object value = redisUtil.getValue(RedisConstant.DICT + dictCode);
-        List<SysDictDetail> list = JSON.parseArray(JSON.toJSONString(value), SysDictDetail.class);
+        Object object = redisUtil.getValue(RedisConstant.DICT + dictCode);
+        List<SysDictDetail> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetail.class);
         return list;
     }
 

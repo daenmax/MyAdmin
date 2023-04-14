@@ -9,6 +9,7 @@
     <result column="key" jdbcType="VARCHAR" property="key" />
     <result column="value" jdbcType="LONGVARCHAR" property="value" />
     <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -18,7 +19,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, `key`, `value`, `type`, remark, create_id, create_time, update_id, update_time, 
+    id, `name`, `key`, `value`, `type`, `status`, remark, create_id, create_time, update_id, update_time,
     is_delete
   </sql>
 </mapper>
