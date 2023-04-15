@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.daenx.myadmin.system.mapper.SysOssConfigMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysOssConfig">
+    <!--@mbg.generated-->
+    <!--@Table sys_oss_config-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="access_key" jdbcType="VARCHAR" property="accessKey" />
+    <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+    <result column="bucket_name" jdbcType="VARCHAR" property="bucketName" />
+    <result column="prefix" jdbcType="VARCHAR" property="prefix" />
+    <result column="endpoint" jdbcType="VARCHAR" property="endpoint" />
+    <result column="domain" jdbcType="VARCHAR" property="domain" />
+    <result column="is_https" jdbcType="CHAR" property="isHttps" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="access_policy" jdbcType="CHAR" property="accessPolicy" />
+    <result column="in_use" jdbcType="VARCHAR" property="inUse" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="VARCHAR" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, access_key, secret_key, bucket_name, `prefix`, endpoint, `domain`, is_https, 
+    region, access_policy, in_use, `status`, remark, create_id, create_time, update_id, 
+    update_time, is_delete
+  </sql>
+</mapper>
