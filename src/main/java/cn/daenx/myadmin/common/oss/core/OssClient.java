@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * AWS S3接口协议，诸多云存储厂商都兼容此协议，例如：minio、阿里云OSS、腾讯云COS、七牛云、京东云、华为云
+ * AWS S3接口协议，诸多云存储厂商都兼容此协议，例如：minio、阿里云、腾讯云、七牛云、京东云、华为云
  */
 public class OssClient {
     private final OssProperties properties;
