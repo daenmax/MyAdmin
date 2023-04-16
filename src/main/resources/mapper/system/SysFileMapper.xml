@@ -26,4 +26,14 @@
     id, original_name, file_name, file_suffix, file_url, file_size, file_md5, file_type, oss_id, `status`,
     remark, create_id, create_time, update_id, update_time, is_delete
   </sql>
+
+  <select id="getPageWrapper" resultType="cn.daenx.myadmin.system.dto.SysFilePageDto">
+    SELECT
+      sf.*,
+      soc.`name` AS ossName
+    FROM
+      sys_file sf
+        LEFT JOIN sys_oss_config soc ON soc.id = sf.oss_id
+    ${ew.customSqlSegment}
+  </select>
 </mapper>

@@ -186,7 +186,7 @@ public class OssClient {
      * @param path 完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
      */
     public void delete(String path) {
-        path = path.replace(getUrl() + "/", "");
+//        path = path.replace(getUrl() + "/", "");
         try {
             client.deleteObject(properties.getBucketName(), path);
         } catch (Exception e) {
@@ -197,10 +197,10 @@ public class OssClient {
     /**
      * 获取文件元数据
      *
-     * @param path 完整文件路径
+     * @param path 完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
      */
     public ObjectMetadata getObjectMetadata(String path) {
-        path = path.replace(getUrl() + "/", "");
+//        path = path.replace(getUrl() + "/", "");
         S3Object object = client.getObject(properties.getBucketName(), path);
         return object.getObjectMetadata();
     }

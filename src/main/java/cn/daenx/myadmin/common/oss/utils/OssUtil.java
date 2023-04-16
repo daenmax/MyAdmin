@@ -23,14 +23,30 @@ public class OssUtil {
     private static final Map<String, OssClient> clientMap = new ConcurrentHashMap<>();
 
     /**
-     * 根据类型获取实例
+     * 获取当前正在使用的OSS配置实例
      */
     public static OssClient getOssClient() {
-        Object object = RedisUtil.getValue(RedisConstant.OSS);
+        Object object = RedisUtil.getValue(RedisConstant.OSS_USE);
         if (ObjectUtil.isEmpty(object)) {
             throw new MyException("未配置OSS配置信息，请联系管理员");
         }
         OssProperties properties = JSON.parseObject(JSON.toJSONString(object), OssProperties.class);
+        return handle(properties);
+    }
+
+    /**
+     * 获取指定的OSS配置实例
+     */
+    public static OssClient getOssClientByOssConfigId(String ossConfigId) {
+        Object object = RedisUtil.getValue(RedisConstant.OSS + ossConfigId);
+        if (ObjectUtil.isEmpty(object)) {
+            throw new MyException("未找到OSS配置信息，请联系管理员");
+        }
+        OssProperties properties = JSON.parseObject(JSON.toJSONString(object), OssProperties.class);
+        return handle(properties);
+    }
+
+    private static OssClient handle(OssProperties properties) {
         String name = properties.getName();
         OssClient client = clientMap.get(name);
         if (client == null) {

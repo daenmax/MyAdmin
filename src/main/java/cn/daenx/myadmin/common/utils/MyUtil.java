@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -112,5 +113,20 @@ public class MyUtil {
         byte[] digest = md5.digest(uploadBytes);
         //转换为16进制
         return new BigInteger(1, digest).toString(16);
+    }
+
+    /**
+     * 获取文件大小
+     *
+     * @param file
+     * @param type 单位，1=KB，2=MB
+     * @return
+     */
+    public static BigDecimal getFileSize(MultipartFile file, int type) {
+        long size = file.getSize();
+        BigDecimal sizeDecimal = new BigDecimal(size);
+        BigDecimal kbDecimal = new BigDecimal(type == 1 ? "1024" : "1048576");
+        BigDecimal sizeKB = sizeDecimal.divide(kbDecimal, 2, BigDecimal.ROUND_HALF_UP);
+        return sizeKB;
     }
 }

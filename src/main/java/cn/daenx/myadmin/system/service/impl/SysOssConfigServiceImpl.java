@@ -11,6 +11,8 @@ import cn.daenx.myadmin.system.mapper.SysOssConfigMapper;
 import cn.daenx.myadmin.system.po.SysOssConfig;
 import cn.daenx.myadmin.system.service.SysOssConfigService;
 
+import java.util.List;
+
 @Service
 public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, SysOssConfig> implements SysOssConfigService {
 
@@ -24,12 +26,16 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     @Override
     public void initOssConfig() {
         LambdaQueryWrapper<SysOssConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysOssConfig::getInUse, SystemConstant.IN_USE_YES);
         wrapper.eq(SysOssConfig::getStatus, SystemConstant.STATUS_NORMAL);
-        SysOssConfig sysOssConfig = sysOssConfigMapper.selectOne(wrapper);
-        RedisUtil.del(RedisConstant.OSS);
-        if (sysOssConfig != null) {
-            RedisUtil.setValue(RedisConstant.OSS, sysOssConfig, null, null);
+        List<SysOssConfig> sysOssConfigs = sysOssConfigMapper.selectList(wrapper);
+        RedisUtil.delBatch(RedisConstant.OSS + "*");
+        RedisUtil.del(RedisConstant.OSS_USE);
+        for (SysOssConfig sysOssConfig : sysOssConfigs) {
+            RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), sysOssConfig, null, null);
+            if (sysOssConfig.getStatus().equals(SystemConstant.IN_USE_YES)) {
+                //正在使用的
+                RedisUtil.setValue(RedisConstant.OSS_USE, sysOssConfig, null, null);
+            }
         }
     }
 }
