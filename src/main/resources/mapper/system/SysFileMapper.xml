@@ -10,6 +10,7 @@
     <result column="file_suffix" jdbcType="VARCHAR" property="fileSuffix" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
     <result column="file_size" jdbcType="INTEGER" property="fileSize" />
+    <result column="file_md5" jdbcType="VARCHAR" property="fileMd5" />
     <result column="oss_id" jdbcType="VARCHAR" property="ossId" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -21,7 +22,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, original_name, file_name, file_suffix, file_url, file_size, oss_id, `status`, 
+    id, original_name, file_name, file_suffix, file_url, file_size, file_md5, oss_id, `status`,
     remark, create_id, create_time, update_id, update_time, is_delete
   </sql>
 </mapper>

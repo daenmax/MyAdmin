@@ -43,7 +43,7 @@ public class SysOssConfig extends BaseEntity implements Serializable {
     private String secretKey;
 
     /**
-     * 桶名称
+     * 存储桶名称
      */
     @TableField(value = "bucket_name")
     private String bucketName;
@@ -55,7 +55,7 @@ public class SysOssConfig extends BaseEntity implements Serializable {
     private String prefix;
 
     /**
-     * 访问站点
+     * 访问站点endpoint
      */
     @TableField(value = "endpoint")
     private String endpoint;
@@ -73,13 +73,13 @@ public class SysOssConfig extends BaseEntity implements Serializable {
     private String isHttps;
 
     /**
-     * 域
+     * 地域
      */
     @TableField(value = "region")
     private String region;
 
     /**
-     * 桶权限类型(0=private 1=public 2=custom)
+     * 存储桶权限类型，0=private，1=public，2=custom
      */
     @TableField(value = "access_policy")
     private String accessPolicy;
