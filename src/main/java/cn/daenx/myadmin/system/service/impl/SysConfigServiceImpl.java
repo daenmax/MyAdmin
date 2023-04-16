@@ -26,8 +26,6 @@ import java.util.List;
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService {
     @Resource
     private SysConfigMapper sysConfigMapper;
-    @Resource
-    private RedisUtil redisUtil;
 
     private LambdaQueryWrapper<SysConfig> getWrapper(SysConfigPageVo vo) {
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
@@ -120,9 +118,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(vo.getId());
-        redisUtil.del(RedisConstant.CONFIG + info.getKey());
+        RedisUtil.del(RedisConstant.CONFIG + info.getKey());
         if (info.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
-            redisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
+            RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
         }
     }
 
@@ -149,9 +147,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(sysConfig.getId());
-        redisUtil.del(RedisConstant.CONFIG + info.getKey());
+        RedisUtil.del(RedisConstant.CONFIG + info.getKey());
         if (info.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
-            redisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
+            RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
         }
     }
 
@@ -167,7 +165,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         wrapper.in(SysConfig::getId, ids);
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
-            redisUtil.del(RedisConstant.CONFIG + sysConfig.getKey());
+            RedisUtil.del(RedisConstant.CONFIG + sysConfig.getKey());
         }
         int i = sysConfigMapper.deleteBatchIds(ids);
         if (i < 1) {
@@ -184,7 +182,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public String getConfigByKey(String key) {
-        Object object = redisUtil.getValue(RedisConstant.CONFIG + key);
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + key);
         if (ObjectUtil.isEmpty(object)) {
             return "";
         }
@@ -200,12 +198,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public void refreshCache() {
-        redisUtil.delBatch(RedisConstant.CONFIG + "*");
+        RedisUtil.delBatch(RedisConstant.CONFIG + "*");
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysConfig::getStatus, SystemConstant.STATUS_NORMAL);
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
-            redisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig, null, null);
+            RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig, null, null);
         }
     }
 }

@@ -9,7 +9,6 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
-import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -20,8 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoginUtilServiceImpl implements LoginUtilService {
-    @Resource
-    private RedisUtil redisUtil;
     @Value("${sa-token.timeout}")
     private Long timeOut;
     public static String LOGIN_KEY = "system";
@@ -48,7 +45,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      * @param username
      */
     private void saveLoginCache(String userId, String username) {
-        redisUtil.setValue("Authorization:cache:" + userId, username, timeOut, TimeUnit.SECONDS);
+        RedisUtil.setValue("Authorization:cache:" + userId, username, timeOut, TimeUnit.SECONDS);
     }
 
     /**
@@ -198,10 +195,10 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      */
     @Override
     public void logoutByUserId(String userId) {
-        String username = (String) redisUtil.getValue("Authorization:cache:" + userId);
+        String username = (String) RedisUtil.getValue("Authorization:cache:" + userId);
         if (StringUtils.isNotBlank(username)) {
             logoutByUsername(username);
-            redisUtil.del("Authorization:cache:" + userId);
+            RedisUtil.del("Authorization:cache:" + userId);
         }
     }
 

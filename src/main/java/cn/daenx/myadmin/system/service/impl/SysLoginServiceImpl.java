@@ -29,8 +29,6 @@ import java.util.*;
 @Service
 public class SysLoginServiceImpl implements SysLoginService {
     @Resource
-    private RedisUtil redisUtil;
-    @Resource
     private SysUserService sysUserService;
     @Resource
     private SysRoleService sysRoleService;
@@ -55,15 +53,15 @@ public class SysLoginServiceImpl implements SysLoginService {
             if (ObjectUtil.isEmpty(code) || ObjectUtil.isEmpty(uuid)) {
                 throw new MyException("验证码相关参数不能为空");
             }
-            String codeReal = (String) redisUtil.getValue(RedisConstant.CAPTCHA_IMG + uuid);
+            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_IMG + uuid);
             if (ObjectUtil.isEmpty(codeReal)) {
                 throw new MyException("验证码已过期，请刷新验证码");
             }
             if (!codeReal.equals(code)) {
-                redisUtil.del(RedisConstant.CAPTCHA_IMG + uuid);
+                RedisUtil.del(RedisConstant.CAPTCHA_IMG + uuid);
                 throw new MyException("验证码错误");
             }
-            redisUtil.del(RedisConstant.CAPTCHA_IMG + uuid);
+            RedisUtil.del(RedisConstant.CAPTCHA_IMG + uuid);
         }
     }
 

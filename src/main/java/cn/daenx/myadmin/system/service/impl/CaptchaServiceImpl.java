@@ -7,7 +7,6 @@ import cn.hutool.captcha.*;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
-    @Resource
-    private RedisUtil redisUtil;
-
     /**
      * 验证码类型，1=线段干扰的验证码，2=圆圈干扰验证码，3=扭曲干扰验证码，4=GIF，5=加减运算
      */
@@ -100,7 +96,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             base64 = ImgUtil.toBase64(image, ImgUtil.IMAGE_TYPE_PNG);
         }
         String uuid = IdUtil.randomUUID();
-        redisUtil.setValue(RedisConstant.CAPTCHA_IMG + uuid, code, 300L, TimeUnit.SECONDS);
+        RedisUtil.setValue(RedisConstant.CAPTCHA_IMG + uuid, code, 300L, TimeUnit.SECONDS);
         map.put("uuid", uuid);
         map.put("img", base64);
         return map;

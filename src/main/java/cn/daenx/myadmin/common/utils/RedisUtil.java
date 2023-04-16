@@ -1,15 +1,9 @@
 package cn.daenx.myadmin.common.utils;
 
 import jakarta.annotation.Resource;
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -20,11 +14,12 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class RedisUtil {
-    @Resource
-    private RedisTemplate redisTemplate;
 
+    private static RedisTemplate redisTemplate;
+
+    @Resource
     public void setRedisTemplate(RedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+        RedisUtil.redisTemplate = redisTemplate;
     }
 
 
@@ -34,7 +29,7 @@ public class RedisUtil {
      * @param key 键
      * @return 值
      */
-    public Object getValue(String key) {
+    public static Object getValue(String key) {
         return key == null ? null : redisTemplate.opsForValue().get(key);
     }
 
@@ -48,7 +43,7 @@ public class RedisUtil {
      * @param timeUnit 和上面保持一致
      * @return
      */
-    public boolean setValue(String key, Object value, Long time, TimeUnit timeUnit) {
+    public static boolean setValue(String key, Object value, Long time, TimeUnit timeUnit) {
         try {
             if (time != null) {
                 redisTemplate.opsForValue().set(key, value, time, timeUnit);
@@ -67,7 +62,7 @@ public class RedisUtil {
      *
      * @param key
      */
-    public void del(String key) {
+    public static void del(String key) {
         redisTemplate.delete(key);
     }
 
@@ -76,7 +71,7 @@ public class RedisUtil {
      *
      * @param key 后面要跟上*号
      */
-    public void delBatch(String key) {
+    public static void delBatch(String key) {
         Set<String> keys = redisTemplate.keys(key);
         redisTemplate.delete(keys);
     }

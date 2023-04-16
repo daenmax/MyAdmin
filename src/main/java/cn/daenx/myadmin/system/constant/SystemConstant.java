@@ -109,4 +109,13 @@ public class SystemConstant {
      */
     public static final String STATUS_DISABLE = "1";
 
+    /**
+     * OSS正在使用：否
+     */
+    public static final String IN_USE_NO = "0";
+    /**
+     * OSS正在使用：是
+     */
+    public static final String IN_USE_YES = "1";
+
 }
