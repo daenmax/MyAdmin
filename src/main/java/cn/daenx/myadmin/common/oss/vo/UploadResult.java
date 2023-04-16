@@ -21,9 +21,27 @@ public class UploadResult {
      * 包含路径，例如：MyAdmin/2023/04/16/d85ce625e0a34568938c218554938d34.jpg
      */
     private String fileName;
+
     /**
-     * eTag
-     * 通常就是文件MD5，例如：4879054b23eb68d156eb7d92906aa113
+     * MD5
+     * 通常就是eTag，例如：4879054b23eb68d156eb7d92906aa113
      */
-    private String eTag;
+    private String md5;
+
+    /**
+     * 后缀
+     * 例如：.jpg
+     */
+    private String suffix;
+
+    /**
+     * 文件大小（字节）
+     */
+    private Long size;
+
+    /**
+     * 文件类型
+     * 例如：image/jpeg
+     */
+    private String contentType;
 }

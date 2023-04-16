@@ -2,8 +2,12 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.oss.core.OssClient;
+import cn.daenx.myadmin.common.oss.utils.OssUtil;
+import cn.daenx.myadmin.common.oss.vo.UploadResult;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
+import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -711,5 +716,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         list = sysUserMapper.getAll(wrapper);
         return list;
+    }
+
+    /**
+     * 修改头像
+     *
+     * @param avatar
+     * @return
+     */
+    @Override
+    public String avatar(MultipartFile avatar) {
+//        //文件名，例如：大恩的头像.jpg
+//        String originalName = file.getOriginalFilename();
+//        //后缀，例如：.jpg
+//        String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
+//        //文件类型，例如：image/jpeg
+//        String contentType = file.getContentType();
+//        OssClient ossClient = OssUtil.getOssClient();
+//        UploadResult upload = ossClient.uploadSuffix(file.getBytes(), suffix, contentType);
+//        return Result.ok("上传成功", upload);
+        return "";
     }
 }

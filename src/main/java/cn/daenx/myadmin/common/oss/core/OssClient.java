@@ -122,6 +122,8 @@ public class OssClient {
             inputStream = new ByteArrayInputStream(IoUtil.readBytes(inputStream));
         }
         PutObjectResult putObjectResult;
+        String suffix;
+        Long fileSize;
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(contentType);
@@ -130,10 +132,19 @@ public class OssClient {
             // 设置上传对象的 Acl 为公共读
             putObjectRequest.setCannedAcl(getAccessPolicy().getAcl());
             putObjectResult = client.putObject(putObjectRequest);
+            suffix = StringUtils.substring(path, path.lastIndexOf("."), path.length());
+            fileSize = metadata.getContentLength();
         } catch (Exception e) {
             throw new MyException("上传文件失败[" + e.getMessage() + "]");
         }
-        return UploadResult.builder().url(getUrl() + "/" + path).fileName(path).eTag(putObjectResult.getETag()).build();
+        return UploadResult.builder()
+                .url(getUrl() + "/" + path)
+                .fileName(path)
+                .md5(putObjectResult.getETag())
+                .suffix(suffix)
+                .size(fileSize)
+                .contentType(contentType)
+                .build();
     }
 
     /**

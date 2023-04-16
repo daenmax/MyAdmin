@@ -16,6 +16,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,17 @@ public class SysUserController {
     public Result updatePwd(@Validated @RequestBody SysUserUpdPwdVo vo) {
         sysUserService.updatePwd(vo);
         return Result.ok("修改成功，请重新登录", null);
+    }
+
+    /**
+     * 修改头像
+     *
+     * @return
+     */
+    @PutMapping("/avatar")
+    public Result avatar(@RequestPart("avatar") MultipartFile avatar) {
+        String imgUrl = sysUserService.avatar(avatar);
+        return Result.ok();
     }
 
     /**

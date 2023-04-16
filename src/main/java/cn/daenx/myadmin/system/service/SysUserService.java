@@ -6,6 +6,7 @@ import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.vo.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -227,4 +228,12 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     List<SysUserPageDto> getUserList(String id, String username, String nickName, String realName, String phone, String email);
+
+    /**
+     * 修改头像
+     *
+     * @param avatar
+     * @return
+     */
+    String avatar(MultipartFile avatar);
 }

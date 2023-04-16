@@ -57,13 +57,19 @@ public class SysFile extends BaseEntity implements Serializable {
      * 单位字节
      */
     @TableField(value = "file_size")
-    private Integer fileSize;
+    private Long fileSize;
 
     /**
      * 文件MD5（eTag）
      */
     @TableField(value = "file_md5")
     private String fileMd5;
+
+    /**
+     * 文件类型，例如：例如：image/jpeg
+     */
+    @TableField(value = "file_type")
+    private String fileType;
 
     /**
      * 所属OSS配置ID
