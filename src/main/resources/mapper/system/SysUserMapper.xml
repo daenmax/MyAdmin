@@ -52,17 +52,18 @@
                sud.sex,
                sud.`profile`,
                sud.user_sign,
-               sud.avatar,
+               sf.file_url                  AS avatar,
                sud.money,
-               sd.`name`    AS deptName,
-               su1.username AS createName,
-               su2.username AS updateName,
-               IF( su.id = '1', TRUE, FALSE ) as admin
+               sd.`name`                    AS deptName,
+               su1.username                 AS createName,
+               su2.username                 AS updateName,
+               IF(su.id = '1', TRUE, FALSE) as admin
         FROM sys_user su
                  LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
                  LEFT JOIN sys_dept sd ON sd.id = su.dept_id
                  LEFT JOIN sys_user su1 ON su1.id = su.create_id
                  LEFT JOIN sys_user su2 ON su2.id = su.update_id
+                 LEFT JOIN sys_file sf ON sf.id = sud.avatar
     </sql>
     <select id="getUserInfoByUserId" resultMap="userInfoMap">
         <include refid="userInfo">

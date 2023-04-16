@@ -2,12 +2,9 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.oss.core.OssClient;
-import cn.daenx.myadmin.common.oss.utils.OssUtil;
 import cn.daenx.myadmin.common.oss.vo.UploadResult;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
-import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
@@ -54,6 +51,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysDictDetailService sysDictDetailService;
     @Resource
     private LoginUtilService loginUtilService;
+    @Resource
+    private SysFileService sysFileService;
 
     /**
      * 通过手机号检查用户是否存在
@@ -720,21 +719,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 修改头像
+     * 返回头像链接
      *
-     * @param avatar
+     * @param file
      * @return
      */
     @Override
-    public String avatar(MultipartFile avatar) {
-//        //文件名，例如：大恩的头像.jpg
-//        String originalName = file.getOriginalFilename();
-//        //后缀，例如：.jpg
-//        String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
-//        //文件类型，例如：image/jpeg
-//        String contentType = file.getContentType();
-//        OssClient ossClient = OssUtil.getOssClient();
-//        UploadResult upload = ossClient.uploadSuffix(file.getBytes(), suffix, contentType);
-//        return Result.ok("上传成功", upload);
-        return "";
+    public String avatar(MultipartFile file) {
+        //文件名，例如：大恩的头像.jpg
+        String originalName = file.getOriginalFilename();
+        //后缀，例如：.jpg
+        String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
+        if (!StringUtils.equalsAnyIgnoreCase(suffix, SystemConstant.IMAGE_SUFFIX)) {
+            throw new MyException("文件类型[" + suffix + "]不支持");
+        }
+        String userId = loginUtilService.getLoginUserId();
+        UploadResult uploadResult = sysFileService.uploadFile(file, SystemConstant.FILE_FROM_AVATAR);
+        LambdaUpdateWrapper<SysUserDetail> updateWrapperDetail = new LambdaUpdateWrapper<>();
+        updateWrapperDetail.eq(SysUserDetail::getUserId, userId);
+        updateWrapperDetail.set(SysUserDetail::getAvatar, uploadResult.getSysFileId());
+        int rowsDetail = sysUserDetailMapper.update(new SysUserDetail(), updateWrapperDetail);
+        if (rowsDetail < 1) {
+            throw new MyException("修改失败");
+        }
+        return uploadResult.getUrl();
     }
 }

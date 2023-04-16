@@ -46,6 +46,15 @@ public class OssClient {
     private String[] CLOUD_SERVICE = new String[]{"aliyun", "qcloud", "qiniu", "jdcloud", "obs"};
 
     /**
+     * 获取当前OSS配置信息
+     *
+     * @return
+     */
+    public OssProperties getOssProperties() {
+        return this.properties;
+    }
+
+    /**
      * 初始化
      *
      * @param ossProperties

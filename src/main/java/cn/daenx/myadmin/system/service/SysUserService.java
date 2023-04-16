@@ -231,9 +231,10 @@ public interface SysUserService extends IService<SysUser> {
 
     /**
      * 修改头像
+     * 返回头像链接
      *
-     * @param avatar
+     * @param file
      * @return
      */
-    String avatar(MultipartFile avatar);
+    String avatar(MultipartFile file);
 }

@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,10 +68,12 @@ public class SysUserController {
      *
      * @return
      */
-    @PutMapping("/avatar")
-    public Result avatar(@RequestPart("avatar") MultipartFile avatar) {
-        String imgUrl = sysUserService.avatar(avatar);
-        return Result.ok();
+    @PostMapping("/profile/avatar")
+    public Result avatar(@RequestPart("avatar") MultipartFile file) {
+        String imgUrl = sysUserService.avatar(file);
+        Map<String, Object> map = new HashMap<>();
+        map.put("imgUrl", imgUrl);
+        return Result.ok(map);
     }
 
     /**

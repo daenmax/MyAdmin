@@ -44,4 +44,9 @@ public class UploadResult {
      * 例如：image/jpeg
      */
     private String contentType;
+
+    /**
+     * 系统文件表里的ID
+     */
+    private String sysFileId;
 }
