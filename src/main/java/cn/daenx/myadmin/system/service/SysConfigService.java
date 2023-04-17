@@ -76,4 +76,22 @@ public interface SysConfigService extends IService<SysConfig> {
      */
     void refreshCache();
 
+    /**
+     * 获取允许上传的图片后缀
+     * 如果未配置则返回默认
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    SysUploadConfigVo getSysUploadImageSuffixs();
+
+    /**
+     * 获取允许上传的文件后缀
+     * 如果未配置则返回默认
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    SysUploadConfigVo getSysUploadFileSuffixs();
+
 }

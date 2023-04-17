@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -27,6 +28,22 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class MyUtil {
+
+    /**
+     * 检查后缀
+     *
+     * @param suffix  后缀，例如：.jpg
+     * @param sysUploadConfigVo
+     * @return
+     */
+    public static Boolean checkSuffix(String suffix, SysUploadConfigVo sysUploadConfigVo) {
+        for (String s : sysUploadConfigVo.getFileType()) {
+            if (suffix.equals("." + s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * 获取IP地址

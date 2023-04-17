@@ -147,12 +147,12 @@ public class OssClient {
             throw new MyException("上传文件失败[" + e.getMessage() + "]");
         }
         return UploadResult.builder()
-                .url(getUrl() + "/" + path)
+                .fileUrl(getUrl() + "/" + path)
                 .fileName(path)
-                .md5(putObjectResult.getETag())
-                .suffix(suffix)
-                .size(fileSize)
-                .contentType(contentType)
+                .fileMd5(putObjectResult.getETag())
+                .fileSuffix(suffix)
+                .fileSize(fileSize)
+                .fileType(contentType)
                 .build();
     }
 

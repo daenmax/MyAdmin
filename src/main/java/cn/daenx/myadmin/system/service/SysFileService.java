@@ -20,7 +20,25 @@ public interface SysFileService extends IService<SysFile> {
      * @param remark 例如：用户头像、附件 等
      * @return
      */
+    UploadResult upload(MultipartFile file, String remark);
+
+    /**
+     * 上传文件的前置，有限制策略
+     *
+     * @param file
+     * @param remark 例如：用户头像、附件 等
+     * @return
+     */
     UploadResult uploadFile(MultipartFile file, String remark);
+
+    /**
+     * 上传图片的前置，有限制策略
+     *
+     * @param file
+     * @param remark 例如：用户头像、附件 等
+     * @return
+     */
+    UploadResult uploadImage(MultipartFile file, String remark);
 
     /**
      * 分页列表

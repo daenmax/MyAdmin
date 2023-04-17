@@ -12,12 +12,10 @@ import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysFilePageDto;
-import cn.daenx.myadmin.system.po.SysOssConfig;
+import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.vo.SysFilePageVo;
-import cn.daenx.myadmin.test.dto.TestDataPageDto;
-import cn.daenx.myadmin.test.po.TestData;
+import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -34,12 +32,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements SysFileService {
     @Resource
     private SysFileMapper sysFileMapper;
+    @Resource
+    private SysConfigService sysConfigService;
 
     /**
      * 如果是私有存储，那么获取一个120秒有效的链接
@@ -73,7 +74,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
      * @return
      */
     @Override
-    public UploadResult uploadFile(MultipartFile file, String remark) {
+    public UploadResult upload(MultipartFile file, String remark) {
         OssClient ossClient = OssUtil.getOssClient();
         //通过MD5去判断是否已经上传过，避免重复上传占用资源
         LambdaQueryWrapper<SysFile> wrapper = new LambdaQueryWrapper<>();
@@ -84,14 +85,15 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             if (sysFileDb.getOssId().equals(ossClient.getOssProperties().getId())) {
                 //当前OSS上已经上传过，直接返回，不再重复上传
                 return UploadResult.builder()
-                        .url(sysFileDb.getFileUrl())
+                        .fileUrl(sysFileDb.getFileUrl())
                         .fileName(sysFileDb.getFileName())
-                        .md5(sysFileDb.getFileMd5())
-                        .suffix(sysFileDb.getFileSuffix())
-                        .size(sysFileDb.getFileSize())
-                        .contentType(sysFileDb.getFileType())
+                        .fileMd5(sysFileDb.getFileMd5())
+                        .fileSuffix(sysFileDb.getFileSuffix())
+                        .fileSize(sysFileDb.getFileSize())
+                        .fileType(sysFileDb.getFileType())
                         .sysFileId(sysFileDb.getId())
                         .originalName(sysFileDb.getOriginalName())
+                        .isExist(true)
                         .build();
             }
         }
@@ -110,18 +112,73 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         SysFile sysFile = new SysFile();
         sysFile.setOriginalName(originalName);
         sysFile.setFileName(upload.getFileName());
-        sysFile.setFileSuffix(upload.getSuffix());
-        sysFile.setFileUrl(transPrivateUrl(upload.getUrl(), upload.getFileName(), ossClient.getOssProperties().getId()));
-        sysFile.setFileSize(upload.getSize());
-        sysFile.setFileMd5(upload.getMd5());
-        sysFile.setFileType(upload.getContentType());
+        sysFile.setFileSuffix(upload.getFileSuffix());
+        sysFile.setFileUrl(transPrivateUrl(upload.getFileUrl(), upload.getFileName(), ossClient.getOssProperties().getId()));
+        sysFile.setFileSize(upload.getFileSize());
+        sysFile.setFileMd5(upload.getFileMd5());
+        sysFile.setFileType(upload.getFileType());
         sysFile.setOssId(ossClient.getOssProperties().getId());
         sysFile.setStatus(SystemConstant.STATUS_NORMAL);
         sysFile.setRemark(remark);
         sysFileMapper.insert(sysFile);
         upload.setSysFileId(sysFile.getId());
         upload.setOriginalName(originalName);
+        upload.setIsExist(false);
         return upload;
+    }
+
+    /**
+     * 上传文件的前置，有限制策略
+     *
+     * @param file
+     * @param remark 例如：用户头像、附件 等
+     * @return
+     */
+    @Override
+    public UploadResult uploadFile(MultipartFile file, String remark) {
+        //文件名，例如：大恩的头像.jpg
+        String originalName = file.getOriginalFilename();
+        //后缀，例如：.jpg
+        String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
+        SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadFileSuffixs();
+        if (sysUploadConfigVo == null) {
+            throw new MyException("当前系统不允许上传");
+        }
+        BigDecimal fileSize = MyUtil.getFileSize(file, 2);
+        if (fileSize.compareTo(new BigDecimal(sysUploadConfigVo.getFileSize())) > 0) {
+            throw new MyException("最大支持上传[" + sysUploadConfigVo.getFileSize() + "]MB的文件");
+        }
+        if (!MyUtil.checkSuffix(suffix, sysUploadConfigVo)) {
+            throw new MyException("文件类型[" + suffix + "]不允许上传");
+        }
+        return upload(file, remark);
+    }
+
+    /**
+     * 上传图片的前置，有限制策略
+     *
+     * @param file
+     * @param remark 例如：用户头像、附件 等
+     * @return
+     */
+    @Override
+    public UploadResult uploadImage(MultipartFile file, String remark) {
+        //文件名，例如：大恩的头像.jpg
+        String originalName = file.getOriginalFilename();
+        //后缀，例如：.jpg
+        String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
+        SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadImageSuffixs();
+        if (sysUploadConfigVo == null) {
+            throw new MyException("当前系统不允许上传");
+        }
+        BigDecimal fileSize = MyUtil.getFileSize(file, 2);
+        if (fileSize.compareTo(new BigDecimal(sysUploadConfigVo.getFileSize())) > 0) {
+            throw new MyException("最大支持上传[" + sysUploadConfigVo.getFileSize() + "MB]的图片");
+        }
+        if (!MyUtil.checkSuffix(suffix, sysUploadConfigVo)) {
+            throw new MyException("文件类型[" + suffix + "]不允许上传");
+        }
+        return upload(file, remark);
     }
 
     /**

@@ -73,10 +73,22 @@ public class SysFileController {
      *
      * @return
      */
-    @SaCheckPermission("system:file:uploadd")
-    @PostMapping("/upload")
-    public Result avatar(@RequestPart("file") MultipartFile file) {
+    @SaCheckPermission("system:file:upload")
+    @PostMapping("/uploadFile")
+    public Result upload(@RequestPart("file") MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadFile(file, SystemConstant.FILE_FROM_USER);
+        return Result.ok(uploadResult);
+    }
+
+    /**
+     * 上传图片
+     *
+     * @return
+     */
+    @SaCheckPermission("system:file:upload")
+    @PostMapping("/uploadImage")
+    public Result avatar(@RequestPart("file") MultipartFile file) {
+        UploadResult uploadResult = sysFileService.uploadImage(file, SystemConstant.FILE_FROM_USER);
         return Result.ok(uploadResult);
     }
 }

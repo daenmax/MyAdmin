@@ -1,5 +1,7 @@
 package cn.daenx.myadmin.system.constant;
 
+import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
+
 public class SystemConstant {
 
 
@@ -129,8 +131,13 @@ public class SystemConstant {
     public static final String FILE_FROM_USER = "用户上传";
 
     /**
-     * 图片类型
+     * 默认的文件上传限制策略
      */
-    public static final String[] IMAGE_SUFFIX = {".bmp", ".gif", ".jpg", ".jpeg", ".png"};
+    public static final SysUploadConfigVo UPLOAD_CONFIG_FILE = new SysUploadConfigVo(3, 5, new String[]{"zip", "txt"}, true);
+    /**
+     * 默认的图片上传限制策略
+     */
+    public static final SysUploadConfigVo UPLOAD_CONFIG_IMAGE = new SysUploadConfigVo(4, 2, new String[]{"bmp", "gif", "jpg", "jpeg", "png"}, true);
+
 
 }

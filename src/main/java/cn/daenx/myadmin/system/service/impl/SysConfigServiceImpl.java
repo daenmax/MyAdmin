@@ -7,8 +7,10 @@ import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.vo.SysConfigAddVo;
 import cn.daenx.myadmin.system.vo.SysConfigPageVo;
 import cn.daenx.myadmin.system.vo.SysConfigUpdVo;
+import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -205,5 +207,45 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         for (SysConfig sysConfig : sysConfigs) {
             RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig, null, null);
         }
+    }
+
+    /**
+     * 获取允许上传的图片后缀
+     * 如果未配置则返回默认
+     *
+     * @return
+     */
+    @Override
+    public SysUploadConfigVo getSysUploadImageSuffixs() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.upload.image");
+        if (ObjectUtil.isEmpty(object)) {
+            return SystemConstant.UPLOAD_CONFIG_IMAGE;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysUploadConfigVo sysUploadConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysUploadConfigVo.class);
+        return sysUploadConfigVo;
+    }
+
+    /**
+     * 获取允许上传的文件后缀
+     * 如果未配置则返回默认
+     *
+     * @return
+     */
+    @Override
+    public SysUploadConfigVo getSysUploadFileSuffixs() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.upload.file");
+        if (ObjectUtil.isEmpty(object)) {
+            return SystemConstant.UPLOAD_CONFIG_FILE;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysUploadConfigVo sysUploadConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysUploadConfigVo.class);
+        return sysUploadConfigVo;
     }
 }
