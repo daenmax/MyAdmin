@@ -27,8 +27,6 @@ import cn.daenx.myadmin.system.service.SysDictDetailService;
 @Service
 public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, SysDictDetail> implements SysDictDetailService {
     @Resource
-    private RedisUtil redisUtil;
-    @Resource
     private SysDictService sysDictService;
     @Resource
     private SysDictDetailMapper sysDictDetailMapper;
@@ -42,8 +40,8 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
      */
     @Override
     public List<SysDictDetail> getDictDetailByCodeFromRedis(String dictCode) {
-        Object value = redisUtil.getValue(RedisConstant.DICT + dictCode);
-        List<SysDictDetail> list = JSON.parseArray(JSON.toJSONString(value), SysDictDetail.class);
+        Object object = RedisUtil.getValue(RedisConstant.DICT + dictCode);
+        List<SysDictDetail> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetail.class);
         return list;
     }
 

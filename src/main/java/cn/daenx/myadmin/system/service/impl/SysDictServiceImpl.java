@@ -30,8 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
     @Resource
-    private RedisUtil redisUtil;
-    @Resource
     private SysDictMapper sysDictMapper;
     @Resource
     private SysDictDetailMapper sysDictDetailMapper;
@@ -199,7 +197,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      */
     @Override
     public void refreshCache() {
-        redisUtil.delBatch(RedisConstant.DICT + "*");
+        RedisUtil.delBatch(RedisConstant.DICT + "*");
         List<SysDict> sysDictList = getSysDictList();
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysDictDetail::getStatus, SystemConstant.STATUS_NORMAL);
@@ -207,7 +205,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         for (SysDict sysDict : sysDictList) {
             List<SysDictDetail> collect = sysDictDetailList.stream().filter(dictDetail -> sysDict.getCode().equals(dictDetail.getDictCode())).collect(Collectors.toList());
-            redisUtil.setValue(RedisConstant.DICT + sysDict.getCode(), collect, null, null);
+            RedisUtil.setValue(RedisConstant.DICT + sysDict.getCode(), collect, null, null);
         }
     }
 }

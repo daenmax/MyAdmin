@@ -6,6 +6,7 @@ import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.vo.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -186,7 +187,7 @@ public interface SysUserService extends IService<SysUser> {
      * @param roleId
      * @return
      */
-    IPage<SysUserPageDto> allocatedList(SysUserPageVo vo, String roleId);
+    IPage<SysUserPageDto> getUserListByRoleId(SysUserPageVo vo, String roleId);
 
     /**
      * 查询未分配该角色的用户列表
@@ -195,7 +196,25 @@ public interface SysUserService extends IService<SysUser> {
      * @param roleId
      * @return
      */
-    IPage<SysUserPageDto> unallocatedList(SysUserPageVo vo, String roleId);
+    IPage<SysUserPageDto> getUserListByUnRoleId(SysUserPageVo vo, String roleId);
+
+    /**
+     * 查询已分配该岗位的用户列表
+     *
+     * @param vo
+     * @param positionId
+     * @return
+     */
+    IPage<SysUserPageDto> getUserListByPositionId(SysUserPageVo vo, String positionId);
+
+    /**
+     * 查询未分配该岗位的用户列表
+     *
+     * @param vo
+     * @param positionId
+     * @return
+     */
+    IPage<SysUserPageDto> getUserListByUnPositionId(SysUserPageVo vo, String positionId);
 
     /**
      * 获取用户列表
@@ -209,4 +228,13 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     List<SysUserPageDto> getUserList(String id, String username, String nickName, String realName, String phone, String email);
+
+    /**
+     * 修改头像
+     * 返回头像链接
+     *
+     * @param file
+     * @return
+     */
+    String avatar(MultipartFile file);
 }

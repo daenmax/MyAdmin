@@ -69,7 +69,7 @@ public class SysUserDetail extends BaseEntity implements Serializable {
     private String userSign;
 
     /**
-     * 头像
+     * 头像（文件ID）
      */
     @TableField(value = "avatar")
     private String avatar;

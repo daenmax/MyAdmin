@@ -3,12 +3,14 @@ package cn.daenx.myadmin.system.controller;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.po.SysDict;
+import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysPosition;
 import cn.daenx.myadmin.system.service.SysPositionService;
+import cn.daenx.myadmin.system.service.SysUserService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,6 +25,9 @@ import java.util.List;
 public class SysPositionController {
     @Resource
     private SysPositionService sysPositionService;
+
+    @Resource
+    private SysUserService sysUserService;
 
     /**
      * 列表
@@ -103,4 +108,55 @@ public class SysPositionController {
         return Result.ok();
     }
 
+
+
+    /**
+     * 查询已分配该岗位的用户列表
+     */
+    @SaCheckPermission("system:position:list")
+    @GetMapping("/authUser/allocatedList")
+    public Result allocatedList(SysUserPageVo vo, String positionId) {
+        if (ObjectUtil.isEmpty(positionId)) {
+            throw new MyException("positionId不能为空");
+        }
+        IPage<SysUserPageDto> page = sysUserService.getUserListByPositionId(vo, positionId);
+        return Result.ok(page);
+    }
+
+    /**
+     * 查询未分配该岗位的用户列表
+     */
+    @SaCheckPermission("system:position:list")
+    @GetMapping("/authUser/unallocatedList")
+    public Result unallocatedList(SysUserPageVo vo, String positionId) {
+        if (ObjectUtil.isEmpty(positionId)) {
+            throw new MyException("positionId不能为空");
+        }
+        IPage<SysUserPageDto> page = sysUserService.getUserListByUnPositionId(vo, positionId);
+        return Result.ok(page);
+    }
+
+    /**
+     * 取消授权用户
+     *
+     * @param vo
+     */
+    @SaCheckPermission("system:position:edit")
+    @PutMapping("/authUser/cancel")
+    public Result cancelAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
+        sysPositionService.cancelAuthUser(vo);
+        return Result.ok();
+    }
+
+    /**
+     * 保存授权用户
+     *
+     * @param vo
+     */
+    @SaCheckPermission("system:position:edit")
+    @PutMapping("/authUser/save")
+    public Result saveAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
+        sysPositionService.saveAuthUser(vo);
+        return Result.ok();
+    }
 }

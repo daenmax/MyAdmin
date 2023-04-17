@@ -21,4 +21,21 @@ public interface SysPositionUserService extends IService<SysPositionUser> {
      */
     void delUserPosition(List<String> userIds);
 
+    /**
+     * 删除用户的指定岗位
+     *
+     * @param userId
+     * @param positionId
+     */
+    Boolean delUserPosition(String userId, String positionId);
+
+    /**
+     * 给用户添加指定岗位
+     *
+     * @param userId
+     * @param positionId
+     * @return
+     */
+    Boolean addUserPosition(String userId, String positionId);
+
 }

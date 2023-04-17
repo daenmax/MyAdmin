@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.common.utils;
 
+import cn.daenx.myadmin.common.exception.MyException;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
@@ -7,7 +8,13 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -80,4 +87,46 @@ public class MyUtil {
         return collection.stream().map(function).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+    /**
+     * 获取上传文件的md5
+     * 32位小写
+     *
+     * @param multipartFile
+     * @return
+     * @throws Exception
+     */
+    public static String getMd5(MultipartFile multipartFile) {
+        //获取文件的byte信息
+        byte[] uploadBytes = new byte[0];
+        try {
+            uploadBytes = multipartFile.getBytes();
+        } catch (IOException e) {
+            throw new MyException("读取文件信息失败0x1");
+        }
+        //拿到一个MD5转换器
+        MessageDigest md5 = null;
+        try {
+            md5 = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            throw new MyException("读取文件信息失败0x2");
+        }
+        byte[] digest = md5.digest(uploadBytes);
+        //转换为16进制
+        return new BigInteger(1, digest).toString(16);
+    }
+
+    /**
+     * 获取文件大小
+     *
+     * @param file
+     * @param type 单位，1=KB，2=MB
+     * @return
+     */
+    public static BigDecimal getFileSize(MultipartFile file, int type) {
+        long size = file.getSize();
+        BigDecimal sizeDecimal = new BigDecimal(size);
+        BigDecimal kbDecimal = new BigDecimal(type == 1 ? "1024" : "1048576");
+        BigDecimal sizeKB = sizeDecimal.divide(kbDecimal, 2, BigDecimal.ROUND_HALF_UP);
+        return sizeKB;
+    }
 }

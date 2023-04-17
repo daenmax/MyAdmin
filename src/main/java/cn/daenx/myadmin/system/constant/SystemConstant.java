@@ -52,12 +52,12 @@ public class SystemConstant {
     /**
      * 是否菜单外链（是）
      */
-    public static final String  YES_FRAME = "0";
+    public static final String YES_FRAME = "0";
 
     /**
      * 是否菜单外链（否）
      */
-    public static final String  NO_FRAME = "1";
+    public static final String NO_FRAME = "1";
 
     /**
      * Layout组件标识
@@ -78,27 +78,27 @@ public class SystemConstant {
     /**
      * 数据权限，0=本人数据
      */
-    public static final String  DATA_SCOPE_SELF = "0";
+    public static final String DATA_SCOPE_SELF = "0";
 
     /**
      * 数据权限，1=本部门数据
      */
-    public static final String  DATA_SCOPE_DEPT = "1";
+    public static final String DATA_SCOPE_DEPT = "1";
 
     /**
      * 数据权限，2=本部门及以下数据
      */
-    public static final String  DATA_SCOPE_DEPT_DOWN = "2";
+    public static final String DATA_SCOPE_DEPT_DOWN = "2";
 
     /**
      * 数据权限，3=全部数据
      */
-    public static final String  DATA_SCOPE_ALL = "3";
+    public static final String DATA_SCOPE_ALL = "3";
 
     /**
      * 数据权限，4=自定义权限
      */
-    public static final String  DATA_SCOPE_CUSTOM = "4";
+    public static final String DATA_SCOPE_CUSTOM = "4";
 
     /**
      * 通用状态：正常
@@ -108,5 +108,24 @@ public class SystemConstant {
      * 通用状态：禁用
      */
     public static final String STATUS_DISABLE = "1";
+
+    /**
+     * OSS正在使用：否
+     */
+    public static final String IN_USE_NO = "0";
+    /**
+     * OSS正在使用：是
+     */
+    public static final String IN_USE_YES = "1";
+
+    /**
+     * 文件来源
+     */
+    public static final String FILE_FROM_AVATAR = "用户头像";
+
+    /**
+     * 图片类型
+     */
+    public static final String[] IMAGE_SUFFIX = {".bmp", ".gif", ".jpg", ".jpeg", ".png"};
 
 }

@@ -1,11 +1,14 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysPositionUserMapper;
 import cn.daenx.myadmin.system.po.SysPositionUser;
 import cn.daenx.myadmin.system.service.LoginUtilService;
+import cn.daenx.myadmin.system.service.SysPositionUserService;
 import cn.daenx.myadmin.system.vo.SysPositionAddVo;
 import cn.daenx.myadmin.system.vo.SysPositionPageVo;
+import cn.daenx.myadmin.system.vo.SysPositionUpdAuthUserVo;
 import cn.daenx.myadmin.system.vo.SysPositionUpdVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -28,6 +31,8 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     private SysPositionMapper sysPositionMapper;
     @Resource
     private SysPositionUserMapper sysPositionUserMapper;
+    @Resource
+    private SysPositionUserService sysPositionUserService;
     @Resource
     private LoginUtilService loginUtilService;
 
@@ -206,5 +211,49 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         wrapper.eq(SysPositionUser::getPositionId, id);
         Long count = sysPositionUserMapper.selectCount(wrapper);
         return count;
+    }
+
+    /**
+     * 取消授权用户
+     *
+     * @param vo
+     */
+    @Override
+    public void cancelAuthUser(SysPositionUpdAuthUserVo vo) {
+        String loginUserId = loginUtilService.getLoginUserId();
+        for (String userId : vo.getUserIds()) {
+            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
+                throw new MyException("禁止操作管理员");
+            }
+            if (loginUserId.equals(userId)) {
+                throw new MyException("禁止操作自己");
+            }
+        }
+        for (String userId : vo.getUserIds()) {
+            sysPositionUserService.delUserPosition(userId, vo.getPositionId());
+            loginUtilService.logoutByUserId(userId);
+        }
+    }
+
+    /**
+     * 保存授权用户
+     *
+     * @param vo
+     */
+    @Override
+    public void saveAuthUser(SysPositionUpdAuthUserVo vo) {
+        String loginUserId = loginUtilService.getLoginUserId();
+        for (String userId : vo.getUserIds()) {
+            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
+                throw new MyException("禁止操作管理员");
+            }
+            if (loginUserId.equals(userId)) {
+                throw new MyException("禁止操作自己");
+            }
+        }
+        for (String userId : vo.getUserIds()) {
+            sysPositionUserService.addUserPosition(userId, vo.getPositionId());
+            loginUtilService.logoutByUserId(userId);
+        }
     }
 }
