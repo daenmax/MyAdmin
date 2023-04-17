@@ -120,10 +120,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(vo.getId());
-        RedisUtil.del(RedisConstant.CONFIG + info.getKey());
-        if (info.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
-            RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
-        }
+        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
     }
 
     /**
@@ -149,10 +146,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(sysConfig.getId());
-        RedisUtil.del(RedisConstant.CONFIG + info.getKey());
-        if (info.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
-            RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
-        }
+        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
     }
 
     /**
@@ -177,7 +171,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 
     /**
      * 根据参数键名查询参数键值
-     * 未查询到或者被禁用了返回""
+     * 如果参数键名不存在或者未查询到，返回null
+     * 如果参数被禁用了，返回空字符串""
+     * 可根据此区别来进行你的业务逻辑
      *
      * @param key
      * @return
@@ -186,7 +182,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public String getConfigByKey(String key) {
         Object object = RedisUtil.getValue(RedisConstant.CONFIG + key);
         if (ObjectUtil.isEmpty(object)) {
-            return "";
+            return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
         if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
@@ -202,7 +198,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public void refreshCache() {
         RedisUtil.delBatch(RedisConstant.CONFIG + "*");
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysConfig::getStatus, SystemConstant.STATUS_NORMAL);
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
             RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig, null, null);

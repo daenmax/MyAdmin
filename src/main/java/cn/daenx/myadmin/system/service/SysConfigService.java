@@ -64,7 +64,9 @@ public interface SysConfigService extends IService<SysConfig> {
 
     /**
      * 根据参数键名查询参数键值
-     * 未查询到或者被禁用了返回""
+     * 如果参数键名不存在或者未查询到，返回null
+     * 如果参数被禁用了，返回空字符串""
+     * 可根据此区别来进行你的业务逻辑
      *
      * @param key
      * @return

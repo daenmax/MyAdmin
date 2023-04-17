@@ -62,6 +62,9 @@ public class SysConfigController {
 
     /**
      * 根据参数键名查询参数键值
+     * 如果参数键名不存在或者未查询到，data返回null
+     * 如果参数被禁用了，data返回空字符串""
+     * 可根据此区别来进行你的业务逻辑
      *
      * @param key 参数键名
      */
