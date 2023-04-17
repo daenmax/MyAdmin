@@ -3,6 +3,7 @@ package cn.daenx.myadmin.common.utils;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -10,7 +11,9 @@ import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -96,23 +99,13 @@ public class MyUtil {
      * @throws Exception
      */
     public static String getMd5(MultipartFile multipartFile) {
-        //获取文件的byte信息
-        byte[] uploadBytes = new byte[0];
+        InputStream inputStream;
         try {
-            uploadBytes = multipartFile.getBytes();
+            inputStream = new ByteArrayInputStream(multipartFile.getBytes());
         } catch (IOException e) {
-            throw new MyException("读取文件信息失败0x1");
+            throw new MyException("读取文件信息失败");
         }
-        //拿到一个MD5转换器
-        MessageDigest md5 = null;
-        try {
-            md5 = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            throw new MyException("读取文件信息失败0x2");
-        }
-        byte[] digest = md5.digest(uploadBytes);
-        //转换为16进制
-        return new BigInteger(1, digest).toString(16);
+        return SecureUtil.md5(inputStream);
     }
 
     /**

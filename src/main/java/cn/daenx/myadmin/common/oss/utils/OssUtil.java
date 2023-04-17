@@ -46,6 +46,13 @@ public class OssUtil {
         return handle(properties);
     }
 
+    /**
+     * 获取指定的OSS配置实例
+     */
+    public static OssClient getOssClientByOssProperties(OssProperties properties) {
+        return handle(properties);
+    }
+
     private static OssClient handle(OssProperties properties) {
         String name = properties.getName();
         OssClient client = clientMap.get(name);

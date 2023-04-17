@@ -25,8 +25,6 @@ import java.util.List;
 public class TestController {
 
 
-
-
     /**
      * 测试OSS
      *
@@ -42,6 +40,12 @@ public class TestController {
         String contentType = file.getContentType();
         OssClient ossClient = OssUtil.getOssClient();
         UploadResult upload = ossClient.uploadSuffix(file.getBytes(), suffix, contentType);
+        System.out.println(upload.getUrl());
+        if (ossClient.getOssProperties().getAccessPolicy().equals("0")) {
+            //存储桶为私有，需要单独获取文件链接
+            String privateUrl = ossClient.getPrivateUrl(upload.getFileName(), 120);
+            upload.setUrl(privateUrl);
+        }
         return Result.ok("上传成功", upload);
     }
 

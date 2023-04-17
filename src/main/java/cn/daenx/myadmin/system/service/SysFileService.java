@@ -37,4 +37,12 @@ public interface SysFileService extends IService<SysFile> {
      * @param ids
      */
     void deleteByIds(List<String> ids);
+
+    /**
+     * 查询文件列表，根据文件ID数组
+     *
+     * @param fileIds
+     * @return
+     */
+    List<SysFile> getListByIds(List<String> fileIds);
 }

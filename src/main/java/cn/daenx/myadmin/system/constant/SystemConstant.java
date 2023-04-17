@@ -124,6 +124,11 @@ public class SystemConstant {
     public static final String FILE_FROM_AVATAR = "用户头像";
 
     /**
+     * 文件来源
+     */
+    public static final String FILE_FROM_USER = "用户上传";
+
+    /**
      * 图片类型
      */
     public static final String[] IMAGE_SUFFIX = {".bmp", ".gif", ".jpg", ".jpeg", ".png"};

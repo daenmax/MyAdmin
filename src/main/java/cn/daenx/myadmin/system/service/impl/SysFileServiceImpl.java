@@ -1,17 +1,24 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.oss.core.OssClient;
+import cn.daenx.myadmin.common.oss.enums.AccessPolicyType;
 import cn.daenx.myadmin.common.oss.utils.OssUtil;
+import cn.daenx.myadmin.common.oss.vo.OssProperties;
 import cn.daenx.myadmin.common.oss.vo.UploadResult;
 import cn.daenx.myadmin.common.utils.MyUtil;
+import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysFilePageDto;
+import cn.daenx.myadmin.system.po.SysOssConfig;
 import cn.daenx.myadmin.system.vo.SysFilePageVo;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.po.TestData;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.crypto.SecureUtil;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -24,7 +31,9 @@ import cn.daenx.myadmin.system.mapper.SysFileMapper;
 import cn.daenx.myadmin.system.service.SysFileService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -32,6 +41,29 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     @Resource
     private SysFileMapper sysFileMapper;
 
+    /**
+     * 如果是私有存储，那么获取一个120秒有效的链接
+     *
+     * @param url
+     * @param path
+     * @param ossConfigId
+     * @return
+     */
+    private String transPrivateUrl(String url, String path, String ossConfigId) {
+        Object object = RedisUtil.getValue(RedisConstant.OSS + ossConfigId);
+        if (ObjectUtil.isEmpty(object)) {
+            throw new MyException("未找到OSS配置信息，请联系管理员");
+        }
+        OssProperties ossProperties = JSON.parseObject(JSON.toJSONString(object), OssProperties.class);
+        if (ossProperties != null) {
+            if (ossProperties.getAccessPolicy().equals(AccessPolicyType.PRIVATE.getType())) {
+                OssClient ossClient = OssUtil.getOssClientByOssProperties(ossProperties);
+                String privateUrl = ossClient.getPrivateUrl(path, 120);
+                return privateUrl;
+            }
+        }
+        return url;
+    }
 
     /**
      * 上传文件
@@ -59,6 +91,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
                         .size(sysFileDb.getFileSize())
                         .contentType(sysFileDb.getFileType())
                         .sysFileId(sysFileDb.getId())
+                        .originalName(sysFileDb.getOriginalName())
                         .build();
             }
         }
@@ -78,7 +111,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         sysFile.setOriginalName(originalName);
         sysFile.setFileName(upload.getFileName());
         sysFile.setFileSuffix(upload.getSuffix());
-        sysFile.setFileUrl(upload.getUrl());
+        sysFile.setFileUrl(transPrivateUrl(upload.getUrl(), upload.getFileName(), ossClient.getOssProperties().getId()));
         sysFile.setFileSize(upload.getSize());
         sysFile.setFileMd5(upload.getMd5());
         sysFile.setFileType(upload.getContentType());
@@ -87,6 +120,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         sysFile.setRemark(remark);
         sysFileMapper.insert(sysFile);
         upload.setSysFileId(sysFile.getId());
+        upload.setOriginalName(originalName);
         return upload;
     }
 
@@ -114,6 +148,10 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "sf.create_time", startTime, endTime);
         wrapper.eq("sf.is_delete", SystemConstant.IS_DELETE_NO);
         IPage<SysFilePageDto> iPage = sysFileMapper.getPageWrapper(vo.getPage(true), wrapper);
+        for (SysFilePageDto record : iPage.getRecords()) {
+            //如果是私有存储，那么获取一个120秒有效的链接
+            record.setFileUrl(transPrivateUrl(record.getFileUrl(), record.getFileName(), record.getOssId()));
+        }
         return iPage;
     }
 
@@ -130,9 +168,24 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         for (SysFile sysFile : sysFiles) {
             int i = sysFileMapper.deleteById(sysFile.getId());
             if (i > 0) {
-                OssClient ossClient = OssUtil.getOssClient();
+                OssClient ossClient = OssUtil.getOssClientByOssConfigId(sysFile.getOssId());
                 ossClient.delete(sysFile.getFileName());
             }
         }
+    }
+
+    /**
+     * 查询文件列表，根据文件ID数组
+     *
+     * @param fileIds
+     * @return
+     */
+    @Override
+    public List<SysFile> getListByIds(List<String> fileIds) {
+        List<SysFile> sysFiles = listByIds(fileIds);
+        for (SysFile sysFile : sysFiles) {
+            sysFile.setFileUrl(transPrivateUrl(sysFile.getFileUrl(), sysFile.getFileName(), sysFile.getOssId()));
+        }
+        return sysFiles;
     }
 }

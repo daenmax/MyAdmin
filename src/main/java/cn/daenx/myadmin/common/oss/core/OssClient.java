@@ -228,12 +228,12 @@ public class OssClient {
     /**
      * 获取私有URL链接
      *
-     * @param objectKey 对象KEY
-     * @param second    授权时间
+     * @param path   完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
+     * @param second 授权时间    单位秒
      */
-    public String getPrivateUrl(String objectKey, Integer second) {
+    public String getPrivateUrl(String path, Integer second) {
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                new GeneratePresignedUrlRequest(properties.getBucketName(), objectKey)
+                new GeneratePresignedUrlRequest(properties.getBucketName(), path)
                         .withMethod(HttpMethod.GET)
                         .withExpiration(new Date(System.currentTimeMillis() + 1000L * second));
         URL url = client.generatePresignedUrl(generatePresignedUrlRequest);

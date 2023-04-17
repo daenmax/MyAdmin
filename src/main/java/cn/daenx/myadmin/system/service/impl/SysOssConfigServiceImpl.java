@@ -32,7 +32,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         RedisUtil.del(RedisConstant.OSS_USE);
         for (SysOssConfig sysOssConfig : sysOssConfigs) {
             RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), sysOssConfig, null, null);
-            if (sysOssConfig.getStatus().equals(SystemConstant.IN_USE_YES)) {
+            if (sysOssConfig.getInUse().equals(SystemConstant.IN_USE_YES)) {
                 //正在使用的
                 RedisUtil.setValue(RedisConstant.OSS_USE, sysOssConfig, null, null);
             }

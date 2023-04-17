@@ -23,6 +23,12 @@ public class UploadResult {
     private String fileName;
 
     /**
+     * 原始文件名称
+     * 例如：大恩的头像.jpg
+     */
+    private String originalName;
+
+    /**
      * MD5
      * 通常就是eTag，例如：4879054b23eb68d156eb7d92906aa113
      */
