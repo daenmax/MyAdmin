@@ -15,13 +15,16 @@ import cn.daenx.myadmin.system.dto.SysFilePageDto;
 import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.vo.SysFilePageVo;
 import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.po.SysFile;
@@ -244,5 +247,32 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             sysFile.setFileUrl(transPrivateUrl(sysFile.getFileUrl(), sysFile.getFileName(), sysFile.getOssId()));
         }
         return sysFiles;
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param id       文件ID
+     * @param response
+     */
+    @Override
+    public void download(String id, HttpServletResponse response) {
+        SysFile sysFile = sysFileMapper.selectById(id);
+        if (sysFile == null) {
+            throw new MyException("文件不存在");
+        }
+        if (!sysFile.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            throw new MyException("该文件状态不可用");
+        }
+        MyUtil.setDownloadResponseHeaders(response, sysFile.getOriginalName());
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
+        OssClient ossClient = OssUtil.getOssClientByOssConfigId(sysFile.getOssId());
+        try (InputStream inputStream = ossClient.getObjectContent(sysFile.getFileName())) {
+            int available = inputStream.available();
+            IoUtil.copy(inputStream, response.getOutputStream(), available);
+            response.setContentLength(available);
+        } catch (Exception e) {
+            throw new MyException(e.getMessage());
+        }
     }
 }

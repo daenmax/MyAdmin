@@ -9,13 +9,16 @@ import cn.daenx.myadmin.system.po.SysFile;
 import cn.daenx.myadmin.system.service.SysFileService;
 import cn.daenx.myadmin.system.vo.SysFilePageVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,5 +93,16 @@ public class SysFileController {
     public Result avatar(@RequestPart("file") MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadImage(file, SystemConstant.FILE_FROM_USER);
         return Result.ok(uploadResult);
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param id 文件ID
+     */
+    @SaCheckPermission("system:file:download")
+    @GetMapping("/download/{id}")
+    public void download(@PathVariable String id, HttpServletResponse response) throws IOException {
+        sysFileService.download(id, response);
     }
 }

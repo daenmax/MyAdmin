@@ -9,16 +9,17 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +33,7 @@ public class MyUtil {
     /**
      * 检查后缀
      *
-     * @param suffix  后缀，例如：.jpg
+     * @param suffix            后缀，例如：.jpg
      * @param sysUploadConfigVo
      * @return
      */
@@ -138,5 +139,25 @@ public class MyUtil {
         BigDecimal kbDecimal = new BigDecimal(type == 1 ? "1024" : "1048576");
         BigDecimal sizeKB = sizeDecimal.divide(kbDecimal, 2, BigDecimal.ROUND_HALF_UP);
         return sizeKB;
+    }
+
+    /**
+     * 设置下载响应头
+     *
+     * @param response
+     * @param originalName 文件名
+     */
+    public static void setDownloadResponseHeaders(HttpServletResponse response, String originalName) {
+        String fileName = null;
+        try {
+            fileName = URLEncoder.encode(originalName, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        fileName = fileName.replaceAll("\\+", "%20");
+        response.addHeader("attachment; filename=", "Content-Disposition,download-filename");
+        response.addHeader("Access-Control-Expose-Headers", "Content-Disposition,download-filename");
+        response.setHeader("Content-disposition", "attachment; filename=\"" + fileName + "\";filename*=utf-8''" + fileName);
+        response.setHeader("download-filename", fileName);
     }
 }

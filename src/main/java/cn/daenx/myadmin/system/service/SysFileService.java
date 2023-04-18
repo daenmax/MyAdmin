@@ -6,6 +6,7 @@ import cn.daenx.myadmin.system.po.SysFile;
 import cn.daenx.myadmin.system.vo.SysFilePageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -63,4 +64,12 @@ public interface SysFileService extends IService<SysFile> {
      * @return
      */
     List<SysFile> getListByIds(List<String> fileIds);
+
+    /**
+     * 下载文件
+     *
+     * @param id       文件ID
+     * @param response
+     */
+    void download(String id, HttpServletResponse response);
 }
