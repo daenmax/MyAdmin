@@ -150,12 +150,12 @@ public class MyUtil {
     public static void setDownloadResponseHeaders(HttpServletResponse response, String originalName) {
         String fileName = null;
         try {
+            //对中文文件名进行编码
             fileName = URLEncoder.encode(originalName, StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
         fileName = fileName.replaceAll("\\+", "%20");
-        response.addHeader("attachment; filename=", "Content-Disposition,download-filename");
         response.addHeader("Access-Control-Expose-Headers", "Content-Disposition,download-filename");
         response.setHeader("Content-disposition", "attachment; filename=\"" + fileName + "\";filename*=utf-8''" + fileName);
         response.setHeader("download-filename", fileName);
