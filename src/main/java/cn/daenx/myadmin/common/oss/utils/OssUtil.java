@@ -54,19 +54,28 @@ public class OssUtil {
     }
 
     private static OssClient handle(OssProperties properties) {
-        String name = properties.getName();
-        OssClient client = clientMap.get(name);
+        String id = properties.getId();
+        OssClient client = clientMap.get(id);
         if (client == null) {
-            clientMap.put(name, new OssClient(properties));
-            log.info("创建OSS实例 key => {}", name);
-            return clientMap.get(name);
+            clientMap.put(id, new OssClient(properties));
+            log.info("创建OSS实例 key => {}，name => {}", id, properties.getName());
+            return clientMap.get(id);
         }
         // 配置不相同则重新构建
         if (!client.checkPropertiesSame(properties)) {
-            clientMap.put(name, new OssClient(properties));
-            log.info("重载OSS实例 key => {}", name);
-            return clientMap.get(name);
+            clientMap.put(id, new OssClient(properties));
+            log.info("重载OSS实例 key => {}，name => {}", id, properties.getName());
+            return clientMap.get(id);
         }
         return client;
+    }
+
+    /**
+     * 删除缓存
+     *
+     * @param key ossConfigId
+     */
+    public static void removeKey(String key) {
+        clientMap.remove(key);
     }
 }

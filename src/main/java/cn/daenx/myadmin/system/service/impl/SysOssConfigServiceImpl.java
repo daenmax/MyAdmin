@@ -1,14 +1,17 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
+import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.oss.utils.OssUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysPosition;
-import cn.daenx.myadmin.system.vo.SysFilePageVo;
-import cn.daenx.myadmin.system.vo.SysOssConfigPageVo;
-import cn.daenx.myadmin.system.vo.SysPositionPageVo;
+import cn.daenx.myadmin.system.mapper.SysFileMapper;
+import cn.daenx.myadmin.system.po.SysFile;
+import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
@@ -25,6 +28,8 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
 
     @Resource
     private SysOssConfigMapper sysOssConfigMapper;
+    @Resource
+    private SysFileMapper sysFileMapper;
 
 
     /**
@@ -89,5 +94,150 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         LambdaQueryWrapper<SysOssConfig> wrapper = getWrapper(vo);
         List<SysOssConfig> sysOssConfigs = sysOssConfigMapper.selectList(wrapper);
         return sysOssConfigs;
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public SysOssConfig getInfo(String id) {
+        return sysOssConfigMapper.selectById(id);
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    @Override
+    public void editInfo(SysOssConfigUpdVo vo) {
+        LambdaUpdateWrapper<SysOssConfig> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysOssConfig::getId, vo.getId());
+        wrapper.set(SysOssConfig::getName, vo.getName());
+        wrapper.set(SysOssConfig::getAccessKey, vo.getAccessKey());
+        wrapper.set(SysOssConfig::getSecretKey, vo.getSecretKey());
+        wrapper.set(SysOssConfig::getBucketName, vo.getBucketName());
+        wrapper.set(SysOssConfig::getPrefix, vo.getPrefix());
+        wrapper.set(SysOssConfig::getEndpoint, vo.getEndpoint());
+        wrapper.set(SysOssConfig::getDomain, vo.getDomain());
+        wrapper.set(SysOssConfig::getIsHttps, vo.getIsHttps());
+        wrapper.set(SysOssConfig::getRegion, vo.getRegion());
+        wrapper.set(SysOssConfig::getAccessPolicy, vo.getAccessPolicy());
+        wrapper.set(SysOssConfig::getStatus, vo.getStatus());
+        wrapper.set(SysOssConfig::getRemark, vo.getRemark());
+        int rows = sysOssConfigMapper.update(new SysOssConfig(), wrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
+        RedisUtil.setValue(RedisConstant.OSS + vo.getId(), getInfo(vo.getId()), null, null);
+    }
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    @Override
+    public void addInfo(SysOssConfigAddVo vo) {
+        SysOssConfig sysOssConfig = new SysOssConfig();
+        sysOssConfig.setName(vo.getName());
+        sysOssConfig.setAccessKey(vo.getAccessKey());
+        sysOssConfig.setSecretKey(vo.getSecretKey());
+        sysOssConfig.setBucketName(vo.getBucketName());
+        sysOssConfig.setPrefix(vo.getPrefix());
+        sysOssConfig.setEndpoint(vo.getEndpoint());
+        sysOssConfig.setDomain(vo.getDomain());
+        sysOssConfig.setIsHttps(vo.getIsHttps());
+        sysOssConfig.setRegion(vo.getRegion());
+        sysOssConfig.setAccessPolicy(vo.getAccessPolicy());
+        sysOssConfig.setStatus(vo.getStatus());
+        sysOssConfig.setRemark(vo.getRemark());
+        sysOssConfig.setInUse(SystemConstant.IN_USE_NO);
+        int insert = sysOssConfigMapper.insert(sysOssConfig);
+        if (insert < 1) {
+            throw new MyException("新增失败");
+        }
+        RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), getInfo(sysOssConfig.getId()), null, null);
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    @Override
+    public void deleteByIds(List<String> ids) {
+        int i = sysOssConfigMapper.deleteBatchIds(ids);
+        if (i < 1) {
+            throw new MyException("删除失败");
+        }
+        //删除所有库里的文件，但是不删除云上的
+        LambdaUpdateWrapper<SysFile> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.in(SysFile::getOssId, ids);
+        sysFileMapper.delete(wrapper);
+        for (String id : ids) {
+            //删除已经缓存的oss实例
+            OssUtil.removeKey(id);
+        }
+        //重新初始化数据到redis
+        initOssConfig();
+    }
+
+    /**
+     * 修改配置状态
+     *
+     * @param vo
+     */
+    @Override
+    public void changeStatus(ComStatusUpdVo vo) {
+        LambdaUpdateWrapper<SysOssConfig> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysOssConfig::getId, vo.getId());
+        wrapper.set(SysOssConfig::getStatus, vo.getStatus());
+        if (!vo.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            //不是启用，那么强制设置使用状态为否
+            wrapper.set(SysOssConfig::getInUse, SystemConstant.IN_USE_NO);
+        }
+        int rows = sysOssConfigMapper.update(new SysOssConfig(), wrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
+        //重新初始化数据到redis
+        initOssConfig();
+    }
+
+    /**
+     * 修改使用状态
+     *
+     * @param vo
+     */
+    @Override
+    public void changeInUse(ComStatusUpdVo vo) {
+        SysOssConfig info = getInfo(vo.getId());
+        if (!info.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            throw new MyException("OSS配置状态非正常，无法启用");
+        }
+        if (info.getInUse().equals(vo.getStatus())) {
+            throw new MyException("已是当前状态");
+        }
+        LambdaUpdateWrapper<SysOssConfig> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysOssConfig::getId, vo.getId());
+        wrapper.set(SysOssConfig::getInUse, vo.getStatus());
+        int rows = sysOssConfigMapper.update(new SysOssConfig(), wrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
+        info.setInUse(vo.getStatus());
+        if(vo.getStatus().equals(SystemConstant.IN_USE_YES)){
+            //启用，那么关闭其他配置的使用状态
+            LambdaUpdateWrapper<SysOssConfig> wrapper2 = new LambdaUpdateWrapper<>();
+            wrapper2.ne(SysOssConfig::getId, info.getId());
+            wrapper2.set(SysOssConfig::getInUse, SystemConstant.IN_USE_NO);
+            sysOssConfigMapper.update(new SysOssConfig(), wrapper2);
+        }
+        //重新初始化数据到redis
+        initOssConfig();
     }
 }
