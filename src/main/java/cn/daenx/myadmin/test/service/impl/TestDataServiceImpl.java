@@ -2,6 +2,7 @@ package cn.daenx.myadmin.test.service.impl;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.mapper.TestDataMapper;
@@ -43,6 +44,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         LambdaQueryWrapper<TestData> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), TestData::getTitle, vo.getTitle());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), TestData::getType, vo.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), TestData::getStatus, vo.getStatus());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), TestData::getContent, vo.getContent());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), TestData::getRemark, vo.getRemark());
         String startTime = vo.getStartTime();
@@ -76,6 +78,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         QueryWrapper<TestData> wrapper = new QueryWrapper<>();
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "td.type", vo.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "td.status", vo.getStatus());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
         String startTime = vo.getStartTime();
@@ -98,6 +101,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         testData.setTitle(vo.getTitle());
         testData.setContent(vo.getContent());
         testData.setType(vo.getType());
+        testData.setStatus(vo.getStatus());
         testData.setRemark(vo.getRemark());
         int insert = testDataMapper.insert(testData);
         if (insert < 1) {
@@ -130,6 +134,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         updateWrapper.set(TestData::getTitle, vo.getTitle());
         updateWrapper.set(TestData::getContent, vo.getContent());
         updateWrapper.set(TestData::getType, vo.getType());
+        updateWrapper.set(TestData::getStatus, vo.getStatus());
         updateWrapper.set(TestData::getRemark, vo.getRemark());
         int rows = testDataMapper.update(new TestData(), updateWrapper);
         if (rows < 1) {
@@ -161,6 +166,8 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     public List<TestDataPageDto> getAll(TestDataPageVo vo) {
         QueryWrapper<TestData> wrapper = new QueryWrapper<>();
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "td.type", vo.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "td.status", vo.getStatus());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
         String startTime = vo.getStartTime();
@@ -185,6 +192,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
             testData.setTitle(testDataVo.getTitle());
             testData.setContent(testDataVo.getContent());
             testData.setType(testDataVo.getType());
+            testData.setStatus(testDataVo.getStatus());
             testData.setRemark(testDataVo.getRemark());
             newList.add(testData);
         }
@@ -195,5 +203,22 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
             throw new MyException("导入失败：入库异常");
         }
         return dataList.size();
+    }
+
+    /**
+     * 测试数据-修改状态
+     *
+     * @param vo
+     */
+    @DataScope(alias = "test_data")
+    @Override
+    public void changeStatus(ComStatusUpdVo vo) {
+        LambdaUpdateWrapper<TestData> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(TestData::getId, vo.getId());
+        updateWrapper.set(TestData::getStatus, vo.getStatus());
+        int rows = testDataMapper.update(new TestData(), updateWrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
     }
 }

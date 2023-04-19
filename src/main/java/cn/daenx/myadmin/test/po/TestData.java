@@ -31,7 +31,7 @@ public class TestData extends BaseEntity implements Serializable {
     private String content;
 
     /**
-     * 文章类型，0=民生，1=科技
+     * 类型，0=民生，1=科技
      */
     @TableField(value = "type")
     private String type;
@@ -41,4 +41,10 @@ public class TestData extends BaseEntity implements Serializable {
      */
     @TableField(value = "remark")
     private String remark;
+
+    /**
+     * 状态，0=正常，1=禁用
+     */
+    @TableField(value = "`status`")
+    private String status;
 }

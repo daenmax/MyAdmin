@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.test.service;
 
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.po.TestData;
 import cn.daenx.myadmin.test.vo.TestDataImportVo;
@@ -81,4 +82,12 @@ public interface TestDataService extends IService<TestData> {
      * @return
      */
     Integer importData(List<TestDataImportVo> dataList);
+
+    /**
+     * 测试数据-修改状态
+     *
+     * @param vo
+     */
+    void changeStatus(ComStatusUpdVo vo);
+
 }

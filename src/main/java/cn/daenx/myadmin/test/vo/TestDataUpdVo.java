@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.test.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -10,5 +11,6 @@ public class TestDataUpdVo {
     private String title;
     private String content;
     private String type;
+    private String status;
     private String remark;
 }

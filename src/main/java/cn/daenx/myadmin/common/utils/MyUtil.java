@@ -20,6 +20,9 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +32,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class MyUtil {
+    /**
+     * 13位时间戳转LocalDateTime
+     *
+     * @param timestamp 例如：System.currentTimeMillis()
+     * @return
+     */
+    public static LocalDateTime toLocalDateTime(long timestamp) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneOffset.of("+8"));
+        return localDateTime;
+    }
 
     /**
      * 检查后缀

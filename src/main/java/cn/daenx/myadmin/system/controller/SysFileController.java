@@ -1,5 +1,7 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.annotation.Log;
+import cn.daenx.myadmin.common.enums.LogOperTypeEnum;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.oss.vo.UploadResult;
 import cn.daenx.myadmin.common.vo.Result;
@@ -76,6 +78,7 @@ public class SysFileController {
      *
      * @return
      */
+    @Log(name = "上传文件", type = LogOperTypeEnum.UPLOAD, recordParams = false, recordResult = true)
     @SaCheckPermission("system:file:upload")
     @PostMapping("/uploadFile")
     public Result upload(@RequestPart("file") MultipartFile file) {
@@ -88,6 +91,7 @@ public class SysFileController {
      *
      * @return
      */
+    @Log(name = "上传图片", type = LogOperTypeEnum.UPLOAD, recordParams = false, recordResult = true)
     @SaCheckPermission("system:file:upload")
     @PostMapping("/uploadImage")
     public Result avatar(@RequestPart("file") MultipartFile file) {
@@ -100,9 +104,10 @@ public class SysFileController {
      *
      * @param id 文件ID
      */
+    @Log(name = "下载文件", type = LogOperTypeEnum.DOWNLOAD, recordParams = true, recordResult = false)
     @SaCheckPermission("system:file:download")
     @GetMapping("/download/{id}")
-    public void download(@PathVariable String id, HttpServletResponse response) throws IOException {
+    public void download(@PathVariable String id, HttpServletResponse response) {
         sysFileService.download(id, response);
     }
 }
