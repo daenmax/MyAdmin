@@ -2,8 +2,10 @@ package cn.daenx.myadmin.test.service.impl;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysDict;
+import cn.daenx.myadmin.system.vo.TestEventVo;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.mapper.TestDataMapper;
 import cn.daenx.myadmin.test.po.TestData;
@@ -20,6 +22,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,9 +32,36 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
 public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> implements TestDataService {
     @Resource
     private TestDataMapper testDataMapper;
+
+    @Async
+    @EventListener(classes = TestEventVo.class)
+    public void avs(TestEventVo testEventVo) {
+        log.info("asd");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("我开始了");
+        log.info(testEventVo.getTitle());
+    }
+
+    @Async
+    @EventListener
+    public void avsb(TestEventVo testEventVo) {
+        log.info("gfhdfdgh");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("我开始了111");
+        log.info(testEventVo.getTitle());
+    }
 
     /**
      * 测试数据分页列表_MP分页插件
