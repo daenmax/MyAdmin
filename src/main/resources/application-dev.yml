@@ -14,6 +14,15 @@ springdoc:
 
 
 spring:
+  servlet:
+    # 上传文件或者请求包体最大大小设置
+    # 此处优先级高于系统参数里配置的限制策略
+    multipart:
+      # 单个文件的最大大小
+      max-file-size: 5MB
+      # 请求包体总数据的大小
+      max-request-size: 10MB
+
   # 数据库配置
   datasource:
     dynamic:

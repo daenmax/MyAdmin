@@ -110,7 +110,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         try {
             upload = ossClient.uploadSuffix(file.getBytes(), suffix, contentType);
         } catch (IOException e) {
-            throw new MyException("上传文件失败[" + e.getMessage() + "]");
+            throw new MyException("上传文件失败[" + OssUtil.transErrMsg(e.getMessage()) + "]");
         }
         SysFile sysFile = new SysFile();
         sysFile.setOriginalName(originalName);
@@ -272,7 +272,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             IoUtil.copy(inputStream, response.getOutputStream(), available);
             response.setContentLength(available);
         } catch (Exception e) {
-            throw new MyException(e.getMessage());
+            throw new MyException("下载文件失败[" + OssUtil.transErrMsg(e.getMessage()) + "]");
         }
     }
 }

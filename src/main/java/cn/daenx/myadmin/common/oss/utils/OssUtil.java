@@ -78,4 +78,17 @@ public class OssUtil {
     public static void removeKey(String key) {
         clientMap.remove(key);
     }
+
+    /**
+     * 翻译错误信息
+     *
+     * @param msg
+     * @return
+     */
+    public static String transErrMsg(String msg) {
+        if (msg.contains("The specified key does not exist")) {
+            return "桶中该文件对象已不存在";
+        }
+        return msg;
+    }
 }

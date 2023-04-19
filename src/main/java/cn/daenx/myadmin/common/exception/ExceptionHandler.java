@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 
 /**
@@ -64,6 +65,16 @@ public class ExceptionHandler {
     public Result handleCannotFindDataSourceException(MyBatisSystemException e, HttpServletRequest request) {
         String msg = e.getMessage();
         log.error("请求地址->{}, Mybatis系统异常", request.getRequestURI(), e);
+        return Result.error(msg);
+    }
+
+    /**
+     * 上传文件大小超出异常
+     */
+    @org.springframework.web.bind.annotation.ExceptionHandler(MaxUploadSizeExceededException.class)
+    public Result handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e, HttpServletRequest request) {
+        String msg = "超过系统设定的最大上传文件大小";
+        log.error("请求地址->{}, 超过系统设定的最大上传文件大小", request.getRequestURI(), e.getMessage());
         return Result.error(msg);
     }
 
