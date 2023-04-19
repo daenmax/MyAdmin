@@ -1,15 +1,11 @@
 package cn.daenx.myadmin.test.controller;
 
-import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.oss.core.OssClient;
 import cn.daenx.myadmin.common.oss.utils.OssUtil;
 import cn.daenx.myadmin.common.oss.vo.UploadResult;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.vo.TestEventVo;
-import cn.daenx.myadmin.system.vo.TestEventVo2;
 import cn.dev33.satoken.annotation.SaIgnore;
-import cn.hutool.extra.spring.SpringUtil;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -27,18 +23,6 @@ import java.util.List;
 @RequestMapping("/test")
 @Slf4j
 public class TestController {
-
-    @GetMapping("/abd")
-    public Result abs() {
-        TestEventVo2 testEventVo = new TestEventVo2();
-        testEventVo.setTitle("按时");
-        SpringUtil.getApplicationContext().publishEvent(testEventVo);
-        if (1 == 1) {
-            throw new MyException("11");
-        }
-        return Result.ok("上传成功");
-    }
-
 
     /**
      * 测试OSS
