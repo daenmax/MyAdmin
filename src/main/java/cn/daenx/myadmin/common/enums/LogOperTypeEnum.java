@@ -27,9 +27,6 @@ public enum LogOperTypeEnum {
     UPLOAD("7", "上传"),
 
     DOWNLOAD("8", "下载");
-    DOWNLOAD("8", "分页");
-    DOWNLOAD("8", "下载模板");
-    DOWNLOAD("8", "修改状态");
 
     private String code;
     private String desc;

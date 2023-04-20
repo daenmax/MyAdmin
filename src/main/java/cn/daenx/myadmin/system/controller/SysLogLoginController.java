@@ -28,7 +28,7 @@ public class SysLogLoginController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:logLogin:list")
+    @SaCheckPermission("monitor:logLogin:list")
     @GetMapping(value = "/list")
     public Result list(SysLogLoginPageVo vo) {
         IPage<SysLogLogin> page = sysLogLoginService.getPage(vo);
@@ -38,7 +38,7 @@ public class SysLogLoginController {
     /**
      * 导出
      */
-    @SaCheckPermission("system:logLogin:export")
+    @SaCheckPermission("monitor:logLogin:export")
     @PostMapping("/export")
     public void export(SysLogLoginPageVo vo, HttpServletResponse response) {
         List<SysLogLogin> list = sysLogLoginService.getAll(vo);
@@ -52,7 +52,7 @@ public class SysLogLoginController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:logLogin:remove")
+    @SaCheckPermission("monitor:logLogin:remove")
     @DeleteMapping()
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
@@ -68,7 +68,7 @@ public class SysLogLoginController {
      *
      * @return
      */
-    @SaCheckPermission("system:logLogin:remove")
+    @SaCheckPermission("monitor:logLogin:remove")
     @DeleteMapping("/clean")
     public Result clean() {
         sysLogLoginService.clean();

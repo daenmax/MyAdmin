@@ -3,12 +3,12 @@ package cn.daenx.myadmin.system.po;
 import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.excel.DictConverter;
 import cn.daenx.myadmin.common.vo.BaseEntity;
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -21,13 +21,15 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
-    * 操作日志表
-    */
+ * 操作日志表
+ */
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "sys_log_oper")
+//导出时忽略没有@ExcelProperty的字段
+@ExcelIgnoreUnannotated
 public class SysLogOper extends BaseEntity implements Serializable {
     @ExcelProperty(value = "操作ID")
     @TableId(value = "id", type = IdType.ASSIGN_UUID)

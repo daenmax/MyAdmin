@@ -2,20 +2,15 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.ExcelUtil;
-import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.po.SysDict;
 import cn.daenx.myadmin.system.po.SysLogOper;
-import cn.daenx.myadmin.system.po.SysOssConfig;
 import cn.daenx.myadmin.system.service.SysLogOperService;
-import cn.daenx.myadmin.system.service.SysOssConfigService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +28,7 @@ public class SysLogOperController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:logOper:list")
+    @SaCheckPermission("monitor:logOper:list")
     @GetMapping(value = "/list")
     public Result list(SysLogOperPageVo vo) {
         IPage<SysLogOper> page = sysLogOperService.getPage(vo);
@@ -43,7 +38,7 @@ public class SysLogOperController {
     /**
      * 导出
      */
-    @SaCheckPermission("system:logOper:export")
+    @SaCheckPermission("monitor:logOper:export")
     @PostMapping("/export")
     public void export(SysLogOperPageVo vo, HttpServletResponse response) {
         List<SysLogOper> list = sysLogOperService.getAll(vo);
@@ -57,7 +52,7 @@ public class SysLogOperController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:logOper:remove")
+    @SaCheckPermission("monitor:logOper:remove")
     @DeleteMapping()
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
@@ -73,7 +68,7 @@ public class SysLogOperController {
      *
      * @return
      */
-    @SaCheckPermission("system:logOper:remove")
+    @SaCheckPermission("monitor:logOper:remove")
     @DeleteMapping("/clean")
     public Result clean() {
         sysLogOperService.clean();

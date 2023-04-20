@@ -25,6 +25,7 @@ public class BaseEntity<T extends Model<T>> extends Model<T> {
     /**
      * 创建人ID
      */
+    @ExcelProperty(value = "创建人ID")
     @TableField(fill = FieldFill.INSERT)
     private String createId;
 
