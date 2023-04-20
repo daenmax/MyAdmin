@@ -32,7 +32,6 @@ import cn.daenx.myadmin.system.mapper.SysFileMapper;
 import cn.daenx.myadmin.system.service.SysFileService;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -184,14 +183,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         return upload(file, remark);
     }
 
-    /**
-     * 分页列表
-     *
-     * @param vo
-     * @return
-     */
-    @Override
-    public IPage<SysFilePageDto> getPage(SysFilePageVo vo) {
+    private QueryWrapper<SysFile> getWrapper(SysFilePageVo vo) {
         QueryWrapper<SysFile> wrapper = new QueryWrapper<>();
         wrapper.like(ObjectUtil.isNotEmpty(vo.getOriginalName()), "sf.original_name", vo.getOriginalName());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getFileName()), "sf.file_name", vo.getFileName());
@@ -207,6 +199,18 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "sf.create_time", startTime, endTime);
         wrapper.eq("sf.is_delete", SystemConstant.IS_DELETE_NO);
+        return wrapper;
+    }
+
+    /**
+     * 分页列表
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public IPage<SysFilePageDto> getPage(SysFilePageVo vo) {
+        QueryWrapper<SysFile> wrapper = getWrapper(vo);
         IPage<SysFilePageDto> iPage = sysFileMapper.getPageWrapper(vo.getPage(true), wrapper);
         for (SysFilePageDto record : iPage.getRecords()) {
             //如果是私有存储，那么获取一个120秒有效的链接
