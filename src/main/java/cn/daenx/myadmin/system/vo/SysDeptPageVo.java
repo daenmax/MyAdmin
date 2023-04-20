@@ -8,5 +8,6 @@ public class SysDeptPageVo extends BasePageVo {
     private String id;
     private String name;
     private String summary;
+    private String remark;
     private String status;
 }

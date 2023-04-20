@@ -65,6 +65,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getId()), SysDept::getId, vo.getId());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDept::getName, vo.getName());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getSummary()), SysDept::getSummary, vo.getSummary());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysDept::getRemark, vo.getRemark());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDept::getStatus, vo.getStatus());
         wrapper.eq(SysDept::getIsDelete, 0);
         String startTime = vo.getStartTime();
