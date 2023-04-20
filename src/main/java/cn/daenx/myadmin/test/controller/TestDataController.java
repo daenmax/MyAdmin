@@ -38,7 +38,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据-分页列表_MP分页插件", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:list")
     @GetMapping("/list1")
     public Result list1(TestDataPageVo vo) {
@@ -52,7 +52,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据-分页列表_自己写的SQL", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:list")
     @GetMapping("/list2")
     public Result list2(TestDataPageVo vo) {
@@ -66,7 +66,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据-分页列表_MP自定义SQL", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:list")
     @GetMapping("/list3")
     public Result list3(TestDataPageVo vo) {
@@ -80,7 +80,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据-新增", type = LogOperTypeEnum.ADD, recordParams = true, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:add")
     @PostMapping
     public Result add(@Validated @RequestBody cn.daenx.myadmin.test.vo.TestDataAddVo vo) {
@@ -94,7 +94,7 @@ public class TestDataController {
      * @param id
      * @return
      */
-    @Log(name = "测试数据-查询", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
@@ -108,7 +108,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据-修改", type = LogOperTypeEnum.EDIT, recordParams = true, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:edit")
     @PutMapping
     public Result edit(@Validated @RequestBody TestDataUpdVo vo) {
@@ -122,7 +122,7 @@ public class TestDataController {
      * @param ids
      * @return
      */
-    @Log(name = "测试数据-删除", type = LogOperTypeEnum.REMOVE, recordParams = true, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:remove")
     @DeleteMapping()
     public Result remove(@RequestBody List<String> ids) {
@@ -136,7 +136,7 @@ public class TestDataController {
     /**
      * 测试数据-导出
      */
-    @Log(name = "测试数据-导出", type = LogOperTypeEnum.EXPORT, recordParams = true, recordResult = false)
+    @Log(name = "测试数据", type = LogOperTypeEnum.EXPORT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:export")
     @PostMapping("/export")
     public void export(TestDataPageVo vo, HttpServletResponse response) {
@@ -147,7 +147,7 @@ public class TestDataController {
     /**
      * 测试数据-导入
      */
-    @Log(name = "测试数据-导入", type = LogOperTypeEnum.IMPORT, recordParams = false, recordResult = true)
+    @Log(name = "测试数据", type = LogOperTypeEnum.IMPORT, recordParams = false, recordResult = true)
     @SaCheckPermission("test:data:import")
     @PostMapping("/importData")
     public Result importData(@RequestPart("file") MultipartFile file) throws IOException {
@@ -172,7 +172,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据-修改状态", type = LogOperTypeEnum.OTHER, recordParams = true, recordResult = false)
+    @Log(name = "测试数据-修改状态", type = LogOperTypeEnum.EDIT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:edit")
     @PutMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {

@@ -123,7 +123,7 @@ public class LogAspect {
         // 响应时间
         sysLogOper.setResponseTime(LocalDateTime.now());
         // 执行耗时
-        sysLogOper.setExecuteTime(String.valueOf(System.currentTimeMillis() - start));
+        sysLogOper.setExecuteTime((int) (System.currentTimeMillis() - start));
         // 入库
         sysLogOperService.saveOper(sysLogOper);
     }
