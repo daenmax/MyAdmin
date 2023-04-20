@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.aspect;
+package cn.daenx.myadmin.common.aspectj;
 
 
 import cn.daenx.myadmin.common.annotation.Log;
