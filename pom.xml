@@ -26,6 +26,7 @@
         <hutool.version>5.8.18</hutool.version>
         <easyexcel.version>3.2.1</easyexcel.version>
         <aws-s3.version>1.12.450</aws-s3.version>
+        <oshi.version>6.4.1</oshi.version>
     </properties>
     <profiles>
         <profile>
@@ -174,6 +175,12 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>${aws-s3.version}</version>
+        </dependency>
+        <!-- 获取系统信息 -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>${oshi.version}</version>
         </dependency>
 
 
