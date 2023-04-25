@@ -190,12 +190,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 注册用户
      *
      * @param sysUser
-     * @param roleId
+     * @param roleCodes     角色编码
+     * @param positionCodes 岗位编码
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean registerUser(SysUser sysUser, String roleId) {
+    public Boolean registerUser(SysUser sysUser, String[] roleCodes, String[] positionCodes) {
         sysUserMapper.insert(sysUser);
         //创建用户、详细信息关联
         SysUserDetail sysUserDetail = new SysUserDetail();
@@ -204,10 +205,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!detail) {
             throw new MyException("创建用户信息失败");
         }
-        List<String> roleIds = new ArrayList<>();
-        roleIds.add(roleId);
+
         //创建用户、角色关联
+        LambdaQueryWrapper<SysRole> wrapperRole = new LambdaQueryWrapper<>();
+        wrapperRole.in(SysRole::getCode, Arrays.asList(roleCodes));
+        wrapperRole.eq(SysRole::getStatus, SystemConstant.STATUS_NORMAL);
+        List<SysRole> sysRoleList = sysRoleService.list(wrapperRole);
+        List<String> roleIds = MyUtil.joinToList(sysRoleList, SysRole::getId);
         sysRoleUserService.handleUserRole(sysUser.getId(), roleIds);
+
+        //创建用户、岗位关联
+        if (ObjectUtil.isNotEmpty(positionCodes) && positionCodes.length > 0) {
+            LambdaQueryWrapper<SysPosition> wrapperPosition = new LambdaQueryWrapper<>();
+            wrapperPosition.in(SysPosition::getCode, Arrays.asList(roleCodes));
+            wrapperPosition.eq(SysPosition::getStatus, SystemConstant.STATUS_NORMAL);
+            List<SysPosition> sysPositionList = sysPositionService.list(wrapperPosition);
+            List<String> positionIds = MyUtil.joinToList(sysPositionList, SysPosition::getId);
+            sysPositionUserService.handleUserPosition(sysUser.getId(), positionIds);
+        }
         return true;
     }
 

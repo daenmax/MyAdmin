@@ -345,4 +345,17 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<SysDept> collect = list.stream().filter(item -> item.getParentId().equals(waitRemoveList.get(0).getId())).collect(Collectors.toList());
         removeList(list, collect);
     }
+
+    /**
+     * 根据部门编号获取部门
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public SysDept getSysDeptByCode(String code) {
+        LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysDept::getCode, code);
+        return sysDeptMapper.selectOne(wrapper);
+    }
 }

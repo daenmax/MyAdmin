@@ -96,4 +96,13 @@ public interface SysConfigService extends IService<SysConfig> {
      */
     SysUploadConfigVo getSysUploadFileSuffixs();
 
+    /**
+     * 获取允许上传的图片后缀
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    SysRegisterDefaultInfoVo getSysRegisterDefaultInfoVo();
+
 }

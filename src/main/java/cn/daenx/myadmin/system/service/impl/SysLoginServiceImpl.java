@@ -8,14 +8,12 @@ import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
-import cn.daenx.myadmin.system.po.SysMenu;
-import cn.daenx.myadmin.system.po.SysPosition;
-import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.po.SysUser;
+import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
@@ -33,6 +31,8 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private SysRoleService sysRoleService;
     @Resource
+    private SysDeptService sysDeptService;
+    @Resource
     private SysMenuService sysMenuService;
     @Resource
     private SysLogLoginService sysLogLoginService;
@@ -40,6 +40,8 @@ public class SysLoginServiceImpl implements SysLoginService {
     private SysPositionService sysPositionService;
     @Resource
     private LoginUtilService loginUtilService;
+    @Resource
+    private SysConfigService sysConfigService;
 
     /**
      * 校验图片验证码
@@ -48,8 +50,8 @@ public class SysLoginServiceImpl implements SysLoginService {
      * @param uuid
      */
     private void validatedCaptchaImg(String code, String uuid) {
-        //TODO 校验验证码，读取系统参数
-        if (1 == 1) {
+        Boolean lockCaptchaImg = Boolean.parseBoolean(sysConfigService.getConfigByKey("sys.lock.captchaImg"));
+        if (lockCaptchaImg) {
             if (ObjectUtil.isEmpty(code) || ObjectUtil.isEmpty(uuid)) {
                 throw new MyException("验证码相关参数不能为空");
             }
@@ -153,17 +155,34 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Override
     public void register(SysRegisterVo vo) {
         validatedCaptchaImg(vo.getCode(), vo.getUuid());
-        //TODO 检查系统是否开启了注册功能
         //判空
         if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
             throw new MyException("账号和密码不能为空");
         }
-        //TODO 查询默认用户类型user_type
-        String userType = "2";
-        //TODO 查询默认部门ID
-        String deptId = "105";
-        //TODO 查询默认角色ID
-        String roleId = "2";
+        Boolean lockRegister = Boolean.parseBoolean(sysConfigService.getConfigByKey("sys.lock.register"));
+        if (!lockRegister) {
+            throw new MyException("系统未开放注册");
+        }
+        SysRegisterDefaultInfoVo sysRegisterDefaultInfoVo = sysConfigService.getSysRegisterDefaultInfoVo();
+        if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo)) {
+            throw new MyException("系统当前无法注册[0x1]");
+        }
+        if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getUserType())) {
+            throw new MyException("系统当前无法注册[0x2]");
+        }
+        if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getDeptCode())) {
+            throw new MyException("系统当前无法注册[0x2]");
+        }
+        if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getRoleCodes())) {
+            throw new MyException("系统当前无法注册[0x3]");
+        }
+        if (sysRegisterDefaultInfoVo.getRoleCodes().length == 0) {
+            throw new MyException("系统当前无法注册[0x3]");
+        }
+        SysDept sysDeptByCode = sysDeptService.getSysDeptByCode(sysRegisterDefaultInfoVo.getDeptCode());
+        if (!sysDeptByCode.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            throw new MyException("系统当前无法注册[0x4]");
+        }
         //查询账号是否已存在
         SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
         if (ObjectUtil.isNotEmpty(sysUser)) {
@@ -171,12 +190,12 @@ public class SysLoginServiceImpl implements SysLoginService {
         }
         String sha256 = SaSecureUtil.sha256(vo.getPassword());
         sysUser = new SysUser();
-        sysUser.setDeptId(deptId);
+        sysUser.setDeptId(sysDeptByCode.getId());
         sysUser.setUsername(vo.getUsername());
         sysUser.setPassword(sha256);
         sysUser.setStatus(SystemConstant.USER_STATUS_NORMAL);
-        sysUser.setUserType(userType);
-        sysUserService.registerUser(sysUser, roleId);
+        sysUser.setUserType(sysRegisterDefaultInfoVo.getUserType());
+        sysUserService.registerUser(sysUser, sysRegisterDefaultInfoVo.getRoleCodes(), sysRegisterDefaultInfoVo.getPositionCodes());
     }
 
     /**

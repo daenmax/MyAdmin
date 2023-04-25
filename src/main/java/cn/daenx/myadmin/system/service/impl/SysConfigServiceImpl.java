@@ -4,10 +4,7 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.vo.SysConfigAddVo;
-import cn.daenx.myadmin.system.vo.SysConfigPageVo;
-import cn.daenx.myadmin.system.vo.SysConfigUpdVo;
-import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
+import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -242,5 +239,26 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         SysUploadConfigVo sysUploadConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysUploadConfigVo.class);
         return sysUploadConfigVo;
+    }
+
+    /**
+     * 获取允许上传的图片后缀
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    @Override
+    public SysRegisterDefaultInfoVo getSysRegisterDefaultInfoVo() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.register.default.info");
+        if (ObjectUtil.isEmpty(object)) {
+            return null;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysRegisterDefaultInfoVo sysRegisterDefaultInfoVo = JSONObject.parseObject(sysConfig.getValue(), SysRegisterDefaultInfoVo.class);
+        return sysRegisterDefaultInfoVo;
     }
 }
