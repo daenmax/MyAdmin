@@ -98,4 +98,12 @@ public interface SysDeptService extends IService<SysDept> {
      * @param waitRemoveList
      */
     void removeList(List<SysDept> list, List<SysDept> waitRemoveList);
+    /**
+     * 检查是否存在，已存在返回true
+     *
+     * @param code
+     * @param nowId 排除ID
+     * @return
+     */
+    Boolean checkCodeExist(String code, String nowId);
 }

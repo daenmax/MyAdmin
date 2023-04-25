@@ -211,6 +211,22 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     /**
+     * 检查是否存在，已存在返回true
+     *
+     * @param code
+     * @param nowId 排除ID
+     * @return
+     */
+    @Override
+    public Boolean checkCodeExist(String code, String nowId) {
+        LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysDept::getCode, code);
+        wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysDept::getId, nowId);
+        boolean exists = sysDeptMapper.exists(wrapper);
+        return exists;
+    }
+
+    /**
      * 查询
      *
      * @param id
@@ -233,6 +249,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public void editInfo(SysDeptUpdVo vo) {
         if (!checkScope(vo.getId())) {
             throw new MyException("你无权限操作此数据");
+        }
+        if (checkCodeExist(vo.getCode(), vo.getId())) {
+            throw new MyException("部门编号已存在");
         }
         //校验父ID
         SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
@@ -264,6 +283,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public void addInfo(SysDeptAddVo vo) {
+        if (checkCodeExist(vo.getCode(), null)) {
+            throw new MyException("部门编号已存在");
+        }
         //校验父ID
         SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
         if (sysDeptParent == null) {
@@ -315,7 +337,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @param waitRemoveList
      */
     @Override
-    public void     removeList(List<SysDept> list, List<SysDept> waitRemoveList) {
+    public void removeList(List<SysDept> list, List<SysDept> waitRemoveList) {
         if (waitRemoveList == null || waitRemoveList.size() == 0) {
             return;
         }

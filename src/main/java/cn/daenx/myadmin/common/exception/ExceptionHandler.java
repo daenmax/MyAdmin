@@ -83,7 +83,8 @@ public class ExceptionHandler {
      */
     @org.springframework.web.bind.annotation.ExceptionHandler(MyException.class)
     public Result handleMyException(MyException e) {
-        log.error(e.getMessage(), e);
+//        log.error(e.getMessage(), e);
+        log.error(e.getMessage());
         String msg = e.getMessage();
         return Result.error(msg);
     }
