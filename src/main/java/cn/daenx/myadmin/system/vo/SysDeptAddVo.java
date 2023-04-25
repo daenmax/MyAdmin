@@ -19,6 +19,12 @@ public class SysDeptAddVo {
     private String name;
 
     /**
+     * 部门编号
+     */
+    @NotBlank(message = "部门编号不能为空")
+    private String code;
+
+    /**
      * 部门简介
      */
     private String summary;

@@ -64,6 +64,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getId()), SysDept::getId, vo.getId());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDept::getName, vo.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDept::getCode, vo.getCode());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getSummary()), SysDept::getSummary, vo.getSummary());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysDept::getRemark, vo.getRemark());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDept::getStatus, vo.getStatus());
@@ -242,6 +243,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         wrapper.eq(SysDept::getId, vo.getId());
         wrapper.set(SysDept::getParentId, vo.getParentId());
         wrapper.set(SysDept::getName, vo.getName());
+        wrapper.set(SysDept::getCode, vo.getCode());
         wrapper.set(SysDept::getSummary, vo.getSummary());
         wrapper.set(SysDept::getLeaderUserId, vo.getLeaderUserId());
         wrapper.set(SysDept::getSort, vo.getSort());
@@ -270,6 +272,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         SysDept sysDept = new SysDept();
         sysDept.setParentId(vo.getParentId());
         sysDept.setName(vo.getName());
+        sysDept.setCode(vo.getCode());
         sysDept.setSummary(vo.getSummary());
         sysDept.setLeaderUserId(vo.getLeaderUserId());
         sysDept.setSort(vo.getSort());

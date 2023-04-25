@@ -39,6 +39,12 @@ public class SysDept extends BaseEntity implements Serializable {
     private String name;
 
     /**
+     * 部门编号
+     */
+    @TableField(value = "`code`")
+    private String code;
+
+    /**
      * 部门简介
      */
     @TableField(value = "summary")
