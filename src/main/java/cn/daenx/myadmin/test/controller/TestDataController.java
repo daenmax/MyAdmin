@@ -84,7 +84,7 @@ public class TestDataController {
     @SaCheckPermission("test:data:add")
     @PostMapping
     public Result add(@Validated @RequestBody cn.daenx.myadmin.test.vo.TestDataAddVo vo) {
-        testDataService.addData(vo);
+        testDataService.addInfo(vo);
         return Result.ok();
     }
 
@@ -98,7 +98,7 @@ public class TestDataController {
     @SaCheckPermission("test:data:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
-        TestData testData = testDataService.getData(id);
+        TestData testData = testDataService.getInfo(id);
         return Result.ok(testData);
     }
 
@@ -112,7 +112,7 @@ public class TestDataController {
     @SaCheckPermission("test:data:edit")
     @PutMapping
     public Result edit(@Validated @RequestBody TestDataUpdVo vo) {
-        testDataService.editData(vo);
+        testDataService.editInfo(vo);
         return Result.ok();
     }
 
@@ -153,7 +153,7 @@ public class TestDataController {
     public Result importData(@RequestPart("file") MultipartFile file) throws IOException {
         ExcelResult<TestDataImportVo> excelResult = ExcelUtil.importExcel(file.getInputStream(), TestDataImportVo.class, true);
         List<TestDataImportVo> dataList = excelResult.getList();
-        Integer num = testDataService.importData(dataList);
+        Integer num = testDataService.importInfo(dataList);
         return Result.ok("成功导入" + num + "条");
     }
 

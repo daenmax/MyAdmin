@@ -22,4 +22,36 @@
     id, parent_id, title, content, `type`, `status`, remark, create_id, create_time, 
     update_id, update_time, is_delete
   </sql>
+
+  <update id="updateByParentId">
+    UPDATE test_data_tree
+    SET STATUS = #{status}
+    WHERE
+        ID IN (
+        WITH RECURSIVE recursion ( id, title, parent_id ) AS (
+          SELECT
+            sd1.id,
+            sd1.title,
+            sd1.parent_id
+          FROM
+            test_data_tree sd1
+          WHERE
+            sd1.id = #{parentId} UNION ALL
+          SELECT
+            sd2.id,
+            sd2.title,
+            sd2.parent_id
+          FROM
+            test_data_tree sd2,
+            recursion t2
+          WHERE
+            sd2.parent_id = t2.id
+        ) SELECT
+          t1.id
+        FROM
+          recursion t1
+        WHERE
+          t1.id != #{parentId}
+      )
+  </update>
 </mapper>

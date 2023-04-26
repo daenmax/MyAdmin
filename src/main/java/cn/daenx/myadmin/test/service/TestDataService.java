@@ -43,7 +43,7 @@ public interface TestDataService extends IService<TestData> {
      *
      * @param vo
      */
-    void addData(TestDataAddVo vo);
+    void addInfo(TestDataAddVo vo);
 
     /**
      * 查询
@@ -51,14 +51,14 @@ public interface TestDataService extends IService<TestData> {
      * @param id
      * @return
      */
-    TestData getData(String id);
+    TestData getInfo(String id);
 
     /**
      * 修改
      *
      * @param vo
      */
-    void editData(TestDataUpdVo vo);
+    void editInfo(TestDataUpdVo vo);
 
     /**
      * 删除
@@ -81,7 +81,7 @@ public interface TestDataService extends IService<TestData> {
      * @param dataList
      * @return
      */
-    Integer importData(List<TestDataImportVo> dataList);
+    Integer importInfo(List<TestDataImportVo> dataList);
 
     /**
      * 测试数据-修改状态

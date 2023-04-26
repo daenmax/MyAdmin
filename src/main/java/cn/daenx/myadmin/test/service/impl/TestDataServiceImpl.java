@@ -4,6 +4,8 @@ import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysConfig;
+import cn.daenx.myadmin.system.vo.SysConfigPageVo;
 import cn.daenx.myadmin.test.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.mapper.TestDataMapper;
 import cn.daenx.myadmin.test.po.TestData;
@@ -32,15 +34,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     @Resource
     private TestDataMapper testDataMapper;
 
-    /**
-     * 测试数据分页列表_MP分页插件
-     *
-     * @param vo
-     * @return
-     */
-    @DataScope(alias = "test_data")
-    @Override
-    public IPage<TestData> getPage1(TestDataPageVo vo) {
+    private LambdaQueryWrapper<TestData> getWrapper(TestDataPageVo vo) {
         LambdaQueryWrapper<TestData> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), TestData::getTitle, vo.getTitle());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), TestData::getType, vo.getType());
@@ -50,6 +44,33 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), TestData::getCreateTime, startTime, endTime);
+        return wrapper;
+    }
+
+    private QueryWrapper<TestData> getWrapperQuery(TestDataPageVo vo) {
+        QueryWrapper<TestData> wrapper = new QueryWrapper<>();
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "td.type", vo.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "td.status", vo.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
+        wrapper.eq("td.is_delete", SystemConstant.IS_DELETE_NO);
+        return wrapper;
+    }
+
+    /**
+     * 测试数据分页列表_MP分页插件
+     *
+     * @param vo
+     * @return
+     */
+    @DataScope(alias = "test_data")
+    @Override
+    public IPage<TestData> getPage1(TestDataPageVo vo) {
+        LambdaQueryWrapper<TestData> wrapper = getWrapper(vo);
         Page<TestData> testDataPage = testDataMapper.selectPage(vo.getPage(true), wrapper);
         return testDataPage;
     }
@@ -75,18 +96,23 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      */
     @Override
     public IPage<TestDataPageDto> getPage3(TestDataPageVo vo) {
-        QueryWrapper<TestData> wrapper = new QueryWrapper<>();
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "td.type", vo.getType());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "td.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
-        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
-        wrapper.eq("td.is_delete", SystemConstant.IS_DELETE_NO);
-        IPage<TestDataPageDto> iPage = testDataMapper.getPageWrapper(vo.getPage(true), wrapper);
+        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(vo);
+        IPage<TestDataPageDto> iPage = testDataMapper.getPageWrapper(vo.getPage(true), wrapperQuery);
         return iPage;
+    }
+
+
+    /**
+     * 获取所有列表，用于导出
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<TestDataPageDto> getAll(TestDataPageVo vo) {
+        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(vo);
+        List<TestDataPageDto> list = testDataMapper.getAll(wrapperQuery);
+        return list;
     }
 
 
@@ -96,7 +122,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      * @param vo
      */
     @Override
-    public void addData(TestDataAddVo vo) {
+    public void addInfo(TestDataAddVo vo) {
         TestData testData = new TestData();
         testData.setTitle(vo.getTitle());
         testData.setContent(vo.getContent());
@@ -117,7 +143,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      */
     @DataScope(alias = "test_data")
     @Override
-    public TestData getData(String id) {
+    public TestData getInfo(String id) {
         return testDataMapper.selectById(id);
     }
 
@@ -128,7 +154,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      */
     @DataScope(alias = "test_data")
     @Override
-    public void editData(TestDataUpdVo vo) {
+    public void editInfo(TestDataUpdVo vo) {
         LambdaUpdateWrapper<TestData> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(TestData::getId, vo.getId());
         updateWrapper.set(TestData::getTitle, vo.getTitle());
@@ -157,35 +183,13 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     }
 
     /**
-     * 获取所有列表，用于导出
-     *
-     * @param vo
-     * @return
-     */
-    @Override
-    public List<TestDataPageDto> getAll(TestDataPageVo vo) {
-        QueryWrapper<TestData> wrapper = new QueryWrapper<>();
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "td.type", vo.getType());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "td.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
-        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
-        wrapper.eq("td.is_delete", SystemConstant.IS_DELETE_NO);
-        List<TestDataPageDto> list = testDataMapper.getAll(wrapper);
-        return list;
-    }
-
-    /**
      * 导入数据
      *
      * @param dataList
      * @return
      */
     @Override
-    public Integer importData(List<TestDataImportVo> dataList) {
+    public Integer importInfo(List<TestDataImportVo> dataList) {
         List<TestData> newList = new ArrayList<>();
         for (TestDataImportVo testDataVo : dataList) {
             TestData testData = new TestData();
