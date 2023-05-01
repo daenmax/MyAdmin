@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.quartz.exception;
+package cn.daenx.myadmin.quartz.handle;
 
 import cn.daenx.myadmin.quartz.utils.AbstractQuartzJob;
 import cn.daenx.myadmin.quartz.utils.JobInvokeUtil;

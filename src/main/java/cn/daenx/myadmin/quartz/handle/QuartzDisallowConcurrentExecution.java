@@ -1,10 +1,10 @@
-package cn.daenx.myadmin.quartz.exception;
+package cn.daenx.myadmin.quartz.handle;
 
 import cn.daenx.myadmin.quartz.utils.AbstractQuartzJob;
 import cn.daenx.myadmin.quartz.utils.JobInvokeUtil;
 import cn.daenx.myadmin.system.po.SysJob;
-import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
+import org.quartz.DisallowConcurrentExecution;
 
 /**
  * 定时任务处理（禁止并发执行）

@@ -5,11 +5,10 @@ import cn.daenx.myadmin.common.excel.DictConverter;
 import cn.daenx.myadmin.common.vo.BaseEntity;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,6 +18,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 操作日志表
@@ -127,9 +129,9 @@ public class SysLogOper extends BaseEntity implements Serializable {
     private String errorMsg;
 
     /**
-     * 耗时时间
+     * 耗时时间（毫秒）
      */
-    @ExcelProperty(value = "耗时时间(毫秒)")
+    @ExcelProperty(value = "耗时时间（毫秒）")
     @TableField(value = "execute_time")
     private Integer executeTime;
 

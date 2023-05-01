@@ -5,12 +5,18 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 定时任务调度表
@@ -49,7 +55,7 @@ public class SysJob extends BaseEntity implements Serializable {
     private String cronExpression;
 
     /**
-     * 参数状态，0=正常，1=暂停
+     * 任务状态，0=正常，1=暂停
      */
     @TableField(value = "`status`")
     private String status;
@@ -71,5 +77,14 @@ public class SysJob extends BaseEntity implements Serializable {
      */
     @TableField(value = "remark")
     private String remark;
+
+    /**
+     * 下次执行时间
+     */
+    @TableField(exist = false)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime nextValidTime;
 
 }

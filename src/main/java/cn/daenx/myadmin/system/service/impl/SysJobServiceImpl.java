@@ -1,11 +1,354 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.myadmin.system.po.SysJob;
+import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.MyUtil;
+import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
+import cn.daenx.myadmin.quartz.constant.QuartzConstant;
+import cn.daenx.myadmin.quartz.constant.ScheduleConstants;
+import cn.daenx.myadmin.quartz.exception.TaskException;
+import cn.daenx.myadmin.quartz.utils.CronUtils;
+import cn.daenx.myadmin.quartz.utils.ScheduleUtils;
 import cn.daenx.myadmin.system.mapper.SysJobMapper;
+import cn.daenx.myadmin.system.po.SysJob;
 import cn.daenx.myadmin.system.service.SysJobService;
-@Service
-public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> implements SysJobService{
+import cn.daenx.myadmin.system.vo.SysJobAddVo;
+import cn.daenx.myadmin.system.vo.SysJobPageVo;
+import cn.daenx.myadmin.system.vo.SysJobUpdVo;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
+import org.quartz.JobDataMap;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> implements SysJobService {
+    @Resource
+    private SysJobMapper sysJobMapper;
+    @Resource
+    private Scheduler scheduler;
+
+    /**
+     * 初始化定时任务
+     */
+    @Override
+    public void initJob() {
+        try {
+            scheduler.clear();
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+        List<SysJob> list = list();
+        for (SysJob sysJob : list) {
+            addSchedulerJob(sysJob);
+        }
+    }
+
+
+    /**
+     * 设置下次执行时间
+     *
+     * @param sysJob
+     */
+    private void setNextRunTime(SysJob sysJob) {
+        Date nextExecution = CronUtils.getNextExecution(sysJob.getCronExpression());
+        LocalDateTime localDateTime = MyUtil.toLocalDateTime(nextExecution.getTime());
+        sysJob.setNextValidTime(localDateTime);
+    }
+
+    private LambdaQueryWrapper<SysJob> getWrapper(SysJobPageVo vo) {
+        LambdaQueryWrapper<SysJob> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getJobName()), SysJob::getJobName, vo.getJobName());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getJobGroup()), SysJob::getJobGroup, vo.getJobGroup());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getInvokeTarget()), SysJob::getInvokeTarget, vo.getInvokeTarget());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getCronExpression()), SysJob::getCronExpression, vo.getCronExpression());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysJob::getStatus, vo.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getMisfirePolicy()), SysJob::getMisfirePolicy, vo.getMisfirePolicy());
+        wrapper.eq(ObjectUtil.isNotEmpty(vo.getConcurrent()), SysJob::getConcurrent, vo.getConcurrent());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysJob::getRemark, vo.getRemark());
+        String startTime = vo.getStartTime();
+        String endTime = vo.getEndTime();
+        wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysJob::getCreateTime, startTime, endTime);
+        return wrapper;
+    }
+
+    /**
+     * 分页列表
+     *
+     * @param vo
+     * @return
+     */
+    @DataScope(alias = "sys_job")
+    @Override
+    public IPage<SysJob> getPage(SysJobPageVo vo) {
+        LambdaQueryWrapper<SysJob> wrapper = getWrapper(vo);
+        Page<SysJob> sysJobPage = sysJobMapper.selectPage(vo.getPage(true), wrapper);
+        for (SysJob record : sysJobPage.getRecords()) {
+            setNextRunTime(record);
+        }
+        return sysJobPage;
+    }
+
+    /**
+     * 查询
+     *
+     * @param id
+     * @return
+     */
+    @DataScope(alias = "sys_job")
+    @Override
+    public SysJob getInfo(String id) {
+        SysJob sysJob = sysJobMapper.selectById(id);
+        setNextRunTime(sysJob);
+        return sysJob;
+    }
+
+    /**
+     * 新增
+     *
+     * @param vo
+     */
+    @Override
+    public void addInfo(SysJobAddVo vo) {
+        if (!CronUtils.isValid(vo.getCronExpression())) {
+            throw new MyException("新增任务失败，Cron表达式不正确");
+        }
+        if (StringUtils.containsIgnoreCase(vo.getInvokeTarget(), QuartzConstant.LOOKUP_RMI)) {
+            throw new MyException("新增任务失败，目标字符串不允许'rmi'调用");
+        }
+        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{QuartzConstant.LOOKUP_LDAP, QuartzConstant.LOOKUP_LDAPS})) {
+            throw new MyException("新增任务失败，目标字符串不允许'ldap(s)'调用");
+        }
+        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{"http://", "https://"})) {
+            throw new MyException("新增任务失败，目标字符串不允许'http(s)'调用");
+        }
+        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), QuartzConstant.JOB_ERROR_STR)) {
+            throw new MyException("新增任务失败，目标字符串存在违规");
+        }
+        if (!ScheduleUtils.whiteList(vo.getInvokeTarget())) {
+            throw new MyException("新增任务失败，目标字符串不在白名单内");
+        }
+        SysJob sysJob = new SysJob();
+        sysJob.setJobName(vo.getJobName());
+        sysJob.setJobGroup(vo.getJobGroup());
+        sysJob.setInvokeTarget(vo.getInvokeTarget());
+        sysJob.setCronExpression(vo.getCronExpression());
+        sysJob.setStatus(ScheduleConstants.Status.PAUSE.getValue());
+        sysJob.setMisfirePolicy(vo.getMisfirePolicy());
+        sysJob.setConcurrent(vo.getConcurrent());
+        sysJob.setRemark(vo.getRemark());
+        int insert = sysJobMapper.insert(sysJob);
+        if (insert < 1) {
+            throw new MyException("新增失败");
+        }
+
+        SysJob job = getInfo(sysJob.getId());
+        addSchedulerJob(job);
+
+    }
+
+    /**
+     * 修改
+     *
+     * @param vo
+     */
+    @DataScope(alias = "sys_job")
+    @Override
+    public void editInfo(SysJobUpdVo vo) {
+        if (!CronUtils.isValid(vo.getCronExpression())) {
+            throw new MyException("修改任务失败，Cron表达式不正确");
+        }
+        if (StringUtils.containsIgnoreCase(vo.getInvokeTarget(), QuartzConstant.LOOKUP_RMI)) {
+            throw new MyException("修改任务失败，目标字符串不允许'rmi'调用");
+        }
+        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{QuartzConstant.LOOKUP_LDAP, QuartzConstant.LOOKUP_LDAPS})) {
+            throw new MyException("修改任务失败，目标字符串不允许'ldap(s)'调用");
+        }
+        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{"http://", "https://"})) {
+            throw new MyException("修改任务失败，目标字符串不允许'http(s)'调用");
+        }
+        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), QuartzConstant.JOB_ERROR_STR)) {
+            throw new MyException("修改任务失败，目标字符串存在违规");
+        }
+        if (!ScheduleUtils.whiteList(vo.getInvokeTarget())) {
+            throw new MyException("修改任务失败，目标字符串不在白名单内");
+        }
+
+        LambdaUpdateWrapper<SysJob> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysJob::getId, vo.getId());
+        updateWrapper.set(SysJob::getJobName, vo.getJobName());
+        updateWrapper.set(SysJob::getJobGroup, vo.getJobGroup());
+        updateWrapper.set(SysJob::getInvokeTarget, vo.getInvokeTarget());
+        updateWrapper.set(SysJob::getCronExpression, vo.getCronExpression());
+        updateWrapper.set(SysJob::getStatus, vo.getStatus());
+        updateWrapper.set(SysJob::getMisfirePolicy, vo.getMisfirePolicy());
+        updateWrapper.set(SysJob::getConcurrent, vo.getConcurrent());
+        updateWrapper.set(SysJob::getRemark, vo.getRemark());
+        int rows = sysJobMapper.update(new SysJob(), updateWrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
+        SysJob job = getInfo(vo.getId());
+        updateSchedulerJob(job);
+    }
+
+    /**
+     * 修改状态
+     *
+     * @param vo
+     */
+    @DataScope(alias = "sys_job")
+    @Override
+    public void changeStatus(ComStatusUpdVo vo) {
+        LambdaUpdateWrapper<SysJob> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.eq(SysJob::getId, vo.getId());
+        updateWrapper.set(SysJob::getStatus, vo.getStatus());
+        int rows = sysJobMapper.update(new SysJob(), updateWrapper);
+        if (rows < 1) {
+            throw new MyException("修改失败");
+        }
+        SysJob job = getInfo(vo.getId());
+        if (ScheduleConstants.Status.NORMAL.getValue().equals(vo.getStatus())) {
+            resumeSchedulerJob(job);
+        } else if (ScheduleConstants.Status.PAUSE.getValue().equals(vo.getStatus())) {
+            pauseSchedulerJob(job);
+        }
+    }
+
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    @DataScope(alias = "sys_job")
+    @Override
+    public void deleteByIds(List<String> ids) {
+        for (String id : ids) {
+            SysJob job = getInfo(id);
+            int i = sysJobMapper.deleteById(job);
+            if (i > 0) {
+                delSchedulerJob(job);
+            }
+        }
+    }
+
+    /**
+     * 定时任务立即执行一次
+     *
+     * @param id
+     */
+    @Override
+    public void run(String id) {
+        SysJob job = getInfo(id);
+        if (ObjectUtil.isEmpty(job)) {
+            throw new MyException("定时任务不存在");
+        }
+        runSchedulerJob(job);
+    }
+
+    /**
+     * 添加任务
+     *
+     * @param job
+     */
+    public void addSchedulerJob(SysJob job) {
+        try {
+            ScheduleUtils.createScheduleJob(scheduler, job);
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        } catch (TaskException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 更新任务
+     *
+     * @param job
+     */
+    public void updateSchedulerJob(SysJob job) {
+        try {
+            // 判断是否存在
+            JobKey jobKey = ScheduleUtils.getJobKey(job.getId(), job.getJobGroup());
+            if (scheduler.checkExists(jobKey)) {
+                // 防止创建时存在数据问题 先移除，然后在执行创建操作
+                scheduler.deleteJob(jobKey);
+            }
+            ScheduleUtils.createScheduleJob(scheduler, job);
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        } catch (TaskException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 恢复任务
+     *
+     * @param job
+     */
+    private void resumeSchedulerJob(SysJob job) {
+        try {
+            scheduler.resumeJob(ScheduleUtils.getJobKey(job.getId(), job.getJobGroup()));
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 暂停任务
+     *
+     * @param job
+     */
+    private void pauseSchedulerJob(SysJob job) {
+        try {
+            scheduler.pauseJob(ScheduleUtils.getJobKey(job.getId(), job.getJobGroup()));
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 删除任务
+     *
+     * @param job
+     */
+    private void delSchedulerJob(SysJob job) {
+        try {
+            scheduler.deleteJob(ScheduleUtils.getJobKey(job.getId(), job.getJobGroup()));
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 立即运行一次任务
+     *
+     * @param job
+     */
+    private void runSchedulerJob(SysJob job) {
+        try {
+            // 参数
+            JobDataMap dataMap = new JobDataMap();
+            dataMap.put(ScheduleConstants.TASK_PROPERTIES, job);
+            JobKey jobKey = ScheduleUtils.getJobKey(job.getId(), job.getJobGroup());
+            if (scheduler.checkExists(jobKey)) {
+                scheduler.triggerJob(jobKey, dataMap);
+            }
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

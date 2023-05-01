@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.quartz.utils;
 
-import cn.daenx.myadmin.quartz.exception.QuartzDisallowConcurrentExecution;
-import cn.daenx.myadmin.quartz.exception.QuartzJobExecution;
+import cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution;
+import cn.daenx.myadmin.quartz.handle.QuartzJobExecution;
 import cn.daenx.myadmin.quartz.exception.TaskException;
 import cn.daenx.myadmin.quartz.constant.QuartzConstant;
 import cn.daenx.myadmin.quartz.constant.ScheduleConstants;
@@ -13,7 +13,6 @@ import org.quartz.*;
 
 /**
  * 定时任务工具类
- *
  */
 public class ScheduleUtils {
     /**

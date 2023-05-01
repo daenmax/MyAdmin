@@ -2,6 +2,7 @@ package cn.daenx.myadmin.common.init;
 
 import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.service.SysDictService;
+import cn.daenx.myadmin.system.service.SysJobService;
 import cn.daenx.myadmin.system.service.SysOssConfigService;
 import jakarta.annotation.Resource;
 import org.springframework.boot.ApplicationArguments;
@@ -19,6 +20,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     private SysConfigService sysConfigService;
     @Resource
     private SysOssConfigService sysOssConfigService;
+    @Resource
+    private SysJobService sysJobService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -28,6 +31,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
         sysConfigService.refreshCache();
         //初始化OSS
         sysOssConfigService.initOssConfig();
+        //初始化定时任务
+        sysJobService.initJob();
     }
 
 }
