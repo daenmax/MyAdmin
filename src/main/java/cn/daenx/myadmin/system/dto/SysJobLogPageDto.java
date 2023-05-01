@@ -1,57 +1,59 @@
-package cn.daenx.myadmin.system.po;
+package cn.daenx.myadmin.system.dto;
 
-import cn.daenx.myadmin.common.vo.BaseEntity;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import cn.daenx.myadmin.common.annotation.Dict;
+import cn.daenx.myadmin.common.excel.DictConverter;
+import cn.daenx.myadmin.common.vo.BaseDto;
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 定时任务调度日志表
+ * 定时任务调度日志
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@TableName(value = "sys_job_log")
-public class SysJobLog extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
+//导出时忽略没有@ExcelProperty的字段
+@ExcelIgnoreUnannotated
+public class SysJobLogPageDto extends BaseDto {
     private String id;
 
     /**
      * 关联定时任务ID
      */
-    @TableField(value = "job_id")
     private String jobId;
+    @ExcelProperty(value = "定时任务名称")
+    private String jobName;
+
+    /**
+     * 调用目标字符串
+     */
+    @ExcelProperty(value = "调用目标字符串")
+    private String invokeTarget;
 
     /**
      * 日志信息
      */
-    @TableField(value = "job_message")
+    @ExcelProperty(value = "日志信息")
     private String jobMessage;
 
     /**
      * 异常信息
      */
-    @TableField(value = "exception_info")
+    @ExcelProperty(value = "异常信息")
     private String exceptionInfo;
 
     /**
      * 开始执行时间
      */
-    @TableField(value = "start_time")
+    @ExcelProperty(value = "开始执行时间")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -60,7 +62,7 @@ public class SysJobLog extends BaseEntity implements Serializable {
     /**
      * 结束执行时间
      */
-    @TableField(value = "end_time")
+    @ExcelProperty(value = "结束执行时间")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -69,19 +71,20 @@ public class SysJobLog extends BaseEntity implements Serializable {
     /**
      * 执行耗时时间（毫秒）
      */
-    @TableField(value = "execute_time")
+    @ExcelProperty(value = "执行耗时时间（毫秒）")
     private Integer executeTime;
 
     /**
      * 执行结果，0=成功，1=失败
      */
-    @TableField(value = "`status`")
+    @ExcelProperty(value = "执行结果", converter = DictConverter.class)
+    @Dict(dictCode = "sys_common_status", custom = {})
     private String status;
 
     /**
      * 备注
      */
-    @TableField(value = "remark")
+    @ExcelProperty(value = "备注")
     private String remark;
 
 }

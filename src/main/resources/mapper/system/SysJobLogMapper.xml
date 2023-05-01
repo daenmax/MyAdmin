@@ -24,4 +24,26 @@
     id, job_id, job_message, exception_info, start_time, end_time, execute_time, `status`, 
     remark, create_id, create_time, update_id, update_time, is_delete
   </sql>
+
+  <sql id="querySysJobLog">
+    SELECT
+      sjl.*,
+      sj.job_name AS jobName,
+      sj.invoke_target AS invokeTarget
+    FROM
+      sys_job_log sjl
+        LEFT JOIN sys_job sj ON sj.id = sjl.job_id
+  </sql>
+
+  <select id="getPageWrapper" resultType="cn.daenx.myadmin.system.dto.SysJobLogPageDto">
+    <include refid="querySysJobLog">
+    </include>
+    ${ew.customSqlSegment}
+    </select>
+
+  <select id="getAll" resultType="cn.daenx.myadmin.system.dto.SysJobLogPageDto">
+    <include refid="querySysJobLog">
+    </include>
+    ${ew.customSqlSegment}
+  </select>
 </mapper>
