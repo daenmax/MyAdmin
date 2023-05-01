@@ -5,18 +5,18 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
-    * 定时任务调度日志表
-    */
+ * 定时任务调度日志表
+ */
 @Data
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "sys_job_log")
@@ -54,25 +54,4 @@ public class SysJobLog extends BaseEntity implements Serializable {
     @TableField(value = "remark")
     private String remark;
 
-    public static final String COL_ID = "id";
-
-    public static final String COL_JOB_ID = "job_id";
-
-    public static final String COL_JOB_MESSAGE = "job_message";
-
-    public static final String COL_EXCEPTION_INFO = "exception_info";
-
-    public static final String COL_STATUS = "status";
-
-    public static final String COL_REMARK = "remark";
-
-    public static final String COL_CREATE_ID = "create_id";
-
-    public static final String COL_CREATE_TIME = "create_time";
-
-    public static final String COL_UPDATE_ID = "update_id";
-
-    public static final String COL_UPDATE_TIME = "update_time";
-
-    public static final String COL_IS_DELETE = "is_delete";
 }
