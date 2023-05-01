@@ -1,6 +1,5 @@
 package cn.daenx.myadmin.common.exception;
 
-import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;

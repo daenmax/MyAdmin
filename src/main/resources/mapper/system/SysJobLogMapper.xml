@@ -8,6 +8,9 @@
     <result column="job_id" jdbcType="VARCHAR" property="jobId" />
     <result column="job_message" jdbcType="LONGVARCHAR" property="jobMessage" />
     <result column="exception_info" jdbcType="LONGVARCHAR" property="exceptionInfo" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="execute_time" jdbcType="INTEGER" property="executeTime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
@@ -18,7 +21,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, job_id, job_message, exception_info, `status`, remark, create_id, create_time, 
-    update_id, update_time, is_delete
+    id, job_id, job_message, exception_info, start_time, end_time, execute_time, `status`, 
+    remark, create_id, create_time, update_id, update_time, is_delete
   </sql>
 </mapper>
