@@ -2,6 +2,7 @@ package cn.daenx.myadmin.common.aspectj;
 
 
 import cn.daenx.myadmin.common.annotation.Log;
+import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.enums.LogOperTypeEnum;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
@@ -14,6 +15,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ResponseFacade;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -30,11 +32,6 @@ import java.util.List;
 @Aspect
 @Component
 public class LogAspect {
-    /**
-     * 异常日志截取长度
-     */
-    private static final Integer SAVE_LENGTH = 1000;
-
     ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
     @Resource
@@ -110,10 +107,7 @@ public class LogAspect {
         // 判断响应结果
         if (throwable != null) {
             sysLogOper.setStatus(SystemConstant.STATUS_DISABLE);
-            String message = throwable.getMessage();
-            if (message.length() > SAVE_LENGTH) {
-                message = message.substring(0, SAVE_LENGTH);
-            }
+            String message = StringUtils.substring(throwable.getMessage(), 0, Constant.SAVE_LOG_LENGTH);
             sysLogOper.setErrorMsg(message);
         } else {
             sysLogOper.setStatus(SystemConstant.STATUS_NORMAL);
@@ -158,20 +152,16 @@ public class LogAspect {
                     }
                 }
                 String params = JSONObject.toJSONString(list);
-                if (params.length() > SAVE_LENGTH) {
-                    params = params.substring(0, SAVE_LENGTH);
-                }
+                params = StringUtils.substring(params, 0, Constant.SAVE_LOG_LENGTH);
                 sysLogOper.setRequestParams(params);
 
             }
             // 响应结果
             if (recordResult) {
                 if (result != null) {
-                    String r = JSONObject.toJSONString(result);
-                    if (r.length() > SAVE_LENGTH) {
-                        r = r.substring(0, SAVE_LENGTH);
-                    }
-                    sysLogOper.setResponseResult(r);
+                    String ret = JSONObject.toJSONString(result);
+                    ret = StringUtils.substring(ret, 0, Constant.SAVE_LOG_LENGTH);
+                    sysLogOper.setResponseResult(ret);
                 }
             }
         }

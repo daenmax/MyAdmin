@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.quartz.utils;
 
 
+import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.utils.ExceptionUtil;
 import cn.daenx.myadmin.quartz.constant.QuartzConstant;
 import cn.daenx.myadmin.quartz.constant.ScheduleConstants;
@@ -45,6 +46,7 @@ public abstract class AbstractQuartzJob implements Job {
             after(context, sysJob, null);
         } catch (Exception e) {
             log.error("任务执行异常  - ：", e);
+            //TODO 异常报警
             after(context, sysJob, e);
         }
     }
@@ -79,7 +81,7 @@ public abstract class AbstractQuartzJob implements Job {
         sysJobLog.setJobMessage(sysJob.getJobName() + " 总共耗时：" + runMs + "毫秒");
         if (e != null) {
             sysJobLog.setStatus(QuartzConstant.JOB_FAIL);
-            String errorMsg = StringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, 2000);
+            String errorMsg = StringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, Constant.SAVE_LOG_LENGTH);
             sysJobLog.setExceptionInfo(errorMsg);
         } else {
             sysJobLog.setStatus(QuartzConstant.JOB_SUCCESS);
