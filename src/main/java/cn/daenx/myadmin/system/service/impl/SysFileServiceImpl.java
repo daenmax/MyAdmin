@@ -144,7 +144,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
         SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadFileSuffixs();
         if (sysUploadConfigVo == null) {
-            throw new MyException("当前系统不允许上传");
+            throw new MyException("当前系统不允许上传文件");
         }
         BigDecimal fileSize = MyUtil.getFileSize(file, 2);
         if (fileSize.compareTo(new BigDecimal(sysUploadConfigVo.getFileSize())) > 0) {
@@ -171,7 +171,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
         SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadImageSuffixs();
         if (sysUploadConfigVo == null) {
-            throw new MyException("当前系统不允许上传");
+            throw new MyException("当前系统不允许上传图片");
         }
         BigDecimal fileSize = MyUtil.getFileSize(file, 2);
         if (fileSize.compareTo(new BigDecimal(sysUploadConfigVo.getFileSize())) > 0) {
