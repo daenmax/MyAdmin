@@ -93,6 +93,9 @@ public class DataScopeInterceptor implements DataPermissionHandler {
         }
         //判断是否是管理员，如果是的话，直接放行，不修改SQL
         SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        if (loginUser == null) {
+            return where;
+        }
         if (loginUser.isAdmin()) {
             return where;
         }

@@ -242,7 +242,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     /**
-     * 获取允许上传的图片后缀
+     * 获取系统注册默认信息
      * 如果未配置则返回null
      * 如果配置了但是被禁用了，将返回null
      *
@@ -260,5 +260,26 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         SysRegisterDefaultInfoVo sysRegisterDefaultInfoVo = JSONObject.parseObject(sysConfig.getValue(), SysRegisterDefaultInfoVo.class);
         return sysRegisterDefaultInfoVo;
+    }
+
+    /**
+     * 系统登录错误次数限制信息
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    @Override
+    public SysLoginFailInfoVo getSysLoginFailInfoVo() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.login.fail.info");
+        if (ObjectUtil.isEmpty(object)) {
+            return null;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysLoginFailInfoVo sysLoginFailInfoVo = JSONObject.parseObject(sysConfig.getValue(), SysLoginFailInfoVo.class);
+        return sysLoginFailInfoVo;
     }
 }

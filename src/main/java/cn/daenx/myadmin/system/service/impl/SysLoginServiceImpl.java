@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.system.service.impl;
 
+import cn.daenx.myadmin.common.constant.Constant;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.enums.DeviceType;
 import cn.daenx.myadmin.common.enums.LoginType;
@@ -13,13 +14,16 @@ import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -90,14 +94,40 @@ public class SysLoginServiceImpl implements SysLoginService {
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
             }
-            String sha256 = SaSecureUtil.sha256(vo.getPassword());
-            if (!sha256.equals(sysUser.getPassword())) {
-                //记录登录日志
-                sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_FAIL, remark, clientIP, userAgent);
-                throw new MyException("密码错误");
-            }
             //校验账户状态
             sysUserService.validatedUser(sysUser);
+            String sha256 = SaSecureUtil.sha256(vo.getPassword());
+            if (!sha256.equals(sysUser.getPassword())) {
+                SysLoginFailInfoVo sysLoginFailInfoVo = sysConfigService.getSysLoginFailInfoVo();
+                String msg = "密码错误";
+                if (sysLoginFailInfoVo != null) {
+                    Integer failCount = 0;
+                    Object value = RedisUtil.getValue(RedisConstant.LOGIN_FAIL + sysUser.getId());
+                    if (value != null) {
+                        failCount = (Integer) value;
+                    }
+                    failCount = failCount + 1;
+                    if (failCount < sysLoginFailInfoVo.getFailCount()) {
+                        //记录登录错误+1
+                        RedisUtil.setValue(RedisConstant.LOGIN_FAIL + sysUser.getId(), failCount, null, null);
+                        msg = "密码错误，您还可以尝试" + (sysLoginFailInfoVo.getFailCount() - failCount) + "次";
+                    } else {
+                        //封禁
+                        LocalDateTime banToTime = LocalDateTime.now().plusSeconds(sysLoginFailInfoVo.getBanSecond());
+                        LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
+                        wrapper.eq(SysUser::getId, sysUser.getId());
+                        wrapper.set(SysUser::getBanToTime, banToTime);
+                        sysUserService.update(wrapper);
+                        RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
+                        String banToTimeStr = LocalDateTimeUtil.format(banToTime, Constant.DATE_TIME_FORMAT);
+                        msg = "密码连续输入错误" + sysLoginFailInfoVo.getFailCount() + "次，账号被锁定，请于" + banToTimeStr + "后再试";
+                    }
+                }
+                //记录登录日志
+                sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_FAIL, remark, clientIP, userAgent);
+                throw new MyException(msg);
+            }
+            RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
             SysLoginUserVo loginUserVo = new SysLoginUserVo();
             loginUserVo.setId(sysUser.getId());
             loginUserVo.setDeptId(sysUser.getDeptId());
@@ -106,7 +136,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
             if (loginUserVo.getRoles().size() < 1) {
                 //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
-                throw new MyException("用户角色");
+                throw new MyException("用户无可用角色");
             }
             Boolean isRoleOk = false;
             for (SysRole role : loginUserVo.getRoles()) {

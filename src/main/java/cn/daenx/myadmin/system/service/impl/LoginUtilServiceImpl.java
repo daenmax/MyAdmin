@@ -7,6 +7,7 @@ import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.SysLoginUserVo;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -211,7 +212,11 @@ public class LoginUtilServiceImpl implements LoginUtilService {
         if (loginUser != null) {
             return loginUser;
         }
-        loginUser = (SysLoginUserVo) StpUtil.getTokenSession().get(LOGIN_KEY);
+        SaSession tokenSession = StpUtil.getTokenSession();
+        if (tokenSession == null) {
+            return null;
+        }
+        loginUser = (SysLoginUserVo) tokenSession.get(LOGIN_KEY);
         SaHolder.getStorage().set(LOGIN_KEY, loginUser);
         return loginUser;
     }
