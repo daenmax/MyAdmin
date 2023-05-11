@@ -7,6 +7,10 @@ import cn.daenx.myadmin.system.vo.SysEmailConfigVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,13 +20,19 @@ import java.util.stream.Collectors;
  *
  * @author DaenMax
  */
+@Component
 public class EmailUtil {
+    @Resource
+    private RedisScript<Long> limitScript;
+
+
     /**
      * 获得一个邮箱配置
      *
      * @return
      */
     private SysEmailConfigVo.Email getConfig() {
+
         Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
@@ -40,6 +50,7 @@ public class EmailUtil {
             return sysEmailConfigVo.getEmails().get(0);
         }
         //开始算法
+
         return null;
     }
 
