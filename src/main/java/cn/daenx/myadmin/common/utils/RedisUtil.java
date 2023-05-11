@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -59,6 +60,52 @@ public class RedisUtil {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * 左侧插入
+     *
+     * @param key
+     * @param value
+     * @return 列表插入后当前数量总数
+     */
+    public static Long leftPush(String key, Object value) {
+        Long aLong = redisTemplate.opsForList().leftPush(key, value);
+        return aLong;
+    }
+
+    /**
+     * 右侧弹出
+     *
+     * @param key
+     * @return
+     */
+    public static Object rightPop(String key) {
+        return key == null ? null : redisTemplate.opsForList().rightPop(key);
+    }
+
+
+    /**
+     * 左侧插入
+     *
+     * @param key
+     * @param values
+     * @return 列表插入后当前数量总数
+     */
+    public static Long leftPush(String key, List<Object> values) {
+        Long aLong = redisTemplate.opsForList().leftPushAll(values);
+        return aLong;
+    }
+
+
+    /**
+     * 右侧弹出随后重新从左侧插入
+     *
+     * @param key
+     * @return
+     */
+    public static Object rightPopAndLeftPush(String key) {
+        return key == null ? null : redisTemplate.opsForList().rightPopAndLeftPush(key, key);
     }
 
     /**

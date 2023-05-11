@@ -19,7 +19,7 @@ public class SysEmailConfigVo implements Serializable {
     @Data
     public static class Config {
         /**
-         * 模式
+         * 邮箱使用模式
          * 0=轮询，1=完全随机，2=权重随机，默认0
          */
         private String mode;
@@ -53,7 +53,7 @@ public class SysEmailConfigVo implements Serializable {
          */
         private String email;
         /**
-         * 账号
+         * 来源账号
          * 1330166564@qq.com 或者 MyAdmin<1330166564@qq.com>
          */
         private String from;

@@ -140,4 +140,20 @@ public class SystemConstant {
     public static final SysUploadConfigVo UPLOAD_CONFIG_IMAGE = new SysUploadConfigVo(4, 2, new String[]{"bmp", "gif", "jpg", "jpeg", "png"}, true);
 
 
+
+
+    /**
+     * 邮箱使用模式_轮询
+     */
+    public static final String EMAIL_MODE_POLL = "0";
+
+    /**
+     * 邮箱使用模式_完全随机
+     */
+    public static final String EMAIL_MODE_RANDOM = "1";
+
+    /**
+     * 邮箱使用模式_权重随机
+     */
+    public static final String EMAIL_MODE_RANDOM_WEIGHT = "2";
 }

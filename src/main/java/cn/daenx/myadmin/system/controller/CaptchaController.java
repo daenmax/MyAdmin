@@ -41,9 +41,15 @@ public class CaptchaController {
      */
     @GetMapping("/testEmail")
     public Result testEmail() {
-        String test = EmailUtil.test();
+        String test = EmailUtil.rightPopAndLeftPushEmail();
         System.out.println(test);
-        return Result.ok(test);
+//        RedisUtil.leftPush("test","a");
+//        RedisUtil.leftPush("test","b");
+//        RedisUtil.leftPush("test","c");
+//        String test = (String) RedisUtil.rightPopAndLeftPush("test");
+//        System.out.println(test);
+//        RedisUtil.leftPush("test","d");
+        return Result.ok("");
     }
 
 }
