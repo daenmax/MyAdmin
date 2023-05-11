@@ -2,6 +2,8 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.EmailUtil;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.vo.*;
@@ -20,6 +22,7 @@ import cn.daenx.myadmin.system.po.SysConfig;
 import cn.daenx.myadmin.system.service.SysConfigService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService {
@@ -118,6 +121,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         //刷新redis缓存
         SysConfig info = getInfo(vo.getId());
         RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info);
+        //刷新邮箱配置队列
+        updateSysEmailInfo(info.getKey(), 2);
     }
 
     /**
@@ -144,6 +149,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         //刷新redis缓存
         SysConfig info = getInfo(sysConfig.getId());
         RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info);
+        //刷新邮箱配置队列
+        updateSysEmailInfo(info.getKey(), 1);
     }
 
     /**
@@ -159,6 +166,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
             RedisUtil.del(RedisConstant.CONFIG + sysConfig.getKey());
+            //刷新邮箱配置队列
+            updateSysEmailInfo(sysConfig.getKey(), 3);
         }
         int i = sysConfigMapper.deleteBatchIds(ids);
         if (i < 1) {
@@ -198,6 +207,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
             RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig);
+            //刷新邮箱配置队列
+            updateSysEmailInfo(sysConfig.getKey(), 0);
         }
     }
 
@@ -281,5 +292,29 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         SysLoginFailInfoVo sysLoginFailInfoVo = JSONObject.parseObject(sysConfig.getValue(), SysLoginFailInfoVo.class);
         return sysLoginFailInfoVo;
+    }
+
+
+    /**
+     * 处理系统邮箱配置
+     *
+     * @param key
+     * @param type 0=初始化，1=新增，2=修改，3=删除
+     */
+    @Override
+    public void updateSysEmailInfo(String key, Integer type) {
+        if (!"sys.email.config".equals(key)) {
+            return;
+        }
+        if (type == 0 || type == 1 || type == 2) {
+            RedisUtil.del(SystemConstant.EMAIL_POLL_KEY);
+            SysEmailConfigVo sysEmailConfigVo = EmailUtil.getSysEmailConfigVo();
+            List<SysEmailConfigVo.Email> list = sysEmailConfigVo.getEmails().stream().filter(item -> "true".equals(item.getEnable())).collect(Collectors.toList());
+            List<String> emailList = MyUtil.joinToList(list, SysEmailConfigVo.Email::getEmail);
+            RedisUtil.leftPushAll(SystemConstant.EMAIL_POLL_KEY, emailList);
+        } else {
+            RedisUtil.del(SystemConstant.EMAIL_POLL_KEY);
+        }
+
     }
 }

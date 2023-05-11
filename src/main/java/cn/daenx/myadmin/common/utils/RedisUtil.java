@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -110,8 +110,8 @@ public class RedisUtil {
      * @param values
      * @return 列表插入后当前数量总数
      */
-    public static Long leftPush(String key, List<Object> values) {
-        Long aLong = redisTemplate.opsForList().leftPushAll(values);
+    public static <T> Long leftPushAll(String key, Collection<T> values) {
+        Long aLong = redisTemplate.opsForList().leftPushAll(key, values);
         return aLong;
     }
 

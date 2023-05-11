@@ -114,4 +114,12 @@ public interface SysConfigService extends IService<SysConfig> {
      */
     SysLoginFailInfoVo getSysLoginFailInfoVo();
 
+    /**
+     * 处理系统邮箱配置
+     *
+     * @param key
+     * @param type 0=初始化，1=新增，2=修改，3=删除
+     */
+    void updateSysEmailInfo(String key, Integer type);
+
 }

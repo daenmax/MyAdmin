@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class EmailUtil {
-    private static String POLL_KEY = "emailPoll";
 
     /**
      * 邮箱轮询队列脚本
@@ -36,13 +35,13 @@ public class EmailUtil {
         EmailUtil.nextEmailScript = nextEmailScript;
     }
 
-
     /**
-     * 获得一个邮箱对象
+     * 从redis里获取系统邮箱配置信息
+     * 不存在或者被禁用或者数量为0返回null
      *
      * @return
      */
-    private static SysEmailConfigVo.Email getOneEmailConfig() {
+    public static SysEmailConfigVo getSysEmailConfigVo() {
         Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
@@ -53,6 +52,20 @@ public class EmailUtil {
         }
         SysEmailConfigVo sysEmailConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysEmailConfigVo.class);
         if (sysEmailConfigVo.getEmails().size() == 0) {
+            return null;
+        }
+        return sysEmailConfigVo;
+    }
+
+    /**
+     * 获得一个邮箱对象
+     * 不存在或者被禁用或者数量为0返回null
+     *
+     * @return
+     */
+    private static SysEmailConfigVo.Email getOneEmailConfig() {
+        SysEmailConfigVo sysEmailConfigVo = getSysEmailConfigVo();
+        if (ObjectUtil.isEmpty(sysEmailConfigVo)) {
             return null;
         }
         List<SysEmailConfigVo.Email> list = sysEmailConfigVo.getEmails().stream().filter(item -> "true".equals(item.getEnable())).collect(Collectors.toList());
@@ -72,7 +85,7 @@ public class EmailUtil {
         //TODO 使用redis lua方式，待完成
 //        String email = (String) RedisUtil.getRedisTemplate().execute(nextEmailScript, null, "");
         //使用 rightPopAndLeftPush方式
-        String email = (String) RedisUtil.rightPopAndLeftPush(POLL_KEY);
+        String email = (String) RedisUtil.rightPopAndLeftPush(SystemConstant.EMAIL_POLL_KEY);
         return email;
     }
 
