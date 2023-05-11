@@ -1,11 +1,14 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.CaptchaService;
 import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.dev33.satoken.annotation.SaIgnore;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
@@ -29,6 +32,18 @@ public class CaptchaController {
         Boolean lockCaptchaImg = Boolean.parseBoolean(sysConfigService.getConfigByKey("sys.lock.captchaImg"));
         map.put("captchaImgLock", lockCaptchaImg);
         return Result.ok(map);
+    }
+
+    /**
+     * 测试邮箱机制
+     *
+     * @return
+     */
+    @GetMapping("/testEmail")
+    public Result testEmail() {
+        String test = EmailUtil.test();
+        System.out.println(test);
+        return Result.ok(test);
     }
 
 }

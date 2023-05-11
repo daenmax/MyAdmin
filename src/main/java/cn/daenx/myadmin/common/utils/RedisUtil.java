@@ -1,12 +1,9 @@
 package cn.daenx.myadmin.common.utils;
 
 import jakarta.annotation.Resource;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +22,10 @@ public class RedisUtil {
         RedisUtil.redisTemplate = redisTemplate;
     }
 
+
+    public static RedisTemplate getRedisTemplate() {
+        return redisTemplate;
+    }
 
     /**
      * getValue
@@ -77,18 +78,6 @@ public class RedisUtil {
     public static void delBatch(String key) {
         Set<String> keys = redisTemplate.keys(key);
         redisTemplate.delete(keys);
-    }
-
-    /**
-     *
-     * @param script
-     * @param keys
-     * @param agrs
-     * @return
-     */
-    public static Object execute(RedisScript<T> script, List<String> keys, String ... agrs) {
-        Object execute = redisTemplate.execute(script, keys, agrs);
-        return execute;
     }
 
 

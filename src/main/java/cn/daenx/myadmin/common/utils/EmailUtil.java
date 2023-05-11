@@ -8,10 +8,10 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +22,23 @@ import java.util.stream.Collectors;
  */
 @Component
 public class EmailUtil {
+    /**
+     * 邮箱轮询队列脚本
+     */
+    private static RedisScript<String> nextEmailScript;
+
     @Resource
-    private RedisScript<Long> limitScript;
+    public void setNextEmailScript(RedisScript<String> nextEmailScript) {
+        EmailUtil.nextEmailScript = nextEmailScript;
+    }
+
+
+    public static String test() {
+        List<String> list = new ArrayList<>();
+        Object execute = RedisUtil.getRedisTemplate().execute(nextEmailScript, list, "1", "11");
+        String msg = (String) execute;
+        return msg;
+    }
 
 
     /**
