@@ -20,7 +20,7 @@ public class SysEmailConfigVo implements Serializable {
     public static class Config {
         /**
          * 模式
-         * 1=完全随机，2=权重随机，默认1
+         * 0=轮询，1=完全随机，2=权重随机，默认0
          */
         private String mode;
     }
