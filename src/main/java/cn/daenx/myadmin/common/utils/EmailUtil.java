@@ -63,7 +63,7 @@ public class EmailUtil {
      *
      * @return
      */
-    private static SysEmailConfigVo.Email getOneEmailConfig() {
+    public static SysEmailConfigVo.Email getOneEmailConfig() {
         SysEmailConfigVo sysEmailConfigVo = getSysEmailConfigVo();
         if (ObjectUtil.isEmpty(sysEmailConfigVo)) {
             return null;

@@ -1,18 +1,17 @@
 package cn.daenx.myadmin.system.controller;
 
-import cn.daenx.myadmin.common.utils.RedisUtil;
+import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.CaptchaService;
 import cn.daenx.myadmin.system.service.SysConfigService;
+import cn.daenx.myadmin.system.vo.SysEmailConfigVo;
 import cn.dev33.satoken.annotation.SaIgnore;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @SaIgnore
 @RestController
@@ -43,22 +42,9 @@ public class CaptchaController {
      */
     @GetMapping("/testEmail")
     public Result testEmail() {
-//        String test = EmailUtil.rightPopAndLeftPushEmail();
-//        System.out.println(test);
-//        RedisUtil.leftPush("test","a");
-//        RedisUtil.leftPush("test","b");
-//        RedisUtil.leftPush("test","c");
-//        String test = (String) RedisUtil.rightPopAndLeftPush("test");
-//        System.out.println(test);
-//        RedisUtil.leftPush("test","d");
-//        RedisUtil.del("test");
-        List<String> list = new ArrayList<>();
-        list.add("a");
-        list.add("b");
-        list.add("c");
-        list.add("d");
-        RedisUtil.leftPushAll("test",list);
-        return Result.ok("");
+        SysEmailConfigVo.Email email = EmailUtil.getOneEmailConfig();
+        System.out.println(email.getEmail());
+        return Result.ok(email);
     }
 
 }
