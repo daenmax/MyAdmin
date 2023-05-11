@@ -1,10 +1,8 @@
 package cn.daenx.myadmin.system.controller;
 
-import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.CaptchaService;
 import cn.daenx.myadmin.system.service.SysConfigService;
-import cn.daenx.myadmin.system.vo.SysEmailConfigVo;
 import cn.dev33.satoken.annotation.SaIgnore;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,9 +40,9 @@ public class CaptchaController {
      */
     @GetMapping("/testEmail")
     public Result testEmail() {
-        SysEmailConfigVo.Email email = EmailUtil.getOneEmailConfig();
-        System.out.println(email.getEmail());
-        return Result.ok(email);
+//        SysEmailConfigVo.Email email = EmailUtil.getOneEmailConfig();
+//        System.out.println(email.getEmail());
+        return Result.ok("");
     }
 
 }

@@ -13,6 +13,7 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,40 @@ public class EmailUtil {
     public void setNextEmailScript(RedisScript<String> nextEmailScript) {
         EmailUtil.nextEmailScript = nextEmailScript;
     }
+
+    /**
+     * 发送邮件
+     * 按照系统邮箱配置的使用模式进行选择邮箱号
+     *
+     * @param toEmail
+     * @param subject
+     * @param content
+     * @param isHtml   是否是HTML
+     * @param fileList 附件内容，留空则无
+     * @return
+     */
+    public static Boolean sendEmail(String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
+        SysEmailConfigVo.Email email = getOneEmailConfig();
+        return true;
+    }
+
+    /**
+     * 发送邮件
+     * 指定邮箱号
+     *
+     * @param fromEmail 指定要使用的在系统配置里的发信邮箱
+     * @param toEmail
+     * @param subject
+     * @param content
+     * @param isHtml    是否是HTML
+     * @param fileList  附件内容，留空则无
+     * @return
+     */
+    public static Boolean sendEmail(String fromEmail, String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
+        SysEmailConfigVo.Email email = getOneEmailConfig(fromEmail);
+        return true;
+    }
+
 
     /**
      * 从redis里获取系统邮箱配置信息
@@ -63,7 +98,7 @@ public class EmailUtil {
      *
      * @return
      */
-    public static SysEmailConfigVo.Email getOneEmailConfig() {
+    private static SysEmailConfigVo.Email getOneEmailConfig() {
         SysEmailConfigVo sysEmailConfigVo = getSysEmailConfigVo();
         if (ObjectUtil.isEmpty(sysEmailConfigVo)) {
             return null;
@@ -77,11 +112,30 @@ public class EmailUtil {
     }
 
     /**
+     * 获得一个邮箱对象
+     * 不存在或者被禁用或者数量为0返回null
+     *
+     * @param email 指定邮箱
+     * @return
+     */
+    private static SysEmailConfigVo.Email getOneEmailConfig(String email) {
+        SysEmailConfigVo sysEmailConfigVo = getSysEmailConfigVo();
+        if (ObjectUtil.isEmpty(sysEmailConfigVo)) {
+            return null;
+        }
+        List<SysEmailConfigVo.Email> list = sysEmailConfigVo.getEmails().stream().filter(item -> "true".equals(item.getEnable()) && email.equals(item.getEmail())).collect(Collectors.toList());
+        if (list.size() > 0) {
+            return sysEmailConfigVo.getEmails().get(0);
+        }
+        return null;
+    }
+
+    /**
      * 邮箱使用模式_轮询时，弹出一个邮箱并重新放进去
      *
      * @return
      */
-    public static String rightPopAndLeftPushEmail() {
+    private static String rightPopAndLeftPushEmail() {
         //TODO 使用redis lua方式，待完成
 //        String email = (String) RedisUtil.getRedisTemplate().execute(nextEmailScript, null, "");
         //使用 rightPopAndLeftPush方式

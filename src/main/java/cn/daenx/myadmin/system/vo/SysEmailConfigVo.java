@@ -49,12 +49,12 @@ public class SysEmailConfigVo implements Serializable {
         private String protocol;
         /**
          * 账号
-         * 1330166564@qq.com
+         * 例如：1330166564@qq.com
          */
         private String email;
         /**
-         * 来源账号
-         * 1330166564@qq.com 或者 MyAdmin<1330166564@qq.com>
+         * 来源
+         * 例如：1330166564@qq.com 或者 MyAdmin<1330166564@qq.com>
          */
         private String from;
         /**
