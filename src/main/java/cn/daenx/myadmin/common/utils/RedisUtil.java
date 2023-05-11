@@ -63,6 +63,24 @@ public class RedisUtil {
     }
 
     /**
+     * setValue
+     * 永久
+     *
+     * @param key   键
+     * @param value 值
+     * @return
+     */
+    public static boolean setValue(String key, Object value) {
+        try {
+            redisTemplate.opsForValue().set(key, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * 左侧插入
      *
      * @param key

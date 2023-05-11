@@ -117,7 +117,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(vo.getId());
-        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
+        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info);
     }
 
     /**
@@ -143,7 +143,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(sysConfig.getId());
-        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info, null, null);
+        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info);
     }
 
     /**
@@ -197,7 +197,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
-            RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig, null, null);
+            RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig);
         }
     }
 

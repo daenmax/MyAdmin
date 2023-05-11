@@ -69,7 +69,7 @@ public class TestController {
     @GetMapping("/test4")
     public Result test4() {
         RedisUtil.del("test");
-        RedisUtil.setValue("test", "你好啊", null, null);
+        RedisUtil.setValue("test", "你好啊");
         String test = (String) RedisUtil.getValue("test");
         return Result.ok("查询成功", test);
     }

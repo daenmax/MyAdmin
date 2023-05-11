@@ -109,7 +109,7 @@ public class SysLoginServiceImpl implements SysLoginService {
                     failCount = failCount + 1;
                     if (failCount < sysLoginFailInfoVo.getFailCount()) {
                         //记录登录错误+1
-                        RedisUtil.setValue(RedisConstant.LOGIN_FAIL + sysUser.getId(), failCount, null, null);
+                        RedisUtil.setValue(RedisConstant.LOGIN_FAIL + sysUser.getId(), failCount);
                         msg = "密码错误，您还可以尝试" + (sysLoginFailInfoVo.getFailCount() - failCount) + "次";
                     } else {
                         //封禁

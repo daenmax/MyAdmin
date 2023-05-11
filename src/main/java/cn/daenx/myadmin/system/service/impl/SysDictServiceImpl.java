@@ -205,7 +205,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         for (SysDict sysDict : sysDictList) {
             List<SysDictDetail> collect = sysDictDetailList.stream().filter(dictDetail -> sysDict.getCode().equals(dictDetail.getDictCode())).collect(Collectors.toList());
-            RedisUtil.setValue(RedisConstant.DICT + sysDict.getCode(), collect, null, null);
+            RedisUtil.setValue(RedisConstant.DICT + sysDict.getCode(), collect);
         }
     }
 }

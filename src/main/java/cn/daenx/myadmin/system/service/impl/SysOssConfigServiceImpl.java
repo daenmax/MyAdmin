@@ -43,10 +43,10 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         RedisUtil.delBatch(RedisConstant.OSS + "*");
         RedisUtil.del(RedisConstant.OSS_USE);
         for (SysOssConfig sysOssConfig : sysOssConfigs) {
-            RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), sysOssConfig, null, null);
+            RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), sysOssConfig);
             if (sysOssConfig.getInUse().equals(SystemConstant.IN_USE_YES)) {
                 //正在使用的
-                RedisUtil.setValue(RedisConstant.OSS_USE, sysOssConfig, null, null);
+                RedisUtil.setValue(RedisConstant.OSS_USE, sysOssConfig);
             }
         }
     }
@@ -132,7 +132,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        RedisUtil.setValue(RedisConstant.OSS + vo.getId(), getInfo(vo.getId()), null, null);
+        RedisUtil.setValue(RedisConstant.OSS + vo.getId(), getInfo(vo.getId()));
     }
 
     /**
@@ -160,7 +160,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         if (insert < 1) {
             throw new MyException("新增失败");
         }
-        RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), getInfo(sysOssConfig.getId()), null, null);
+        RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), getInfo(sysOssConfig.getId()));
     }
 
     /**
