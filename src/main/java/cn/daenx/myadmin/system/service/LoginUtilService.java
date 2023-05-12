@@ -2,7 +2,7 @@ package cn.daenx.myadmin.system.service;
 
 
 import cn.daenx.myadmin.common.enums.DeviceType;
-import cn.daenx.myadmin.system.vo.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
 
 import java.util.List;
 

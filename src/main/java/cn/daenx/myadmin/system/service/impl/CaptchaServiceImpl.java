@@ -4,7 +4,7 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.service.CaptchaService;
 import cn.daenx.myadmin.system.service.SysConfigService;
-import cn.daenx.myadmin.system.vo.SysCaptchaConfigVo;
+import cn.daenx.myadmin.system.vo.system.SysCaptchaConfigVo;
 import cn.hutool.captcha.*;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;

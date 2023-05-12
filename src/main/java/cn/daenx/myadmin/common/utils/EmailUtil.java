@@ -3,7 +3,7 @@ package cn.daenx.myadmin.common.utils;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysConfig;
-import cn.daenx.myadmin.system.vo.SysEmailConfigVo;
+import cn.daenx.myadmin.system.vo.system.SysEmailConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.WeightRandom;
 import cn.hutool.core.util.ObjectUtil;

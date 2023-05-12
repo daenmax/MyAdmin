@@ -1,6 +1,5 @@
 package cn.daenx.myadmin.system.vo.server;
 
-import cn.daenx.myadmin.system.vo.server.*;
 import lombok.Data;
 
 import java.util.ArrayList;

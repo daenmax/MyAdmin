@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.vo.SysCaptchaConfigVo;
+import cn.daenx.myadmin.system.vo.system.SysCaptchaConfigVo;
 
 import java.util.HashMap;
 

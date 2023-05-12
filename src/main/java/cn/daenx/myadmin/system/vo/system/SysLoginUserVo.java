@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.system.vo;
+package cn.daenx.myadmin.system.vo.system;
 
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysPosition;

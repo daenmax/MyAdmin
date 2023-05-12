@@ -5,7 +5,7 @@ import cn.daenx.myadmin.common.vo.DataScopeParam;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysRole;
 import cn.daenx.myadmin.system.service.LoginUtilService;
-import cn.daenx.myadmin.system.vo.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import jakarta.annotation.Resource;

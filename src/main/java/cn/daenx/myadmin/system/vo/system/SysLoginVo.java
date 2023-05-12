@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.system.vo;
+package cn.daenx.myadmin.system.vo.system;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

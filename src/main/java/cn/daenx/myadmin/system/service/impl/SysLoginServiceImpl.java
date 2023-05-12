@@ -11,7 +11,7 @@ import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.*;
-import cn.daenx.myadmin.system.vo.*;
+import cn.daenx.myadmin.system.vo.system.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;

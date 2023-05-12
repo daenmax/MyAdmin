@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
+import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;

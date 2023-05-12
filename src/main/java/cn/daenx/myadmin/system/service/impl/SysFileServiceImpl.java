@@ -14,7 +14,7 @@ import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysFilePageDto;
 import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.vo.SysFilePageVo;
-import cn.daenx.myadmin.system.vo.SysUploadConfigVo;
+import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
