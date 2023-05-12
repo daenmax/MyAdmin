@@ -11,12 +11,16 @@ import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
@@ -37,11 +41,12 @@ public class EmailUtil {
         EmailUtil.nextEmailScript = nextEmailScript;
     }
 
+
     /**
      * 发送邮件
      * 按照系统邮箱配置的使用模式进行选择邮箱号
      *
-     * @param toEmail
+     * @param toEmail  多个用,隔开
      * @param subject
      * @param content
      * @param isHtml   是否是HTML
@@ -50,7 +55,7 @@ public class EmailUtil {
      */
     public static Boolean sendEmail(String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
         SysEmailConfigVo.Email email = getOneEmailConfig();
-        return true;
+        return sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
     }
 
     /**
@@ -67,9 +72,53 @@ public class EmailUtil {
      */
     public static Boolean sendEmail(String fromEmail, String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
         SysEmailConfigVo.Email email = getOneEmailConfig(fromEmail);
-        return true;
+        return sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
     }
 
+    /**
+     * 实际发送邮件协议
+     *
+     * @param email
+     * @param toEmail  多个用,隔开
+     * @param subject
+     * @param content
+     * @param isHtml   是否是HTML
+     * @param fileList 附件内容，留空则无
+     * @return
+     */
+    private static Boolean sendMailProtocol(SysEmailConfigVo.Email email, String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(email.getHost());
+        javaMailSender.setUsername(email.getHost());
+        javaMailSender.setPassword(email.getPassword());
+        javaMailSender.setPort(email.getPort());
+        javaMailSender.setDefaultEncoding(email.getEncode());
+        javaMailSender.setProtocol(email.getProtocol());
+        Properties properties = new Properties();
+        properties.setProperty("mail.smtp.timeout", email.getTimeout());
+        properties.setProperty("mail.smtp.auth", email.getAuth());
+        properties.setProperty("mail.smtp.socketFactoryClass", email.getSocketFactoryClass());
+        javaMailSender.setJavaMailProperties(properties);
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper;
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setFrom(email.getFrom());
+            mimeMessageHelper.setTo(toEmail.split(","));
+            mimeMessageHelper.setSubject(subject);
+            mimeMessageHelper.setText(content, isHtml);
+            if (fileList != null) {
+                for (File file : fileList) {
+                    mimeMessageHelper.addAttachment(file.getName(), file);
+                }
+            }
+            javaMailSender.send(mimeMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 从redis里获取系统邮箱配置信息
@@ -77,7 +126,7 @@ public class EmailUtil {
      *
      * @return
      */
-    public static SysEmailConfigVo getSysEmailConfigVo() {
+    private static SysEmailConfigVo getSysEmailConfigVo() {
         Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;

@@ -124,6 +124,14 @@ public interface SysConfigService extends IService<SysConfig> {
     SysCaptchaConfigVo getSysCaptchaConfigVo();
 
     /**
+     * 获取系统邮箱配置信息
+     * 不存在或者被禁用或者数量为0返回null
+     *
+     * @return
+     */
+    SysEmailConfigVo getSysEmailConfigVo();
+
+    /**
      * 处理系统邮箱配置
      *
      * @param key

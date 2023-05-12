@@ -2,10 +2,12 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.mapper.SysConfigMapper;
+import cn.daenx.myadmin.system.po.SysConfig;
+import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
@@ -14,12 +16,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.myadmin.system.mapper.SysConfigMapper;
-import cn.daenx.myadmin.system.po.SysConfig;
-import cn.daenx.myadmin.system.service.SysConfigService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -316,6 +315,29 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     /**
+     * 获取系统邮箱配置信息
+     * 不存在或者被禁用或者数量为0返回null
+     *
+     * @return
+     */
+    @Override
+    public SysEmailConfigVo getSysEmailConfigVo() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
+        if (ObjectUtil.isEmpty(object)) {
+            return null;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysEmailConfigVo sysEmailConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysEmailConfigVo.class);
+        if (sysEmailConfigVo.getEmails().size() == 0) {
+            return null;
+        }
+        return sysEmailConfigVo;
+    }
+
+    /**
      * 处理系统邮箱配置
      *
      * @param key
@@ -328,7 +350,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         if (type == 0 || type == 1 || type == 2) {
             RedisUtil.del(SystemConstant.EMAIL_POLL_KEY);
-            SysEmailConfigVo sysEmailConfigVo = EmailUtil.getSysEmailConfigVo();
+            SysEmailConfigVo sysEmailConfigVo = getSysEmailConfigVo();
             List<SysEmailConfigVo.Email> list = sysEmailConfigVo.getEmails().stream().filter(item -> "true".equals(item.getEnable())).collect(Collectors.toList());
             List<String> emailList = MyUtil.joinToList(list, SysEmailConfigVo.Email::getEmail);
             RedisUtil.leftPushAll(SystemConstant.EMAIL_POLL_KEY, emailList);
