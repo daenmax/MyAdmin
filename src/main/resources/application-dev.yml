@@ -148,22 +148,6 @@ sa-token:
   # jwt秘钥
   jwt-secret-key: 1qTJiBvZMaDloBOnRrngkzr5g7vuQyZA
 
-# 验证码
-captcha:
-  # 图片验证码
-  img:
-    # 验证码类型，1=线段干扰的验证码，2=圆圈干扰验证码，3=扭曲干扰验证码，4=GIF，5=加减运算
-    type: 5
-    # 宽度
-    width: 200
-    # 高度
-    height: 100
-    # 字符数
-    codeCount: 4
-    # 线段干扰元素数/线段干扰元素数/扭曲干扰线宽度
-    olCount: 10
-  sms:
-
 # 设置忽略鉴权的地址
 check-login:
   # 忽略以下接口，不鉴权，路径不包含 server.servlet.context-path，即不用考虑

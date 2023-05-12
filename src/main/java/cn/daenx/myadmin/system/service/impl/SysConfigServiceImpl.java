@@ -294,6 +294,26 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         return sysLoginFailInfoVo;
     }
 
+    /**
+     * 系统验证码配置
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    @Override
+    public SysCaptchaConfigVo getSysCaptchaConfigVo() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.captcha.config");
+        if (ObjectUtil.isEmpty(object)) {
+            return null;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysCaptchaConfigVo sysCaptchaConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysCaptchaConfigVo.class);
+        return sysCaptchaConfigVo;
+    }
 
     /**
      * 处理系统邮箱配置

@@ -115,6 +115,15 @@ public interface SysConfigService extends IService<SysConfig> {
     SysLoginFailInfoVo getSysLoginFailInfoVo();
 
     /**
+     * 系统验证码配置
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    SysCaptchaConfigVo getSysCaptchaConfigVo();
+
+    /**
      * 处理系统邮箱配置
      *
      * @param key

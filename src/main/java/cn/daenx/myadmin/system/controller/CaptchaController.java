@@ -21,15 +21,13 @@ public class CaptchaController {
     private SysConfigService sysConfigService;
 
     /**
-     * 获取图片验证码
+     * 获取验证码
      *
      * @return
      */
-    @GetMapping("/captchaImage")
-    public Result captchaImage() {
-        HashMap<String, Object> map = captchaService.createCaptchaImgToBase64();
-        Boolean lockCaptchaImg = Boolean.parseBoolean(sysConfigService.getConfigByKey("sys.lock.captchaImg"));
-        map.put("captchaImgLock", lockCaptchaImg);
+    @GetMapping("/captcha")
+    public Result captcha() {
+        HashMap<String, Object> map = captchaService.createCaptcha();
         return Result.ok(map);
     }
 
