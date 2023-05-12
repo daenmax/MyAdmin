@@ -2,8 +2,7 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.vo.server.ServerInfoVo;
-import cn.daenx.myadmin.system.vo.server.*;
+import cn.daenx.myadmin.system.vo.system.ServerInfoVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.NumberUtil;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +46,7 @@ public class ServerController {
         return Result.ok(serverInfoVo);
     }
 
-    private ServerInfoCpu getCpu(CentralProcessor processor) {
+    private ServerInfoVo.ServerInfoCpu getCpu(CentralProcessor processor) {
         long[] prevTicks = processor.getSystemCpuLoadTicks();
         Util.sleep(1000);
         long[] ticks = processor.getSystemCpuLoadTicks();
@@ -60,7 +59,7 @@ public class ServerController {
         long ioWait = ticks[TickType.IOWAIT.getIndex()] - prevTicks[TickType.IOWAIT.getIndex()];
         long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
         long totalCpu = user + nice + cSys + idle + ioWait + irq + softIrq + steal;
-        ServerInfoCpu serverInfoCpu = new ServerInfoCpu();
+        ServerInfoVo.ServerInfoCpu serverInfoCpu = new ServerInfoVo.ServerInfoCpu();
         serverInfoCpu.setCpuNum(processor.getLogicalProcessorCount());
         serverInfoCpu.setSys(NumberUtil.round(NumberUtil.div(cSys * 100, totalCpu), 2));
         serverInfoCpu.setUsed(NumberUtil.round(NumberUtil.div(user * 100, totalCpu), 2));
@@ -69,8 +68,8 @@ public class ServerController {
         return serverInfoCpu;
     }
 
-    private ServerInfoMemory getMemory(GlobalMemory memory) {
-        ServerInfoMemory serverInfoMemory = new ServerInfoMemory();
+    private ServerInfoVo.ServerInfoMemory getMemory(GlobalMemory memory) {
+        ServerInfoVo.ServerInfoMemory serverInfoMemory = new ServerInfoVo.ServerInfoMemory();
         long total = memory.getTotal();
         long free = memory.getAvailable();
         long used = total - free;
@@ -82,8 +81,8 @@ public class ServerController {
         return serverInfoMemory;
     }
 
-    private ServerInfoJvm getJvm() {
-        ServerInfoJvm serverInfoJvm = new ServerInfoJvm();
+    private ServerInfoVo.ServerInfoJvm getJvm() {
+        ServerInfoVo.ServerInfoJvm serverInfoJvm = new ServerInfoVo.ServerInfoJvm();
         Properties props = System.getProperties();
         long total = Runtime.getRuntime().totalMemory();
         long max = Runtime.getRuntime().maxMemory();
@@ -105,8 +104,8 @@ public class ServerController {
         return serverInfoJvm;
     }
 
-    private ServerInfoSystem getSystem() {
-        ServerInfoSystem serverInfoSystem = new ServerInfoSystem();
+    private ServerInfoVo.ServerInfoSystem getSystem() {
+        ServerInfoVo.ServerInfoSystem serverInfoSystem = new ServerInfoVo.ServerInfoSystem();
         Properties props = System.getProperties();
         serverInfoSystem.setComputerName(MyUtil.getHostName());
         serverInfoSystem.setComputerIp(MyUtil.getHostIp());
@@ -116,14 +115,14 @@ public class ServerController {
         return serverInfoSystem;
     }
 
-    private List<ServerInfoDisk> getDisks(OperatingSystem os) {
-        List<ServerInfoDisk> serverInfoDisks = new ArrayList<>();
+    private List<ServerInfoVo.ServerInfoDisk> getDisks(OperatingSystem os) {
+        List<ServerInfoVo.ServerInfoDisk> serverInfoDisks = new ArrayList<>();
         List<OSFileStore> fsArray = os.getFileSystem().getFileStores();
         for (OSFileStore fs : fsArray) {
             long free = fs.getUsableSpace();
             long total = fs.getTotalSpace();
             long used = total - free;
-            ServerInfoDisk serverInfoDisk = new ServerInfoDisk();
+            ServerInfoVo.ServerInfoDisk serverInfoDisk = new ServerInfoVo.ServerInfoDisk();
             serverInfoDisk.setDirName(fs.getMount());
             serverInfoDisk.setSysTypeName(fs.getType());
             serverInfoDisk.setTypeName(fs.getName());
