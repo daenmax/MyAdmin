@@ -4,6 +4,7 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysConfig;
 import cn.daenx.myadmin.system.vo.SysEmailConfigVo;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.WeightRandom;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -136,10 +137,10 @@ public class EmailUtil {
      * @return
      */
     private static String rightPopAndLeftPushEmail() {
-        //TODO 使用redis lua方式，待完成
-//        String email = (String) RedisUtil.getRedisTemplate().execute(nextEmailScript, null, "");
+        //使用redis lua方式
+        String email = (String) RedisUtil.getRedisTemplate().execute(nextEmailScript, CollUtil.newArrayList(SystemConstant.EMAIL_POLL_KEY), "");
         //使用 rightPopAndLeftPush方式
-        String email = (String) RedisUtil.rightPopAndLeftPush(SystemConstant.EMAIL_POLL_KEY);
+//        String email = (String) RedisUtil.rightPopAndLeftPush(SystemConstant.EMAIL_POLL_KEY);
         return email;
     }
 

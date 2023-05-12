@@ -55,7 +55,9 @@ public class RedisScript {
     }
 
     private String nextEmailScriptText() {
-        //注意，如果返回值是文本类型，那么需要加双引号包裹住，否则会执行反序列化，导致异常Boom！
-        return "return '\"您好\"';";
+        return "local key = KEYS[1];\n" +
+                "local email= redis.call('rpop',key);\n" +
+                "redis.call('lpush',key,email);\n" +
+                "return email;";
     }
 }
