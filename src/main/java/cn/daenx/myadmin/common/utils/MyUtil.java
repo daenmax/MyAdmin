@@ -5,10 +5,10 @@ import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,12 +25,54 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class MyUtil {
+
+    /**
+     * 检查腾讯滑块验证码是否有效
+     *
+     * @param randStr
+     * @param ticket
+     * @return
+     */
+    public static Boolean checkTencentCaptchaSlider(String randStr, String ticket) {
+        JSONObject unlgn = new JSONObject();
+        unlgn.put("uin", 10001);
+        JSONObject com = new JSONObject();
+        com.put("src", 1);
+        com.put("scene", 100607);
+        com.put("platform", 5);
+        com.put("version", "0.0.0");
+        com.put("unlgn", unlgn);
+        JSONObject req = new JSONObject();
+        req.put("com", com);
+        req.put("ticket", ticket);
+        req.put("randStr", randStr);
+        req.put("appid", 2090581062);
+        String url = "https://accounts.qq.com/login/limit/proxy/domain/cloud.tencent.com/v3/chkcaptcha?bkn=";
+        String body = HttpRequest.post(url)
+                .header("Content-Type", "application/json")
+                .header("qname-service", "1935233:65536")
+                .header("qname-space", "Production")
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.87 Safari/537.36")
+                .body(req.toJSONString()).execute().body();
+        //{"retcode":0,"retmsg":""}
+        //{"retcode":1500,"retmsg":"验证码校验错误"}
+        JSONObject ret = JSONObject.parseObject(body);
+        if (ObjectUtil.isEmpty(ret)) {
+            return false;
+        }
+        Integer retcode = ret.getInteger("retcode");
+        return retcode == 0;
+    }
+
     /**
      * 字节转换
      *
@@ -148,19 +190,19 @@ public class MyUtil {
         }
         String res = HttpUtil.get("https://ip.useragentinfo.com/json?ip=" + ip);
         if (ObjectUtil.isNotEmpty(res)) {
-            JSONObject jsonObject = JSONUtil.parseObj(res);
-            if (jsonObject.getInt("code") == 200) {
-                return jsonObject.getStr("province") + jsonObject.getStr("city") + " " + jsonObject.getStr("isp");
+            JSONObject jsonObject1 = JSONObject.parseObject(res);
+            if (jsonObject1.getInteger("code") == 200) {
+                return jsonObject1.getString("province") + jsonObject1.getString("city") + " " + jsonObject1.getString("isp");
             }
         }
         res = HttpUtil.get("http://opendata.baidu.com/api.php?query=" + ip + "&co=&resource_id=6006&oe=utf8");
         if (ObjectUtil.isNotEmpty(res)) {
-            JSONObject jsonObject = JSONUtil.parseObj(res);
-            if ("0".equals(jsonObject.getStr("status"))) {
+            JSONObject jsonObject = JSONObject.parseObject(res);
+            if ("0".equals(jsonObject.getString("status"))) {
                 JSONArray data = jsonObject.getJSONArray("data");
                 if (data.size() > 0) {
-                    JSONObject jsonObject1 = data.get(0, JSONObject.class);
-                    return jsonObject1.getStr("location");
+                    JSONObject jsonObject1 = data.getJSONObject(0);
+                    return jsonObject1.getString("location");
                 }
             }
         }
