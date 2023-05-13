@@ -1,9 +1,11 @@
 package cn.daenx.myadmin.system.controller;
 
+import cn.daenx.myadmin.common.utils.DingTalkUtil;
 import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.CaptchaService;
 import cn.daenx.myadmin.system.service.SysConfigService;
+import cn.daenx.myadmin.system.vo.system.DingTalkSendResult;
 import cn.daenx.myadmin.system.vo.system.SmsSendResult;
 import cn.dev33.satoken.annotation.SaIgnore;
 import jakarta.annotation.Resource;
@@ -45,6 +47,7 @@ public class CaptchaController {
 //        System.out.println(email.getEmail());
         return Result.ok("");
     }
+
     /**
      * 测试邮箱机制
      *
@@ -60,8 +63,22 @@ public class CaptchaController {
         //阿里云
         Map<String, String> map2 = new HashMap<>();
         map2.put("code", "6666");
-        SmsSendResult smsSendResult = SmsUtil.sendSms("+8618731055555,+8618754158888", "SMS_460755481", map2,"aliyun");
+        SmsSendResult smsSendResult = SmsUtil.sendSms("+8618731055555,+8618754158888", "SMS_460755481", map2, "aliyun");
         return Result.ok(smsSendResult);
+    }
+
+    /**
+     * 测试钉钉群通知
+     *
+     * @return
+     */
+    @GetMapping("/testDingTalk")
+    public Result testDingTalk() {
+        //发送普通文本消息
+        DingTalkSendResult dingTalkSendResult = DingTalkUtil.sendTalk("测试普通文本消息");
+        //自己组装复杂的消息，以便发送其他消息类型的消息
+//        DingTalkSendResult dingTalkSendResult = DingTalkUtil.sendTalkContent("{\"actionCard\":{\"title\":\"乔布斯 20 年前想打造一间苹果咖啡厅，而它正是 Apple Store 的前身\",\"text\":\"![screenshot](https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png)   ### 乔布斯 20 年前想打造的苹果咖啡厅   Apple Store 的设计正从原来满满的科技感走向生活化，而其生活化的走向其实可以追溯到 20 年前苹果一个建立咖啡馆的计划\",\"btnOrientation\":\"0\",\"singleTitle\":\"阅读全文\",\"singleURL\":\"https://www.dingtalk.com/\"},\"msgtype\":\"actionCard\"}");
+        return Result.ok(dingTalkSendResult);
     }
 
 }
