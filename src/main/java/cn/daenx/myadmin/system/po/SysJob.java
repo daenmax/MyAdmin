@@ -78,17 +78,20 @@ public class SysJob extends BaseEntity implements Serializable {
     @TableField(value = "remark")
     private String remark;
 
-//    /**
-//     * 异常时，通知渠道
-//     */
-//    @TableField(value = "notify_channel")
-//    private String notifyChannel;
-//
-//    /**
-//     * 异常时，通知对象
-//     */
-//    @TableField(value = "notify_obj")
-//    private String notifyObj;
+    /**
+     * 异常时，通知渠道，0=不通知，1=邮件，2=短信，3=钉钉
+     */
+    @TableField(value = "notify_channel")
+    private String notifyChannel;
+
+    /**
+     * 异常时，通知对象，多个用,隔开
+     * 邮件渠道时，写邮箱
+     * 短信渠道时，写手机号
+     * 钉钉渠道时，写botName
+     */
+    @TableField(value = "notify_objs")
+    private String notifyObjs;
 
     /**
      * 下次执行时间
