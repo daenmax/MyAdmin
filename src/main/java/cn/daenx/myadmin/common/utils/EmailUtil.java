@@ -105,7 +105,7 @@ public class EmailUtil {
     private static Boolean sendMailProtocol(SysEmailConfigVo.Email email, String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(email.getHost());
-        javaMailSender.setUsername(email.getHost());
+        javaMailSender.setUsername(email.getEmail());
         javaMailSender.setPassword(email.getPassword());
         javaMailSender.setPort(email.getPort());
         javaMailSender.setDefaultEncoding(email.getEncode());

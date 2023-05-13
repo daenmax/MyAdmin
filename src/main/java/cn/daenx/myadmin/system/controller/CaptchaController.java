@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.utils.DingTalkUtil;
+import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.CaptchaService;
@@ -41,9 +42,8 @@ public class CaptchaController {
      */
     @GetMapping("/testEmail")
     public Result testEmail() {
-//        SysEmailConfigVo.Email email = EmailUtil.getOneEmailConfig();
-//        System.out.println(email.getEmail());
-        return Result.ok("");
+        Boolean aBoolean = EmailUtil.sendEmail("1330166565@qq.com", "测试", "阿萨德", false, null);
+        return Result.ok(aBoolean);
     }
 
     /**
