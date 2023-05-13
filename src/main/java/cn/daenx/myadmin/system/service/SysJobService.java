@@ -66,4 +66,12 @@ public interface SysJobService extends IService<SysJob> {
      * @param id
      */
     void run(String id);
+
+    /**
+     * 异常通知
+     *
+     * @param sysJob
+     * @param errorMsg
+     */
+    void sendNotify(SysJob sysJob, String errorMsg);
 }

@@ -31,4 +31,9 @@ public class SysDingTalkConfigVo implements Serializable {
      * 仅仅是备注，无其他作用
      */
     private String remark;
+
+    /**
+     * 此参数不是真的存在
+     */
+    private String botName;
 }

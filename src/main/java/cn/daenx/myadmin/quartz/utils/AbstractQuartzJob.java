@@ -8,6 +8,7 @@ import cn.daenx.myadmin.quartz.constant.ScheduleConstants;
 import cn.daenx.myadmin.system.mapper.SysJobLogMapper;
 import cn.daenx.myadmin.system.po.SysJob;
 import cn.daenx.myadmin.system.po.SysJobLog;
+import cn.daenx.myadmin.system.service.SysJobService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,13 +23,15 @@ import java.time.LocalDateTime;
 
 /**
  * 抽象quartz调用
- *
  */
 @Component
 @Slf4j
 public abstract class AbstractQuartzJob implements Job {
     @Resource
     private SysJobLogMapper sysJobLogMapper;
+    @Resource
+    private SysJobService sysJobService;
+
     /**
      * 线程本地变量
      */
@@ -46,7 +49,6 @@ public abstract class AbstractQuartzJob implements Job {
             after(context, sysJob, null);
         } catch (Exception e) {
             log.error("任务执行异常  - ：", e);
-            //TODO 异常报警
             after(context, sysJob, e);
         }
     }
@@ -83,6 +85,8 @@ public abstract class AbstractQuartzJob implements Job {
             sysJobLog.setStatus(QuartzConstant.JOB_FAIL);
             String errorMsg = StringUtils.substring(ExceptionUtil.getExceptionMessage(e), 0, Constant.SAVE_LOG_LENGTH);
             sysJobLog.setExceptionInfo(errorMsg);
+            //发送异常通知
+            sysJobService.sendNotify(sysJob, errorMsg);
         } else {
             sysJobLog.setStatus(QuartzConstant.JOB_SUCCESS);
         }

@@ -5,12 +5,15 @@ import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysConfig;
 import cn.daenx.myadmin.system.vo.system.DingTalkSendResult;
 import cn.daenx.myadmin.system.vo.system.SysDingTalkConfigVo;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -26,6 +29,8 @@ import java.util.stream.Collectors;
  *
  * @author DaenMax
  */
+@Component
+@Slf4j
 public class DingTalkUtil {
 
     /**
@@ -37,9 +42,15 @@ public class DingTalkUtil {
      * @return
      */
     public static List<DingTalkSendResult> sendTalk(String botName, String msg) {
+        log.info("发送钉钉头部开始ing，botName={}，msg：{}", botName, msg);
         List<SysDingTalkConfigVo> sysSmsConfigVoList = getSysSmsConfigVo(botName);
+        if (CollUtil.isEmpty(sysSmsConfigVoList)) {
+            log.info("发送钉钉{}，botName={}，msg：{}", false ? "成功" : "失败", botName, msg);
+            return null;
+        }
         List<DingTalkSendResult> list = new ArrayList<>();
         for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
+            log.info("发送钉钉ing，botName={}，msg：{}", false ? "成功" : "失败", sysSmsConfigVo.getBotName(), msg);
             JSONObject req = new JSONObject();
             req.put("msgtype", "text");
             JSONObject text = new JSONObject();
@@ -48,6 +59,7 @@ public class DingTalkUtil {
             DingTalkSendResult dingTalkSendResult = sendMsg(sysSmsConfigVo, req.toJSONString());
             dingTalkSendResult.setBotName(botName);
             list.add(dingTalkSendResult);
+            log.info("发送钉钉{}，botName={}，msg：{}，原因", dingTalkSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getBotName(), msg, dingTalkSendResult.getMsg());
         }
         return list;
     }
@@ -61,12 +73,19 @@ public class DingTalkUtil {
      * @return
      */
     public static List<DingTalkSendResult> sendTalkContent(String botName, String content) {
+        log.info("发送钉钉头部开始ing，botName={}，content：{}", botName, content);
         List<SysDingTalkConfigVo> sysSmsConfigVoList = getSysSmsConfigVo(botName);
+        if (CollUtil.isEmpty(sysSmsConfigVoList)) {
+            log.info("发送钉钉{}，botName={}，content：{}", false ? "成功" : "失败", botName, content);
+            return null;
+        }
         List<DingTalkSendResult> list = new ArrayList<>();
         for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
+            log.info("发送钉钉ing，botName={}，content：{}", false ? "成功" : "失败", sysSmsConfigVo.getBotName(), content);
             DingTalkSendResult dingTalkSendResult = sendMsg(sysSmsConfigVo, content);
             dingTalkSendResult.setBotName(botName);
             list.add(dingTalkSendResult);
+            log.info("发送钉钉{}，botName={}，content：{}，原因", dingTalkSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getBotName(), content, dingTalkSendResult.getMsg());
         }
         return list;
     }
@@ -144,6 +163,7 @@ public class DingTalkUtil {
             JSONObject jsonObject = JSONObject.parseObject(sysConfig.getValue());
             SysDingTalkConfigVo sysDingTalkConfigVo = jsonObject.getObject(name, SysDingTalkConfigVo.class);
             if (ObjectUtil.isNotEmpty(sysDingTalkConfigVo)) {
+                sysDingTalkConfigVo.setBotName(name);
                 list.add(sysDingTalkConfigVo);
             }
         }

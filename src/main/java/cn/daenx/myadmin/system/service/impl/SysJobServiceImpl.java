@@ -2,13 +2,17 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.DingTalkUtil;
+import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
+import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.quartz.constant.QuartzConstant;
 import cn.daenx.myadmin.quartz.constant.ScheduleConstants;
 import cn.daenx.myadmin.quartz.exception.TaskException;
 import cn.daenx.myadmin.quartz.utils.CronUtils;
 import cn.daenx.myadmin.quartz.utils.ScheduleUtils;
+import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysJobMapper;
 import cn.daenx.myadmin.system.po.SysJob;
 import cn.daenx.myadmin.system.service.SysJobService;
@@ -16,24 +20,30 @@ import cn.daenx.myadmin.system.vo.SysJobAddVo;
 import cn.daenx.myadmin.system.vo.SysJobPageVo;
 import cn.daenx.myadmin.system.vo.SysJobUpdVo;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
+@Slf4j
 public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> implements SysJobService {
     @Resource
     private SysJobMapper sysJobMapper;
@@ -149,6 +159,8 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
         sysJob.setMisfirePolicy(vo.getMisfirePolicy());
         sysJob.setConcurrent(vo.getConcurrent());
         sysJob.setRemark(vo.getRemark());
+        sysJob.setNotifyChannel(vo.getNotifyChannel());
+        sysJob.setNotifyObjs(vo.getNotifyObjs());
         int insert = sysJobMapper.insert(sysJob);
         if (insert < 1) {
             throw new MyException("新增失败");
@@ -196,6 +208,8 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
         updateWrapper.set(SysJob::getMisfirePolicy, vo.getMisfirePolicy());
         updateWrapper.set(SysJob::getConcurrent, vo.getConcurrent());
         updateWrapper.set(SysJob::getRemark, vo.getRemark());
+        updateWrapper.set(SysJob::getNotifyChannel, vo.getNotifyChannel());
+        updateWrapper.set(SysJob::getNotifyObjs, vo.getNotifyObjs());
         int rows = sysJobMapper.update(new SysJob(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
@@ -256,6 +270,40 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
             throw new MyException("定时任务不存在");
         }
         runSchedulerJob(job);
+    }
+
+    /**
+     * 异常通知
+     *
+     * @param sysJob
+     * @param errorMsg
+     */
+    @Override
+    @Async
+    public void sendNotify(SysJob sysJob, String errorMsg) {
+        if (ObjectUtil.isEmpty(sysJob.getNotifyObjs())) {
+            log.info("没有填写通知对象，通知线程结束");
+            return;
+        }
+        if (SystemConstant.NOTIFY_CHANNEL_NO.equals(sysJob.getNotifyChannel())) {
+            //不通知
+        } else if (SystemConstant.NOTIFY_CHANNEL_EMAIL.equals(sysJob.getNotifyChannel())) {
+            //邮件
+            String subject = "[定时任务执行异常]" + sysJob.getJobName();
+            String content = "异常信息：\n" + errorMsg;
+            EmailUtil.sendEmail(sysJob.getNotifyObjs(), subject, content, false, null);
+        } else if (SystemConstant.NOTIFY_CHANNEL_SMS.equals(sysJob.getNotifyChannel())) {
+            //短信
+            JSONObject jsonObject = JSONObject.parseObject(sysJob.getNotifySmsInfo());
+            errorMsg = StringUtils.substring(errorMsg, 0, jsonObject.getInteger("length"));
+            Map<String, String> map = new HashMap<>();
+            map.put(jsonObject.getString("variable"), errorMsg);
+            SmsUtil.sendSms(sysJob.getNotifyObjs(), jsonObject.getString("templateId"), map);
+        } else if (SystemConstant.NOTIFY_CHANNEL_DING.equals(sysJob.getNotifyChannel())) {
+            //钉钉
+            String msg = "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
+            DingTalkUtil.sendTalk(sysJob.getNotifyObjs(), msg);
+        }
     }
 
     /**

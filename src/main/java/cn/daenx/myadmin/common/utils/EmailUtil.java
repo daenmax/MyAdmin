@@ -12,6 +12,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  * @author DaenMax
  */
 @Component
+@Slf4j
 public class EmailUtil {
 
     /**
@@ -54,11 +56,15 @@ public class EmailUtil {
      * @return
      */
     public static Boolean sendEmail(String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
+        log.info("发送邮件ing，对象={}，标题：{}，内容：{}", toEmail, subject, content);
         SysEmailConfigVo.Email email = getOneEmailConfig();
         if (ObjectUtil.isEmpty(email)) {
+            log.info("发送邮件{}，对象={}，标题：{}，内容：{}", false ? "成功" : "失败", toEmail, subject, content);
             return false;
         }
-        return sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
+        Boolean aBoolean = sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
+        log.info("发送邮件{}，发信={}，对象={}，标题：{}，内容：{}", aBoolean ? "成功" : "失败", email.getEmail(), toEmail, subject, content);
+        return aBoolean;
     }
 
     /**
@@ -74,11 +80,15 @@ public class EmailUtil {
      * @return
      */
     public static Boolean sendEmail(String toEmail, String subject, String content, Boolean isHtml, List<File> fileList, String fromEmail) {
+        log.info("发送邮件ing，对象={}，标题：{}，内容：{}", toEmail, subject, content);
         SysEmailConfigVo.Email email = getOneEmailConfig(fromEmail);
         if (ObjectUtil.isEmpty(email)) {
+            log.info("发送邮件{}，对象={}，标题：{}，内容：{}", false ? "成功" : "失败", toEmail, subject, content);
             return false;
         }
-        return sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
+        Boolean aBoolean = sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
+        log.info("发送邮件{}，发信={}，对象={}，标题：{}，内容：{}", aBoolean ? "成功" : "失败", email.getEmail(), toEmail, subject, content);
+        return aBoolean;
     }
 
     /**

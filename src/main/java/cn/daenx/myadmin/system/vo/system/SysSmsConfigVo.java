@@ -32,7 +32,8 @@ public class SysSmsConfigVo implements Serializable {
          */
         private String enable;
         /**
-         * 固定为：sms.tencentcloudapi.com
+         * 阿里云固定为：dysmsapi.aliyuncs.com
+         * 腾讯云固定为：sms.tencentcloudapi.com
          */
         private String endpoint;
         private String accessKeyId;

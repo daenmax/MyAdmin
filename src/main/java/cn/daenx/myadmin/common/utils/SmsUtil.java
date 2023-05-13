@@ -19,6 +19,8 @@ import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.sms.v20190711.SmsClient;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20190711.models.SendStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
  *
  * @author DaenMax
  */
+@Component
+@Slf4j
 public class SmsUtil {
 
 
@@ -52,22 +56,35 @@ public class SmsUtil {
      * @return
      */
     public static SmsSendResult sendSms(String phones, String templateId, Map<String, String> param) {
-        if (ObjectUtil.isEmpty(phones)) {
-            return SmsSendResult.builder().isSuccess(false).msg("手机号不能为空").build();
-        }
-        if (ObjectUtil.isEmpty(templateId)) {
-            return SmsSendResult.builder().isSuccess(false).msg("模板ID不能为空").build();
-        }
+        log.info("发送短信ing，对象={}，templateId：{}，param：{}", phones, templateId, param);
         SysSmsConfigVo sysSmsConfigVo = getSysSmsConfigVo();
         if (ObjectUtil.isEmpty(sysSmsConfigVo)) {
-            return SmsSendResult.builder().isSuccess(false).msg("系统短信配置不可用").build();
+            String msg = "系统短信配置不可用";
+            log.info("发送短信{}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败",phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
+        }
+        if (ObjectUtil.isEmpty(phones)) {
+            String msg = "手机号不能为空";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
+        }
+        if (ObjectUtil.isEmpty(templateId)) {
+            String msg = "模板ID不能为空";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
         }
         if ("aliyun".equals(sysSmsConfigVo.getConfig().getType())) {
-            return sendSmsAliyun(sysSmsConfigVo.getAliyun(), phones, templateId, param);
+            SmsSendResult smsSendResult = sendSmsAliyun(sysSmsConfigVo.getAliyun(), phones, templateId, param);
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, smsSendResult.getMsg());
+            return smsSendResult;
         } else if ("tencent".equals(sysSmsConfigVo.getConfig().getType())) {
-            return sendSmsTencent(sysSmsConfigVo.getTencent(), phones, templateId, param);
+            SmsSendResult smsSendResult = sendSmsTencent(sysSmsConfigVo.getTencent(), phones, templateId, param);
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, smsSendResult.getMsg());
+            return smsSendResult;
         }
-        return SmsSendResult.builder().isSuccess(false).msg("未知的type").build();
+        String msg = "未知的type";
+        log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, msg);
+        return SmsSendResult.builder().isSuccess(false).msg(msg).build();
     }
 
     /**
@@ -90,25 +107,40 @@ public class SmsUtil {
      * @return
      */
     public static SmsSendResult sendSms(String phones, String templateId, Map<String, String> param, String type) {
-        if (ObjectUtil.isEmpty(phones)) {
-            return SmsSendResult.builder().isSuccess(false).msg("手机号不能为空").build();
-        }
-        if (ObjectUtil.isEmpty(templateId)) {
-            return SmsSendResult.builder().isSuccess(false).msg("模板ID不能为空").build();
-        }
-        if (ObjectUtil.isEmpty(type)) {
-            return SmsSendResult.builder().isSuccess(false).msg("type不能为空").build();
-        }
+        log.info("发送短信ing，平台={}，对象={}，templateId：{}，param：{}", type, phones, templateId, param);
         SysSmsConfigVo sysSmsConfigVo = getSysSmsConfigVo();
         if (ObjectUtil.isEmpty(sysSmsConfigVo)) {
-            return SmsSendResult.builder().isSuccess(false).msg("系统短信配置不可用").build();
+            String msg = "系统短信配置不可用";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
+        }
+        if (ObjectUtil.isEmpty(phones)) {
+            String msg = "手机号不能为空";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
+        }
+        if (ObjectUtil.isEmpty(templateId)) {
+            String msg = "模板ID不能为空";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
+        }
+        if (ObjectUtil.isEmpty(type)) {
+            String msg = "type不能为空";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
         }
         if ("aliyun".equals(type)) {
-            return sendSmsAliyun(sysSmsConfigVo.getAliyun(), phones, templateId, param);
+            SmsSendResult smsSendResult = sendSmsAliyun(sysSmsConfigVo.getAliyun(), phones, templateId, param);
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", type, phones, templateId, param, smsSendResult.getMsg());
+            return smsSendResult;
         } else if ("tencent".equals(type)) {
-            return sendSmsTencent(sysSmsConfigVo.getTencent(), phones, templateId, param);
+            SmsSendResult smsSendResult = sendSmsTencent(sysSmsConfigVo.getTencent(), phones, templateId, param);
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", type, phones, templateId, param, smsSendResult.getMsg());
+            return smsSendResult;
         }
-        return SmsSendResult.builder().isSuccess(false).msg("未知的type").build();
+        String msg = "未知的type";
+        log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
+        return SmsSendResult.builder().isSuccess(false).msg(msg).build();
     }
 
     /**

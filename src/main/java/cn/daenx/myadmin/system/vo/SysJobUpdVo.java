@@ -56,4 +56,23 @@ public class SysJobUpdVo {
      */
     private String remark;
 
+    /**
+     * 异常时，通知渠道，0=不通知，1=邮件，2=短信，3=钉钉
+     */
+    private String notifyChannel;
+
+    /**
+     * 异常时，通知对象，多个用,隔开
+     * 邮件渠道时，写邮箱
+     * 短信渠道时，写手机号
+     * 钉钉渠道时，写botName
+     */
+    private String notifyObjs;
+
+    /**
+     * 通知渠道是短信时，填写变量名、模板ID和短信长度，例如：
+     * {"variable":"content","templateId":"123123","length":70}
+     */
+    private String notifySmsInfo;
+
 }

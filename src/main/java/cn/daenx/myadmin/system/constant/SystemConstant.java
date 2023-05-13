@@ -158,4 +158,21 @@ public class SystemConstant {
      * 邮箱redis队列key
      */
     public static final String EMAIL_POLL_KEY = "emailPoll";
+
+    /**
+     * 通知渠道，不通知
+     */
+    public static final String NOTIFY_CHANNEL_NO = "0";
+    /**
+     * 通知渠道，邮件
+     */
+    public static final String NOTIFY_CHANNEL_EMAIL = "1";
+    /**
+     * 通知渠道，短信
+     */
+    public static final String NOTIFY_CHANNEL_SMS = "2";
+    /**
+     * 通知渠道，钉钉
+     */
+    public static final String NOTIFY_CHANNEL_DING = "3";
 }
