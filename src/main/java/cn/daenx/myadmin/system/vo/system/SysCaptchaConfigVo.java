@@ -24,7 +24,7 @@ public class SysCaptchaConfigVo implements Serializable {
     public static class Config {
         /**
          * 验证码类型
-         * 0=图片验证码，1=滑块验证码（待实现），2=文字点选（待实现）
+         * 0=图片验证码，1=滑块验证码，2=文字点选（待实现）
          */
         private Integer type;
 

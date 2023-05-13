@@ -7,16 +7,8 @@ import lombok.Data;
  * 登录
  */
 @Data
-public class SysLoginVo {
+public class SysLoginVo extends SysSubmitCaptchaVo{
 
-    /**
-     * 验证码
-     */
-    private String code;
-    /**
-     * 验证码ID
-     */
-    private String uuid;
     /**
      * 登录方式
      */
