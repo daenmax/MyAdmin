@@ -65,15 +65,15 @@ public class EmailUtil {
      * 发送邮件
      * 指定邮箱号
      *
-     * @param fromEmail 指定要使用的在系统配置里的发信邮箱
-     * @param toEmail
+     * @param toEmail   多个用,隔开
      * @param subject
      * @param content
      * @param isHtml    是否是HTML
      * @param fileList  附件内容，留空则无
+     * @param fromEmail 指定要使用的在系统配置里的发信邮箱
      * @return
      */
-    public static Boolean sendEmail(String fromEmail, String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
+    public static Boolean sendEmail(String toEmail, String subject, String content, Boolean isHtml, List<File> fileList, String fromEmail) {
         SysEmailConfigVo.Email email = getOneEmailConfig(fromEmail);
         if (ObjectUtil.isEmpty(email)) {
             return false;
