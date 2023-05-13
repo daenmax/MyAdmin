@@ -4,7 +4,6 @@ import cn.daenx.myadmin.common.utils.DingTalkUtil;
 import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.CaptchaService;
-import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.vo.system.DingTalkSendResult;
 import cn.daenx.myadmin.system.vo.system.SmsSendResult;
 import cn.dev33.satoken.annotation.SaIgnore;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SaIgnore
@@ -22,8 +22,6 @@ import java.util.Map;
 public class CaptchaController {
     @Resource
     private CaptchaService captchaService;
-    @Resource
-    private SysConfigService sysConfigService;
 
     /**
      * 获取验证码
@@ -75,10 +73,10 @@ public class CaptchaController {
     @GetMapping("/testDingTalk")
     public Result testDingTalk() {
         //发送普通文本消息
-        DingTalkSendResult dingTalkSendResult = DingTalkUtil.sendTalk("测试普通文本消息");
+//        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendTalk("testbot", "测试普通文本消息");
         //自己组装复杂的消息，以便发送其他消息类型的消息
-//        DingTalkSendResult dingTalkSendResult = DingTalkUtil.sendTalkContent("{\"actionCard\":{\"title\":\"乔布斯 20 年前想打造一间苹果咖啡厅，而它正是 Apple Store 的前身\",\"text\":\"![screenshot](https://gw.alicdn.com/tfs/TB1ut3xxbsrBKNjSZFpXXcXhFXa-846-786.png)   ### 乔布斯 20 年前想打造的苹果咖啡厅   Apple Store 的设计正从原来满满的科技感走向生活化，而其生活化的走向其实可以追溯到 20 年前苹果一个建立咖啡馆的计划\",\"btnOrientation\":\"0\",\"singleTitle\":\"阅读全文\",\"singleURL\":\"https://www.dingtalk.com/\"},\"msgtype\":\"actionCard\"}");
-        return Result.ok(dingTalkSendResult);
+        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendTalkContent("testbot", "{\"msgtype\":\"markdown\",\"markdown\":{\"title\":\"杭州天气\",\"text\":\"#### 杭州天气 @150XXXXXXXX \\n > 9度，西北风1级，空气良89，相对温度73%\\n > ![screenshot](https://img.alicdn.com/tfs/TB1NwmBEL9TBuNjy1zbXXXpepXa-2400-1218.png)\\n > ###### 10点20分发布 [天气](https://www.dingtalk.com) \\n\"},\"at\":{\"atMobiles\":[\"150XXXXXXXX\"],\"atUserIds\":[\"user123\"],\"isAtAll\":false}}");
+        return Result.ok(dingTalkSendResults);
     }
 
 }

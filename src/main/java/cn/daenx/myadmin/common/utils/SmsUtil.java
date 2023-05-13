@@ -133,8 +133,6 @@ public class SmsUtil {
                     .setTemplateCode(templateId)
                     .setTemplateParam(JSON.toJSONString(param));
             SendSmsResponse resp = client.sendSms(req);
-            System.out.println("OK".equals(resp.getBody().getCode()));
-            System.out.println(resp.getBody().getCode());
             SmsSendResult smsSendResult = SmsSendResult.builder().isSuccess("OK".equals(resp.getBody().getCode())).msg(resp.getBody().getMessage()).aliyunRes(resp).build();
             return smsSendResult;
         } catch (Exception e) {

@@ -18,4 +18,5 @@ public class DingTalkSendResult {
      * 钉钉返回的
      */
     private String msg;
+    private String botName;
 }

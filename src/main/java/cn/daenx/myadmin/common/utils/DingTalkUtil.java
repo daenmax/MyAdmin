@@ -5,6 +5,7 @@ import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysConfig;
 import cn.daenx.myadmin.system.vo.system.DingTalkSendResult;
 import cn.daenx.myadmin.system.vo.system.SysDingTalkConfigVo;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSON;
@@ -14,6 +15,11 @@ import org.apache.commons.codec.binary.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 钉钉群通知工具类
@@ -26,29 +32,43 @@ public class DingTalkUtil {
      * 发送钉钉群通知
      * text类型，如果需要其他消息类型，请自己组装报文，然后调用DingTalkSendResult方法
      *
-     * @param msg 消息内容
+     * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开
+     * @param msg     消息内容
      * @return
      */
-    public static DingTalkSendResult sendTalk(String msg) {
-        SysDingTalkConfigVo sysSmsConfigVo = getSysSmsConfigVo();
-        JSONObject req = new JSONObject();
-        req.put("msgtype", "text");
-        JSONObject text = new JSONObject();
-        text.put("content", ObjectUtil.isEmpty(sysSmsConfigVo.getKeywords()) ? msg : sysSmsConfigVo.getKeywords() + msg);
-        req.put("text", text);
-        return sendMsg(sysSmsConfigVo, req.toJSONString());
+    public static List<DingTalkSendResult> sendTalk(String botName, String msg) {
+        List<SysDingTalkConfigVo> sysSmsConfigVoList = getSysSmsConfigVo(botName);
+        List<DingTalkSendResult> list = new ArrayList<>();
+        for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
+            JSONObject req = new JSONObject();
+            req.put("msgtype", "text");
+            JSONObject text = new JSONObject();
+            text.put("content", ObjectUtil.isEmpty(sysSmsConfigVo.getKeywords()) ? msg : sysSmsConfigVo.getKeywords() + msg);
+            req.put("text", text);
+            DingTalkSendResult dingTalkSendResult = sendMsg(sysSmsConfigVo, req.toJSONString());
+            dingTalkSendResult.setBotName(botName);
+            list.add(dingTalkSendResult);
+        }
+        return list;
     }
 
     /**
      * 发送钉钉群通知
      * 自己组装报文，以便实现更多消息类型
      *
+     * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开
      * @param content JSON格式的数据
      * @return
      */
-    public static DingTalkSendResult sendTalkContent(String content) {
-        SysDingTalkConfigVo sysSmsConfigVo = getSysSmsConfigVo();
-        return sendMsg(sysSmsConfigVo, content);
+    public static List<DingTalkSendResult> sendTalkContent(String botName, String content) {
+        List<SysDingTalkConfigVo> sysSmsConfigVoList = getSysSmsConfigVo(botName);
+        List<DingTalkSendResult> list = new ArrayList<>();
+        for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
+            DingTalkSendResult dingTalkSendResult = sendMsg(sysSmsConfigVo, content);
+            dingTalkSendResult.setBotName(botName);
+            list.add(dingTalkSendResult);
+        }
+        return list;
     }
 
     /**
@@ -60,27 +80,27 @@ public class DingTalkUtil {
      */
     private static DingTalkSendResult sendMsg(SysDingTalkConfigVo sysSmsConfigVo, String content) {
         if (ObjectUtil.isEmpty(sysSmsConfigVo)) {
-            return new DingTalkSendResult(false, 9999, "系统钉钉通知配置不可用");
+            return new DingTalkSendResult(false, 9999, "系统钉钉通知配置不可用", null);
         }
         String sign = "";
         if (ObjectUtil.isNotEmpty(sysSmsConfigVo.getSecret())) {
             try {
                 sign = getSign(sysSmsConfigVo.getSecret());
             } catch (Exception e) {
-                return new DingTalkSendResult(false, 9999, "计算签名失败");
+                return new DingTalkSendResult(false, 9999, "计算签名失败", null);
             }
         }
         String url = "https://oapi.dingtalk.com/robot/send?access_token=" + sysSmsConfigVo.getAccessToken() + sign;
         String body = HttpRequest.post(url).header("Content-Type", "application/json").body(content).execute().body();
         if (ObjectUtil.isEmpty(body)) {
-            return new DingTalkSendResult(false, 9999, "请求接收为空");
+            return new DingTalkSendResult(false, 9999, "请求接收为空", null);
         }
         JSONObject jsonObject = JSONObject.parseObject(body);
         Integer errcode = jsonObject.getInteger("errcode");
         if (errcode == 0) {
-            return new DingTalkSendResult(true, errcode, jsonObject.getString("errmsg"));
+            return new DingTalkSendResult(true, errcode, jsonObject.getString("errmsg"), null);
         }
-        return new DingTalkSendResult(false, errcode, jsonObject.getString("errmsg"));
+        return new DingTalkSendResult(false, errcode, jsonObject.getString("errmsg"), null);
     }
 
     /**
@@ -105,9 +125,10 @@ public class DingTalkUtil {
      * 从redis里获取系统钉钉通知配置
      * 不存在或者被禁用或者数量为0返回null
      *
+     * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开
      * @return
      */
-    private static SysDingTalkConfigVo getSysSmsConfigVo() {
+    private static List<SysDingTalkConfigVo> getSysSmsConfigVo(String botName) {
         Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.dingTalk.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
@@ -116,8 +137,17 @@ public class DingTalkUtil {
         if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
             return null;
         }
-        SysDingTalkConfigVo sysDingTalkConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysDingTalkConfigVo.class);
-        return sysDingTalkConfigVo;
+        List<SysDingTalkConfigVo> list = new ArrayList<>();
+        Set<String> set = Arrays.stream(botName.split(",")).collect(Collectors.toSet());
+        String[] array = ArrayUtil.toArray(set, String.class);
+        for (String name : array) {
+            JSONObject jsonObject = JSONObject.parseObject(sysConfig.getValue());
+            SysDingTalkConfigVo sysDingTalkConfigVo = jsonObject.getObject(name, SysDingTalkConfigVo.class);
+            if (ObjectUtil.isNotEmpty(sysDingTalkConfigVo)) {
+                list.add(sysDingTalkConfigVo);
+            }
+        }
+        return list;
     }
 
 }
