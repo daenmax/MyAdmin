@@ -358,6 +358,5 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         } else {
             RedisUtil.del(SystemConstant.EMAIL_POLL_KEY);
         }
-
     }
 }

@@ -55,6 +55,9 @@ public class EmailUtil {
      */
     public static Boolean sendEmail(String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
         SysEmailConfigVo.Email email = getOneEmailConfig();
+        if (ObjectUtil.isEmpty(email)) {
+            return false;
+        }
         return sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
     }
 
@@ -72,6 +75,9 @@ public class EmailUtil {
      */
     public static Boolean sendEmail(String fromEmail, String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
         SysEmailConfigVo.Email email = getOneEmailConfig(fromEmail);
+        if (ObjectUtil.isEmpty(email)) {
+            return false;
+        }
         return sendMailProtocol(email, toEmail, subject, content, isHtml, fileList);
     }
 
