@@ -56,7 +56,7 @@ public class MyUtil {
         req.put("ticket", ticket);
         req.put("randStr", randStr);
         req.put("appid", 2090581062);
-        String url = "https://accounts.qq.com/login/limit/proxy/domain/cloud.tencent.com/v3/chkcaptcha?bkn=";
+        String url = "https://accounts.qq.com/login/limit/proxy/domain/qq110.qq.com/v3/chkcaptcha?bkn=";
         String body = HttpRequest.post(url)
                 .header("Content-Type", "application/json")
                 .header("qname-service", "1935233:65536")

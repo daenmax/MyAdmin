@@ -84,12 +84,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      * 获取登录用户ID
      */
     private String getLoginUserId() {
-        SysLoginUserVo loginUser;
-        try {
-            loginUser = loginUtilService.getLoginUser();
-        } catch (Exception e) {
-            return null;
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        if (loginUser != null) {
+            return loginUser.getId();
         }
-        return loginUser.getId();
+        return null;
     }
 }
