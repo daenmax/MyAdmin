@@ -94,13 +94,6 @@ public class SysJob extends BaseEntity implements Serializable {
     private String notifyObjs;
 
     /**
-     * 通知渠道是短信时，填写变量名、模板ID和短信长度，例如：
-     * {"variable":"content","templateId":"123123","length":70}
-     */
-    @TableField(value = "notify_sms_info")
-    private String notifySmsInfo;
-
-    /**
      * 下次执行时间
      */
     @TableField(exist = false)

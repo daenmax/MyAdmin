@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.system.vo.system.SysCaptchaConfigVo;
+import cn.daenx.myadmin.system.vo.system.SysSubmitCaptchaVo;
 
 import java.util.HashMap;
 
@@ -20,4 +21,11 @@ public interface CaptchaService {
      * @return
      */
     HashMap<String, Object> createCaptchaImgToBase64(SysCaptchaConfigVo sysCaptchaConfigVo);
+
+    /**
+     * 校验验证码
+     *
+     * @param vo
+     */
+    void validatedCaptcha(SysSubmitCaptchaVo vo);
 }

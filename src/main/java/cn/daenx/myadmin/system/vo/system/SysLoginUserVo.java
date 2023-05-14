@@ -28,6 +28,21 @@ public class SysLoginUserVo implements Serializable {
     private String deptId;
     private String userType;
 
+    /**
+     * 用户手机号
+     */
+    private String phone;
+
+    /**
+     * 邮箱
+     */
+    private String email;
+
+    /**
+     * 微信open_id
+     */
+    private String openId;
+
 
     /**
      * 菜单权限

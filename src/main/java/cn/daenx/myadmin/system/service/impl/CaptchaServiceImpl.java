@@ -1,14 +1,19 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
+import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.service.CaptchaService;
 import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.vo.system.SysCaptchaConfigVo;
+import cn.daenx.myadmin.system.vo.system.SysSubmitCaptchaVo;
 import cn.hutool.captcha.*;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.SecureUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -118,5 +123,47 @@ public class CaptchaServiceImpl implements CaptchaService {
         map.put("uuid", uuid);
         map.put("img", base64);
         return map;
+    }
+
+    /**
+     * 校验验证码
+     *
+     * @param vo
+     */
+    @Override
+    public void validatedCaptcha(SysSubmitCaptchaVo vo) {
+        SysCaptchaConfigVo sysCaptchaConfigVo = sysConfigService.getSysCaptchaConfigVo();
+        if (!"true".equals(sysCaptchaConfigVo.getConfig().getLock())) {
+            return;
+        }
+        if (sysCaptchaConfigVo.getConfig().getType() == 0) {
+            //图片验证码
+            if (ObjectUtil.isEmpty(vo.getCode()) || ObjectUtil.isEmpty(vo.getUuid())) {
+                throw new MyException("验证码相关参数不能为空");
+            }
+            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+            if (ObjectUtil.isEmpty(codeReal)) {
+                throw new MyException("验证码已过期，请刷新验证码");
+            }
+            if (!codeReal.equals(vo.getCode())) {
+                RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+                throw new MyException("验证码错误");
+            }
+            RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+        } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
+            //滑块验证码
+            if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket())) {
+                throw new MyException("验证码相关参数不能为空");
+            }
+            String md5 = SecureUtil.md5(vo.getRandStr() + vo.getTicket());
+            Object value = RedisUtil.getValue(RedisConstant.CHECK_CAPTCHA_TENCENT + md5);
+            if (ObjectUtil.isNotEmpty(value)) {
+                throw new MyException("滑块验证参数已失效，请重新验证");
+            }
+            if (!MyUtil.checkTencentCaptchaSlider(vo.getRandStr(), vo.getTicket())) {
+                throw new MyException("滑块验证失败，请重试");
+            }
+            RedisUtil.setValue(RedisConstant.CHECK_CAPTCHA_TENCENT + md5, "1", 60L, TimeUnit.SECONDS);
+        }
     }
 }

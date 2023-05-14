@@ -5,7 +5,6 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.enums.DeviceType;
 import cn.daenx.myadmin.common.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
@@ -25,7 +24,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -46,43 +47,9 @@ public class SysLoginServiceImpl implements SysLoginService {
     private LoginUtilService loginUtilService;
     @Resource
     private SysConfigService sysConfigService;
+    @Resource
+    private CaptchaService captchaService;
 
-    /**
-     * 校验验证码
-     *
-     * @param vo
-     */
-    private void validatedCaptcha(SysSubmitCaptchaVo vo) {
-        SysCaptchaConfigVo sysCaptchaConfigVo = sysConfigService.getSysCaptchaConfigVo();
-        if (!"true".equals(sysCaptchaConfigVo.getConfig().getLock())) {
-            return;
-        }
-        if (sysCaptchaConfigVo.getConfig().getType() == 0) {
-            //图片验证码
-            if (ObjectUtil.isEmpty(vo.getCode()) || ObjectUtil.isEmpty(vo.getUuid())) {
-                throw new MyException("验证码相关参数不能为空");
-            }
-            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_IMG + vo.getUuid());
-            if (ObjectUtil.isEmpty(codeReal)) {
-                throw new MyException("验证码已过期，请刷新验证码");
-            }
-            if (!codeReal.equals(vo.getCode())) {
-                RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
-                throw new MyException("验证码错误");
-            }
-            RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
-        } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
-            //滑块验证码
-            if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket())) {
-                throw new MyException("验证码相关参数不能为空");
-            }
-            if (!MyUtil.checkTencentCaptchaSlider(vo.getRandStr(), vo.getTicket())) {
-                throw new MyException("滑块验证异常，请重试");
-            }
-
-        }
-
-    }
 
     /**
      * PC登录
@@ -97,7 +64,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         HttpServletRequest request = ServletUtils.getRequest();
         UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
         //校验验证码
-        validatedCaptcha(vo);
+        captchaService.validatedCaptcha(vo);
         if (vo.getLoginType().equals(LoginType.ACCOUNT.getCode())) {
             remark = remark + "/" + LoginType.ACCOUNT.getDesc();
             //账号密码登录
@@ -147,6 +114,9 @@ public class SysLoginServiceImpl implements SysLoginService {
             loginUserVo.setDeptId(sysUser.getDeptId());
             loginUserVo.setUsername(sysUser.getUsername());
             loginUserVo.setUserType(sysUser.getUserType());
+            loginUserVo.setEmail(sysUser.getEmail());
+            loginUserVo.setPhone(sysUser.getPhone());
+            loginUserVo.setOpenId(sysUser.getOpenId());
             loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
             if (loginUserVo.getRoles().size() < 1) {
                 //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
@@ -197,7 +167,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public void register(SysRegisterVo vo) {
-        validatedCaptcha(vo);
+        captchaService.validatedCaptcha(vo);
         //判空
         if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
             throw new MyException("账号和密码不能为空");

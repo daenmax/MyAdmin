@@ -47,7 +47,7 @@ public class CaptchaController {
     }
 
     /**
-     * 测试邮箱机制
+     * 测试短信
      *
      * @return
      */

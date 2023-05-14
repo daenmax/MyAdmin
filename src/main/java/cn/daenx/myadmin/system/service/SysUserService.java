@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
+import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.SysUser;
 import cn.daenx.myadmin.system.vo.*;
@@ -16,25 +17,28 @@ public interface SysUserService extends IService<SysUser> {
      * 通过手机号检查用户是否存在
      *
      * @param phone
+     * @param nowId 排除ID
      * @return
      */
-    Boolean checkUserByPhone(String phone);
+    Boolean checkUserByPhone(String phone, String nowId);
 
     /**
      * 通过邮箱检查用户是否存在
      *
      * @param email
+     * @param nowId 排除ID
      * @return
      */
-    Boolean checkUserByEmail(String email);
+    Boolean checkUserByEmail(String email, String nowId);
 
     /**
      * 通过openId检查用户是否存在
      *
      * @param openId
+     * @param nowId  排除ID
      * @return
      */
-    Boolean checkUserByOpenId(String openId);
+    Boolean checkUserByOpenId(String openId, String nowId);
 
     /**
      * 通过apiKey检查用户是否存在
@@ -238,4 +242,36 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     String avatar(MultipartFile file);
+
+    /**
+     * 获取邮箱验证码
+     *
+     * @param vo
+     * @return
+     */
+    Result getEmailValidCode(SysUserUpdBindVo vo);
+
+    /**
+     * 获取手机验证码
+     *
+     * @param vo
+     * @return
+     */
+    Result getPhoneValidCode(SysUserUpdBindVo vo);
+
+    /**
+     * 修改邮箱绑定
+     *
+     * @param vo
+     * @return
+     */
+    Result updateBindEmail(SysUserUpdBindVo vo);
+
+    /**
+     * 修改手机绑定
+     *
+     * @param vo
+     * @return
+     */
+    Result updateBindPhone(SysUserUpdBindVo vo);
 }

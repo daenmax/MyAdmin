@@ -15,12 +15,13 @@ import cn.daenx.myadmin.quartz.utils.ScheduleUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysJobMapper;
 import cn.daenx.myadmin.system.po.SysJob;
+import cn.daenx.myadmin.system.service.SysConfigService;
 import cn.daenx.myadmin.system.service.SysJobService;
 import cn.daenx.myadmin.system.vo.SysJobAddVo;
 import cn.daenx.myadmin.system.vo.SysJobPageVo;
 import cn.daenx.myadmin.system.vo.SysJobUpdVo;
+import cn.daenx.myadmin.system.vo.system.SysSmsTemplateConfigVo;
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -33,6 +34,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +50,11 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
     @Resource
     private SysJobMapper sysJobMapper;
     @Resource
+    private SysConfigService sysConfigService;
+    @Resource
     private Scheduler scheduler;
+    @Value("${system-info.name}")
+    private String systemInfoName;
 
     /**
      * 初始化定时任务
@@ -289,19 +295,27 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
             //不通知
         } else if (SystemConstant.NOTIFY_CHANNEL_EMAIL.equals(sysJob.getNotifyChannel())) {
             //邮件
-            String subject = "[定时任务执行异常]" + sysJob.getJobName();
+            String subject = "【" + systemInfoName + "】" + "[定时任务执行异常]" + sysJob.getJobName();
             String content = "异常信息：\n" + errorMsg;
             EmailUtil.sendEmail(sysJob.getNotifyObjs(), subject, content, false, null);
         } else if (SystemConstant.NOTIFY_CHANNEL_SMS.equals(sysJob.getNotifyChannel())) {
             //短信
-            JSONObject jsonObject = JSONObject.parseObject(sysJob.getNotifySmsInfo());
-            errorMsg = StringUtils.substring(errorMsg, 0, jsonObject.getInteger("length"));
-            Map<String, String> map = new HashMap<>();
-            map.put(jsonObject.getString("variable"), errorMsg);
-            SmsUtil.sendSms(sysJob.getNotifyObjs(), jsonObject.getString("templateId"), map);
+            SysSmsTemplateConfigVo sysSmsTemplateConfigVo = sysConfigService.getSysSmsTemplateConfigVo();
+            if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo)) {
+                log.info("没有配置短信模板参数，通知线程结束");
+                return;
+            }
+            if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo.getJobError())) {
+                log.info("没有配置jobError短信模板参数，通知线程结束");
+                return;
+            }
+            errorMsg = StringUtils.substring(errorMsg, 0, sysSmsTemplateConfigVo.getJobError().getLength());
+            Map<String, String> smsMap = new HashMap<>();
+            smsMap.put(sysSmsTemplateConfigVo.getJobError().getVariable(), errorMsg);
+            SmsUtil.sendSms(sysJob.getNotifyObjs(), sysSmsTemplateConfigVo.getJobError().getTemplateId(), smsMap);
         } else if (SystemConstant.NOTIFY_CHANNEL_DING.equals(sysJob.getNotifyChannel())) {
             //钉钉
-            String msg = "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
+            String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
             DingTalkUtil.sendTalk(sysJob.getNotifyObjs(), msg);
         }
     }

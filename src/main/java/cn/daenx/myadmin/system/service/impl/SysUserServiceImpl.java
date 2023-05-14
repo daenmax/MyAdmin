@@ -1,34 +1,45 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.Constant;
+import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.oss.vo.UploadResult;
+import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
+import cn.daenx.myadmin.common.utils.RedisUtil;
+import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
+import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
+import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import cn.daenx.myadmin.system.po.*;
 import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
+import cn.daenx.myadmin.system.vo.system.SmsSendResult;
 import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.system.SysSmsTemplateConfigVo;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
@@ -55,19 +66,25 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private SysFileService sysFileService;
     @Resource
+    private CaptchaService captchaService;
+    @Resource
     private SysConfigService sysConfigService;
+
+    @Value("${system-info.name}")
+    private String systemInfoName;
 
     /**
      * 通过手机号检查用户是否存在
      *
      * @param phone
+     * @param nowId 排除ID
      * @return
      */
     @Override
-    public Boolean checkUserByPhone(String phone) {
+    public Boolean checkUserByPhone(String phone, String nowId) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getPhone, phone);
-        wrapper.eq(SysUser::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysUser::getId, nowId);
         return sysUserMapper.exists(wrapper);
     }
 
@@ -75,13 +92,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 通过邮箱检查用户是否存在
      *
      * @param email
+     * @param nowId 排除ID
      * @return
      */
     @Override
-    public Boolean checkUserByEmail(String email) {
+    public Boolean checkUserByEmail(String email, String nowId) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getEmail, email);
-        wrapper.eq(SysUser::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysUser::getId, nowId);
         return sysUserMapper.exists(wrapper);
     }
 
@@ -89,13 +107,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 通过openId检查用户是否存在
      *
      * @param openId
+     * @param nowId  排除ID
      * @return
      */
     @Override
-    public Boolean checkUserByOpenId(String openId) {
+    public Boolean checkUserByOpenId(String openId, String nowId) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getOpenId, openId);
-        wrapper.eq(SysUser::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysUser::getId, nowId);
         return sysUserMapper.exists(wrapper);
     }
 
@@ -450,17 +469,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Transactional(rollbackFor = Exception.class)
     public void addInfo(SysUserAddVo vo) {
         if (StringUtils.isNotBlank(vo.getPhone())) {
-            if (checkUserByPhone(vo.getPhone())) {
+            if (checkUserByPhone(vo.getPhone(), null)) {
                 throw new MyException("手机号已存在");
             }
         }
         if (StringUtils.isNotBlank(vo.getEmail())) {
-            if (checkUserByEmail(vo.getEmail())) {
+            if (checkUserByEmail(vo.getEmail(), null)) {
                 throw new MyException("邮箱已存在");
             }
         }
         if (StringUtils.isNotBlank(vo.getOpenId())) {
-            if (checkUserByOpenId(vo.getOpenId())) {
+            if (checkUserByOpenId(vo.getOpenId(), null)) {
                 throw new MyException("openId已存在");
             }
         }
@@ -755,5 +774,232 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("修改失败");
         }
         return uploadResult.getFileUrl();
+    }
+
+    /**
+     * 获取邮箱验证码
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public Result getEmailValidCode(SysUserUpdBindVo vo) {
+        captchaService.validatedCaptcha(vo);
+        if (ObjectUtil.isEmpty(vo.getEmail())) {
+            throw new MyException("请填写邮箱");
+        }
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
+        if (exist) {
+            throw new MyException("该邮箱已经被其他账户绑定");
+        }
+        if (vo.getEmail().equals(loginUser.getEmail())) {
+            throw new MyException("当前账户已经绑定了此邮箱");
+        }
+        String value = (String) RedisUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        if (ObjectUtil.isNotEmpty(value)) {
+            throw new MyException("验证码尚未失效，如未收到验证码请30分钟后再试");
+        }
+        long nowTime = System.currentTimeMillis() / 1000;
+        long waitTime;
+        String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_EMAIL + loginUser.getId());
+        if (ObjectUtil.isNotEmpty(lastSendTimeStr)) {
+            Long lastSendTime = Long.valueOf(lastSendTimeStr);
+            waitTime = nowTime - lastSendTime;
+            if (waitTime < 60) {
+                throw new MyException("请于" + waitTime + "秒后再试");
+            } else {
+                waitTime = 60;
+            }
+        } else {
+            waitTime = 60;
+        }
+        //生成验证码
+        String code = RandomUtil.randomNumbers(6);
+        String subject = "【" + systemInfoName + "】" + "邮件验证";
+        String content = buildCodeValida(systemInfoName, code);
+        Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
+        if (aBoolean) {
+            RedisUtil.setValue(RedisConstant.SEND_EMAIL + loginUser.getId(), String.valueOf(nowTime));
+            //有效期30分钟
+            RedisUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, 1800L, TimeUnit.SECONDS);
+        } else {
+            throw new MyException("发送邮件失败，请联系管理员");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("waitTime", waitTime);
+        map.put("msg", "验证码已发送，30分钟有效");
+        return Result.ok(map);
+    }
+
+    /**
+     * 读取邮件HTLM模板，如果不存在就使用默认的
+     *
+     * @param systemName
+     * @param code
+     * @return
+     */
+    private String buildCodeValida(String systemName, String code) {
+        String html = "";
+        try {
+            //加载邮件html模板
+            html = ResourceUtil.readUtf8Str("emailTemplate/codeValida.html");
+        } catch (Exception e) {
+            html = "您好！感谢您使用【systemInfoName】，您的验证码为：【code】，有效期30分钟，请尽快填写验证码完成验证！\n\nHello! Thanks for using 【systemInfoName】, the verification code is:【code】, valid for 30 minutes. Please fill in the verification code as soon as possible!";
+        }
+        html = html.replaceAll("【systemInfoName】", systemName).replaceAll("【code】", code);
+        return html;
+
+
+    }
+
+
+    /**
+     * 获取手机验证码
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public Result getPhoneValidCode(SysUserUpdBindVo vo) {
+        captchaService.validatedCaptcha(vo);
+        if (ObjectUtil.isEmpty(vo.getPhone())) {
+            throw new MyException("请填写手机号");
+        }
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
+        if (exist) {
+            throw new MyException("该手机号已经被其他账户绑定");
+        }
+        if (vo.getPhone().equals(loginUser.getPhone())) {
+            throw new MyException("当前账户已经绑定了此手机号");
+        }
+        String value = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        if (ObjectUtil.isNotEmpty(value)) {
+            throw new MyException("验证码尚未失效，如未收到验证码请30分钟后再试");
+        }
+        long nowTime = System.currentTimeMillis() / 1000;
+        long waitTime;
+        String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_PHONE + loginUser.getId());
+        if (ObjectUtil.isNotEmpty(lastSendTimeStr)) {
+            Long lastSendTime = Long.valueOf(lastSendTimeStr);
+            waitTime = nowTime - lastSendTime;
+            if (waitTime < 60) {
+                throw new MyException("请于" + waitTime + "秒后再试");
+            } else {
+                waitTime = 60;
+            }
+        } else {
+            waitTime = 60;
+        }
+        SysSmsTemplateConfigVo sysSmsTemplateConfigVo = sysConfigService.getSysSmsTemplateConfigVo();
+        if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo)) {
+            throw new MyException("没有配置短信模板参数，请联系管理员");
+        }
+        if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo.getBindPhone())) {
+            throw new MyException("没有配置bindPhone短信模板参数，请联系管理员");
+        }
+        //生成验证码
+        String code = RandomUtil.randomNumbers(6);
+        Map<String, String> smsMap = new HashMap<>();
+        smsMap.put(sysSmsTemplateConfigVo.getBindPhone().getVariable(), code);
+        SmsSendResult smsSendResult = SmsUtil.sendSms(vo.getPhone(), sysSmsTemplateConfigVo.getBindPhone().getTemplateId(), smsMap);
+        if (smsSendResult.isSuccess()) {
+            RedisUtil.setValue(RedisConstant.SEND_PHONE + loginUser.getId(), String.valueOf(nowTime));
+            //有效期30分钟
+            RedisUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, 300L, TimeUnit.SECONDS);
+        } else {
+            throw new MyException("发送邮件失败，请联系管理员");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("waitTime", waitTime);
+        map.put("msg", "验证码已发送，5分钟有效");
+        return Result.ok(map);
+    }
+
+    /**
+     * 修改邮箱绑定
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public Result updateBindEmail(SysUserUpdBindVo vo) {
+        if (ObjectUtil.isEmpty(vo.getEmail())) {
+            throw new MyException("请填写邮箱");
+        }
+        if (ObjectUtil.isEmpty(vo.getValidCode())) {
+            throw new MyException("请填写收到的验证码");
+        }
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        if (ObjectUtil.isEmpty(validCode)) {
+            throw new MyException("验证码已失效，请重试");
+        }
+        if (!vo.getValidCode().equals(validCode)) {
+            throw new MyException("验证码错误，请检查");
+        }
+        RedisUtil.del(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
+        if (exist) {
+            throw new MyException("该邮箱已经被其他账户绑定");
+        }
+        if (vo.getEmail().equals(loginUser.getEmail())) {
+            throw new MyException("当前账户已经绑定了此邮箱");
+        }
+        LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysUser::getId, loginUser.getId());
+        wrapper.set(SysUser::getEmail, vo.getEmail());
+        int update = sysUserMapper.update(new SysUser(), wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+        loginUtilService.logout();
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg", "绑定成功，请重新登录");
+        return Result.ok(map);
+    }
+
+    /**
+     * 修改手机绑定
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public Result updateBindPhone(SysUserUpdBindVo vo) {
+        if (ObjectUtil.isEmpty(vo.getPhone())) {
+            throw new MyException("请填写手机号");
+        }
+        if (ObjectUtil.isEmpty(vo.getValidCode())) {
+            throw new MyException("请填写收到的验证码");
+        }
+        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        if (ObjectUtil.isEmpty(validCode)) {
+            throw new MyException("验证码已失效，请重试");
+        }
+        if (!vo.getValidCode().equals(validCode)) {
+            throw new MyException("验证码错误，请检查");
+        }
+        RedisUtil.del(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
+        if (exist) {
+            throw new MyException("该手机号已经被其他账户绑定");
+        }
+        if (vo.getPhone().equals(loginUser.getPhone())) {
+            throw new MyException("当前账户已经绑定了此手机号");
+        }
+        LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(SysUser::getId, loginUser.getId());
+        wrapper.set(SysUser::getPhone, vo.getPhone());
+        int update = sysUserMapper.update(new SysUser(), wrapper);
+        if (update < 1) {
+            throw new MyException("修改失败");
+        }
+        loginUtilService.logout();
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg", "绑定成功，请重新登录");
+        return Result.ok(map);
     }
 }

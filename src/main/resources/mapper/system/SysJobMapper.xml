@@ -15,7 +15,6 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="notify_channel" jdbcType="VARCHAR" property="notifyChannel" />
     <result column="notify_objs" jdbcType="VARCHAR" property="notifyObjs" />
-    <result column="notify_sms_info" jdbcType="VARCHAR" property="notifySmsInfo" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_id" jdbcType="VARCHAR" property="updateId" />
@@ -25,6 +24,6 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, job_name, job_group, invoke_target, cron_expression, `status`, misfire_policy, 
-    concurrent, remark, notify_channel, notify_objs, notify_sms_info, create_id, create_time, update_id, update_time, is_delete
+    concurrent, remark, notify_channel, notify_objs, create_id, create_time, update_id, update_time, is_delete
   </sql>
 </mapper>

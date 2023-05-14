@@ -316,6 +316,27 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     /**
+     * 获取系统短信模板ID配置
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    @Override
+    public SysSmsTemplateConfigVo getSysSmsTemplateConfigVo() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.smsTemplate.config");
+        if (ObjectUtil.isEmpty(object)) {
+            return null;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysSmsTemplateConfigVo sysSmsTemplateConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysSmsTemplateConfigVo.class);
+        return sysSmsTemplateConfigVo;
+    }
+
+    /**
      * 获取系统邮箱配置信息
      * 不存在或者被禁用或者数量为0返回null
      *

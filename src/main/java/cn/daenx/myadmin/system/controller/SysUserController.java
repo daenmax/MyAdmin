@@ -219,4 +219,46 @@ public class SysUserController {
         sysUserService.saveAuthRole(vo);
         return Result.ok();
     }
+
+
+    /**
+     * 获取邮箱验证码
+     *
+     * @return
+     */
+    @PostMapping("/getEmailValidCode")
+    public Result getEmailValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
+        return sysUserService.getEmailValidCode(vo);
+    }
+
+    /**
+     * 获取手机验证码
+     *
+     * @return
+     */
+    @PostMapping("/getPhoneValidCode")
+    public Result getPhoneValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
+        return sysUserService.getPhoneValidCode(vo);
+    }
+
+
+    /**
+     * 修改邮箱绑定
+     *
+     * @return
+     */
+    @PostMapping("/updateBindEmail")
+    public Result updateBindEmail(@Validated @RequestBody SysUserUpdBindVo vo) {
+        return sysUserService.updateBindEmail(vo);
+    }
+
+    /**
+     * 修改手机绑定
+     *
+     * @return
+     */
+    @PostMapping("/updateBindPhone")
+    public Result updateBindPhone(@Validated @RequestBody SysUserUpdBindVo vo) {
+        return sysUserService.updateBindPhone(vo);
+    }
 }

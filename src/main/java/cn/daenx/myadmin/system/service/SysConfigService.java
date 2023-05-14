@@ -133,6 +133,15 @@ public interface SysConfigService extends IService<SysConfig> {
     SysEmailConfigVo getSysEmailConfigVo();
 
     /**
+     * 获取系统短信模板ID配置
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    SysSmsTemplateConfigVo getSysSmsTemplateConfigVo();
+
+    /**
      * 处理系统邮箱配置
      *
      * @param key
