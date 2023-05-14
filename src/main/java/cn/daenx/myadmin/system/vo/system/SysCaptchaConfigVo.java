@@ -15,7 +15,6 @@ public class SysCaptchaConfigVo implements Serializable {
     private Config config;
     private Image image;
     private Slider slider;
-    private Click click;
 
     /**
      * 配置
@@ -24,7 +23,7 @@ public class SysCaptchaConfigVo implements Serializable {
     public static class Config {
         /**
          * 验证码类型
-         * 0=图片验证码，1=滑块验证码，2=文字点选（待实现）
+         * 0=图片验证码，1=滑块验证码
          */
         private Integer type;
 
@@ -69,19 +68,10 @@ public class SysCaptchaConfigVo implements Serializable {
     }
 
     /**
-     * 滑块验证码（待实现）
+     * 滑块验证码（目前不需要任何配置）
      */
     @Data
     public static class Slider {
-
-    }
-
-
-    /**
-     * 文字点选（待实现）
-     */
-    @Data
-    public static class Click {
 
     }
 

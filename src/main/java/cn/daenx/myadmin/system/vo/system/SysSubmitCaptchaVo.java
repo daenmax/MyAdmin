@@ -7,15 +7,17 @@ import lombok.Data;
  */
 @Data
 public class SysSubmitCaptchaVo {
+    /**
+     * 通用验证码ID
+     */
+    private String uuid;
+
 
     /**
      * 图片验证码：验证码
      */
     private String code;
-    /**
-     * 图片验证码：验证码ID
-     */
-    private String uuid;
+
 
     /**
      * 滑块验证码：随机字符

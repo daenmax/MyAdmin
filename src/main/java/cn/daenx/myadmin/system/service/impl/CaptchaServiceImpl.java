@@ -45,19 +45,16 @@ public class CaptchaServiceImpl implements CaptchaService {
             return map;
         }
         map.put("captchaType", sysCaptchaConfigVo.getConfig().getType());
-        //0=图片验证码，1=滑块验证码（待实现），2=文字点选（待实现）
+        //0=图片验证码，1=滑块验证码
         if (sysCaptchaConfigVo.getConfig().getType() == 0) {
             //0=图片验证码
             HashMap<String, Object> captchaImgToBase64 = createCaptchaImgToBase64(sysCaptchaConfigVo);
             map.put("image", captchaImgToBase64);
             return map;
         } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
-            //TODO 1=滑块验证码（待实现）
-            map.put("slider", null);
-            return map;
-        } else if (sysCaptchaConfigVo.getConfig().getType() == 2) {
-            //TODO 文字点选（待实现）
-            map.put("click", null);
+            //1=滑块验证码
+            HashMap<String, Object> captchaSlider = createCaptchaSlider(sysCaptchaConfigVo);
+            map.put("slider", captchaSlider);
             return map;
         }
         map.put("captchaLock", "false");
@@ -126,6 +123,21 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     /**
+     * 创建腾讯滑块验证码
+     *
+     * @param sysCaptchaConfigVo
+     * @return
+     */
+    @Override
+    public HashMap<String, Object> createCaptchaSlider(SysCaptchaConfigVo sysCaptchaConfigVo) {
+        HashMap<String, Object> map = new HashMap<>();
+        String uuid = IdUtil.randomUUID();
+        RedisUtil.setValue(RedisConstant.CAPTCHA_SLIDER + uuid, "1", 300L, TimeUnit.SECONDS);
+        map.put("uuid", uuid);
+        return map;
+    }
+
+    /**
      * 校验验证码
      *
      * @param vo
@@ -152,18 +164,18 @@ public class CaptchaServiceImpl implements CaptchaService {
             RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
         } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
             //滑块验证码
-            if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket())) {
+            if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket()) || ObjectUtil.isEmpty(vo.getUuid())) {
                 throw new MyException("验证码相关参数不能为空");
             }
-            String md5 = SecureUtil.md5(vo.getRandStr() + vo.getTicket());
-            Object value = RedisUtil.getValue(RedisConstant.CHECK_CAPTCHA_TENCENT + md5);
-            if (ObjectUtil.isNotEmpty(value)) {
-                throw new MyException("滑块验证参数已失效，请重新验证");
+            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
+            if (ObjectUtil.isEmpty(codeReal)) {
+                throw new MyException("验证参数已过期，请重新验证");
             }
+            String md5 = SecureUtil.md5(vo.getRandStr() + vo.getTicket());
             if (!MyUtil.checkTencentCaptchaSlider(vo.getRandStr(), vo.getTicket())) {
                 throw new MyException("滑块验证失败，请重试");
             }
-            RedisUtil.setValue(RedisConstant.CHECK_CAPTCHA_TENCENT + md5, "1", 60L, TimeUnit.SECONDS);
+            RedisUtil.del(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
         }
     }
 }
