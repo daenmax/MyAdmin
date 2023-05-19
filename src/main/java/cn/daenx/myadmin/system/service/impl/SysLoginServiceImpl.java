@@ -7,6 +7,7 @@ import cn.daenx.myadmin.common.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
+import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.po.*;
@@ -50,6 +51,38 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private CaptchaService captchaService;
 
+    /**
+     * 获取邮箱验证码
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public Result getEmailValidCode(SysLoginVo vo) {
+        captchaService.validatedCaptcha(vo);
+        if (ObjectUtil.isEmpty(vo.getEmail())) {
+            throw new MyException("请填写邮箱");
+        }
+        SysUser sysUser = sysUserService.getUserByEmail(vo.getEmail());
+        if (ObjectUtil.isEmpty(sysUser)) {
+            throw new MyException("账号不存在");
+        }
+        //校验账户状态
+        sysUserService.validatedUser(sysUser);
+        return null;
+    }
+
+    /**
+     * /**
+     * * 获取手机验证码
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public Result getPhoneValidCode(SysLoginVo vo) {
+        return null;
+    }
 
     /**
      * PC登录
@@ -65,8 +98,8 @@ public class SysLoginServiceImpl implements SysLoginService {
         UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
         //校验验证码
         captchaService.validatedCaptcha(vo);
-        if (vo.getLoginType().equals(LoginType.ACCOUNT.getCode())) {
-            remark = remark + "/" + LoginType.ACCOUNT.getDesc();
+        if (vo.getLoginType().equals(LoginType.USERNAME.getCode())) {
+            remark = remark + "/" + LoginType.USERNAME.getDesc();
             //账号密码登录
             if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
                 throw new MyException("账号和密码不能为空");
@@ -249,4 +282,6 @@ public class SysLoginServiceImpl implements SysLoginService {
     public void logout() {
         loginUtilService.logout();
     }
+
+
 }

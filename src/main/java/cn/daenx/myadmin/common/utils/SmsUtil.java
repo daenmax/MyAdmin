@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
+import cn.daenx.myadmin.common.vo.CheckSendVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysConfig;
 import cn.daenx.myadmin.system.vo.system.SmsSendResult;
@@ -22,9 +23,12 @@ import com.tencentcloudapi.sms.v20190711.models.SendStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -236,4 +240,57 @@ public class SmsUtil {
         return sysSmsConfigVo;
     }
 
+    /**
+     * 根据用户ID判断是否可以发送
+     * 返回所需要等待的秒数，0=马上可以发
+     *
+     * @param userId
+     * @return
+     */
+    public static CheckSendVo checkSendByUserId(String userId) {
+//        String key = ServletUtils.getClientIP();
+        String key = userId;
+        Integer dayMaxCount = 8;
+        Integer maxSec = 60;
+        //判断今天是否还可以发送
+        Collection<String> yyyyMMdd = RedisUtil.getList(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
+        if (yyyyMMdd.size() >= dayMaxCount) {
+            Integer remainSecondsOneDay = MyUtil.getRemainSecondsOneDay(LocalDateTime.now());
+            String str = MyUtil.timeDistance(Long.valueOf(String.valueOf(remainSecondsOneDay * 1000)));
+            return new CheckSendVo(false, remainSecondsOneDay, "今日请求过多，请于" + str + "后再试");
+        }
+
+        String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_PHONE + key);
+        LocalDateTime lastSendTime = MyUtil.strToLocalDateTime(lastSendTimeStr, "yyyy-MM-dd HH:mm:ss");
+        Integer diffSec = MyUtil.getDiffSec(LocalDateTime.now(), lastSendTime);
+        if (diffSec < maxSec) {
+            int sec = maxSec - diffSec;
+            String str = MyUtil.timeDistance(Long.valueOf(String.valueOf(sec * 1000)));
+            return new CheckSendVo(false, sec, "请求过于频繁，请于" + str + "后再试");
+        }
+        return new CheckSendVo(true, 0, "可以进行发送");
+    }
+
+    /**
+     * 记录
+     *
+     * @param userId
+     * @return
+     */
+    public static Integer saveSendByUserId(String userId) {
+//        String key = ServletUtils.getClientIP();
+        String key = userId;
+        Integer dayMaxCount = 8;
+        Integer maxSec = 60;
+        String dateStrByFormat = MyUtil.getDateStrByFormat("yyyy-MM-dd HH:mm:ss");
+        RedisUtil.setValue(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key, dateStrByFormat, 1L, TimeUnit.DAYS);
+        RedisUtil.setValue(RedisConstant.SEND_PHONE + key, dateStrByFormat);
+        //计算下次可以发的秒数
+        Collection<String> yyyyMMdd = RedisUtil.getList(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
+        if (yyyyMMdd.size() >= dayMaxCount) {
+            Integer remainSecondsOneDay = MyUtil.getRemainSecondsOneDay(LocalDateTime.now());
+            return remainSecondsOneDay;
+        }
+        return maxSec;
+    }
 }

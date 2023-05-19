@@ -2,10 +2,12 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.service.SysLoginService;
+import cn.daenx.myadmin.system.vo.SysUserUpdBindVo;
 import cn.daenx.myadmin.system.vo.system.RouterVo;
 import cn.daenx.myadmin.system.vo.system.SysLoginVo;
 import cn.daenx.myadmin.system.vo.system.SysRegisterVo;
 import cn.dev33.satoken.annotation.SaIgnore;
+import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,28 @@ public class SysLoginController {
     private SysLoginService sysLoginService;
 
     /**
+     * 获取邮箱验证码
+     *
+     * @return
+     */
+    @SaIgnore
+    @PostMapping("/getEmailValidCode")
+    public Result getEmailValidCode(@Validated @RequestBody SysLoginVo vo) {
+        return sysLoginService.getEmailValidCode(vo);
+    }
+
+    /**
+     * 获取手机验证码
+     *
+     * @return
+     */
+    @SaIgnore
+    @PostMapping("/getPhoneValidCode")
+    public Result getPhoneValidCode(@Validated @RequestBody SysLoginVo vo) {
+        return sysLoginService.getPhoneValidCode(vo);
+    }
+
+    /**
      * PC登录
      *
      * @param vo
@@ -28,7 +52,10 @@ public class SysLoginController {
      */
     @SaIgnore
     @PostMapping("/login")
-    public Result login(@RequestBody @Validated SysLoginVo vo) {
+    public Result login(@Validated @RequestBody SysLoginVo vo) {
+        if (ObjectUtil.isEmpty(vo.getLoginType())) {
+            return Result.error("loginType不能为空");
+        }
         String token = sysLoginService.login(vo);
         HashMap<String, String> map = new HashMap<>();
         map.put("token", token);
@@ -48,22 +75,11 @@ public class SysLoginController {
      */
     @SaIgnore
     @PostMapping("/register")
-    public Result register(@RequestBody @Validated SysRegisterVo vo) {
+    public Result register(@Validated @RequestBody SysRegisterVo vo) {
         sysLoginService.register(vo);
         return Result.ok("注册成功");
     }
 
-    /**
-     * 绑定手机号
-     */
-
-    /**
-     * 绑定邮箱
-     */
-
-    /**
-     * 绑定openid
-     */
 
     /**
      * 退出登录

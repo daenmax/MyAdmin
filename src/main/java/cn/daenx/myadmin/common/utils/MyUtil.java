@@ -22,9 +22,9 @@ import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -126,41 +126,6 @@ public class MyUtil {
         return hostAddress;
     }
 
-    /**
-     * 计算时间差
-     *
-     * @param nowDate 当前时间戳（13位）
-     * @param date    目标时间（13位）
-     * @return
-     */
-    public static String timeDistance(long nowDate, long date) {
-        long nd = 1000 * 24 * 60 * 60;
-        long nh = 1000 * 60 * 60;
-        long nm = 1000 * 60;
-        // long ns = 1000;
-        // 获得两个时间的毫秒时间差异
-        long diff = nowDate - date;
-        // 计算差多少天
-        long day = diff / nd;
-        // 计算差多少小时
-        long hour = diff % nd / nh;
-        // 计算差多少分钟
-        long min = diff % nd % nh / nm;
-        // 计算差多少秒//输出结果
-        // long sec = diff % nd % nh % nm / ns;
-        return day + "天" + hour + "小时" + min + "分钟";
-    }
-
-    /**
-     * 13位时间戳转LocalDateTime
-     *
-     * @param timestamp 例如：System.currentTimeMillis()
-     * @return
-     */
-    public static LocalDateTime toLocalDateTime(long timestamp) {
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneOffset.of("+8"));
-        return localDateTime;
-    }
 
     /**
      * 检查后缀
@@ -291,5 +256,142 @@ public class MyUtil {
         response.addHeader("Access-Control-Expose-Headers", "Content-Disposition,download-filename");
         response.setHeader("Content-disposition", "attachment; filename=\"" + fileName + "\";filename*=utf-8''" + fileName);
         response.setHeader("download-filename", fileName);
+    }
+
+    /**
+     * 获取指定格式的时间
+     *
+     * @param dateFormat 例如：yyyy-MM-dd HH:mm:ss
+     * @return
+     */
+    public static String getDateStrByFormat(String dateFormat) {
+        String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern(dateFormat));
+        return format;
+    }
+
+    /**
+     * 字符串时间转LocalDateTime
+     *
+     * @param str        例如："2023-05-19 14:19:20"
+     * @param dateFormat 例如"yyyy-MM-dd HH:mm:ss"
+     * @return
+     */
+    public static LocalDateTime strToLocalDateTime(String str, String dateFormat) {
+        LocalDateTime localDateTime = LocalDateTime.parse(str, DateTimeFormatter.ofPattern(dateFormat));
+        return localDateTime;
+    }
+
+    /**
+     * 计算某个时间距离今天结束还剩多少秒
+     *
+     * @param currentDate
+     * @return
+     */
+    public static Integer getRemainSecondsOneDay(LocalDateTime currentDate) {
+        LocalDateTime midnight = LocalDateTime.ofInstant(currentDate.toInstant(ZoneOffset.of("+8")), ZoneId.systemDefault()).plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime currentDateTime = LocalDateTime.ofInstant(currentDate.toInstant(ZoneOffset.of("+8")), ZoneId.systemDefault());
+        long seconds = ChronoUnit.SECONDS.between(currentDateTime, midnight);
+        return (int) seconds;
+    }
+
+    /**
+     * 取两个时间相差的秒数的绝对值
+     *
+     * @param time1
+     * @param time2
+     * @return
+     */
+    public static Integer getDiffSec(LocalDateTime time1, LocalDateTime time2) {
+        long l = Duration.between(time1, time2).toMillis() / 1000;
+        if (l < 0) {
+            l = l * -1;
+        }
+        return (int) l;
+    }
+
+    /**
+     * 计算时间差
+     *
+     * @param nowDate 当前时间戳（13位）
+     * @param date    目标时间（13位）
+     * @return
+     */
+    public static String timeDistance(long nowDate, long date) {
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = nowDate - date;
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        long sec = diff % nd % nh % nm / ns;
+        String str = "";
+        if (day != 0) {
+            str = str + day + "天";
+        }
+        if (hour != 0) {
+            str = str + hour + "小时";
+        }
+        if (min != 0) {
+            str = str + min + "分";
+        }
+        if (sec != 0) {
+            str = str + sec + "秒";
+        }
+        return str;
+    }
+
+    /**
+     * 计算时间差
+     *
+     * @param miss 毫秒
+     * @return
+     */
+    public static String timeDistance(long miss) {
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = miss;
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        long sec = diff % nd % nh % nm / ns;
+        String str = "";
+        if (day != 0) {
+            str = str + day + "天";
+        }
+        if (hour != 0) {
+            str = str + hour + "小时";
+        }
+        if (min != 0) {
+            str = str + min + "分";
+        }
+        if (sec != 0) {
+            str = str + sec + "秒";
+        }
+        return str;
+    }
+
+    /**
+     * 13位时间戳转LocalDateTime
+     *
+     * @param timestamp 例如：System.currentTimeMillis()
+     * @return
+     */
+    public static LocalDateTime toLocalDateTime(long timestamp) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneOffset.of("+8"));
+        return localDateTime;
     }
 }

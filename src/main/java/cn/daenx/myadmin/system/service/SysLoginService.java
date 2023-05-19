@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.system.service;
 
 
+import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.vo.system.RouterVo;
 import cn.daenx.myadmin.system.vo.system.SysLoginVo;
 import cn.daenx.myadmin.system.vo.system.SysRegisterVo;
@@ -47,4 +48,20 @@ public interface SysLoginService {
      */
     void logout();
 
+    /**
+     * 获取邮箱验证码
+     *
+     * @param vo
+     * @return
+     */
+    Result getEmailValidCode(SysLoginVo vo);
+
+    /**
+     * /**
+     * * 获取手机验证码
+     *
+     * @param vo
+     * @return
+     */
+    Result getPhoneValidCode(SysLoginVo vo);
 }

@@ -1,6 +1,5 @@
 package cn.daenx.myadmin.system.vo.system;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -12,7 +11,6 @@ public class SysLoginVo extends SysSubmitCaptchaVo{
     /**
      * 登录方式
      */
-    @NotBlank(message = "loginType不能为空")
     private String loginType;
 
 
@@ -33,9 +31,9 @@ public class SysLoginVo extends SysSubmitCaptchaVo{
     private String email;
 
     /**
-     * 用微信扫码或微信小程序扫码登录时（暂未实现）
+     * 验证码
      */
-    private String wxCode;
+    private String validCode;
 
     /**
      * 用开放API登录时

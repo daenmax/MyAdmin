@@ -146,4 +146,14 @@ public class RedisUtil {
     }
 
 
+    /**
+     * 获取列表
+     *
+     * @param key 后面要跟上*号
+     * @return
+     */
+    public static Collection<String> getList(String key) {
+        Set keys = redisTemplate.keys(key);
+        return keys;
+    }
 }

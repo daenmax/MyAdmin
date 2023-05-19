@@ -16,13 +16,9 @@ import java.util.Map;
 public enum LoginType {
 
 
-    ACCOUNT("account", "账号密码登录"),
-
-    SMS("sms", "短信验证码登录"),
-
+    USERNAME("username", "账号密码登录"),
     EMAIL("email", "邮箱验证码登录"),
-    WX("wx", "微信授权登录"),
-
+    PHONE("phone", "短信验证码登录"),
     API("apikey", "开放API登录");
 
 

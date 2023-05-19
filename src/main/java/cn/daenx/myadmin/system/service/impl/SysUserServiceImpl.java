@@ -8,6 +8,7 @@ import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.SmsUtil;
+import cn.daenx.myadmin.common.vo.CheckSendVo;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
@@ -142,6 +143,32 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public SysUser getUserByUsername(String username) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getUsername, username);
+        return sysUserMapper.selectOne(wrapper);
+    }
+
+    /**
+     * 通过邮箱获取用户
+     *
+     * @param email
+     * @return
+     */
+    @Override
+    public SysUser getUserByEmail(String email) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getEmail, email);
+        return sysUserMapper.selectOne(wrapper);
+    }
+
+    /**
+     * 通过手机获取用户
+     *
+     * @param phone
+     * @return
+     */
+    @Override
+    public SysUser getUserByPhone(String phone) {
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getPhone, phone);
         return sysUserMapper.selectOne(wrapper);
     }
 
@@ -800,32 +827,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请30分钟后再试");
         }
-        long nowTime = System.currentTimeMillis() / 1000;
-        long waitTime;
-        String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_EMAIL + loginUser.getId());
-        if (ObjectUtil.isNotEmpty(lastSendTimeStr)) {
-            Long lastSendTime = Long.valueOf(lastSendTimeStr);
-            waitTime = nowTime - lastSendTime;
-            if (waitTime < 60) {
-                throw new MyException("请于" + waitTime + "秒后再试");
-            } else {
-                waitTime = 60;
-            }
-        } else {
-            waitTime = 60;
+        CheckSendVo checkSendVo = EmailUtil.checkSendByUserId(loginUser.getId());
+        if (!checkSendVo.getNowOk()) {
+            throw new MyException(checkSendVo.getMsg());
         }
         //生成验证码
         String code = RandomUtil.randomNumbers(6);
         String subject = "【" + systemInfoName + "】" + "邮件验证";
         String content = buildCodeValida(systemInfoName, code);
         Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
-        if (aBoolean) {
-            RedisUtil.setValue(RedisConstant.SEND_EMAIL + loginUser.getId(), String.valueOf(nowTime));
-            //有效期30分钟
-            RedisUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, 1800L, TimeUnit.SECONDS);
-        } else {
+        if (!aBoolean) {
             throw new MyException("发送邮件失败，请联系管理员");
         }
+        //有效期30分钟
+        RedisUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, 1800L, TimeUnit.SECONDS);
+        Integer waitTime = EmailUtil.saveSendByUserId(loginUser.getId());
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，30分钟有效");
@@ -876,22 +892,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         String value = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         if (ObjectUtil.isNotEmpty(value)) {
-            throw new MyException("验证码尚未失效，如未收到验证码请30分钟后再试");
+            throw new MyException("验证码尚未失效，如未收到验证码请5分钟后再试");
         }
-        long nowTime = System.currentTimeMillis() / 1000;
-        long waitTime;
-        String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_PHONE + loginUser.getId());
-        if (ObjectUtil.isNotEmpty(lastSendTimeStr)) {
-            Long lastSendTime = Long.valueOf(lastSendTimeStr);
-            waitTime = nowTime - lastSendTime;
-            if (waitTime < 60) {
-                throw new MyException("请于" + waitTime + "秒后再试");
-            } else {
-                waitTime = 60;
-            }
-        } else {
-            waitTime = 60;
+
+        CheckSendVo checkSendVo = SmsUtil.checkSendByUserId(loginUser.getId());
+        if (!checkSendVo.getNowOk()) {
+            throw new MyException(checkSendVo.getMsg());
         }
+
         SysSmsTemplateConfigVo sysSmsTemplateConfigVo = sysConfigService.getSysSmsTemplateConfigVo();
         if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo)) {
             throw new MyException("没有配置短信模板参数，请联系管理员");
@@ -904,13 +912,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Map<String, String> smsMap = new HashMap<>();
         smsMap.put(sysSmsTemplateConfigVo.getBindPhone().getVariable(), code);
         SmsSendResult smsSendResult = SmsUtil.sendSms(vo.getPhone(), sysSmsTemplateConfigVo.getBindPhone().getTemplateId(), smsMap);
-        if (smsSendResult.isSuccess()) {
-            RedisUtil.setValue(RedisConstant.SEND_PHONE + loginUser.getId(), String.valueOf(nowTime));
-            //有效期30分钟
-            RedisUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, 300L, TimeUnit.SECONDS);
-        } else {
-            throw new MyException("发送邮件失败，请联系管理员");
+        if (!smsSendResult.isSuccess()) {
+            throw new MyException("发送短信失败，请联系管理员");
         }
+        //有效期30分钟
+        RedisUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, 300L, TimeUnit.SECONDS);
+        Integer waitTime = SmsUtil.saveSendByUserId(loginUser.getId());
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，5分钟有效");
