@@ -9,6 +9,7 @@ import cn.daenx.myadmin.system.vo.system.SysEmailConfigVo;
 import cn.daenx.myadmin.system.vo.system.SysSendLimitConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.WeightRandom;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSON;
@@ -288,6 +289,9 @@ public class EmailUtil {
             return new CheckSendVo(false, remainSecondsOneDay, "今日请求过多，请于" + str + "后再试");
         }
         String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_EMAIL + key);
+        if (ObjectUtil.isEmpty(lastSendTimeStr)) {
+            return new CheckSendVo(true, 0, "可以进行发送");
+        }
         LocalDateTime lastSendTime = MyUtil.strToLocalDateTime(lastSendTimeStr, "yyyy-MM-dd HH:mm:ss");
         Integer diffSec = MyUtil.getDiffSec(LocalDateTime.now(), lastSendTime);
         if (diffSec < needWait) {
@@ -323,7 +327,7 @@ public class EmailUtil {
         Integer dayMax = sysSendLimitConfigVo.getEmail().getDayMax();
         Integer needWait = sysSendLimitConfigVo.getEmail().getNeedWait();
         String dateStrByFormat = MyUtil.getDateStrByFormat("yyyy-MM-dd HH:mm:ss");
-        RedisUtil.setValue(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key, dateStrByFormat, 1L, TimeUnit.DAYS);
+        RedisUtil.setValue(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + ":" + IdUtil.fastSimpleUUID(), dateStrByFormat, 1L, TimeUnit.DAYS);
         RedisUtil.setValue(RedisConstant.SEND_EMAIL + key, dateStrByFormat);
         //计算下次可以发的秒数
         Collection<String> yyyyMMdd = RedisUtil.getList(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
