@@ -57,8 +57,7 @@ public interface SysLoginService {
     Result getEmailValidCode(SysLoginVo vo);
 
     /**
-     * /**
-     * * 获取手机验证码
+     * 获取手机验证码
      *
      * @param vo
      * @return

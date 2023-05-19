@@ -5,8 +5,8 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.enums.DeviceType;
 import cn.daenx.myadmin.common.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.RedisUtil;
-import cn.daenx.myadmin.common.utils.ServletUtils;
+import cn.daenx.myadmin.common.utils.*;
+import cn.daenx.myadmin.common.vo.CheckSendVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
@@ -17,17 +17,20 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -51,6 +54,9 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private CaptchaService captchaService;
 
+    @Value("${system-info.name}")
+    private String systemInfoName;
+
     /**
      * 获取邮箱验证码
      *
@@ -65,23 +71,96 @@ public class SysLoginServiceImpl implements SysLoginService {
         }
         SysUser sysUser = sysUserService.getUserByEmail(vo.getEmail());
         if (ObjectUtil.isEmpty(sysUser)) {
-            throw new MyException("账号不存在");
+            throw new MyException("邮箱不存在");
         }
         //校验账户状态
         sysUserService.validatedUser(sysUser);
-        return null;
+        SysSendLimitConfigVo sysSendLimitConfigVo = sysConfigService.getSysSendLimitConfigVo();
+        Long keepLive = 0L;
+        if (sysSendLimitConfigVo != null) {
+            keepLive = Long.valueOf(sysSendLimitConfigVo.getEmail().getKeepLive());
+        }
+        //例如：5分钟
+        String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
+        String value = (String) RedisUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
+        if (ObjectUtil.isNotEmpty(value)) {
+            throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
+        }
+        CheckSendVo checkSendVo = EmailUtil.checkSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
+        if (!checkSendVo.getNowOk()) {
+            throw new MyException(checkSendVo.getMsg());
+        }
+        //生成验证码
+        String code = RandomUtil.randomNumbers(6);
+        String subject = "【" + systemInfoName + "】" + "邮件验证";
+        String content = MyUtil.buildCodeValida(systemInfoName, code);
+        Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
+        if (!aBoolean) {
+            throw new MyException("发送邮件失败，请联系管理员");
+        }
+        //有效期30分钟
+        RedisUtil.setValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
+        Integer waitTime = EmailUtil.saveSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
+        Map<String, Object> map = new HashMap<>();
+        map.put("waitTime", waitTime);
+        map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
+        return Result.ok(map);
     }
 
     /**
-     * /**
-     * * 获取手机验证码
+     * 获取手机验证码
      *
      * @param vo
      * @return
      */
     @Override
     public Result getPhoneValidCode(SysLoginVo vo) {
-        return null;
+        captchaService.validatedCaptcha(vo);
+        if (ObjectUtil.isEmpty(vo.getPhone())) {
+            throw new MyException("请填写邮箱");
+        }
+        SysUser sysUser = sysUserService.getUserByPhone(vo.getPhone());
+        if (ObjectUtil.isEmpty(sysUser)) {
+            throw new MyException("手机号不存在");
+        }
+        //校验账户状态
+        sysUserService.validatedUser(sysUser);
+        SysSendLimitConfigVo sysSendLimitConfigVo = sysConfigService.getSysSendLimitConfigVo();
+        Long keepLive = 0L;
+        if (sysSendLimitConfigVo != null) {
+            keepLive = Long.valueOf(sysSendLimitConfigVo.getEmail().getKeepLive());
+        }
+        //例如：5分钟
+        String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
+        String value = (String) RedisUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+        if (ObjectUtil.isNotEmpty(value)) {
+            throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
+        }
+        CheckSendVo checkSendVo = SmsUtil.checkSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
+        if (!checkSendVo.getNowOk()) {
+            throw new MyException(checkSendVo.getMsg());
+        }
+        SysSmsTemplateConfigVo sysSmsTemplateConfigVo = sysConfigService.getSysSmsTemplateConfigVo();
+        if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo)) {
+            throw new MyException("没有配置短信模板参数，请联系管理员");
+        }
+        if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo.getLogin())) {
+            throw new MyException("没有配置login短信模板参数，请联系管理员");
+        }
+        //生成验证码
+        String code = RandomUtil.randomNumbers(6);
+        Map<String, String> smsMap = new HashMap<>();
+        smsMap.put(sysSmsTemplateConfigVo.getBindPhone().getVariable(), code);
+        SmsSendResult smsSendResult = SmsUtil.sendSms(vo.getPhone(), sysSmsTemplateConfigVo.getBindPhone().getTemplateId(), smsMap);
+        if (!smsSendResult.isSuccess()) {
+            throw new MyException("发送短信失败，请联系管理员");
+        }
+        RedisUtil.setValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
+        Integer waitTime = SmsUtil.saveSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
+        Map<String, Object> map = new HashMap<>();
+        map.put("waitTime", waitTime);
+        map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
+        return Result.ok(map);
     }
 
     /**

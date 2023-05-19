@@ -842,12 +842,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //生成验证码
         String code = RandomUtil.randomNumbers(6);
         String subject = "【" + systemInfoName + "】" + "邮件验证";
-        String content = buildCodeValida(systemInfoName, code);
+        String content = MyUtil.buildCodeValida(systemInfoName, code);
         Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
         if (!aBoolean) {
             throw new MyException("发送邮件失败，请联系管理员");
         }
-        //有效期30分钟
         RedisUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = EmailUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
@@ -856,26 +855,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(map);
     }
 
-    /**
-     * 读取邮件HTLM模板，如果不存在就使用默认的
-     *
-     * @param systemName
-     * @param code
-     * @return
-     */
-    private String buildCodeValida(String systemName, String code) {
-        String html = "";
-        try {
-            //加载邮件html模板
-            html = ResourceUtil.readUtf8Str("emailTemplate/codeValida.html");
-        } catch (Exception e) {
-            html = "您好！感谢您使用【systemInfoName】，您的验证码为：【code】，有效期30分钟，请尽快填写验证码完成验证！\n\nHello! Thanks for using 【systemInfoName】, the verification code is:【code】, valid for 30 minutes. Please fill in the verification code as soon as possible!";
-        }
-        html = html.replaceAll("【systemInfoName】", systemName).replaceAll("【code】", code);
-        return html;
 
-
-    }
 
 
     /**
@@ -928,7 +908,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!smsSendResult.isSuccess()) {
             throw new MyException("发送短信失败，请联系管理员");
         }
-        //有效期30分钟
         RedisUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = SmsUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();

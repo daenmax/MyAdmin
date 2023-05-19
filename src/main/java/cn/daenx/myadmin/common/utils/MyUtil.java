@@ -3,6 +3,7 @@ package cn.daenx.myadmin.common.utils;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
@@ -393,5 +394,24 @@ public class MyUtil {
     public static LocalDateTime toLocalDateTime(long timestamp) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneOffset.of("+8"));
         return localDateTime;
+    }
+
+    /**
+     * 读取邮件HTLM模板，如果不存在就使用默认的
+     *
+     * @param systemName
+     * @param code
+     * @return
+     */
+    public static String buildCodeValida(String systemName, String code) {
+        String html = "";
+        try {
+            //加载邮件html模板
+            html = ResourceUtil.readUtf8Str("emailTemplate/codeValida.html");
+        } catch (Exception e) {
+            html = "您好！感谢您使用【systemInfoName】，您的验证码为：【code】，有效期30分钟，请尽快填写验证码完成验证！\n\nHello! Thanks for using 【systemInfoName】, the verification code is:【code】, valid for 30 minutes. Please fill in the verification code as soon as possible!";
+        }
+        html = html.replaceAll("【systemInfoName】", systemName).replaceAll("【code】", code);
+        return html;
     }
 }

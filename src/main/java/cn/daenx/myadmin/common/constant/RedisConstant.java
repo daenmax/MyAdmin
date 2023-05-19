@@ -16,4 +16,7 @@ public class RedisConstant {
 
     public static final String VALIDA_EMAIL = "valida:email:";
     public static final String VALIDA_PHONE = "valida:phone:";
+
+    public static final String LOGIN_EMAIL = "login:email:";
+    public static final String LOGIN_PHONE = "login:phone:";
 }
