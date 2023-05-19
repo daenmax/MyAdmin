@@ -104,6 +104,8 @@ public class SysLoginServiceImpl implements SysLoginService {
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
+        //这里设置一层验证码UUID缓存，为后面点击登录增加一道障碍，避免出现不输入验证码就一直点登录，对面通过遍历造成撞库泄露风险
+        RedisUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
         return Result.ok(map);
     }
 
@@ -160,6 +162,8 @@ public class SysLoginServiceImpl implements SysLoginService {
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
+        //这里设置一层验证码UUID缓存，为后面点击登录增加一道障碍，避免出现不输入验证码就一直点登录，对面通过遍历造成撞库泄露风险
+        RedisUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
         return Result.ok(map);
     }
 
@@ -175,11 +179,11 @@ public class SysLoginServiceImpl implements SysLoginService {
         String clientIP = ServletUtils.getClientIP();
         HttpServletRequest request = ServletUtils.getRequest();
         UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
-        //校验验证码
-        captchaService.validatedCaptcha(vo);
         SysUser sysUser = null;
         if (vo.getLoginType().equals(LoginType.USERNAME.getCode())) {
             //账号密码登录
+            //校验验证码
+            captchaService.validatedCaptcha(vo);
             remark = remark + "/" + LoginType.USERNAME.getDesc();
             if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
                 throw new MyException("账号和密码不能为空");
@@ -230,6 +234,10 @@ public class SysLoginServiceImpl implements SysLoginService {
             if (ObjectUtil.hasEmpty(vo.getValidCode())) {
                 throw new MyException("邮箱验证码不能为空");
             }
+            Object value = RedisUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
+            if (ObjectUtil.isEmpty(value)) {
+                throw new MyException("请求不合法");
+            }
             sysUser = sysUserService.getUserByEmail(vo.getEmail());
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
@@ -238,10 +246,10 @@ public class SysLoginServiceImpl implements SysLoginService {
             sysUserService.validatedUser(sysUser);
             String validCode = (String) RedisUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
             if (ObjectUtil.isEmpty(validCode)) {
-                throw new MyException("验证码已失效，请重试");
+                throw new MyException("邮箱验证码错误或者已失效");
             }
             if (!vo.getValidCode().equals(validCode)) {
-                throw new MyException("验证码错误，请检查");
+                throw new MyException("邮箱验证码错误，请检查");
             }
             RedisUtil.del(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getPhone());
         } else if (vo.getLoginType().equals(LoginType.PHONE.getCode())) {
@@ -253,6 +261,10 @@ public class SysLoginServiceImpl implements SysLoginService {
             if (ObjectUtil.hasEmpty(vo.getValidCode())) {
                 throw new MyException("手机验证码不能为空");
             }
+            Object value = RedisUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
+            if (ObjectUtil.isEmpty(value)) {
+                throw new MyException("请求不合法");
+            }
             sysUser = sysUserService.getUserByPhone(vo.getPhone());
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
@@ -261,10 +273,10 @@ public class SysLoginServiceImpl implements SysLoginService {
             sysUserService.validatedUser(sysUser);
             String validCode = (String) RedisUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
             if (ObjectUtil.isEmpty(validCode)) {
-                throw new MyException("验证码已失效，请重试");
+                throw new MyException("短信验证码错误或者已失效");
             }
             if (!vo.getValidCode().equals(validCode)) {
-                throw new MyException("验证码错误，请检查");
+                throw new MyException("短信验证码错误，请检查");
             }
             RedisUtil.del(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
         } else {

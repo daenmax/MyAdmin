@@ -4,6 +4,7 @@ public class RedisConstant {
 
     public static final String CAPTCHA_IMG = "captcha:img:";
     public static final String CAPTCHA_SLIDER = "captcha:slider:";
+    public static final String CACHE_UUID = "cache:uuid:";
 
     public static final String DICT = "dict:";
     public static final String CONFIG = "config:";

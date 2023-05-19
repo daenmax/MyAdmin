@@ -1,7 +1,6 @@
 package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
-import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.CheckSendVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysConfig;

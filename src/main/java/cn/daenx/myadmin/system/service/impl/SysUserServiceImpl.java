@@ -24,7 +24,6 @@ import cn.daenx.myadmin.system.vo.system.SysSendLimitConfigVo;
 import cn.daenx.myadmin.system.vo.system.SysSmsTemplateConfigVo;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -928,15 +927,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("请填写邮箱");
         }
         if (ObjectUtil.isEmpty(vo.getValidCode())) {
-            throw new MyException("请填写收到的验证码");
+            throw new MyException("请填写收到的邮箱验证码");
         }
         SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
         if (ObjectUtil.isEmpty(validCode)) {
-            throw new MyException("验证码已失效，请重试");
+            throw new MyException("邮箱验证码错误或者已失效");
         }
         if (!vo.getValidCode().equals(validCode)) {
-            throw new MyException("验证码错误，请检查");
+            throw new MyException("邮箱验证码错误，请检查");
         }
         RedisUtil.del(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
         Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
@@ -971,15 +970,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("请填写手机号");
         }
         if (ObjectUtil.isEmpty(vo.getValidCode())) {
-            throw new MyException("请填写收到的验证码");
+            throw new MyException("请填写收到的短信验证码");
         }
         SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         if (ObjectUtil.isEmpty(validCode)) {
-            throw new MyException("验证码已失效，请重试");
+            throw new MyException("短信验证码错误或者已失效");
         }
         if (!vo.getValidCode().equals(validCode)) {
-            throw new MyException("验证码错误，请检查");
+            throw new MyException("短信验证码错误，请检查");
         }
         RedisUtil.del(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
