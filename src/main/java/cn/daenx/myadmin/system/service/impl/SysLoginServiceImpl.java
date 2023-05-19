@@ -177,13 +177,14 @@ public class SysLoginServiceImpl implements SysLoginService {
         UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
         //校验验证码
         captchaService.validatedCaptcha(vo);
+        SysUser sysUser = null;
         if (vo.getLoginType().equals(LoginType.USERNAME.getCode())) {
-            remark = remark + "/" + LoginType.USERNAME.getDesc();
             //账号密码登录
+            remark = remark + "/" + LoginType.USERNAME.getDesc();
             if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
                 throw new MyException("账号和密码不能为空");
             }
-            SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
+            sysUser = sysUserService.getUserByUsername(vo.getUsername());
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
             }
@@ -220,54 +221,101 @@ public class SysLoginServiceImpl implements SysLoginService {
                 sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_FAIL, remark, clientIP, userAgent);
                 throw new MyException(msg);
             }
-            RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
-            SysLoginUserVo loginUserVo = new SysLoginUserVo();
-            loginUserVo.setId(sysUser.getId());
-            loginUserVo.setDeptId(sysUser.getDeptId());
-            loginUserVo.setUsername(sysUser.getUsername());
-            loginUserVo.setUserType(sysUser.getUserType());
-            loginUserVo.setEmail(sysUser.getEmail());
-            loginUserVo.setPhone(sysUser.getPhone());
-            loginUserVo.setOpenId(sysUser.getOpenId());
-            loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
-            if (loginUserVo.getRoles().size() < 1) {
-                //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
-                throw new MyException("用户无可用角色");
+        } else if (vo.getLoginType().equals(LoginType.EMAIL.getCode())) {
+            //邮箱验证码登录
+            remark = remark + "/" + LoginType.EMAIL.getDesc();
+            if (ObjectUtil.hasEmpty(vo.getEmail())) {
+                throw new MyException("邮箱不能为空");
             }
-            Boolean isRoleOk = false;
-            for (SysRole role : loginUserVo.getRoles()) {
-                if (role.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
-                    isRoleOk = true;
+            if (ObjectUtil.hasEmpty(vo.getValidCode())) {
+                throw new MyException("邮箱验证码不能为空");
+            }
+            sysUser = sysUserService.getUserByEmail(vo.getEmail());
+            if (ObjectUtil.isEmpty(sysUser)) {
+                throw new MyException("账号不存在");
+            }
+            //校验账户状态
+            sysUserService.validatedUser(sysUser);
+            String validCode = (String) RedisUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
+            if (ObjectUtil.isEmpty(validCode)) {
+                throw new MyException("验证码已失效，请重试");
+            }
+            if (!vo.getValidCode().equals(validCode)) {
+                throw new MyException("验证码错误，请检查");
+            }
+            RedisUtil.del(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getPhone());
+        } else if (vo.getLoginType().equals(LoginType.PHONE.getCode())) {
+            //短信验证码登录
+            remark = remark + "/" + LoginType.PHONE.getDesc();
+            if (ObjectUtil.hasEmpty(vo.getPhone())) {
+                throw new MyException("手机不能为空");
+            }
+            if (ObjectUtil.hasEmpty(vo.getValidCode())) {
+                throw new MyException("手机验证码不能为空");
+            }
+            sysUser = sysUserService.getUserByPhone(vo.getPhone());
+            if (ObjectUtil.isEmpty(sysUser)) {
+                throw new MyException("账号不存在");
+            }
+            //校验账户状态
+            sysUserService.validatedUser(sysUser);
+            String validCode = (String) RedisUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+            if (ObjectUtil.isEmpty(validCode)) {
+                throw new MyException("验证码已失效，请重试");
+            }
+            if (!vo.getValidCode().equals(validCode)) {
+                throw new MyException("验证码错误，请检查");
+            }
+            RedisUtil.del(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+        } else {
+            throw new MyException("错误的loginType");
+        }
+        RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
+        SysLoginUserVo loginUserVo = new SysLoginUserVo();
+        loginUserVo.setId(sysUser.getId());
+        loginUserVo.setDeptId(sysUser.getDeptId());
+        loginUserVo.setUsername(sysUser.getUsername());
+        loginUserVo.setUserType(sysUser.getUserType());
+        loginUserVo.setEmail(sysUser.getEmail());
+        loginUserVo.setPhone(sysUser.getPhone());
+        loginUserVo.setOpenId(sysUser.getOpenId());
+        loginUserVo.setRoles(sysRoleService.getSysRoleListByUserId(sysUser.getId()));
+        if (loginUserVo.getRoles().size() < 1) {
+            //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
+            throw new MyException("用户无可用角色");
+        }
+        Boolean isRoleOk = false;
+        for (SysRole role : loginUserVo.getRoles()) {
+            if (role.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+                isRoleOk = true;
+                break;
+            }
+        }
+        if (!isRoleOk) {
+            //用户绑定的角色全部被禁用了
+            throw new MyException("用户角色全部不可用");
+        }
+        loginUserVo.setPositions(sysPositionService.getSysPositionListByUserId(sysUser.getId()));
+        if (loginUserVo.getPositions().size() > 0) {
+            Boolean isPositionOk = false;
+            for (SysPosition sysPosition : loginUserVo.getPositions()) {
+                if (sysPosition.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+                    isPositionOk = true;
                     break;
                 }
             }
-            if (!isRoleOk) {
-                //用户绑定的角色全部被禁用了
-                throw new MyException("用户角色全部不可用");
+            if (!isPositionOk) {
+                //用户绑定的岗位全部被禁用了
+                throw new MyException("用户岗位全部不可用");
             }
-            loginUserVo.setPositions(sysPositionService.getSysPositionListByUserId(sysUser.getId()));
-            if (loginUserVo.getPositions().size() > 0) {
-                Boolean isPositionOk = false;
-                for (SysPosition sysPosition : loginUserVo.getPositions()) {
-                    if (sysPosition.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
-                        isPositionOk = true;
-                        break;
-                    }
-                }
-                if (!isPositionOk) {
-                    //用户绑定的岗位全部被禁用了
-                    throw new MyException("用户岗位全部不可用");
-                }
-            }
-            loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
-            loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
-            //设置登录状态
-            loginUtilService.login(loginUserVo, DeviceType.PC);
-            //记录登录日志
-            sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, remark, clientIP, userAgent);
-            return StpUtil.getTokenValue();
         }
-        return "";
+        loginUserVo.setRolePermission(sysRoleService.getRolePermissionListByUserId(sysUser.getId()));
+        loginUserVo.setMenuPermission(sysMenuService.getMenuPermissionByUser(loginUserVo));
+        //设置登录状态
+        loginUtilService.login(loginUserVo, DeviceType.PC);
+        //记录登录日志
+        sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_SUCCESS, remark, clientIP, userAgent);
+        return StpUtil.getTokenValue();
     }
 
     /**
