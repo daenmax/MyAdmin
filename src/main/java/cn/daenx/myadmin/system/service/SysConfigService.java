@@ -142,6 +142,15 @@ public interface SysConfigService extends IService<SysConfig> {
     SysSmsTemplateConfigVo getSysSmsTemplateConfigVo();
 
     /**
+     * 获取系统发送验证码时的限制配置
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    SysSendLimitConfigVo getSysSendLimitConfigVo();
+
+    /**
      * 处理系统邮箱配置
      *
      * @param key

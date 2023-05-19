@@ -337,6 +337,27 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     /**
+     * 获取系统发送限制配置
+     * 如果未配置则返回null
+     * 如果配置了但是被禁用了，将返回null
+     *
+     * @return
+     */
+    @Override
+    public SysSendLimitConfigVo getSysSendLimitConfigVo() {
+        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.sendLimit.config");
+        if (ObjectUtil.isEmpty(object)) {
+            return null;
+        }
+        SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
+        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            return null;
+        }
+        SysSendLimitConfigVo sysSendLimitConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysSendLimitConfigVo.class);
+        return sysSendLimitConfigVo;
+    }
+
+    /**
      * 获取系统邮箱配置信息
      * 不存在或者被禁用或者数量为0返回null
      *

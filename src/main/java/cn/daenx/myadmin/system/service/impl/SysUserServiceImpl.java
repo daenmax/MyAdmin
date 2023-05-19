@@ -20,6 +20,7 @@ import cn.daenx.myadmin.system.service.*;
 import cn.daenx.myadmin.system.vo.*;
 import cn.daenx.myadmin.system.vo.system.SmsSendResult;
 import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
+import cn.daenx.myadmin.system.vo.system.SysSendLimitConfigVo;
 import cn.daenx.myadmin.system.vo.system.SysSmsTemplateConfigVo;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
@@ -815,6 +816,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isEmpty(vo.getEmail())) {
             throw new MyException("请填写邮箱");
         }
+        SysSendLimitConfigVo sysSendLimitConfigVo = sysConfigService.getSysSendLimitConfigVo();
+        Long keepLive = 0L;
+        if (sysSendLimitConfigVo != null) {
+            keepLive = Long.valueOf(sysSendLimitConfigVo.getEmail().getKeepLive());
+        }
+        //例如：5分钟
+        String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
         SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
         if (exist) {
@@ -825,9 +833,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         String value = (String) RedisUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
         if (ObjectUtil.isNotEmpty(value)) {
-            throw new MyException("验证码尚未失效，如未收到验证码请30分钟后再试");
+            throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
-        CheckSendVo checkSendVo = EmailUtil.checkSendByUserId(loginUser.getId());
+        CheckSendVo checkSendVo = EmailUtil.checkSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         if (!checkSendVo.getNowOk()) {
             throw new MyException(checkSendVo.getMsg());
         }
@@ -840,11 +848,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("发送邮件失败，请联系管理员");
         }
         //有效期30分钟
-        RedisUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, 1800L, TimeUnit.SECONDS);
-        Integer waitTime = EmailUtil.saveSendByUserId(loginUser.getId());
+        RedisUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
+        Integer waitTime = EmailUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
-        map.put("msg", "验证码已发送，30分钟有效");
+        map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
         return Result.ok(map);
     }
 
@@ -882,6 +890,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isEmpty(vo.getPhone())) {
             throw new MyException("请填写手机号");
         }
+        SysSendLimitConfigVo sysSendLimitConfigVo = sysConfigService.getSysSendLimitConfigVo();
+        Long keepLive = 0L;
+        if (sysSendLimitConfigVo != null) {
+            keepLive = Long.valueOf(sysSendLimitConfigVo.getSms().getKeepLive());
+        }
+        //例如：5分钟
+        String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
         SysLoginUserVo loginUser = loginUtilService.getLoginUser();
         Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
         if (exist) {
@@ -892,14 +907,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         String value = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         if (ObjectUtil.isNotEmpty(value)) {
-            throw new MyException("验证码尚未失效，如未收到验证码请5分钟后再试");
+            throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
-
-        CheckSendVo checkSendVo = SmsUtil.checkSendByUserId(loginUser.getId());
+        CheckSendVo checkSendVo = SmsUtil.checkSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         if (!checkSendVo.getNowOk()) {
             throw new MyException(checkSendVo.getMsg());
         }
-
         SysSmsTemplateConfigVo sysSmsTemplateConfigVo = sysConfigService.getSysSmsTemplateConfigVo();
         if (ObjectUtil.isEmpty(sysSmsTemplateConfigVo)) {
             throw new MyException("没有配置短信模板参数，请联系管理员");
@@ -916,11 +929,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("发送短信失败，请联系管理员");
         }
         //有效期30分钟
-        RedisUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, 300L, TimeUnit.SECONDS);
-        Integer waitTime = SmsUtil.saveSendByUserId(loginUser.getId());
+        RedisUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
+        Integer waitTime = SmsUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
-        map.put("msg", "验证码已发送，5分钟有效");
+        map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
         return Result.ok(map);
     }
 
