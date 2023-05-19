@@ -4,6 +4,7 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
@@ -414,4 +415,22 @@ public class MyUtil {
         html = html.replaceAll("【systemInfoName】", systemName).replaceAll("【code】", code);
         return html;
     }
+
+    /**
+     * 判断输入的账号类型
+     * 1=账号，2=邮箱，3=手机号
+     *
+     * @param username
+     * @return
+     */
+    public static Integer getUsernameType(String username) {
+        if (username.contains("@")) {
+            return 2;
+        }
+        if (NumberUtil.isNumber(username) && username.length() == 11) {
+            return 3;
+        }
+        return 1;
+    }
+
 }

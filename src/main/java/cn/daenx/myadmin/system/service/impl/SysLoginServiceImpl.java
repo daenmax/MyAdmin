@@ -188,7 +188,19 @@ public class SysLoginServiceImpl implements SysLoginService {
             if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
                 throw new MyException("账号和密码不能为空");
             }
-            sysUser = sysUserService.getUserByUsername(vo.getUsername());
+            //判断用户输入的账号是 账号还是邮箱还是手机号
+            Integer usernameType = MyUtil.getUsernameType(vo.getUsername());
+            if (usernameType == 1) {
+                sysUser = sysUserService.getUserByUsername(vo.getUsername());
+            } else if (usernameType == 2) {
+                sysUser = sysUserService.getUserByEmail(vo.getUsername());
+            } else if (usernameType == 3) {
+                sysUser = sysUserService.getUserByPhone(vo.getUsername());
+                if (sysUser == null) {
+                    //某些情况下，账号会设置成手机号，这个时候，需要进行二次判断
+                    sysUser = sysUserService.getUserByUsername(vo.getUsername());
+                }
+            }
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
             }
@@ -343,6 +355,9 @@ public class SysLoginServiceImpl implements SysLoginService {
         //判空
         if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
             throw new MyException("账号和密码不能为空");
+        }
+        if (vo.getUsername().contains("@")) {
+            throw new MyException("账号不能包含@符号");
         }
         Boolean lockRegister = Boolean.parseBoolean(sysConfigService.getConfigByKey("sys.lock.register"));
         if (!lockRegister) {

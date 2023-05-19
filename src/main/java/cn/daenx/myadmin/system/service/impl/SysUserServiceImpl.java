@@ -495,6 +495,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addInfo(SysUserAddVo vo) {
+        if (vo.getUsername().contains("@")) {
+            throw new MyException("账号不能包含@符号");
+        }
         if (StringUtils.isNotBlank(vo.getPhone())) {
             if (checkUserByPhone(vo.getPhone(), null)) {
                 throw new MyException("手机号已存在");
