@@ -5,10 +5,7 @@ import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.vo.system.DingTalkSendResult;
-import cn.daenx.myadmin.system.vo.system.SendEmailVo;
-import cn.daenx.myadmin.system.vo.system.SendSmsVo;
-import cn.daenx.myadmin.system.vo.system.SmsSendResult;
+import cn.daenx.myadmin.system.vo.system.*;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.util.ObjectUtil;
 import org.springframework.validation.annotation.Validated;
@@ -65,17 +62,18 @@ public class FunctestController {
     }
 
     /**
-     * 测试钉钉群通知
+     * 钉钉测试
      *
      * @return
      */
     @PostMapping("/sendDingTalk")
-    public Result sendDingTalk() {
+    public Result sendDingTalk(@Validated @RequestBody SendDingTalkVo vo) {
         //发送普通文本消息
-//        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendTalk("testbot", "测试普通文本消息");
-        //自己组装复杂的消息，以便发送其他消息类型的消息
-        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendTalkContent("testbot", "{\"msgtype\":\"markdown\",\"markdown\":{\"title\":\"杭州天气\",\"text\":\"#### 杭州天气 @150XXXXXXXX \\n > 9度，西北风1级，空气良89，相对温度73%\\n > ![screenshot](https://img.alicdn.com/tfs/TB1NwmBEL9TBuNjy1zbXXXpepXa-2400-1218.png)\\n > ###### 10点20分发布 [天气](https://www.dingtalk.com) \\n\"},\"at\":{\"atMobiles\":[\"150XXXXXXXX\"],\"atUserIds\":[\"user123\"],\"isAtAll\":false}}");
-        return Result.ok(dingTalkSendResults);
+        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendTalk(vo.getBotName(), vo.getMsg());
+        if (dingTalkSendResults.get(0).isSuccess()) {
+            return Result.ok("发送成功", null);
+        }
+        return Result.error(dingTalkSendResults.get(0).getMsg());
     }
 
 }
