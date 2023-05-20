@@ -1,7 +1,10 @@
 package cn.daenx.myadmin.system.vo.system;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 短信测试
@@ -16,8 +19,8 @@ public class SendSmsVo {
     /**
      * 接收手机号
      */
-    @NotBlank(message = "接收手机号不能为空")
-    private String phones;
+    @Size(min = 1, message = "接收手机号最少填写一个")
+    private List<String> phones;
 
     /**
      * 模板ID
@@ -28,7 +31,7 @@ public class SendSmsVo {
     /**
      * kv
      */
-    @NotBlank(message = "kv不能为空")
-    private String kv;
+    @Size(min = 1, message = "kv参数最少填写一个")
+    private List<String> kv;
 
 }

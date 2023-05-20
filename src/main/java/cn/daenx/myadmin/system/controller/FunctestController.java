@@ -2,6 +2,7 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.utils.DingTalkUtil;
 import cn.daenx.myadmin.common.utils.EmailUtil;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.vo.system.DingTalkSendResult;
@@ -49,16 +50,18 @@ public class FunctestController {
      */
     @PostMapping("/sendSms")
     public Result sendSms(@Validated @RequestBody SendSmsVo vo) {
-        //腾讯云
-//        Map<String, String> map1 = new HashMap<>();
-//        map1.put("1", "1234");
-//        map1.put("2", "8888");
-//        SmsSendResult smsSendResult = SmsUtil.sendSms("+8618731055555,+8618754158888", "1794869", map1,"tencent");
-        //阿里云
-        Map<String, String> map2 = new HashMap<>();
-        map2.put("code", "6666");
-        SmsSendResult smsSendResult = SmsUtil.sendSms("+8618731055555,+8618754158888", "SMS_46075548111", map2, "aliyun");
-        return Result.ok(smsSendResult);
+        Map<String, String> smsMap = new HashMap<>();
+        for (String kv : vo.getKv()) {
+            String[] split = kv.split("-");
+            if (split.length == 2) {
+                smsMap.put(split[0], split[1]);
+            }
+        }
+        SmsSendResult smsSendResult = SmsUtil.sendSms(MyUtil.join(vo.getPhones(), String::trim, ","), vo.getTemplateId(), smsMap, vo.getType());
+        if (smsSendResult.isSuccess()) {
+            return Result.ok("发送成功", null);
+        }
+        return Result.error(smsSendResult.getMsg());
     }
 
     /**
