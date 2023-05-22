@@ -24,7 +24,7 @@ public class RedisUtil {
     }
 
 
-    public static RedisTemplate getRedisTemplate() {
+    public static RedisTemplate<String, Object> getRedisTemplate() {
         return redisTemplate;
     }
 
