@@ -5,27 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 通用配置
- *
- * @author Lion Li
+ * 解决跨域
+ * 其他方案可参考：https://blog.csdn.net/m0_58528901/article/details/123775417
  */
 @Configuration
-public class CrossConfig implements WebMvcConfigurer {
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        // 全局访问性能拦截
-       // registry.addInterceptor(new PlusWebInvokeTimeInterceptor());
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    }
+public class CrossConfig {
 
     /**
      * 跨域配置
