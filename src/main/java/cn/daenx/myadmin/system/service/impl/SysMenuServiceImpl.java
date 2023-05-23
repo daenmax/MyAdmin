@@ -98,6 +98,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (vo.getId().equals(vo.getParentId())) {
             throw new MyException("上级菜单不能选择自己");
         }
+        if (ObjectUtil.isEmpty(vo.getIcon())) {
+            vo.setIcon("#");
+        }
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysMenu::getId, vo.getId());
         wrapper.set(SysMenu::getParentId, vo.getParentId());
@@ -158,6 +161,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
         if ("0".equals(vo.getIsFrame()) && !Validator.isUrl(vo.getPath())) {
             throw new MyException("地址必须以http(s)://开头");
+        }
+        if (ObjectUtil.isEmpty(vo.getIcon())) {
+            vo.setIcon("#");
         }
         SysMenu sysMenu = new SysMenu();
         sysMenu.setParentId(vo.getParentId());

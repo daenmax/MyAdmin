@@ -19,36 +19,6 @@ public class SysApiLimitPageVo extends BasePageVo {
     private String apiUri;
 
     /**
-     * 单个用户次数
-     */
-    private Integer singleFrequency;
-
-    /**
-     * 单个用户时间
-     */
-    private Integer singleTime;
-
-    /**
-     * 单个用户时间单位
-     */
-    private String singleTimeUnit;
-
-    /**
-     * 全部用户次数
-     */
-    private Integer wholeFrequency;
-
-    /**
-     * 全部用户时间
-     */
-    private Integer wholeTime;
-
-    /**
-     * 全部用户时间单位
-     */
-    private String wholeTimeUnit;
-
-    /**
      * 限制类型，0=限流，1=停用
      */
     private String limitType;
