@@ -6,6 +6,7 @@ import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.vo.system.*;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.util.ObjectUtil;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 @SaIgnore
 @RestController
-@RequestMapping("/system/functest")
+@RequestMapping("/tool/functest")
 public class FunctestController {
 
 
@@ -29,6 +30,7 @@ public class FunctestController {
      *
      * @return
      */
+    @SaCheckPermission("tool:functest:sendEmail")
     @PostMapping("/sendEmail")
     public Result sendEmail(@Validated @RequestBody SendEmailVo vo) {
         Boolean res;
@@ -45,6 +47,7 @@ public class FunctestController {
      *
      * @return
      */
+    @SaCheckPermission("tool:functest:sendSms")
     @PostMapping("/sendSms")
     public Result sendSms(@Validated @RequestBody SendSmsVo vo) {
         Map<String, String> smsMap = new HashMap<>();
@@ -66,6 +69,7 @@ public class FunctestController {
      *
      * @return
      */
+    @SaCheckPermission("tool:functest:sendDingTalk")
     @PostMapping("/sendDingTalk")
     public Result sendDingTalk(@Validated @RequestBody SendDingTalkVo vo) {
         //发送普通文本消息

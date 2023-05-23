@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/system/ossConfig")
+@RequestMapping("/monitor/ossConfig")
 public class SysOssConfigController {
     @Resource
     private SysOssConfigService sysOssConfigService;
@@ -28,7 +28,7 @@ public class SysOssConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:ossConfig:list")
+    @SaCheckPermission("monitor:ossConfig:list")
     @GetMapping(value = "/list")
     public Result list(SysOssConfigPageVo vo) {
         IPage<SysOssConfig> page = sysOssConfigService.getPage(vo);
@@ -40,7 +40,7 @@ public class SysOssConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:ossConfig:list")
+    @SaCheckPermission("monitor:ossConfig:list")
     @GetMapping(value = "/allList")
     public Result allList(SysOssConfigPageVo vo) {
         List<SysOssConfig> list = sysOssConfigService.getAll(vo);
@@ -53,7 +53,7 @@ public class SysOssConfigController {
      * @param id
      * @return
      */
-    @SaCheckPermission("system:ossConfig:query")
+    @SaCheckPermission("monitor:ossConfig:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
         SysOssConfig sysOssConfig = sysOssConfigService.getInfo(id);
@@ -66,7 +66,7 @@ public class SysOssConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:ossConfig:edit")
+    @SaCheckPermission("monitor:ossConfig:edit")
     @PutMapping
     public Result edit(@Validated @RequestBody SysOssConfigUpdVo vo) {
         sysOssConfigService.editInfo(vo);
@@ -79,7 +79,7 @@ public class SysOssConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:ossConfig:add")
+    @SaCheckPermission("monitor:ossConfig:add")
     @PostMapping
     public Result add(@Validated @RequestBody SysOssConfigAddVo vo) {
         sysOssConfigService.addInfo(vo);
@@ -92,7 +92,7 @@ public class SysOssConfigController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:ossConfig:remove")
+    @SaCheckPermission("monitor:ossConfig:remove")
     @DeleteMapping()
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
@@ -108,7 +108,7 @@ public class SysOssConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:ossConfig:edit")
+    @SaCheckPermission("monitor:ossConfig:edit")
     @PutMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         sysOssConfigService.changeStatus(vo);
@@ -121,7 +121,7 @@ public class SysOssConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:ossConfig:edit")
+    @SaCheckPermission("monitor:ossConfig:edit")
     @PutMapping("/changeInUse")
     public Result changeInUse(@Validated @RequestBody ComStatusUpdVo vo) {
         sysOssConfigService.changeInUse(vo);
