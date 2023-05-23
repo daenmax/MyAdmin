@@ -175,4 +175,14 @@ public class SystemConstant {
      * 通知渠道，钉钉
      */
     public static final String NOTIFY_CHANNEL_DING = "3";
+
+
+    /**
+     * 接口限制类型，0=限流，1=停用
+     */
+    public static final String API_LIMIT_XL = "0";
+    /**
+     * 接口限制类型，0=限流，1=停用
+     */
+    public static final String API_LIMIT_TY = "1";
 }
