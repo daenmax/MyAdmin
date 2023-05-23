@@ -55,4 +55,14 @@ public interface SysApiLimitService extends IService<SysApiLimit> {
      * @param ids
      */
     void deleteByIds(List<String> ids);
+
+    /**
+     * 检查某个接口的某个限制是否存在，已存在返回true
+     *
+     * @param apiUri
+     * @param limitType
+     * @param nowId 排除ID
+     * @return
+     */
+    Boolean checkApiLimitExist(String apiUri, String limitType, String nowId);
 }

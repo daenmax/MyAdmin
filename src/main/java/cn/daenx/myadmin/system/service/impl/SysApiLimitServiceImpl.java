@@ -40,6 +40,7 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
         return wrapper;
     }
 
+
     /**
      * 分页列表
      *
@@ -80,15 +81,18 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
                 throw new MyException("单个用户限制和全部用户限制最少填写一个");
             }
             if (ObjectUtil.isNotEmpty(vo.getSingleFrequency())) {
-                if (ObjectUtil.isNotEmpty(vo.getSingleTime()) || ObjectUtil.isNotEmpty(vo.getSingleTimeUnit())) {
+                if (ObjectUtil.isEmpty(vo.getSingleTime()) || ObjectUtil.isEmpty(vo.getSingleTimeUnit())) {
                     throw new MyException("单个用户限制填写不完整");
                 }
             }
             if (ObjectUtil.isNotEmpty(vo.getWholeFrequency())) {
-                if (ObjectUtil.isNotEmpty(vo.getWholeTime()) || ObjectUtil.isNotEmpty(vo.getWholeTimeUnit())) {
+                if (ObjectUtil.isEmpty(vo.getWholeTime()) || ObjectUtil.isEmpty(vo.getWholeTimeUnit())) {
                     throw new MyException("全部用户限制填写不完整");
                 }
             }
+        }
+        if (checkApiLimitExist(vo.getApiUri(), vo.getLimitType(), null)) {
+            throw new MyException("当前接口已经存在当前限制类型");
         }
         SysApiLimit sysApiLimit = new SysApiLimit();
         sysApiLimit.setApiName(vo.getApiName());
@@ -137,6 +141,9 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
                     throw new MyException("全部用户限制填写不完整");
                 }
             }
+        }
+        if (checkApiLimitExist(vo.getApiUri(), vo.getLimitType(), vo.getId())) {
+            throw new MyException("当前接口已经存在当前限制类型");
         }
         LambdaUpdateWrapper<SysApiLimit> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysApiLimit::getId, vo.getId());
@@ -201,5 +208,23 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
                 //刷新redis缓存
             }
         }
+    }
+
+    /**
+     * 检查某个接口的某个限制是否存在，已存在返回true
+     *
+     * @param apiUri
+     * @param limitType
+     * @param nowId     排除ID
+     * @return
+     */
+    @Override
+    public Boolean checkApiLimitExist(String apiUri, String limitType, String nowId) {
+        LambdaQueryWrapper<SysApiLimit> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysApiLimit::getApiUri, apiUri);
+        wrapper.eq(SysApiLimit::getLimitType, limitType);
+        wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysApiLimit::getId, nowId);
+        boolean exists = sysApiLimitMapper.exists(wrapper);
+        return exists;
     }
 }
