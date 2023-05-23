@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.daenx.myadmin.system.mapper.SysApiLimitMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysApiLimit">
+    <!--@mbg.generated-->
+    <!--@Table sys_api_limit-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="api_name" jdbcType="VARCHAR" property="apiName" />
+    <result column="api_uri" jdbcType="VARCHAR" property="apiUri" />
+    <result column="single_frequency" jdbcType="INTEGER" property="singleFrequency" />
+    <result column="single_time" jdbcType="INTEGER" property="singleTime" />
+    <result column="single_time_unit" jdbcType="VARCHAR" property="singleTimeUnit" />
+    <result column="whole_frequency" jdbcType="INTEGER" property="wholeFrequency" />
+    <result column="whole_time" jdbcType="INTEGER" property="wholeTime" />
+    <result column="whole_time_unit" jdbcType="VARCHAR" property="wholeTimeUnit" />
+    <result column="limit_type" jdbcType="VARCHAR" property="limitType" />
+    <result column="ret_msg" jdbcType="LONGVARCHAR" property="retMsg" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="VARCHAR" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, api_name, api_uri, single_frequency, single_time, single_time_unit, whole_frequency, 
+    whole_time, whole_time_unit, limit_type, ret_msg, `status`, remark, create_id, create_time, 
+    update_id, update_time, is_delete
+  </sql>
+</mapper>
