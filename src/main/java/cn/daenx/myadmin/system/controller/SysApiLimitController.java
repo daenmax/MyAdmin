@@ -104,4 +104,16 @@ public class SysApiLimitController {
         SysApiLimitService.deleteByIds(ids);
         return Result.ok();
     }
+
+    /**
+     * 刷新缓存
+     *
+     * @return
+     */
+    @SaCheckPermission("monitor:apiLimit:refreshCache")
+    @PostMapping("/refreshCache")
+    public Result refreshCache() {
+        SysApiLimitService.refreshApiLimitCache();
+        return Result.ok();
+    }
 }
