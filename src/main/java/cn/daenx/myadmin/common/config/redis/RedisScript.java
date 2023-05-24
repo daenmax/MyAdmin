@@ -45,7 +45,7 @@ public class RedisScript {
                 "\t\tlocal minTime = currentTime - outTime\n" +
                 "\t\tlocal effectiveNum = redis.call('ZCOUNT',singleUserKey,minTime,currentTime)\n" +
                 "\t\tif  effectiveNum < maxSize and redis.call('ZREMRANGEBYSCORE',singleUserKey,0,minTime) > 0 then\n" +
-                "\t\t\tredis.call('ZADD',singleUserKey,currentTime,currentTime)\n" +
+                "\t\t\tredis.call('ZADD',singleUserKey,currentTime,currentTimeMiss)\n" +
                 "\t\t\tredis.call('expire',singleUserKey,outTime)\n" +
                 "\t\telse\n" +
                 "\t\t\treturn -1\n" +
@@ -57,13 +57,13 @@ public class RedisScript {
                 "\tlocal outTimeWhole = tonumber(redis.call('hget',wholeKey,'outTime'))\n" +
                 "\tlocal currentLenWhole = redis.call('ZCARD',wholeLimiterKey)\n" +
                 "\tif currentLenWhole < maxSizeWhole then\n" +
-                "\t\tredis.call('ZADD',wholeLimiterKey,currentTime,currentTime)\n" +
+                "\t\tredis.call('ZADD',wholeLimiterKey,currentTime,currentTimeMiss)\n" +
                 "\t\tredis.call('expire',wholeLimiterKey,outTimeWhole)\n" +
                 "\telse\n" +
                 "\t\tlocal minTimeWhole = currentTime - outTimeWhole\n" +
                 "\t\tlocal effectiveNumWhole = redis.call('ZCOUNT',wholeLimiterKey,minTimeWhole,currentTime)\n" +
                 "\t\tif  effectiveNumWhole < maxSizeWhole and redis.call('ZREMRANGEBYSCORE',wholeLimiterKey,0,minTimeWhole) > 0 then\n" +
-                "\t\t\tredis.call('ZADD',wholeLimiterKey,currentTime,currentTime)\n" +
+                "\t\t\tredis.call('ZADD',wholeLimiterKey,currentTime,currentTimeMiss)\n" +
                 "\t\t\tredis.call('expire',wholeLimiterKey,outTimeWhole)\n" +
                 "\t\telse\n" +
                 "\t\t\treturn -2\n" +

@@ -28,7 +28,7 @@ if redis.call('EXISTS',singleKey)==1 then
 		-- 判断有效次数小于最大次数 并且 移除无效次数大于0
 		if  effectiveNum < maxSize and redis.call('ZREMRANGEBYSCORE',singleUserKey,0,minTime) > 0 then
 			-- 移除成功 通过
-			redis.call('ZADD',singleUserKey,currentTime,currentTime)
+			redis.call('ZADD',singleUserKey,currentTime,currentTimeMiss)
 			redis.call('expire',singleUserKey,outTime)
 		else
 			-- 失败 不通过
@@ -45,7 +45,7 @@ if redis.call('EXISTS',wholeKey)==1 then
 	-- 判断是否达到最大次数 ZCARD 如果没有key 则返回 0 有key 则返回key的 长度
 	if currentLenWhole < maxSizeWhole then
 		-- 没有达到最大次数 直接通过
-		redis.call('ZADD',wholeLimiterKey,currentTime,currentTime)
+		redis.call('ZADD',wholeLimiterKey,currentTime,currentTimeMiss)
 		redis.call('expire',wholeLimiterKey,outTimeWhole)
 	else
 		-- 达到最大次数 计算已无效的范围 即 0 到 minTimeWhole 中的访问 不再计算次数了
@@ -55,7 +55,7 @@ if redis.call('EXISTS',wholeKey)==1 then
 		-- 判断有效次数小于最大次数 并且 移除无效次数大于0
 		if  effectiveNumWhole < maxSizeWhole and redis.call('ZREMRANGEBYSCORE',wholeLimiterKey,0,minTimeWhole) > 0 then
 			-- 移除成功 通过
-			redis.call('ZADD',wholeLimiterKey,currentTime,currentTime)
+			redis.call('ZADD',wholeLimiterKey,currentTime,currentTimeMiss)
 			redis.call('expire',wholeLimiterKey,outTimeWhole)
 		else
 			-- 失败 不通过
