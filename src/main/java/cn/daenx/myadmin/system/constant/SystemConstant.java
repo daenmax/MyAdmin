@@ -188,6 +188,17 @@ public class SystemConstant {
 
 
     /**
+     * 接口限流redis lua脚本返回值： 超过单个用户访问限制
+     */
+    public static final Long API_LIMIT_SINGLE_LIMIT_EXCEED = -1L;
+
+    /**
+     * 接口限流redis lua脚本返回值： 超过全部用户访问限制
+     */
+    public static final Long API_LIMIT_WHOLE_LIMIT_EXCEED = -2L;
+
+
+    /**
      * 系统时间单位
      */
     public static final String SYS_TIME_UNIT_SECOND = "0";

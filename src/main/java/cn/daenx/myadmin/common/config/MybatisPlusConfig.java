@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.common.config;
 
-import cn.daenx.myadmin.common.interceptor.DataScopeInterceptor;
+import cn.daenx.myadmin.common.aspectj.DataScopeInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;

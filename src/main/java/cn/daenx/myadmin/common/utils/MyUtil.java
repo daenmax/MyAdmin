@@ -441,23 +441,23 @@ public class MyUtil {
      * @param unit 单位，0=秒，1=分钟，2=小时，3=天
      * @return
      */
-    public static Long toSecond(Integer time, String unit) {
+    public static Integer toSecond(Integer time, String unit) {
         Integer timeI = time;
         if (timeI == 0) {
-            return 0L;
+            return 0;
         }
         if (SystemConstant.SYS_TIME_UNIT_SECOND.equals(unit)) {
-            return Long.valueOf(timeI);
+            return timeI;
         } else if (SystemConstant.SYS_TIME_UNIT_MINUTE.equals(unit)) {
             timeI = timeI * 60;
-            return Long.valueOf(timeI);
+            return timeI;
         } else if (SystemConstant.SYS_TIME_UNIT_HOUR.equals(unit)) {
             timeI = timeI * 60 * 60;
-            return Long.valueOf(timeI);
+            return timeI;
         } else if (SystemConstant.SYS_TIME_UNIT_DAY.equals(unit)) {
             timeI = timeI * 60 * 60 * 24;
-            return Long.valueOf(timeI);
+            return timeI;
         }
-        return 0L;
+        return 0;
     }
 }
