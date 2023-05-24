@@ -61,8 +61,13 @@ public interface SysApiLimitService extends IService<SysApiLimit> {
      *
      * @param apiUri
      * @param limitType
-     * @param nowId 排除ID
+     * @param nowId     排除ID
      * @return
      */
     Boolean checkApiLimitExist(String apiUri, String limitType, String nowId);
+
+    /**
+     * 刷新redis缓存
+     */
+    void refreshApiLimitCache();
 }

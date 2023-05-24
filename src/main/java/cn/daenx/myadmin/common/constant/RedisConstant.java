@@ -20,4 +20,10 @@ public class RedisConstant {
 
     public static final String LOGIN_EMAIL = "login:email:";
     public static final String LOGIN_PHONE = "login:phone:";
+
+
+    public static final String API_LIMIT_CLOSE_KEY = "apiLimit:close:";
+    public static final String API_LIMIT_SINGLE_KEY = "apiLimit:single:";
+    public static final String API_LIMIT_WHOLE_KEY = "apiLimit:whole:";
+    public static final String API_LIMIT_WHOLE_LIMITER_KEY = "apiLimit:whole:limiter:";
 }

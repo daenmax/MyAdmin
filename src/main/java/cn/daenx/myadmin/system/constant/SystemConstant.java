@@ -180,9 +180,18 @@ public class SystemConstant {
     /**
      * 接口限制类型，0=限流，1=停用
      */
-    public static final String API_LIMIT_XL = "0";
+    public static final String API_LIMIT_CURRENT = "0";
     /**
      * 接口限制类型，0=限流，1=停用
      */
-    public static final String API_LIMIT_TY = "1";
+    public static final String API_LIMIT_CLOSE = "1";
+
+
+    /**
+     * 系统时间单位
+     */
+    public static final String SYS_TIME_UNIT_SECOND = "0";
+    public static final String SYS_TIME_UNIT_MINUTE = "1";
+    public static final String SYS_TIME_UNIT_HOUR = "2";
+    public static final String SYS_TIME_UNIT_DAY = "3";
 }

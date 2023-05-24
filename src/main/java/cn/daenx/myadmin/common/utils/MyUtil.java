@@ -1,6 +1,7 @@
 package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
@@ -433,4 +434,30 @@ public class MyUtil {
         return 1;
     }
 
+    /**
+     * 转换到秒
+     *
+     * @param time 时间，例如：5
+     * @param unit 单位，0=秒，1=分钟，2=小时，3=天
+     * @return
+     */
+    public static Long toSecond(Integer time, String unit) {
+        Integer timeI = time;
+        if (timeI == 0) {
+            return 0L;
+        }
+        if (SystemConstant.SYS_TIME_UNIT_SECOND.equals(unit)) {
+            return Long.valueOf(timeI);
+        } else if (SystemConstant.SYS_TIME_UNIT_MINUTE.equals(unit)) {
+            timeI = timeI * 60;
+            return Long.valueOf(timeI);
+        } else if (SystemConstant.SYS_TIME_UNIT_HOUR.equals(unit)) {
+            timeI = timeI * 60 * 60;
+            return Long.valueOf(timeI);
+        } else if (SystemConstant.SYS_TIME_UNIT_DAY.equals(unit)) {
+            timeI = timeI * 60 * 60 * 24;
+            return Long.valueOf(timeI);
+        }
+        return 0L;
+    }
 }
