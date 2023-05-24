@@ -5,8 +5,10 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.po.SysApiLimit;
 import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,6 +41,13 @@ public class ApiLimitInterceptor implements HandlerInterceptor {
         if (ObjectUtil.isNotEmpty(contextPath)) {
             requestURI = requestURI.replaceFirst(contextPath, "");
         }
+        //查询接口是否停用
+        Object value = RedisUtil.getValue(RedisConstant.API_LIMIT_CLOSE_KEY + requestURI);
+        if (ObjectUtil.isNotEmpty(value)) {
+            SysApiLimit sysApiLimit = JSON.parseObject(JSON.toJSONString(value), SysApiLimit.class);
+            throw new MyException(sysApiLimit.getRetMsg());
+        }
+        //查询接口限流策略
         String loginUserId = loginUtilService.getLoginUserId();
         String clientIP = ServletUtils.getClientIP();
         String userKey = ObjectUtil.isEmpty(loginUserId) ? clientIP : loginUserId;
