@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.interceptor;
+package cn.daenx.myadmin.common.config;
 
 import cn.daenx.myadmin.common.properties.checkLoginIgnoresProperties;
 import cn.dev33.satoken.fun.SaParamFunction;
@@ -9,12 +9,14 @@ import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @Slf4j
-public class SaTokenInterceptor implements WebMvcConfigurer {
+@Order(2)
+public class SaTokenInterceptorConfig implements WebMvcConfigurer {
     @Resource
     private checkLoginIgnoresProperties checkLoginIgnoresProperties;
 

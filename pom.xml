@@ -68,14 +68,22 @@
             <artifactId>spring-boot-starter-aop</artifactId>
             <version>${aop.version}</version>
         </dependency>
+        <!-- 数据校验 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <!-- Spring重试框架 -->
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
+        <!-- 健康监控 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -91,7 +99,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-
         <!-- Mysql驱动包 -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -114,7 +121,6 @@
             <artifactId>fastjson2</artifactId>
             <version>${fastjson2.version}</version>
         </dependency>
-
         <!--redis依赖包-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -156,7 +162,6 @@
             <artifactId>sa-token-dao-redis-jackson</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
-
         <!-- Hutool -->
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -203,9 +208,6 @@
             <artifactId>dysmsapi20170525</artifactId>
             <version>2.0.23</version>
         </dependency>
-
-
-
 
 
 

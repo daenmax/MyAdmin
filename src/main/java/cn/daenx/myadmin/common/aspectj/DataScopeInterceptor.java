@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.interceptor;
+package cn.daenx.myadmin.common.aspectj;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.vo.DataScopeParam;

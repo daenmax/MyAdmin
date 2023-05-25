@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/system/notice")
+@RequestMapping("/monitor/notice")
 public class SysNoticeController {
     @Resource
     private SysNoticeService sysNoticeService;
@@ -29,7 +29,7 @@ public class SysNoticeController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:notice:list")
+    @SaCheckPermission("monitor:notice:list")
     @GetMapping("/list")
     public Result list(SysNoticePageVo vo) {
         IPage<SysNoticePageDto> page = sysNoticeService.getPage(vo);
@@ -42,7 +42,7 @@ public class SysNoticeController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:notice:add")
+    @SaCheckPermission("monitor:notice:add")
     @PostMapping
     public Result add(@Validated @RequestBody SysNoticeAddVo vo) {
         sysNoticeService.addInfo(vo);
@@ -55,7 +55,7 @@ public class SysNoticeController {
      * @param id
      * @return
      */
-    @SaCheckPermission("system:notice:query")
+    @SaCheckPermission("monitor:notice:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
         SysNotice sysNotice = sysNoticeService.getInfo(id);
@@ -68,7 +68,7 @@ public class SysNoticeController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:notice:edit")
+    @SaCheckPermission("monitor:notice:edit")
     @PutMapping
     public Result edit(@Validated @RequestBody SysNoticeUpdVo vo) {
         sysNoticeService.editInfo(vo);
@@ -81,7 +81,7 @@ public class SysNoticeController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:notice:remove")
+    @SaCheckPermission("monitor:notice:remove")
     @DeleteMapping()
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {

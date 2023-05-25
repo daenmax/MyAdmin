@@ -210,7 +210,7 @@ public class EmailUtil {
     private static String rightPopAndLeftPushEmail() {
         //这里两种方式，自己决定用哪一种哈~
         //使用redis lua方式
-        String email = (String) RedisUtil.getRedisTemplate().execute(nextEmailScript, CollUtil.newArrayList(SystemConstant.EMAIL_POLL_KEY), "");
+        String email = RedisUtil.getRedisTemplate().execute(nextEmailScript, CollUtil.newArrayList(SystemConstant.EMAIL_POLL_KEY), "");
         //使用 rightPopAndLeftPush方式
 //        String email = (String) RedisUtil.rightPopAndLeftPush(SystemConstant.EMAIL_POLL_KEY);
         return email;

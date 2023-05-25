@@ -14,31 +14,63 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 public class RedisScript {
 
     /**
-     * 限流脚本
+     * 接口限流脚本
      *
      * @return
      */
     @Bean
-    public DefaultRedisScript<Long> limitScript() {
+    public DefaultRedisScript<Long> apiLimitScript() {
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
-        redisScript.setScriptText(limitScriptText());
+        redisScript.setScriptText(apiLimitScriptText());
         redisScript.setResultType(Long.class);
         return redisScript;
     }
 
-    private String limitScriptText() {
-        return "local key = KEYS[1]\n" +
-                "local count = tonumber(ARGV[1])\n" +
-                "local time = tonumber(ARGV[2])\n" +
-                "local current = redis.call('get', key);\n" +
-                "if current and tonumber(current) > count then\n" +
-                "    return tonumber(current);\n" +
+    private String apiLimitScriptText() {
+        return "redis.replicate_commands();\n" +
+                "local singleKey = KEYS[1]\n" +
+                "local singleUserKey = KEYS[2]\n" +
+                "local wholeKey = KEYS[3]\n" +
+                "local wholeLimiterKey = KEYS[4]\n" +
+                "local currentTime = redis.call('TIME')[1]\n" +
+                "local currentTimeMiss = redis.call('TIME')[1]..redis.call('TIME')[2]\n" +
+                "if redis.call('EXISTS',singleKey)==1 then\n" +
+                "\tlocal maxSize = tonumber(redis.call('hget',singleKey,'max'))\n" +
+                "\tlocal outTime = tonumber(redis.call('hget',singleKey,'outTime'))\n" +
+                "\tlocal currentLen = redis.call('ZCARD',singleUserKey)\n" +
+                "\tif  currentLen < maxSize then\n" +
+                "\t\tredis.call('ZADD',singleUserKey,currentTime,currentTimeMiss)\n" +
+                "\t\tredis.call('expire',singleUserKey,outTime)\n" +
+                "\telse\n" +
+                "\t\tlocal minTime = currentTime - outTime\n" +
+                "\t\tlocal effectiveNum = redis.call('ZCOUNT',singleUserKey,minTime,currentTime)\n" +
+                "\t\tif  effectiveNum < maxSize and redis.call('ZREMRANGEBYSCORE',singleUserKey,0,minTime) > 0 then\n" +
+                "\t\t\tredis.call('ZADD',singleUserKey,currentTime,currentTimeMiss)\n" +
+                "\t\t\tredis.call('expire',singleUserKey,outTime)\n" +
+                "\t\telse\n" +
+                "\t\t\treturn -1\n" +
+                "\t\tend\n" +
+                "\tend\n" +
                 "end\n" +
-                "current = redis.call('incr', key)\n" +
-                "if tonumber(current) == 1 then\n" +
-                "    redis.call('expire', key, time)\n" +
+                "if redis.call('EXISTS',wholeKey)==1 then\n" +
+                "\tlocal maxSizeWhole = tonumber(redis.call('hget',wholeKey,'max'))\n" +
+                "\tlocal outTimeWhole = tonumber(redis.call('hget',wholeKey,'outTime'))\n" +
+                "\tlocal currentLenWhole = redis.call('ZCARD',wholeLimiterKey)\n" +
+                "\tif currentLenWhole < maxSizeWhole then\n" +
+                "\t\tredis.call('ZADD',wholeLimiterKey,currentTime,currentTimeMiss)\n" +
+                "\t\tredis.call('expire',wholeLimiterKey,outTimeWhole)\n" +
+                "\telse\n" +
+                "\t\tlocal minTimeWhole = currentTime - outTimeWhole\n" +
+                "\t\tlocal effectiveNumWhole = redis.call('ZCOUNT',wholeLimiterKey,minTimeWhole,currentTime)\n" +
+                "\t\tif  effectiveNumWhole < maxSizeWhole and redis.call('ZREMRANGEBYSCORE',wholeLimiterKey,0,minTimeWhole) > 0 then\n" +
+                "\t\t\tredis.call('ZADD',wholeLimiterKey,currentTime,currentTimeMiss)\n" +
+                "\t\t\tredis.call('expire',wholeLimiterKey,outTimeWhole)\n" +
+                "\t\telse\n" +
+                "\t\t\treturn -2\n" +
+                "\t\tend\n" +
+                "\tend\n" +
                 "end\n" +
-                "return tonumber(current);";
+                "return 0\n";
     }
 
     /**

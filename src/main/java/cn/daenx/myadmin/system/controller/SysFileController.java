@@ -24,7 +24,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/system/file")
+@RequestMapping("/monitor/file")
 public class SysFileController {
     @Resource
     private SysFileService sysFileService;
@@ -35,7 +35,7 @@ public class SysFileController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:file:list")
+    @SaCheckPermission("monitor:file:list")
     @GetMapping(value = "/list")
     public Result list(SysFilePageVo vo) {
         IPage<SysFilePageDto> page = sysFileService.getPage(vo);
@@ -48,7 +48,7 @@ public class SysFileController {
      * @param fileIds 文件ID数组
      * @return
      */
-    @SaCheckPermission("system:file:list")
+    @SaCheckPermission("monitor:file:list")
     @GetMapping("/listByIds/{fileIds}")
     public Result listByIds(@NotEmpty(message = "文件ID列表不能为空") @PathVariable String[] fileIds) {
         List<SysFile> list = sysFileService.getListByIds(Arrays.asList(fileIds));
@@ -61,7 +61,7 @@ public class SysFileController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:file:remove")
+    @SaCheckPermission("monitor:file:remove")
     @DeleteMapping()
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
@@ -77,7 +77,7 @@ public class SysFileController {
      * @return
      */
     @Log(name = "上传文件", type = LogOperTypeEnum.UPLOAD, recordParams = false, recordResult = true)
-    @SaCheckPermission("system:file:upload")
+    @SaCheckPermission("monitor:file:upload")
     @PostMapping("/uploadFile")
     public Result upload(@RequestPart("file") MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadFile(file, SystemConstant.FILE_FROM_USER);
@@ -90,7 +90,7 @@ public class SysFileController {
      * @return
      */
     @Log(name = "上传图片", type = LogOperTypeEnum.UPLOAD, recordParams = false, recordResult = true)
-    @SaCheckPermission("system:file:upload")
+    @SaCheckPermission("monitor:file:upload")
     @PostMapping("/uploadImage")
     public Result avatar(@RequestPart("file") MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadImage(file, SystemConstant.FILE_FROM_USER);
@@ -103,7 +103,7 @@ public class SysFileController {
      * @param id 文件ID
      */
     @Log(name = "下载文件", type = LogOperTypeEnum.DOWNLOAD, recordParams = true, recordResult = false)
-    @SaCheckPermission("system:file:download")
+    @SaCheckPermission("monitor:file:download")
     @GetMapping("/download/{id}")
     public void download(@PathVariable String id, HttpServletResponse response) {
         sysFileService.download(id, response);

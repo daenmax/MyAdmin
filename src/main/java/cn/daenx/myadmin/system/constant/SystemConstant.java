@@ -175,4 +175,34 @@ public class SystemConstant {
      * 通知渠道，钉钉
      */
     public static final String NOTIFY_CHANNEL_DING = "3";
+
+
+    /**
+     * 接口限制类型，0=限流，1=停用
+     */
+    public static final String API_LIMIT_CURRENT = "0";
+    /**
+     * 接口限制类型，0=限流，1=停用
+     */
+    public static final String API_LIMIT_CLOSE = "1";
+
+
+    /**
+     * 接口限流redis lua脚本返回值： 超过单个用户访问限制
+     */
+    public static final Long API_LIMIT_SINGLE_LIMIT_EXCEED = -1L;
+
+    /**
+     * 接口限流redis lua脚本返回值： 超过全部用户访问限制
+     */
+    public static final Long API_LIMIT_WHOLE_LIMIT_EXCEED = -2L;
+
+
+    /**
+     * 系统时间单位
+     */
+    public static final String SYS_TIME_UNIT_SECOND = "0";
+    public static final String SYS_TIME_UNIT_MINUTE = "1";
+    public static final String SYS_TIME_UNIT_HOUR = "2";
+    public static final String SYS_TIME_UNIT_DAY = "3";
 }

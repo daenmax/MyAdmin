@@ -28,7 +28,6 @@ public class SysLogOperServiceImpl extends ServiceImpl<SysLogOperMapper, SysLogO
      *
      * @param sysLogOper
      */
-    @Async
     @Override
     public void saveOper(SysLogOper sysLogOper) {
         if (ObjectUtil.isNotEmpty(sysLogOper.getRequestIp())) {

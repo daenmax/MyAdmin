@@ -1,9 +1,11 @@
 package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.text.AntPathMatcher;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -433,4 +435,62 @@ public class MyUtil {
         return 1;
     }
 
+    /**
+     * 转换到秒
+     *
+     * @param time 时间，例如：5
+     * @param unit 单位，0=秒，1=分钟，2=小时，3=天
+     * @return
+     */
+    public static Integer toSecond(Integer time, String unit) {
+        Integer timeI = time;
+        if (timeI == 0) {
+            return 0;
+        }
+        if (SystemConstant.SYS_TIME_UNIT_SECOND.equals(unit)) {
+            return timeI;
+        } else if (SystemConstant.SYS_TIME_UNIT_MINUTE.equals(unit)) {
+            timeI = timeI * 60;
+            return timeI;
+        } else if (SystemConstant.SYS_TIME_UNIT_HOUR.equals(unit)) {
+            timeI = timeI * 60 * 60;
+            return timeI;
+        } else if (SystemConstant.SYS_TIME_UNIT_DAY.equals(unit)) {
+            timeI = timeI * 60 * 60 * 24;
+            return timeI;
+        }
+        return 0;
+    }
+
+    /**
+     * 查找指定字符串是否匹配指定字符串列表中的任意一个字符串
+     *
+     * @param str  指定字符串
+     * @param strs 需要检查的字符串数组
+     * @return 是否匹配
+     */
+    public static boolean matches(String str, List<String> strs) {
+        if (ObjectUtil.isEmpty(str) || CollUtil.isEmpty(strs)) {
+            return false;
+        }
+        for (String pattern : strs) {
+            if (isMatch(pattern, str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * 判断url是否与规则配置:
+     * ? 表示单个字符;
+     * * 表示一层路径内的任意字符串，不可跨层级;
+     * ** 表示任意层路径;
+     *
+     * @param pattern 匹配规则
+     * @param url     需要匹配的url
+     */
+    public static boolean isMatch(String pattern, String url) {
+        AntPathMatcher matcher = new AntPathMatcher();
+        return matcher.match(pattern, url);
+    }
 }

@@ -212,7 +212,12 @@ public class LoginUtilServiceImpl implements LoginUtilService {
         if (loginUser != null) {
             return loginUser;
         }
-        SaSession tokenSession = StpUtil.getTokenSession();
+        SaSession tokenSession;
+        try {
+            tokenSession = StpUtil.getTokenSession();
+        } catch (Exception e) {
+            return null;
+        }
         if (tokenSession == null) {
             return null;
         }
@@ -234,7 +239,11 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      */
     @Override
     public String getLoginUserId() {
-        return getLoginUser().getId();
+        SysLoginUserVo loginUser = getLoginUser();
+        if (loginUser == null) {
+            return null;
+        }
+        return loginUser.getId();
     }
 
     /**
