@@ -1,13 +1,11 @@
 package cn.daenx.myadmin.common.config;
 
-import cn.daenx.myadmin.common.filter.ActuatorFilter;
 import cn.daenx.myadmin.common.filter.RepeatableFilter;
 import cn.daenx.myadmin.common.filter.XssFilter;
 import cn.daenx.myadmin.common.properties.XssProperties;
 import jakarta.annotation.Resource;
 import jakarta.servlet.DispatcherType;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +22,6 @@ import java.util.Map;
 public class FilterConfig {
     @Resource
     private XssProperties xssProperties;
-    @Value("${management.endpoints.web.base-path}")
-    private String actuatorBasePath;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Bean
@@ -50,17 +46,6 @@ public class FilterConfig {
         registration.setFilter(new RepeatableFilter());
         registration.addUrlPatterns("/*");
         registration.setName("repeatableFilter");
-        registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
-        return registration;
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Bean
-    public FilterRegistrationBean actuatorFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new ActuatorFilter());
-        registration.addUrlPatterns(actuatorBasePath + "/*");
-        registration.setName("actuatorFilter");
         registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
         return registration;
     }
