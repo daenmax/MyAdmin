@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.init;
+package cn.daenx.myadmin.common.liveCycle;
 
 import cn.daenx.myadmin.system.service.*;
 import jakarta.annotation.Resource;
