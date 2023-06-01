@@ -26,6 +26,8 @@ public class FilterConfig {
     private XssProperties xssProperties;
     @Value("${management.endpoints.web.base-path}")
     private String actuatorBasePath;
+    @Value("${management.token}")
+    private String actuatorToken;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Bean
@@ -58,7 +60,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean actuatorFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new ActuatorFilter());
+        registration.setFilter(new ActuatorFilter(actuatorToken));
         registration.addUrlPatterns(actuatorBasePath + "/*");
         registration.setName("actuatorFilter");
         registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
