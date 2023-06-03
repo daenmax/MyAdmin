@@ -99,7 +99,7 @@ public class MybatisEncryptInterceptor implements Interceptor {
      * @return 加密后结果
      */
     private String encryptField(String value, Field field) {
-        if (ObjectUtil.isNull(value)) {
+        if (ObjectUtil.isEmpty(value)) {
             return null;
         }
         EncryptField encryptField = field.getAnnotation(EncryptField.class);

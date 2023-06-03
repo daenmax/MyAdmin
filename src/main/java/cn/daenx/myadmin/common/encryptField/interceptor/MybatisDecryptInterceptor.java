@@ -90,7 +90,7 @@ public class MybatisDecryptInterceptor implements Interceptor {
      * @return 加密后结果
      */
     private String decryptField(String value, Field field) {
-        if (ObjectUtil.isNull(value)) {
+        if (ObjectUtil.isEmpty(value)) {
             return null;
         }
         EncryptField encryptField = field.getAnnotation(EncryptField.class);
