@@ -29,6 +29,7 @@
         <oshi.core.version>6.4.2</oshi.core.version>
         <tencentcloudapi.sms.version>3.1.758</tencentcloudapi.sms.version>
         <aliyun.dysmsapi.version>2.0.23</aliyun.dysmsapi.version>
+        <bouncycastle.version>1.70</bouncycastle.version>
     </properties>
     <profiles>
         <profile>
@@ -174,6 +175,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+        <!-- 加密 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
         </dependency>
         <!--常用工具类 -->
         <dependency>

@@ -1,5 +1,7 @@
 package cn.daenx.myadmin.test.po;
 
+import cn.daenx.myadmin.common.encryptField.annotation.EncryptField;
+import cn.daenx.myadmin.common.encryptField.enumd.AlgorithmType;
 import cn.daenx.myadmin.common.vo.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -28,6 +30,7 @@ public class TestData extends BaseEntity implements Serializable {
     private String title;
 
     @TableField(value = "content")
+    @EncryptField(algorithm = AlgorithmType.AES, password = "10rfylhtccpuyke5")
     private String content;
 
     /**
@@ -40,6 +43,7 @@ public class TestData extends BaseEntity implements Serializable {
      * 备注
      */
     @TableField(value = "remark")
+    @EncryptField(algorithm = AlgorithmType.AES, password = "10rfylhtccpuyke5")
     private String remark;
 
     /**
