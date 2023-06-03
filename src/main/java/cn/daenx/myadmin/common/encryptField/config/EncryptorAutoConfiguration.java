@@ -5,10 +5,10 @@ import cn.daenx.myadmin.common.encryptField.interceptor.MybatisDecryptIntercepto
 import cn.daenx.myadmin.common.encryptField.interceptor.MybatisEncryptInterceptor;
 import cn.daenx.myadmin.common.encryptField.properties.EncryptorProperties;
 import jakarta.annotation.Resource;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * 加解密配置
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
  * @author 老马
  * @version 4.6.0
  */
-@AutoConfiguration
+@Configuration
 @EnableConfigurationProperties(EncryptorProperties.class)
 @ConditionalOnProperty(value = "mybatis-encryptor.enable", havingValue = "true")
 public class EncryptorAutoConfiguration {
