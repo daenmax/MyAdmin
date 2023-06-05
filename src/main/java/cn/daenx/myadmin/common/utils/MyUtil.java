@@ -6,15 +6,19 @@ import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.AntPathMatcher;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.MD5;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -38,6 +42,32 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class MyUtil {
+
+    /**
+     * SM4加密
+     *
+     * @param data 明文
+     * @param key  任意长度，任意字符串，因为取的是MD5
+     * @return
+     */
+    public static String sm4Encrypt(String data, String key) {
+        SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
+        String encryptHex = sm4.encryptHex(data);
+        return encryptHex;
+    }
+
+    /**
+     * SM4解密
+     *
+     * @param data 密文
+     * @param key  任意长度，任意字符串，因为取的是MD5
+     * @return
+     */
+    public static String sm4Decrypt(String data, String key) {
+        SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
+        String decryptStr = sm4.decryptStr(data, CharsetUtil.CHARSET_UTF_8);
+        return decryptStr;
+    }
 
     /**
      * 检查腾讯滑块验证码是否有效
@@ -480,6 +510,7 @@ public class MyUtil {
         }
         return false;
     }
+
     /**
      * 判断url是否与规则配置:
      * ? 表示单个字符;
