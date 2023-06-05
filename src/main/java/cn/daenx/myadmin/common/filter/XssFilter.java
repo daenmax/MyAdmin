@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.common.filter;
 
-import cn.daenx.myadmin.common.enums.HttpMethod;
+import cn.daenx.myadmin.common.constant.enums.HttpMethod;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import jakarta.servlet.*;

@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.test.controller;
 
 import cn.daenx.myadmin.common.annotation.Log;
-import cn.daenx.myadmin.common.enums.LogOperTypeEnum;
+import cn.daenx.myadmin.common.constant.enums.LogOperType;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
@@ -28,7 +28,7 @@ public class TestDataTreeController {
      * @param vo
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:list")
     @GetMapping("/list")
     public Result list(TestDataTreePageVo vo) {
@@ -42,7 +42,7 @@ public class TestDataTreeController {
      * @param vo
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperTypeEnum.ADD, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:add")
     @PostMapping
     public Result add(@Validated @RequestBody TestDataTreeAddVo vo) {
@@ -56,7 +56,7 @@ public class TestDataTreeController {
      * @param id
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperTypeEnum.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
@@ -70,7 +70,7 @@ public class TestDataTreeController {
      * @param vo
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperTypeEnum.EDIT, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:edit")
     @PutMapping
     public Result edit(@Validated @RequestBody TestDataTreeUpdVo vo) {
@@ -84,7 +84,7 @@ public class TestDataTreeController {
      * @param id
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperTypeEnum.REMOVE, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:remove")
     @DeleteMapping("/{id}")
     public Result remove(@PathVariable("id") String id) {
@@ -101,7 +101,7 @@ public class TestDataTreeController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据-修改状态", type = LogOperTypeEnum.EDIT, recordParams = true, recordResult = false)
+    @Log(name = "测试数据-修改状态", type = LogOperType.EDIT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:edit")
     @PutMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {

@@ -1,9 +1,9 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.constant.Constant;
+import cn.daenx.myadmin.common.constant.CommonConstant;
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.oss.vo.UploadResult;
+import cn.daenx.myadmin.framework.oss.vo.UploadResult;
 import cn.daenx.myadmin.common.utils.EmailUtil;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
@@ -215,7 +215,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //判断是否锁定中
         if (ObjectUtil.isNotEmpty(sysUser.getBanToTime())) {
             if (LocalDateTime.now().isBefore(sysUser.getBanToTime())) {
-                String banToTime = LocalDateTimeUtil.format(sysUser.getBanToTime(), Constant.DATE_TIME_FORMAT);
+                String banToTime = LocalDateTimeUtil.format(sysUser.getBanToTime(), CommonConstant.DATE_TIME_FORMAT);
                 throw new MyException("账号被锁定，自动解除时间：" + banToTime);
             }
         }
@@ -225,7 +225,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 return true;
             } else {
                 if (LocalDateTime.now().isAfter(sysUser.getExpireToTime())) {
-                    String expireToTime = LocalDateTimeUtil.format(sysUser.getExpireToTime(), Constant.DATE_TIME_FORMAT);
+                    String expireToTime = LocalDateTimeUtil.format(sysUser.getExpireToTime(), CommonConstant.DATE_TIME_FORMAT);
                     throw new MyException("账号已到期，到期时间：" + expireToTime);
                 }
             }

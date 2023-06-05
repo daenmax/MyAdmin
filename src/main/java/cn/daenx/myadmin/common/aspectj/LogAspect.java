@@ -2,8 +2,8 @@ package cn.daenx.myadmin.common.aspectj;
 
 
 import cn.daenx.myadmin.common.annotation.Log;
-import cn.daenx.myadmin.common.constant.Constant;
-import cn.daenx.myadmin.common.enums.LogOperTypeEnum;
+import cn.daenx.myadmin.common.constant.CommonConstant;
+import cn.daenx.myadmin.common.constant.enums.LogOperType;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.system.constant.SystemConstant;
@@ -107,7 +107,7 @@ public class LogAspect {
         // 判断响应结果
         if (throwable != null) {
             sysLogOper.setStatus(SystemConstant.STATUS_DISABLE);
-            String message = StringUtils.substring(throwable.getMessage(), 0, Constant.SAVE_LOG_LENGTH);
+            String message = StringUtils.substring(throwable.getMessage(), 0, CommonConstant.SAVE_LOG_LENGTH);
             sysLogOper.setErrorMsg(message);
         } else {
             sysLogOper.setStatus(SystemConstant.STATUS_NORMAL);
@@ -133,7 +133,7 @@ public class LogAspect {
         if (annotation != null) {
             // 获取注解参数
             String name = annotation.name();
-            LogOperTypeEnum type = annotation.type();
+            LogOperType type = annotation.type();
             boolean recordParams = annotation.recordParams();
             boolean recordResult = annotation.recordResult();
             sysLogOper.setName(name);
@@ -152,7 +152,7 @@ public class LogAspect {
                     }
                 }
                 String params = JSONObject.toJSONString(list);
-                params = StringUtils.substring(params, 0, Constant.SAVE_LOG_LENGTH);
+                params = StringUtils.substring(params, 0, CommonConstant.SAVE_LOG_LENGTH);
                 sysLogOper.setRequestParams(params);
 
             }
@@ -160,7 +160,7 @@ public class LogAspect {
             if (recordResult) {
                 if (result != null) {
                     String ret = JSONObject.toJSONString(result);
-                    ret = StringUtils.substring(ret, 0, Constant.SAVE_LOG_LENGTH);
+                    ret = StringUtils.substring(ret, 0, CommonConstant.SAVE_LOG_LENGTH);
                     sysLogOper.setResponseResult(ret);
                 }
             }

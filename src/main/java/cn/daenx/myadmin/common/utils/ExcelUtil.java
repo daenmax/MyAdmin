@@ -1,8 +1,8 @@
 package cn.daenx.myadmin.common.utils;
 
-import cn.daenx.myadmin.common.excel.DefaultExcelListener;
-import cn.daenx.myadmin.common.excel.ExcelListener;
-import cn.daenx.myadmin.common.excel.ExcelResult;
+import cn.daenx.myadmin.framework.excel.DefaultExcelListener;
+import cn.daenx.myadmin.framework.excel.ExcelListener;
+import cn.daenx.myadmin.framework.excel.ExcelResult;
 import cn.daenx.myadmin.common.exception.MyException;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;

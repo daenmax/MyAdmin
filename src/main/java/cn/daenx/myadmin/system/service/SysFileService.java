@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.common.oss.vo.UploadResult;
+import cn.daenx.myadmin.framework.oss.vo.UploadResult;
 import cn.daenx.myadmin.system.dto.SysFilePageDto;
 import cn.daenx.myadmin.system.po.SysFile;
 import cn.daenx.myadmin.system.vo.SysFilePageVo;

@@ -1,16 +1,12 @@
 package cn.daenx.myadmin.system.dto;
 
 import cn.daenx.myadmin.common.annotation.Dict;
-import cn.daenx.myadmin.common.annotation.DictDetail;
-import cn.daenx.myadmin.common.excel.DictConverter;
+import cn.daenx.myadmin.framework.excel.DictConverter;
 import cn.daenx.myadmin.common.vo.BaseDto;
 import cn.daenx.myadmin.system.po.SysPosition;
 import cn.daenx.myadmin.system.po.SysRole;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

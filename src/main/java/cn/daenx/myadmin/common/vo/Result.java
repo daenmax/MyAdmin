@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.common.vo;
 
-import cn.daenx.myadmin.common.constant.Constant;
+import cn.daenx.myadmin.common.constant.CommonConstant;
 import cn.hutool.http.HttpStatus;
 import lombok.Data;
 
@@ -21,7 +21,7 @@ public class Result implements Serializable {
     public static Result ok() {
         Result result = new Result();
         result.setCode(HttpStatus.HTTP_OK);
-        result.setMsg(Constant.MSG_200);
+        result.setMsg(CommonConstant.MSG_200);
         result.setSuccess(true);
         return result;
     }
@@ -29,7 +29,7 @@ public class Result implements Serializable {
     public static Result ok(Object data) {
         Result result = new Result();
         result.setCode(HttpStatus.HTTP_OK);
-        result.setMsg(Constant.MSG_200);
+        result.setMsg(CommonConstant.MSG_200);
         result.setSuccess(true);
         result.setData(data);
         return result;
@@ -47,7 +47,7 @@ public class Result implements Serializable {
     public static Result error() {
         Result result = new Result();
         result.setCode(HttpStatus.HTTP_INTERNAL_ERROR);
-        result.setMsg(Constant.MSG_500);
+        result.setMsg(CommonConstant.MSG_500);
         result.setSuccess(false);
         return result;
     }

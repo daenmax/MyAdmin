@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.enums.DeviceType;
+import cn.daenx.myadmin.system.constant.enums.DeviceType;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.service.LoginUtilService;
@@ -208,22 +208,27 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      */
     @Override
     public SysLoginUserVo getLoginUser() {
-        SysLoginUserVo loginUser = (SysLoginUserVo) SaHolder.getStorage().get(LOGIN_KEY);
-        if (loginUser != null) {
-            return loginUser;
-        }
-        SaSession tokenSession;
         try {
-            tokenSession = StpUtil.getTokenSession();
+            SysLoginUserVo loginUser = (SysLoginUserVo) SaHolder.getStorage().get(LOGIN_KEY);
+            if (loginUser != null) {
+                return loginUser;
+            }
+            SaSession tokenSession;
+            try {
+                tokenSession = StpUtil.getTokenSession();
+            } catch (Exception e) {
+                return null;
+            }
+            if (tokenSession == null) {
+                return null;
+            }
+            loginUser = (SysLoginUserVo) tokenSession.get(LOGIN_KEY);
+            SaHolder.getStorage().set(LOGIN_KEY, loginUser);
+            return loginUser;
         } catch (Exception e) {
             return null;
         }
-        if (tokenSession == null) {
-            return null;
-        }
-        loginUser = (SysLoginUserVo) tokenSession.get(LOGIN_KEY);
-        SaHolder.getStorage().set(LOGIN_KEY, loginUser);
-        return loginUser;
+
     }
 
     /**

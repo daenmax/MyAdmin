@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.common.annotation;
 
 
-import cn.daenx.myadmin.common.enums.LogOperTypeEnum;
+import cn.daenx.myadmin.common.constant.enums.LogOperType;
 
 import java.lang.annotation.*;
 
@@ -20,7 +20,7 @@ public @interface Log {
     /**
      * 操作类型
      **/
-    public LogOperTypeEnum type() default LogOperTypeEnum.OTHER;
+    public LogOperType type() default LogOperType.OTHER;
 
     /**
      * 是否记录请求参数

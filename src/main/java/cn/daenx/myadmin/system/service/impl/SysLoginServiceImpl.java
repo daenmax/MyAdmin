@@ -1,9 +1,9 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.constant.Constant;
+import cn.daenx.myadmin.common.constant.CommonConstant;
 import cn.daenx.myadmin.common.constant.RedisConstant;
-import cn.daenx.myadmin.common.enums.DeviceType;
-import cn.daenx.myadmin.common.enums.LoginType;
+import cn.daenx.myadmin.system.constant.enums.DeviceType;
+import cn.daenx.myadmin.system.constant.enums.LoginType;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.*;
 import cn.daenx.myadmin.common.vo.CheckSendVo;
@@ -229,7 +229,7 @@ public class SysLoginServiceImpl implements SysLoginService {
                         wrapper.set(SysUser::getBanToTime, banToTime);
                         sysUserService.update(wrapper);
                         RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
-                        String banToTimeStr = LocalDateTimeUtil.format(banToTime, Constant.DATE_TIME_FORMAT);
+                        String banToTimeStr = LocalDateTimeUtil.format(banToTime, CommonConstant.DATE_TIME_FORMAT);
                         msg = "密码连续输入错误" + sysLoginFailInfoVo.getFailCount() + "次，账号被锁定，请于" + banToTimeStr + "后再试";
                     }
                 }

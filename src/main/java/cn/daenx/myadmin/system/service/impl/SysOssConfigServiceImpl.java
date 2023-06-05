@@ -2,7 +2,7 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.oss.utils.OssUtil;
+import cn.daenx.myadmin.framework.oss.utils.OssUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
