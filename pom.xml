@@ -30,6 +30,7 @@
         <tencentcloudapi.sms.version>3.1.758</tencentcloudapi.sms.version>
         <aliyun.dysmsapi.version>2.0.23</aliyun.dysmsapi.version>
         <bouncycastle.version>1.70</bouncycastle.version>
+        <flowable.version>6.8.0</flowable.version>
     </properties>
     <profiles>
         <profile>
@@ -216,6 +217,12 @@
             <groupId>com.aliyun</groupId>
             <artifactId>dysmsapi20170525</artifactId>
             <version>${aliyun.dysmsapi.version}</version>
+        </dependency>
+        <!-- flowable工作流 -->
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter-process</artifactId>
+            <version>${flowable.version}</version>
         </dependency>
 
 
