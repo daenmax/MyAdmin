@@ -6,9 +6,9 @@ import cn.daenx.myadmin.common.constant.CommonConstant;
 import cn.daenx.myadmin.common.constant.enums.LogOperType;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysLogOper;
-import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.service.SysLogOperService;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;
@@ -36,8 +36,7 @@ public class LogAspect {
 
     @Resource
     private SysLogOperService sysLogOperService;
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     /**
      * 配置织入点
@@ -113,7 +112,7 @@ public class LogAspect {
             sysLogOper.setStatus(SystemConstant.STATUS_NORMAL);
         }
         // 执行人ID
-        sysLogOper.setCreateId(loginUtilService.getLoginUserId());
+        sysLogOper.setCreateId(LoginUtil.getLoginUserId());
         // 响应时间
         sysLogOper.setResponseTime(LocalDateTime.now());
         // 执行耗时

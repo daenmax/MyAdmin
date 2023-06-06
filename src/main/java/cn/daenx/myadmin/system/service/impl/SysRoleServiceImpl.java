@@ -3,6 +3,7 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysRoleUser;
 import cn.daenx.myadmin.system.service.*;
@@ -33,8 +34,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRoleDeptService sysRoleDeptService;
     @Resource
     private SysRoleUserService sysRoleUserService;
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     @Override
     public List<SysRole> getSysRoleListByUserId(String userId) {
@@ -152,7 +152,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         //更新角色菜单关联信息
         sysRoleMenuService.handleRoleMenu(vo.getId(), vo.getMenuIds());
         //下线相关用户
-        loginUtilService.logoutByRoleId(vo.getId());
+        LoginUtil.logoutByRoleId(vo.getId());
     }
 
     /**
@@ -215,7 +215,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             throw new MyException("删除失败");
         }
         //下线相关用户
-        loginUtilService.logoutByRoleIds(ids);
+        LoginUtil.logoutByRoleIds(ids);
     }
 
 
@@ -240,7 +240,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         //更新角色部门关联信息
         sysRoleDeptService.handleRoleDept(vo.getId(), vo.getDeptIds());
         //下线相关用户
-        loginUtilService.logoutByRoleId(vo.getId());
+        LoginUtil.logoutByRoleId(vo.getId());
     }
 
     /**
@@ -250,7 +250,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public void cancelAuthUser(SysRoleUpdAuthUserVo vo) {
-        String loginUserId = loginUtilService.getLoginUserId();
+        String loginUserId = LoginUtil.getLoginUserId();
         for (String userId : vo.getUserIds()) {
             if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
                 throw new MyException("禁止操作管理员");
@@ -261,7 +261,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         for (String userId : vo.getUserIds()) {
             sysRoleUserService.delUserRole(userId, vo.getRoleId());
-            loginUtilService.logoutByUserId(userId);
+            LoginUtil.logoutByUserId(userId);
         }
     }
 
@@ -272,7 +272,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public void saveAuthUser(SysRoleUpdAuthUserVo vo) {
-        String loginUserId = loginUtilService.getLoginUserId();
+        String loginUserId = LoginUtil.getLoginUserId();
         for (String userId : vo.getUserIds()) {
             if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
                 throw new MyException("禁止操作管理员");
@@ -283,7 +283,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         for (String userId : vo.getUserIds()) {
             sysRoleUserService.addUserRole(userId, vo.getRoleId());
-            loginUtilService.logoutByUserId(userId);
+            LoginUtil.logoutByUserId(userId);
         }
     }
 
@@ -305,6 +305,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             throw new MyException("修改失败");
         }
         //下线相关用户
-        loginUtilService.logoutByRoleId(vo.getId());
+        LoginUtil.logoutByRoleId(vo.getId());
     }
 }

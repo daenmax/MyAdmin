@@ -4,9 +4,9 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysApiLimit;
-import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.Resource;
@@ -29,8 +29,7 @@ import java.util.Arrays;
 public class ApiLimitInterceptor implements HandlerInterceptor {
     @Resource
     private RedisScript<Long> apiLimitScript;
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
@@ -48,7 +47,7 @@ public class ApiLimitInterceptor implements HandlerInterceptor {
             throw new MyException(sysApiLimit.getRetMsg());
         }
         //查询接口限流策略
-        String loginUserId = loginUtilService.getLoginUserId();
+        String loginUserId = LoginUtil.getLoginUserId();
         String clientIP = ServletUtils.getClientIP();
         String userKey = ObjectUtil.isEmpty(loginUserId) ? clientIP : loginUserId;
 

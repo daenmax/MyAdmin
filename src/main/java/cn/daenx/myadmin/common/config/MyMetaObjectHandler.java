@@ -1,9 +1,8 @@
 package cn.daenx.myadmin.common.config;
 
-import cn.daenx.myadmin.system.service.LoginUtilService;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -14,8 +13,7 @@ import java.time.LocalDateTime;
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
 
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -84,7 +82,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      * 获取登录用户ID
      */
     private String getLoginUserId() {
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         if (loginUser != null) {
             return loginUser.getId();
         }

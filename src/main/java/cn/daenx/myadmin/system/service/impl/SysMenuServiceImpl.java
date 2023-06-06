@@ -4,11 +4,11 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.StreamUtils;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
 import cn.daenx.myadmin.system.mapper.SysRoleMenuMapper;
 import cn.daenx.myadmin.system.po.*;
-import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.daenx.myadmin.system.vo.system.RouterVo;
 import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
@@ -36,8 +36,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private SysRoleMapper sysRoleMapper;
     @Resource
     private SysRoleMenuMapper sysRoleMenuMapper;
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     /**
      * 列表
@@ -47,8 +46,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public List<SysMenu> getList(SysMenuPageVo vo) {
-        String userId = loginUtilService.getLoginUserId();
-        Boolean isAdmin = loginUtilService.isAdmin();
+        String userId = LoginUtil.getLoginUserId();
+        Boolean isAdmin = LoginUtil.isAdmin();
         List<SysMenu> menus = null;
         if (isAdmin) {
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
@@ -267,7 +266,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<SysMenu> getMenuTreeByUserId(String userId) {
         List<SysMenu> menus = null;
-        if (loginUtilService.isAdmin(userId)) {
+        if (LoginUtil.isAdmin(userId)) {
             LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<SysMenu>()
                     .in(SysMenu::getMenuType, SystemConstant.MENU_TYPE_DIR, SystemConstant.MENU_TYPE_MENU)
                     .eq(SysMenu::getStatus, SystemConstant.STATUS_NORMAL)

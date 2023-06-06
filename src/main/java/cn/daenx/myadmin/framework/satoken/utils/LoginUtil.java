@@ -1,29 +1,32 @@
-package cn.daenx.myadmin.system.service.impl;
+package cn.daenx.myadmin.framework.satoken.utils;
 
-import cn.daenx.myadmin.system.constant.enums.DeviceType;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.service.LoginUtilService;
+import cn.daenx.myadmin.system.constant.enums.DeviceType;
 import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+@Component
+@Slf4j
+public class LoginUtil {
 
-@Service
-public class LoginUtilServiceImpl implements LoginUtilService {
+    private static Long timeOut;
     @Value("${sa-token.timeout}")
-    private Long timeOut;
-    public static String LOGIN_KEY = "system";
+    public void setTimeOut(Long timeOut) {
+        LoginUtil.timeOut = timeOut;
+    }
 
+    public static String LOGIN_KEY = "system";
 
     /**
      * 登录
@@ -31,8 +34,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      * @param sysLoginUserVo
      * @param deviceType
      */
-    @Override
-    public void login(SysLoginUserVo sysLoginUserVo, DeviceType deviceType) {
+    public static void login(SysLoginUserVo sysLoginUserVo, DeviceType deviceType) {
         SaHolder.getStorage().set(LOGIN_KEY, sysLoginUserVo);
         StpUtil.login(sysLoginUserVo.getUsername(), deviceType.getCode());
         StpUtil.getTokenSession().set(LOGIN_KEY, sysLoginUserVo);
@@ -45,23 +47,21 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      * @param userId
      * @param username
      */
-    private void saveLoginCache(String userId, String username) {
+    public static void saveLoginCache(String userId, String username) {
         RedisUtil.setValue("Authorization:cache:" + userId, username, timeOut, TimeUnit.SECONDS);
     }
 
     /**
      * 退出登录
      */
-    @Override
-    public void logout() {
+    public static void logout() {
         StpUtil.logout();
     }
 
     /**
      * 退出登录
      */
-    @Override
-    public void logoutByUsername(String username) {
+    public static void logoutByUsername(String username) {
         StpUtil.kickout(username);
 //        StpUtil.logout(username);
     }
@@ -69,8 +69,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
     /**
      * 退出登录
      */
-    @Override
-    public void logoutByToken(String token) {
+    public static void logoutByToken(String token) {
         StpUtil.kickoutByTokenValue(token);
 //        StpUtil.logoutByTokenValue(token);
     }
@@ -81,9 +80,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      *
      * @param roleId
      */
-    @Override
-    @Async
-    public void logoutByRoleId(String roleId) {
+    public static void logoutByRoleId(String roleId) {
         List<String> loginTokenList = getLoginTokenList();
         if (CollUtil.isEmpty(loginTokenList)) {
             return;
@@ -109,9 +106,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      *
      * @param roleIds
      */
-    @Override
-    @Async
-    public void logoutByRoleIds(List<String> roleIds) {
+    public static void logoutByRoleIds(List<String> roleIds) {
         List<String> loginTokenList = getLoginTokenList();
         if (CollUtil.isEmpty(loginTokenList)) {
             return;
@@ -138,9 +133,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      *
      * @param positionIds
      */
-    @Override
-    @Async
-    public void logoutByPositionIds(List<String> positionIds) {
+    public static void logoutByPositionIds(List<String> positionIds) {
         List<String> loginTokenList = getLoginTokenList();
         if (CollUtil.isEmpty(loginTokenList)) {
             return;
@@ -167,8 +160,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      *
      * @param positionId
      */
-    @Override
-    public void logoutByPositionId(String positionId) {
+    public static void logoutByPositionId(String positionId) {
         List<String> loginTokenList = getLoginTokenList();
         if (CollUtil.isEmpty(loginTokenList)) {
             return;
@@ -194,8 +186,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      *
      * @param userId
      */
-    @Override
-    public void logoutByUserId(String userId) {
+    public static void logoutByUserId(String userId) {
         String username = (String) RedisUtil.getValue("Authorization:cache:" + userId);
         if (StringUtils.isNotBlank(username)) {
             logoutByUsername(username);
@@ -206,8 +197,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
     /**
      * 获取登录用户
      */
-    @Override
-    public SysLoginUserVo getLoginUser() {
+    public static SysLoginUserVo getLoginUser() {
         try {
             SysLoginUserVo loginUser = (SysLoginUserVo) SaHolder.getStorage().get(LOGIN_KEY);
             if (loginUser != null) {
@@ -234,16 +224,14 @@ public class LoginUtilServiceImpl implements LoginUtilService {
     /**
      * 获取登录用户
      */
-    @Override
-    public SysLoginUserVo getLoginUserByToken(String token) {
+    public static SysLoginUserVo getLoginUserByToken(String token) {
         return (SysLoginUserVo) StpUtil.getTokenSessionByToken(token).get(LOGIN_KEY);
     }
 
     /**
      * 获取登录用户ID
      */
-    @Override
-    public String getLoginUserId() {
+    public static String getLoginUserId() {
         SysLoginUserVo loginUser = getLoginUser();
         if (loginUser == null) {
             return null;
@@ -257,8 +245,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      * @param userId
      * @return
      */
-    @Override
-    public boolean isAdmin(String userId) {
+    public static boolean isAdmin(String userId) {
         return SystemConstant.IS_ADMIN_ID.equals(userId);
     }
 
@@ -267,8 +254,8 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      *
      * @return
      */
-    @Override
-    public boolean isAdmin() {
+
+    public static boolean isAdmin() {
         return SystemConstant.IS_ADMIN_ID.equals(getLoginUserId());
     }
 
@@ -277,8 +264,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      *
      * @return
      */
-    @Override
-    public List<String> getLoginTokenList() {
+    public static List<String> getLoginTokenList() {
         List<String> keys = StpUtil.searchTokenValue("", 0, -1, false);
         return keys;
     }
@@ -289,8 +275,7 @@ public class LoginUtilServiceImpl implements LoginUtilService {
      * @param token
      * @return
      */
-    @Override
-    public long getTokenActivityTimeoutByToken(String token) {
+    public static long getTokenActivityTimeoutByToken(String token) {
         return StpUtil.stpLogic.getTokenActivityTimeoutByToken(token);
     }
 }

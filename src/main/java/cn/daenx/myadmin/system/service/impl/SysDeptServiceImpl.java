@@ -3,12 +3,12 @@ package cn.daenx.myadmin.system.service.impl;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysRoleDeptMapper;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
 import cn.daenx.myadmin.system.mapper.SysUserMapper;
 import cn.daenx.myadmin.system.po.*;
-import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.*;
 import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
 import cn.hutool.core.collection.CollUtil;
@@ -42,8 +42,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Resource
     private SysUserMapper sysUserMapper;
 
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     /**
      * 分页列表
@@ -59,7 +58,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     private LambdaQueryWrapper<SysDept> getWrapper(SysDeptPageVo vo) {
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         List<SysRole> roleList = loginUser.getRoles();
         Map<String, List<SysRole>> roleMap = roleList.stream().collect(Collectors.groupingBy(SysRole::getDataScope));
         LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();

@@ -1,10 +1,10 @@
 package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.exception.MyException;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysPositionUserMapper;
 import cn.daenx.myadmin.system.po.SysPositionUser;
-import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.service.SysPositionUserService;
 import cn.daenx.myadmin.system.vo.SysPositionAddVo;
 import cn.daenx.myadmin.system.vo.SysPositionPageVo;
@@ -33,8 +33,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     private SysPositionUserMapper sysPositionUserMapper;
     @Resource
     private SysPositionUserService sysPositionUserService;
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     @Override
     public List<SysPosition> getSysPositionListByUserId(String userId) {
@@ -150,7 +149,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
             throw new MyException("修改失败");
         }
         //下线相关用户
-        loginUtilService.logoutByPositionId(vo.getId());
+        LoginUtil.logoutByPositionId(vo.getId());
     }
 
     /**
@@ -197,7 +196,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
             throw new MyException("删除失败");
         }
         //下线相关用户
-        loginUtilService.logoutByPositionIds(ids);
+        LoginUtil.logoutByPositionIds(ids);
     }
 
     /**
@@ -220,7 +219,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
      */
     @Override
     public void cancelAuthUser(SysPositionUpdAuthUserVo vo) {
-        String loginUserId = loginUtilService.getLoginUserId();
+        String loginUserId = LoginUtil.getLoginUserId();
         for (String userId : vo.getUserIds()) {
             if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
                 throw new MyException("禁止操作管理员");
@@ -231,7 +230,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         }
         for (String userId : vo.getUserIds()) {
             sysPositionUserService.delUserPosition(userId, vo.getPositionId());
-            loginUtilService.logoutByUserId(userId);
+            LoginUtil.logoutByUserId(userId);
         }
     }
 
@@ -242,7 +241,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
      */
     @Override
     public void saveAuthUser(SysPositionUpdAuthUserVo vo) {
-        String loginUserId = loginUtilService.getLoginUserId();
+        String loginUserId = LoginUtil.getLoginUserId();
         for (String userId : vo.getUserIds()) {
             if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
                 throw new MyException("禁止操作管理员");
@@ -253,7 +252,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
         }
         for (String userId : vo.getUserIds()) {
             sysPositionUserService.addUserPosition(userId, vo.getPositionId());
-            loginUtilService.logoutByUserId(userId);
+            LoginUtil.logoutByUserId(userId);
         }
     }
 }

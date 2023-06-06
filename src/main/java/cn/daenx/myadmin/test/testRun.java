@@ -53,4 +53,27 @@ public class testRun {
     }
 
 
+    /**
+     * 读取txt文件
+     *
+     * @param filePath txt文件地址
+     * @return
+     */
+    public static String readTxt(String filePath) {
+        String content = "";
+        try {
+            File file = new File(filePath);
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
+            BufferedReader br = new BufferedReader(isr);
+            String lineTxt;
+            while ((lineTxt = br.readLine()) != null) {
+                content += lineTxt + "\n";
+            }
+            br.close();
+        } catch (Exception e) {
+            return null;
+        }
+        return content;
+    }
+
 }

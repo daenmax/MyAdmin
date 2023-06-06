@@ -11,6 +11,7 @@ import cn.daenx.myadmin.common.utils.SmsUtil;
 import cn.daenx.myadmin.common.vo.CheckSendVo;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.dto.SysUserPageDto;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
@@ -62,8 +63,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysDeptService sysDeptService;
     @Resource
     private SysDictDetailService sysDictDetailService;
-    @Resource
-    private LoginUtilService loginUtilService;
+
     @Resource
     private SysFileService sysFileService;
     @Resource
@@ -280,7 +280,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Map<String, Object> profile() {
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         SysUserPageDto sysUserVo = getUserInfoByUserId(loginUser.getId());
         if (sysUserVo == null) {
             throw new MyException("用户不存在");
@@ -302,7 +302,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void updInfo(SysUserUpdInfoVo vo) {
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUserDetail::getUserId, loginUser.getId());
         wrapper.set(SysUserDetail::getNickName, vo.getNickName());
@@ -327,7 +327,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (vo.getNewPassword().equals(vo.getOldPassword())) {
             throw new MyException("新密码不能与旧密码一样");
         }
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         SysUser sysUser = getUserByUserId(loginUser.getId());
         String sha256 = SaSecureUtil.sha256(vo.getOldPassword());
         if (!sha256.equals(sysUser.getPassword())) {
@@ -341,7 +341,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (update < 1) {
             throw new MyException("修改失败");
         }
-        loginUtilService.logout();
+        LoginUtil.logout();
     }
 
 
@@ -445,7 +445,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = loginUtilService.getLoginUserId();
+        String userId = LoginUtil.getLoginUserId();
         if (userId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
@@ -484,7 +484,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysRoleUserService.handleUserRole(vo.getId(), vo.getRoleIds());
         sysPositionUserService.handleUserPosition(vo.getId(), vo.getPositionIds());
         //注销该账户的登录
-        loginUtilService.logoutByUsername(sysUserByPermissions.getUsername());
+        LoginUtil.logoutByUsername(sysUserByPermissions.getUsername());
     }
 
     /**
@@ -569,7 +569,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = loginUtilService.getLoginUserId();
+        String userId = LoginUtil.getLoginUserId();
         if (userId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
@@ -592,7 +592,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = loginUtilService.getLoginUserId();
+        String userId = LoginUtil.getLoginUserId();
         if (userId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
@@ -606,7 +606,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("修改失败");
         }
         //注销该账户的登录
-        loginUtilService.logoutByUsername(sysUserByPermissions.getUsername());
+        LoginUtil.logoutByUsername(sysUserByPermissions.getUsername());
     }
 
     /**
@@ -616,7 +616,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void deleteByIds(List<String> ids) {
-        String userId = loginUtilService.getLoginUserId();
+        String userId = LoginUtil.getLoginUserId();
         if (ids.contains(userId)) {
             throw new MyException("不能删除自己");
         }
@@ -630,7 +630,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (sysUsers.size() > 0) {
             for (SysUser sysUser : sysUsers) {
                 //注销该账户的登录
-                loginUtilService.logoutByUsername(sysUser.getUsername());
+                LoginUtil.logoutByUsername(sysUser.getUsername());
             }
             List<String> realList = MyUtil.joinToList(sysUsers, SysUser::getId);
             //删除主表
@@ -679,7 +679,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (SystemConstant.IS_ADMIN_ID.equals(vo.getUserId())) {
             throw new MyException("禁止操作管理员");
         }
-        String userId = loginUtilService.getLoginUserId();
+        String userId = LoginUtil.getLoginUserId();
         if (userId.equals(vo.getUserId())) {
             throw new MyException("禁止操作自己");
         }
@@ -687,7 +687,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //修改关联数据
         sysRoleUserService.handleUserRole(vo.getUserId(), vo.getRoleIds());
         //注销该账户的登录
-        loginUtilService.logoutByUsername(sysUserByPermissions.getUsername());
+        LoginUtil.logoutByUsername(sysUserByPermissions.getUsername());
     }
 
     /**
@@ -795,7 +795,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public String avatar(MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadImage(file, SystemConstant.FILE_FROM_AVATAR);
 
-        String userId = loginUtilService.getLoginUserId();
+        String userId = LoginUtil.getLoginUserId();
         LambdaUpdateWrapper<SysUserDetail> updateWrapperDetail = new LambdaUpdateWrapper<>();
         updateWrapperDetail.eq(SysUserDetail::getUserId, userId);
         updateWrapperDetail.set(SysUserDetail::getAvatar, uploadResult.getSysFileId());
@@ -825,7 +825,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
         if (exist) {
             throw new MyException("该邮箱已经被其他账户绑定");
@@ -879,7 +879,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
         if (exist) {
             throw new MyException("该手机号已经被其他账户绑定");
@@ -932,7 +932,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isEmpty(vo.getValidCode())) {
             throw new MyException("请填写收到的邮箱验证码");
         }
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
         if (ObjectUtil.isEmpty(validCode)) {
             throw new MyException("邮箱验证码错误或者已失效");
@@ -955,7 +955,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (update < 1) {
             throw new MyException("修改失败");
         }
-        loginUtilService.logout();
+        LoginUtil.logout();
         Map<String, Object> map = new HashMap<>();
         map.put("msg", "绑定成功，请重新登录");
         return Result.ok(map);
@@ -975,7 +975,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isEmpty(vo.getValidCode())) {
             throw new MyException("请填写收到的短信验证码");
         }
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         if (ObjectUtil.isEmpty(validCode)) {
             throw new MyException("短信验证码错误或者已失效");
@@ -998,7 +998,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (update < 1) {
             throw new MyException("修改失败");
         }
-        loginUtilService.logout();
+        LoginUtil.logout();
         Map<String, Object> map = new HashMap<>();
         map.put("msg", "绑定成功，请重新登录");
         return Result.ok(map);

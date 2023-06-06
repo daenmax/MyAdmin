@@ -2,13 +2,12 @@ package cn.daenx.myadmin.common.aspectj;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.vo.DataScopeParam;
+import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.service.LoginUtilService;
 import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
-import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
@@ -38,8 +37,7 @@ import java.util.List;
 @Intercepts(@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}))
 public class DataScopeInterceptor implements DataPermissionHandler {
 
-    @Resource
-    private LoginUtilService loginUtilService;
+
 
     //线程局部变量
     //ThreadLocal的作用主要是做数据隔离，填充的数据只属于当前线程
@@ -92,7 +90,7 @@ public class DataScopeInterceptor implements DataPermissionHandler {
             return where;
         }
         //判断是否是管理员，如果是的话，直接放行，不修改SQL
-        SysLoginUserVo loginUser = loginUtilService.getLoginUser();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         if (loginUser == null) {
             return where;
         }
