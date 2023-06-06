@@ -11,4 +11,8 @@ public class CommonConstant {
     public static final Integer SAVE_LOG_LENGTH = 2000;
 
 
+    public static final String IS_HTTPS_YES = "1";
+    public static final String IS_HTTPS_NO = "0";
+
+
 }

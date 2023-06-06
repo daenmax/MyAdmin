@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.framework.oss.core;
 
+import cn.daenx.myadmin.common.constant.CommonConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.framework.oss.vo.UploadResult;
 import cn.daenx.myadmin.framework.oss.enums.AccessPolicyType;
@@ -67,7 +68,7 @@ public class OssClient {
             AWSCredentials credentials = new BasicAWSCredentials(properties.getAccessKey(), properties.getSecretKey());
             AWSCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(credentials);
             ClientConfiguration clientConfig = new ClientConfiguration();
-            clientConfig.setProtocol("1".equals(properties.getIsHttps()) ? Protocol.HTTPS : Protocol.HTTP);
+            clientConfig.setProtocol(CommonConstant.IS_HTTPS_YES.equals(properties.getIsHttps()) ? Protocol.HTTPS : Protocol.HTTP);
             AmazonS3ClientBuilder build = AmazonS3Client.builder()
                     .withEndpointConfiguration(endpointConfig)
                     .withClientConfiguration(clientConfig)
@@ -300,7 +301,7 @@ public class OssClient {
     private String getUrl() {
         String domain = properties.getDomain();
         String endpoint = properties.getEndpoint();
-        String header = "1".equals(properties.getIsHttps()) ? "https://" : "http://";
+        String header = (CommonConstant.IS_HTTPS_YES.equals(properties.getIsHttps()) ? Protocol.HTTPS : Protocol.HTTP) + "://";
         // 云服务商直接返回
         if (StringUtils.containsAny(endpoint, CLOUD_SERVICE)) {
             if (StringUtils.isNotBlank(domain)) {
