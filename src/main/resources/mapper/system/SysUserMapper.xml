@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.daenx.myadmin.system.mapper.SysUserMapper">
-    <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysUser">
+    <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.domain.po.SysUser">
         <!--@mbg.generated-->
         <!--@Table sys_user-->
         <id column="id" jdbcType="VARCHAR" property="id"/>
@@ -71,25 +71,25 @@
         ${ew.customSqlSegment}
     </select>
 
-    <resultMap id="userInfoMap" type="cn.daenx.myadmin.system.dto.SysUserPageDto">
+    <resultMap id="userInfoMap" type="cn.daenx.myadmin.system.domain.dto.SysUserPageDto">
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <collection property="roles" column="id" select="queryUserRoles"></collection>
         <collection property="positions" column="id" select="queryUserPositions"></collection>
     </resultMap>
-    <select id="queryUserRoles" resultType="cn.daenx.myadmin.system.po.SysRole">
+    <select id="queryUserRoles" resultType="cn.daenx.myadmin.system.domain.po.SysRole">
         SELECT sr.*
         FROM sys_role_user sru
                  LEFT JOIN sys_role sr ON sru.role_id = sr.id
         WHERE sru.user_id = #{id}
     </select>
-    <select id="queryUserPositions" resultType="cn.daenx.myadmin.system.po.SysPosition">
+    <select id="queryUserPositions" resultType="cn.daenx.myadmin.system.domain.po.SysPosition">
         SELECT sp.*
         FROM sys_position_user spu
                  LEFT JOIN sys_position sp ON spu.position_id = sp.id
         WHERE spu.user_id = #{id}
     </select>
 
-    <select id="getPageWrapper" resultType="cn.daenx.myadmin.system.dto.SysUserPageDto">
+    <select id="getPageWrapper" resultType="cn.daenx.myadmin.system.domain.dto.SysUserPageDto">
         <include refid="userInfo">
         </include>
         ${ew.customSqlSegment}
@@ -101,13 +101,13 @@
         ${ew.customSqlSegment}
     </select>
 
-    <select id="getUserList" resultType="cn.daenx.myadmin.system.po.SysUser">
+    <select id="getUserList" resultType="cn.daenx.myadmin.system.domain.po.SysUser">
         SELECT su.*
         FROM sys_user su
         ${ew.customSqlSegment}
     </select>
 
-    <select id="getAll" resultType="cn.daenx.myadmin.system.dto.SysUserPageDto">
+    <select id="getAll" resultType="cn.daenx.myadmin.system.domain.dto.SysUserPageDto">
         <include refid="userInfo">
         </include>
         ${ew.customSqlSegment}

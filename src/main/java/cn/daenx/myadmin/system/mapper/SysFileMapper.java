@@ -1,10 +1,8 @@
 package cn.daenx.myadmin.system.mapper;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
-import cn.daenx.myadmin.system.dto.SysFilePageDto;
-import cn.daenx.myadmin.system.po.SysFile;
-import cn.daenx.myadmin.test.dto.TestDataPageDto;
-import cn.daenx.myadmin.test.po.TestData;
+import cn.daenx.myadmin.system.domain.dto.SysFilePageDto;
+import cn.daenx.myadmin.system.domain.po.SysFile;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

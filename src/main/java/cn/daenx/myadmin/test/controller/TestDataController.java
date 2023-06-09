@@ -7,12 +7,13 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.test.dto.TestDataPageDto;
-import cn.daenx.myadmin.test.po.TestData;
+import cn.daenx.myadmin.test.domain.dto.TestDataPageDto;
+import cn.daenx.myadmin.test.domain.po.TestData;
+import cn.daenx.myadmin.test.domain.vo.TestDataAddVo;
 import cn.daenx.myadmin.test.service.TestDataService;
-import cn.daenx.myadmin.test.vo.TestDataImportVo;
-import cn.daenx.myadmin.test.vo.TestDataPageVo;
-import cn.daenx.myadmin.test.vo.TestDataUpdVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataImportVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataPageVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataUpdVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -83,7 +84,7 @@ public class TestDataController {
     @Log(name = "测试数据", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:add")
     @PostMapping
-    public Result add(@Validated @RequestBody cn.daenx.myadmin.test.vo.TestDataAddVo vo) {
+    public Result add(@Validated @RequestBody TestDataAddVo vo) {
         testDataService.addInfo(vo);
         return Result.ok();
     }

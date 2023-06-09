@@ -2,9 +2,9 @@ package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysConfig;
-import cn.daenx.myadmin.system.vo.system.DingTalkSendResult;
-import cn.daenx.myadmin.system.vo.system.SysDingTalkConfigVo;
+import cn.daenx.myadmin.system.domain.po.SysConfig;
+import cn.daenx.myadmin.system.domain.vo.system.DingTalkSendResult;
+import cn.daenx.myadmin.system.domain.vo.system.SysDingTalkConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;

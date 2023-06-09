@@ -1,10 +1,10 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
-import cn.daenx.myadmin.system.po.SysApiLimit;
-import cn.daenx.myadmin.system.vo.SysApiLimitAddVo;
-import cn.daenx.myadmin.system.vo.SysApiLimitPageVo;
-import cn.daenx.myadmin.system.vo.SysApiLimitUpdVo;
+import cn.daenx.myadmin.system.domain.po.SysApiLimit;
+import cn.daenx.myadmin.system.domain.vo.SysApiLimitAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysApiLimitPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysApiLimitUpdVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

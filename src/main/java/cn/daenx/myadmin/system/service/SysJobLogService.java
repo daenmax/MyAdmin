@@ -1,8 +1,8 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.dto.SysJobLogPageDto;
-import cn.daenx.myadmin.system.po.SysJobLog;
-import cn.daenx.myadmin.system.vo.SysJobLogPageVo;
+import cn.daenx.myadmin.system.domain.dto.SysJobLogPageDto;
+import cn.daenx.myadmin.system.domain.po.SysJobLog;
+import cn.daenx.myadmin.system.domain.vo.SysJobLogPageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

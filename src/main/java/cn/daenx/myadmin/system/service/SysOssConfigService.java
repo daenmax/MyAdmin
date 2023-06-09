@@ -1,10 +1,10 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
-import cn.daenx.myadmin.system.po.SysOssConfig;
-import cn.daenx.myadmin.system.vo.SysOssConfigAddVo;
-import cn.daenx.myadmin.system.vo.SysOssConfigPageVo;
-import cn.daenx.myadmin.system.vo.SysOssConfigUpdVo;
+import cn.daenx.myadmin.system.domain.po.SysOssConfig;
+import cn.daenx.myadmin.system.domain.vo.SysOssConfigAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysOssConfigPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysOssConfigUpdVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

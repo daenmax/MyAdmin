@@ -1,8 +1,8 @@
 package cn.daenx.myadmin.system.mapper;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
-import cn.daenx.myadmin.system.dto.SysNoticePageDto;
-import cn.daenx.myadmin.system.po.SysNotice;
+import cn.daenx.myadmin.system.domain.dto.SysNoticePageDto;
+import cn.daenx.myadmin.system.domain.po.SysNotice;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

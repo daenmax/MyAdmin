@@ -1,11 +1,10 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysLogLogin;
-import cn.daenx.myadmin.system.vo.SysLogLoginPageVo;
+import cn.daenx.myadmin.system.domain.po.SysLogLogin;
+import cn.daenx.myadmin.system.domain.vo.SysLogLoginPageVo;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 

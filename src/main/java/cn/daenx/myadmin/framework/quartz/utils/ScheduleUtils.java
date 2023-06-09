@@ -5,7 +5,7 @@ import cn.daenx.myadmin.framework.quartz.constant.ScheduleConstants;
 import cn.daenx.myadmin.framework.quartz.exception.TaskException;
 import cn.daenx.myadmin.framework.quartz.handle.QuartzDisallowConcurrentExecution;
 import cn.daenx.myadmin.framework.quartz.handle.QuartzJobExecution;
-import cn.daenx.myadmin.system.po.SysJob;
+import cn.daenx.myadmin.system.domain.po.SysJob;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import org.apache.commons.lang3.StringUtils;

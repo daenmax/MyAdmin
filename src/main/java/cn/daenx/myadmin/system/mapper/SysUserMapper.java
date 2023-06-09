@@ -1,8 +1,8 @@
 package cn.daenx.myadmin.system.mapper;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
-import cn.daenx.myadmin.system.dto.SysUserPageDto;
-import cn.daenx.myadmin.system.po.SysUser;
+import cn.daenx.myadmin.system.domain.dto.SysUserPageDto;
+import cn.daenx.myadmin.system.domain.po.SysUser;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
 import java.util.List;
 
 @Mapper

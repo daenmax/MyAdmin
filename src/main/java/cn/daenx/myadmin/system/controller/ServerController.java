@@ -2,7 +2,7 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.vo.system.ServerInfoVo;
+import cn.daenx.myadmin.system.domain.vo.system.ServerInfoVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.NumberUtil;
 import org.springframework.web.bind.annotation.GetMapping;

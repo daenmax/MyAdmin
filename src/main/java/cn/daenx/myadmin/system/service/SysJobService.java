@@ -1,10 +1,10 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
-import cn.daenx.myadmin.system.po.SysJob;
-import cn.daenx.myadmin.system.vo.SysJobAddVo;
-import cn.daenx.myadmin.system.vo.SysJobPageVo;
-import cn.daenx.myadmin.system.vo.SysJobUpdVo;
+import cn.daenx.myadmin.system.domain.po.SysJob;
+import cn.daenx.myadmin.system.domain.vo.SysJobAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysJobPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysJobUpdVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

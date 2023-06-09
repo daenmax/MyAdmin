@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.daenx.myadmin.system.mapper.SysApiLimitMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysApiLimit">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.domain.po.SysApiLimit">
     <!--@mbg.generated-->
     <!--@Table sys_api_limit-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -25,8 +25,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, api_name, api_uri, single_frequency, single_time, single_time_unit, whole_frequency, 
-    whole_time, whole_time_unit, limit_type, ret_msg, `status`, remark, create_id, create_time, 
+    id, api_name, api_uri, single_frequency, single_time, single_time_unit, whole_frequency,
+    whole_time, whole_time_unit, limit_type, ret_msg, `status`, remark, create_id, create_time,
     update_id, update_time, is_delete
   </sql>
 </mapper>

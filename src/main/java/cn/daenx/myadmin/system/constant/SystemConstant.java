@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.constant;
 
-import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
+import cn.daenx.myadmin.system.domain.vo.system.SysUploadConfigVo;
 
 public class SystemConstant {
 

@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.framework.quartz.utils;
 
 
-import cn.daenx.myadmin.system.po.SysJob;
+import cn.daenx.myadmin.system.domain.po.SysJob;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import org.apache.commons.lang3.StringUtils;

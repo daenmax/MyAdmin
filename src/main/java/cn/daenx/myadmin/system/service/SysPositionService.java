@@ -1,7 +1,11 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysPosition;
-import cn.daenx.myadmin.system.vo.*;
+import cn.daenx.myadmin.system.domain.po.SysPosition;
+import cn.daenx.myadmin.system.domain.vo.SysPositionAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysPositionPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysPositionUpdAuthUserVo;
+import cn.daenx.myadmin.system.domain.vo.SysPositionUpdVo;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.daenx.myadmin.system.mapper.SysJobMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysJob">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.domain.po.SysJob">
     <!--@mbg.generated-->
     <!--@Table sys_job-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -23,7 +23,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, job_name, job_group, invoke_target, cron_expression, `status`, misfire_policy, 
+    id, job_name, job_group, invoke_target, cron_expression, `status`, misfire_policy,
     concurrent, remark, notify_channel, notify_objs, create_id, create_time, update_id, update_time, is_delete
   </sql>
 </mapper>

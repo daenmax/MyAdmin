@@ -8,7 +8,7 @@ import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysLogOper;
+import cn.daenx.myadmin.system.domain.po.SysLogOper;
 import cn.daenx.myadmin.system.service.SysLogOperService;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.annotation.Resource;

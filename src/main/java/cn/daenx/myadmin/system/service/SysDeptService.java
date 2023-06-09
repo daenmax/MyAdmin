@@ -1,10 +1,9 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysDept;
-import cn.daenx.myadmin.system.vo.SysDeptAddVo;
-import cn.daenx.myadmin.system.vo.SysDeptPageVo;
-import cn.daenx.myadmin.system.vo.SysDeptUpdVo;
-import cn.daenx.myadmin.system.vo.SysMenuPageVo;
+import cn.daenx.myadmin.system.domain.po.SysDept;
+import cn.daenx.myadmin.system.domain.vo.SysDeptAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysDeptPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysDeptUpdVo;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;

@@ -1,9 +1,9 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.framework.oss.vo.UploadResult;
-import cn.daenx.myadmin.system.dto.SysFilePageDto;
-import cn.daenx.myadmin.system.po.SysFile;
-import cn.daenx.myadmin.system.vo.SysFilePageVo;
+import cn.daenx.myadmin.system.domain.dto.SysFilePageDto;
+import cn.daenx.myadmin.system.domain.po.SysFile;
+import cn.daenx.myadmin.system.domain.vo.SysFilePageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.servlet.http.HttpServletResponse;

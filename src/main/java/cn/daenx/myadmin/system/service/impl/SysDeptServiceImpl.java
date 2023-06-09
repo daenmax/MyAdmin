@@ -5,12 +5,19 @@ import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.TreeBuildUtils;
 import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.domain.po.SysDept;
+import cn.daenx.myadmin.system.domain.po.SysRole;
+import cn.daenx.myadmin.system.domain.po.SysRoleDept;
+import cn.daenx.myadmin.system.domain.po.SysUser;
+import cn.daenx.myadmin.system.domain.vo.SysDeptAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysDeptPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysDeptUpdVo;
 import cn.daenx.myadmin.system.mapper.SysRoleDeptMapper;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
 import cn.daenx.myadmin.system.mapper.SysUserMapper;
-import cn.daenx.myadmin.system.po.*;
-import cn.daenx.myadmin.system.vo.*;
-import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
+
+
+import cn.daenx.myadmin.system.domain.vo.system.SysLoginUserVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;

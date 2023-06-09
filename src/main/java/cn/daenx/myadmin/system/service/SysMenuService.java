@@ -1,9 +1,11 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysMenu;
-import cn.daenx.myadmin.system.vo.*;
-import cn.daenx.myadmin.system.vo.system.RouterVo;
-import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
+import cn.daenx.myadmin.system.domain.po.SysMenu;
+import cn.daenx.myadmin.system.domain.vo.SysMenuAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysMenuPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysMenuUpdVo;
+import cn.daenx.myadmin.system.domain.vo.system.RouterVo;
+import cn.daenx.myadmin.system.domain.vo.system.SysLoginUserVo;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 

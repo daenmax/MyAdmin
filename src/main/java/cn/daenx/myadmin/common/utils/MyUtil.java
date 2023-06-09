@@ -2,7 +2,7 @@ package cn.daenx.myadmin.common.utils;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.vo.system.SysUploadConfigVo;
+import cn.daenx.myadmin.system.domain.vo.system.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.text.AntPathMatcher;

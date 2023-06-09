@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.daenx.myadmin.system.mapper.SysLogOperMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.po.SysLogOper">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.system.domain.po.SysLogOper">
     <!--@mbg.generated-->
     <!--@Table sys_log_oper-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -28,8 +28,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, `type`, `method`, request_type, request_url, request_ip, request_location, 
-    request_params, request_time, response_result, response_time, error_msg, execute_time, 
+    id, `name`, `type`, `method`, request_type, request_url, request_ip, request_location,
+    request_params, request_time, response_result, response_time, error_msg, execute_time,
     `status`, remark, create_id, create_time, update_id, update_time, is_delete
   </sql>
 </mapper>

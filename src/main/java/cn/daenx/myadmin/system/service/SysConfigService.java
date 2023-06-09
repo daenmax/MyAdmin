@@ -1,8 +1,10 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysConfig;
-import cn.daenx.myadmin.system.vo.*;
-import cn.daenx.myadmin.system.vo.system.*;
+import cn.daenx.myadmin.system.domain.po.SysConfig;
+import cn.daenx.myadmin.system.domain.vo.SysConfigAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysConfigPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysConfigUpdVo;
+import cn.daenx.myadmin.system.domain.vo.system.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

@@ -2,11 +2,11 @@ package cn.daenx.myadmin.system.service.impl;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.dto.SysJobLogPageDto;
+import cn.daenx.myadmin.system.domain.dto.SysJobLogPageDto;
 import cn.daenx.myadmin.system.mapper.SysJobLogMapper;
-import cn.daenx.myadmin.system.po.SysJobLog;
+import cn.daenx.myadmin.system.domain.po.SysJobLog;
 import cn.daenx.myadmin.system.service.SysJobLogService;
-import cn.daenx.myadmin.system.vo.SysJobLogPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysJobLogPageVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

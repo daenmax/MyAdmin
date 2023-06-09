@@ -1,12 +1,12 @@
 package cn.daenx.myadmin.test.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
-import cn.daenx.myadmin.test.dto.TestDataPageDto;
-import cn.daenx.myadmin.test.po.TestData;
-import cn.daenx.myadmin.test.vo.TestDataImportVo;
-import cn.daenx.myadmin.test.vo.TestDataPageVo;
-import cn.daenx.myadmin.test.vo.TestDataUpdVo;
-import cn.daenx.myadmin.test.vo.TestDataAddVo;
+import cn.daenx.myadmin.test.domain.dto.TestDataPageDto;
+import cn.daenx.myadmin.test.domain.po.TestData;
+import cn.daenx.myadmin.test.domain.vo.TestDataImportVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataPageVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataUpdVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataAddVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

@@ -1,10 +1,7 @@
 package cn.daenx.myadmin.system.mapper;
 
-import cn.daenx.myadmin.system.po.SysDict;
-import cn.daenx.myadmin.system.vo.SysDictPageVo;
+import cn.daenx.myadmin.system.domain.po.SysDict;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

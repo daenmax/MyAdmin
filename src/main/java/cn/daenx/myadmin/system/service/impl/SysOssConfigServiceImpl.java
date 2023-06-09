@@ -6,9 +6,12 @@ import cn.daenx.myadmin.framework.oss.utils.OssUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;
+import cn.daenx.myadmin.system.domain.vo.SysOssConfigAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysOssConfigPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysOssConfigUpdVo;
 import cn.daenx.myadmin.system.mapper.SysFileMapper;
-import cn.daenx.myadmin.system.po.SysFile;
-import cn.daenx.myadmin.system.vo.*;
+import cn.daenx.myadmin.system.domain.po.SysFile;
+
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -18,7 +21,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysOssConfigMapper;
-import cn.daenx.myadmin.system.po.SysOssConfig;
+import cn.daenx.myadmin.system.domain.po.SysOssConfig;
 import cn.daenx.myadmin.system.service.SysOssConfigService;
 
 import java.util.List;

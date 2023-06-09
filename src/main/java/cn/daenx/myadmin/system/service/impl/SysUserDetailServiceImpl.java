@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysUserDetailMapper;
-import cn.daenx.myadmin.system.po.SysUserDetail;
+import cn.daenx.myadmin.system.domain.po.SysUserDetail;
 import cn.daenx.myadmin.system.service.SysUserDetailService;
 
 @Service

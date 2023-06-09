@@ -35,6 +35,7 @@ management:
       base-path: "/actuator"
   # 调用以上接口时，是否验证head里的token，如果不填写，则不验证（危），建议设置一个，并防止泄露
   token: sGd5v1SG6sd4gSDs6d@8gsdDg
+
 # 防止XSS攻击
 xss:
   # 过滤开关

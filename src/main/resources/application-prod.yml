@@ -1,12 +1,5 @@
-# 测试环境
+# 生产环境
 server:
   port: 8033
   servlet:
     context-path: /my
-
-# 日志配置
-logging:
-  level:
-    com.daenx.myadmin: @logging.level@
-    org.springframework: warn
-  config: classpath:logback.xml

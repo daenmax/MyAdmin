@@ -1,9 +1,9 @@
 package cn.daenx.myadmin.test.mapper;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
-import cn.daenx.myadmin.test.dto.TestDataPageDto;
-import cn.daenx.myadmin.test.po.TestData;
-import cn.daenx.myadmin.test.vo.TestDataPageVo;
+import cn.daenx.myadmin.test.domain.dto.TestDataPageDto;
+import cn.daenx.myadmin.test.domain.po.TestData;
+import cn.daenx.myadmin.test.domain.vo.TestDataPageVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

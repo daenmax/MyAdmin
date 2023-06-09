@@ -6,10 +6,10 @@ import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
 import cn.daenx.myadmin.system.mapper.SysDictDetailMapper;
-import cn.daenx.myadmin.system.po.SysDictDetail;
-import cn.daenx.myadmin.system.vo.SysDictAddVo;
-import cn.daenx.myadmin.system.vo.SysDictPageVo;
-import cn.daenx.myadmin.system.vo.SysDictUpdVo;
+import cn.daenx.myadmin.system.domain.po.SysDictDetail;
+import cn.daenx.myadmin.system.domain.vo.SysDictAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysDictPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysDictUpdVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysDictMapper;
-import cn.daenx.myadmin.system.po.SysDict;
+import cn.daenx.myadmin.system.domain.po.SysDict;
 import cn.daenx.myadmin.system.service.SysDictService;
 import org.springframework.transaction.annotation.Transactional;
 

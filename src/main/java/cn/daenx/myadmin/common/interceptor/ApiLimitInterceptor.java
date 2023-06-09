@@ -6,7 +6,7 @@ import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.common.utils.ServletUtils;
 import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysApiLimit;
+import cn.daenx.myadmin.system.domain.po.SysApiLimit;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.Resource;

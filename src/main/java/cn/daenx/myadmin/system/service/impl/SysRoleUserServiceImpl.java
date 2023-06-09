@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.myadmin.system.po.SysRoleUser;
+import cn.daenx.myadmin.system.domain.po.SysRoleUser;
 import cn.daenx.myadmin.system.mapper.SysRoleUserMapper;
 import cn.daenx.myadmin.system.service.SysRoleUserService;
 

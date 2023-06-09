@@ -2,7 +2,7 @@ package cn.daenx.myadmin.framework.quartz.handle;
 
 import cn.daenx.myadmin.framework.quartz.utils.AbstractQuartzJob;
 import cn.daenx.myadmin.framework.quartz.utils.JobInvokeUtil;
-import cn.daenx.myadmin.system.po.SysJob;
+import cn.daenx.myadmin.system.domain.po.SysJob;
 import org.quartz.JobExecutionContext;
 
 /**

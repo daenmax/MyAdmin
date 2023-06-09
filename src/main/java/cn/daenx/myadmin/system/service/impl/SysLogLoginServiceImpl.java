@@ -4,7 +4,7 @@ import cn.daenx.myadmin.common.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.vo.SysLogLoginPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysLogLoginPageVo;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysLogLoginMapper;
-import cn.daenx.myadmin.system.po.SysLogLogin;
+import cn.daenx.myadmin.system.domain.po.SysLogLogin;
 import cn.daenx.myadmin.system.service.SysLogLoginService;
 
 import java.util.List;

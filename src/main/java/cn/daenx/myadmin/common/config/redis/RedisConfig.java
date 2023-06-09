@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
@@ -26,9 +27,9 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         //使用FastJson2JsonRedisSerializer 替换默认序列化
-        FastJson2JsonRedisSerializer redisSerializer = new FastJson2JsonRedisSerializer(Object.class);
+//        FastJson2JsonRedisSerializer redisSerializer = new FastJson2JsonRedisSerializer(Object.class);
 //        使用Jackson2JsonRedisSerialize 替换默认序列化
-//        Jackson2JsonRedisSerializer redisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        Jackson2JsonRedisSerializer redisSerializer = new Jackson2JsonRedisSerializer(Object.class);
 
         // key采用String的序列化方式
         redisTemplate.setKeySerializer(new StringRedisSerializer());

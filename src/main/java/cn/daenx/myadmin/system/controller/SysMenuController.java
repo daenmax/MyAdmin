@@ -2,9 +2,11 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.po.SysMenu;
+import cn.daenx.myadmin.system.domain.po.SysMenu;
+import cn.daenx.myadmin.system.domain.vo.SysMenuAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysMenuPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysMenuUpdVo;
 import cn.daenx.myadmin.system.service.SysMenuService;
-import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import jakarta.annotation.Resource;

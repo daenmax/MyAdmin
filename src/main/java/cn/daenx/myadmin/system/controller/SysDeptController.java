@@ -2,11 +2,13 @@ package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.dto.SysUserPageDto;
-import cn.daenx.myadmin.system.po.SysDept;
+import cn.daenx.myadmin.system.domain.dto.SysUserPageDto;
+import cn.daenx.myadmin.system.domain.po.SysDept;
+import cn.daenx.myadmin.system.domain.vo.SysDeptAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysDeptPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysDeptUpdVo;
 import cn.daenx.myadmin.system.service.SysDeptService;
 import cn.daenx.myadmin.system.service.SysUserService;
-import cn.daenx.myadmin.system.vo.*;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;

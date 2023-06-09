@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysPositionUser;
+import cn.daenx.myadmin.system.domain.po.SysPositionUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

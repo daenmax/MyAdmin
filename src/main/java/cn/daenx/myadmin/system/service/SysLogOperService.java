@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysLogOper;
-import cn.daenx.myadmin.system.vo.SysLogOperPageVo;
+import cn.daenx.myadmin.system.domain.po.SysLogOper;
+import cn.daenx.myadmin.system.domain.vo.SysLogOperPageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

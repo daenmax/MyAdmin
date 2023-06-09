@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.framework.satoken.service;
 
 import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
-import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
+import cn.daenx.myadmin.system.domain.vo.system.SysLoginUserVo;
 import cn.dev33.satoken.stp.StpInterface;
 import org.springframework.stereotype.Component;
 

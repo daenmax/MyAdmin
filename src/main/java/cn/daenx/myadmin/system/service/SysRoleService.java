@@ -1,8 +1,9 @@
 package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
-import cn.daenx.myadmin.system.po.SysRole;
-import cn.daenx.myadmin.system.vo.*;
+import cn.daenx.myadmin.system.domain.po.SysRole;
+import cn.daenx.myadmin.system.domain.vo.*;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

@@ -1,10 +1,10 @@
 package cn.daenx.myadmin.test.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
-import cn.daenx.myadmin.test.po.TestDataTree;
-import cn.daenx.myadmin.test.vo.TestDataTreeAddVo;
-import cn.daenx.myadmin.test.vo.TestDataTreePageVo;
-import cn.daenx.myadmin.test.vo.TestDataTreeUpdVo;
+import cn.daenx.myadmin.test.domain.po.TestDataTree;
+import cn.daenx.myadmin.test.domain.vo.TestDataTreeAddVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataTreePageVo;
+import cn.daenx.myadmin.test.domain.vo.TestDataTreeUpdVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

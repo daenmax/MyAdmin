@@ -1,8 +1,8 @@
 package cn.daenx.myadmin.system.mapper;
 
 import cn.daenx.myadmin.common.annotation.DataScope;
-import cn.daenx.myadmin.system.dto.SysJobLogPageDto;
-import cn.daenx.myadmin.system.po.SysJobLog;
+import cn.daenx.myadmin.system.domain.dto.SysJobLogPageDto;
+import cn.daenx.myadmin.system.domain.po.SysJobLog;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

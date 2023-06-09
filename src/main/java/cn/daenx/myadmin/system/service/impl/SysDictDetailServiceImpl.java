@@ -4,9 +4,9 @@ import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.RedisUtil;
 import cn.daenx.myadmin.system.service.SysDictService;
-import cn.daenx.myadmin.system.vo.SysDictDetailAddVo;
-import cn.daenx.myadmin.system.vo.SysDictDetailPageVo;
-import cn.daenx.myadmin.system.vo.SysDictDetailUpdVo;
+import cn.daenx.myadmin.system.domain.vo.SysDictDetailAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysDictDetailPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysDictDetailUpdVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysDictDetailMapper;
-import cn.daenx.myadmin.system.po.SysDictDetail;
+import cn.daenx.myadmin.system.domain.po.SysDictDetail;
 import cn.daenx.myadmin.system.service.SysDictDetailService;
 
 @Service

@@ -1,10 +1,9 @@
 package cn.daenx.myadmin.system.service;
 
-import cn.daenx.myadmin.system.po.SysDict;
-import cn.daenx.myadmin.system.po.SysDictDetail;
-import cn.daenx.myadmin.system.vo.SysDictAddVo;
-import cn.daenx.myadmin.system.vo.SysDictPageVo;
-import cn.daenx.myadmin.system.vo.SysDictUpdVo;
+import cn.daenx.myadmin.system.domain.po.SysDict;
+import cn.daenx.myadmin.system.domain.vo.SysDictAddVo;
+import cn.daenx.myadmin.system.domain.vo.SysDictPageVo;
+import cn.daenx.myadmin.system.domain.vo.SysDictUpdVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 

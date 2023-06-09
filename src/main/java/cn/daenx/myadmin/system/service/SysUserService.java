@@ -2,9 +2,10 @@ package cn.daenx.myadmin.system.service;
 
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
-import cn.daenx.myadmin.system.dto.SysUserPageDto;
-import cn.daenx.myadmin.system.po.SysUser;
-import cn.daenx.myadmin.system.vo.*;
+import cn.daenx.myadmin.system.domain.dto.SysUserPageDto;
+import cn.daenx.myadmin.system.domain.po.SysUser;
+import cn.daenx.myadmin.system.domain.vo.*;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;

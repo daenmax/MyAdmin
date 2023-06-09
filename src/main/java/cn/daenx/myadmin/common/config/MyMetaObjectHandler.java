@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.common.config;
 
 import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
-import cn.daenx.myadmin.system.vo.system.SysLoginUserVo;
+import cn.daenx.myadmin.system.domain.vo.system.SysLoginUserVo;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;

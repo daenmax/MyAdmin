@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.daenx.myadmin.test.mapper.TestDataMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.test.po.TestData">
+  <resultMap id="BaseResultMap" type="cn.daenx.myadmin.test.domain.po.TestData">
     <!--@mbg.generated-->
     <!--@Table test_data-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -21,7 +21,7 @@
     id, title, content, type, status, remark, create_id, create_time, update_id, update_time, is_delete
   </sql>
 
-  <select id="getPage" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
+  <select id="getPage" resultType="cn.daenx.myadmin.test.domain.dto.TestDataPageDto">
       SELECT td.*,
              su1.username as createName,
              su2.username as updateName,
@@ -66,7 +66,7 @@
       </choose>
   </select>
 
-  <select id="getPageWrapper" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
+  <select id="getPageWrapper" resultType="cn.daenx.myadmin.test.domain.dto.TestDataPageDto">
       SELECT td.*,
              su1.username as createName,
              su2.username as updateName,
@@ -78,7 +78,7 @@
       ${ew.customSqlSegment}
   </select>
 
-  <select id="getAll" resultType="cn.daenx.myadmin.test.dto.TestDataPageDto">
+  <select id="getAll" resultType="cn.daenx.myadmin.test.domain.dto.TestDataPageDto">
       SELECT td.*,
              su1.username as createName,
              su2.username as updateName,

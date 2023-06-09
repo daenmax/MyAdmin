@@ -5,9 +5,10 @@ import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
-import cn.daenx.myadmin.system.po.SysRoleUser;
+import cn.daenx.myadmin.system.domain.po.SysRoleUser;
+import cn.daenx.myadmin.system.domain.vo.*;
 import cn.daenx.myadmin.system.service.*;
-import cn.daenx.myadmin.system.vo.*;
+
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -17,7 +18,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysRoleMapper;
-import cn.daenx.myadmin.system.po.SysRole;
+import cn.daenx.myadmin.system.domain.po.SysRole;
 
 import java.util.Arrays;
 import java.util.HashSet;
