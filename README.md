@@ -14,17 +14,17 @@
 
 ## 🐻‍❄️ 介绍
 
-正如你所看到的，我也想做一个适用于大部分场景的快速开发框架，所以，沿用My系列的MyAdmin便诞生了
+正如你所看到的，我也想做一个适用于大部分场景的快速开发框架，所以，沿用`My系列`的`MyAdmin`便诞生了
 
-框架基于SpringBoot3.x开发，使用了Mybatis-Plus、dynamic-datasource多数据源、druid数据库连接池、Sa-Token权限认证、springdoc接口文档、lombok等组件
+框架基于SpringBoot3.x开发，使用了Mybatis-Plus、dynamic-datasource多数据源、druid数据库连接池、Sa-Token权限认证、SpringDoc接口文档、lombok、actuator健康监控、retry重试等组件
 
 在开发过程中，参考了[RuoYi-Vue-Plus](https://gitee.com/dromara/RuoYi-Vue-Plus/)以及其他前辈的开源项目，在此表示深深的感谢
 
 ## 🦊 链接
 
-### 文档
+### 文档教程
 
-[官方文档](https://myadmin.daenx.cn/)
+[官网](https://myadmin.daenx.cn/)
 
 ### 在线体验
 
@@ -34,21 +34,51 @@
 
 [MyAdmin-Ui](https://gitee.com/daenmax/myadmin-ui)
 
-## 😊 功能
+## 🦄 功能
 
-- [x] s3协议通用oss存储
-- [x] 密码试错次数超过设置值后自动锁定账号指定时间，在系统配置里实现
-- [x] 邮件管理、短信管理、钉钉管理在系统配置里实现
-- [x] 定时任务 添加异常消息通知，例如：邮件、短信、钉钉
-- [x] 账户设置里 绑定邮箱
-- [x] 账户设置里 绑定手机
-- [x] 实现滑块验证码，在系统配置里实现
-- [x] 支持 邮箱验证码登录
-- [x] 支持 短信验证码登录
-- [x] 测试页面：测试邮箱、测试短信、测试钉钉等
-- [x] 接口管理：接口停用、接口限流等
-- [x] redis lua限流
+- [x] 通用权限管理4件套，另有绑定邮箱、绑定手机
+- [x] 数据权限：注解形式，简单易用
+- [x] s3协议通用oss存储：文件管理
+- [x] 渠道通知：短信、邮箱、钉钉
+- [x] Quartz定时任务：异常报警
+- [x] 多样验证码：图片验证码、腾讯滑块验证码，配置快速切换
+- [x] 日志管理：登录日志、操作日志
+- [x] 系统监控：资源监控、redis监控
+- [x] 接口限制：停用、限流
+- [x] 通知公告：富文本编辑器
+- [x] 功能测试：测试邮件发送、短信发送、钉钉发送
+- [x] 表单构建：拖拽完成页面导出vue文件
+- [x] 测试demo：单表、树表、CRUD、导入导出（字典翻译）
+- [x] logback日志分类、按期归档
+
+## 🕊️ 计划
+
 - [ ] flowable工作流
 - [ ] 数据库字段加解密注解
 
-## 🥳 后记
+## ⚡ 反馈与交流
+
+在使用过程中有任何问题和想法，请给我提 [Issue](https://gitee.com/daenmax/myadmin/issues)
+
+你也可以在Issue查看别人提的问题和给出解决方案。
+
+或者加入我们的交流群：
+
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        <img src="#" alt="暂无" class="no-zoom" style="width:120px;margin: 10px;">
+        <p>MyAdmin 微信群(添加我微信备注"进群")</p>
+      </td>
+      <td align="center" valign="middle">
+        <img src="https://myadmin.daenx.cn/img/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87/qqGroup.png" alt="群号: 373752019" class="no-zoom" style="width:120px;margin: 10px;">
+        <p>MyAdmin QQ群: 373752019</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 🐽 后记
+
