@@ -64,16 +64,15 @@
 
 或者加入我们的交流群：
 
-
 <table>
   <tbody>
     <tr>
       <td align="center" valign="middle">
-        <img src="#" alt="暂无" class="no-zoom" style="width:120px;margin: 10px;">
+        <img src="#" alt="暂无" class="no-zoom" style="width:100px;margin: 10px;">
         <p>MyAdmin 微信群(添加我微信备注"进群")</p>
       </td>
       <td align="center" valign="middle">
-        <img src="https://myadmin.daenx.cn/img/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87/qqGroup.png" alt="群号: 373752019" class="no-zoom" style="width:120px;margin: 10px;">
+        <img src="https://myadmin.daenx.cn/img/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87/qqGroup.png" alt="群号: 373752019" style="width:100px;margin: 10px;">
         <p>MyAdmin QQ群: 373752019</p>
       </td>
     </tr>
