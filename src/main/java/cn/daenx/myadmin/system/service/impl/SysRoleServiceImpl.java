@@ -217,6 +217,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         //下线相关用户
         LoginUtil.logoutByRoleIds(ids);
+        for (String id : ids) {
+            //更新角色菜单关联信息
+            sysRoleMenuService.handleRoleMenu(id, null);
+        }
     }
 
 
