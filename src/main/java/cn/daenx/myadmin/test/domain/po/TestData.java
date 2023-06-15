@@ -2,6 +2,7 @@ package cn.daenx.myadmin.test.domain.po;
 
 
 import cn.daenx.myadmin.common.vo.BaseEntity;
+import cn.daenx.myadmin.framework.translate.annotation.Translate;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -35,6 +36,7 @@ public class TestData extends BaseEntity implements Serializable {
      * 类型，0=民生，1=科技
      */
     @TableField(value = "type")
+    @Translate(dictCode = "test_data_type")
     private String type;
 
     /**
@@ -47,5 +49,6 @@ public class TestData extends BaseEntity implements Serializable {
      * 状态，0=正常，1=禁用
      */
     @TableField(value = "`status`")
+    @Translate(dictCode = "sys_normal_disable")
     private String status;
 }
