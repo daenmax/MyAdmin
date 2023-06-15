@@ -1,10 +1,12 @@
 package cn.daenx.myadmin.framework.translate.core;
 
-import cn.daenx.myadmin.common.constant.RedisConstant;
-import cn.daenx.myadmin.common.utils.RedisUtil;
+import cn.daenx.myadmin.common.annotation.Dict;
+import cn.daenx.myadmin.common.annotation.DictDetail;
 import cn.daenx.myadmin.system.domain.po.SysDictDetail;
-import com.alibaba.fastjson2.JSON;
+import cn.daenx.myadmin.system.service.SysDictDetailService;
+import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +15,6 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Silence
@@ -22,19 +23,31 @@ import java.util.stream.Collectors;
 @Configuration
 public class CustomDictSerializer extends DictSerializerAbstract {
     @Override
-    public Object getDictContent(String dictCode, String fieldValue) {
-        Object object = RedisUtil.getValue(RedisConstant.DICT + dictCode);
-        List<SysDictDetail> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetail.class);
-        List<SysDictDetail> collect = list.stream().filter(item -> fieldValue.equals(item.getValue())).collect(Collectors.toList());
+    public Object getDictContent(Dict dict, String fieldValue) {
         Map<String, String> map = new HashMap<>();
-        if (collect.size() > 0) {
-            SysDictDetail sysDictDetail = collect.get(0);
-            map.put("cssClass", sysDictDetail.getCssClass());
-            map.put("listClass", sysDictDetail.getListClass());
-            map.put("label", sysDictDetail.getLabel());
-            map.put("value", sysDictDetail.getValue());
-            map.put("status", sysDictDetail.getStatus());
-            map.put("remark", sysDictDetail.getRemark());
+        if (StringUtils.isNotBlank(dict.dictCode())) {
+            List<SysDictDetail> list = SpringUtil.getBean(SysDictDetailService.class).getDictDetailByCodeFromRedis(dict.dictCode());
+            for (SysDictDetail sysDictDetail : list) {
+                if(sysDictDetail.getValue().equals(fieldValue)){
+                    map.put("cssClass", sysDictDetail.getCssClass());
+                    map.put("listClass", sysDictDetail.getListClass());
+                    map.put("label", sysDictDetail.getLabel());
+                    map.put("value", sysDictDetail.getValue());
+                    map.put("status", sysDictDetail.getStatus());
+                    map.put("remark", sysDictDetail.getRemark());
+                    return map;
+                }
+            }
+        }else {
+            //根据自定义字典翻译
+            DictDetail[] custom = dict.custom();
+            for (DictDetail dictDetail : custom) {
+                if (dictDetail.value().equals(fieldValue)) {
+                    map.put("label", dictDetail.label());
+                    map.put("value", dictDetail.value());
+                    return map;
+                }
+            }
         }
         return map;
     }
@@ -58,7 +71,7 @@ public class CustomDictSerializer extends DictSerializerAbstract {
             @Override
             public void customize(Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder) {
                 SimpleModule module = new SimpleModule();
-                module.setSerializerModifier(new DictBeanSerializerModifier(new CustomDictSerializer()));
+                module.setSerializerModifier(new DictBeanSerializerModifier(CustomDictSerializer.class));
                 jacksonObjectMapperBuilder.modules(module);
             }
         };

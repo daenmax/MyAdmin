@@ -30,6 +30,8 @@ public class TestDataPageDto extends BaseDto {
     private String type;
 
     @ExcelProperty(value = "状态", converter = DictConverter.class)
+//    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
+    //使用系统字典表里的翻译数据，推荐
     @Dict(dictCode = "sys_normal_disable", custom = {})
     private String status;
 

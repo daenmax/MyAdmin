@@ -1,8 +1,9 @@
 package cn.daenx.myadmin.test.domain.po;
 
 
+import cn.daenx.myadmin.common.annotation.Dict;
+import cn.daenx.myadmin.common.annotation.DictDetail;
 import cn.daenx.myadmin.common.vo.BaseEntity;
-import cn.daenx.myadmin.framework.translate.annotation.Translate;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -36,7 +37,9 @@ public class TestData extends BaseEntity implements Serializable {
      * 类型，0=民生，1=科技
      */
     @TableField(value = "type")
-    @Translate(dictCode = "test_data_type")
+    //使用自定义字典进行翻译，意思是直接写死在代码里的
+    @Dict(custom = {@DictDetail(value = "0", label = "民生"), @DictDetail(value = "1", label = "科技"), @DictDetail(value = "2", label = "农业"), @DictDetail(value = "3", label = "其他")})
+//    @Dict(dictCode = "test_data_type", custom = {})
     private String type;
 
     /**
@@ -49,6 +52,8 @@ public class TestData extends BaseEntity implements Serializable {
      * 状态，0=正常，1=禁用
      */
     @TableField(value = "`status`")
-    @Translate(dictCode = "sys_normal_disable")
+//    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
+    //使用系统字典表里的翻译数据，推荐
+    @Dict(dictCode = "sys_normal_disable", custom = {})
     private String status;
 }

@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.framework.translate.core;
 
-import cn.daenx.myadmin.framework.translate.annotation.Translate;
+import cn.daenx.myadmin.common.annotation.Dict;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
@@ -23,10 +23,10 @@ import java.util.List;
  **/
 public class DictBeanSerializerModifier extends BeanSerializerModifier {
 
-    private DictSerializerAbstract dictSerializerAbstract;
+    private Class<? extends DictSerializerAbstract> dictSerializerAbstractClass;
 
-    public DictBeanSerializerModifier(DictSerializerAbstract dictSerializerAbstract) {
-        this.dictSerializerAbstract = dictSerializerAbstract;
+    public DictBeanSerializerModifier(Class<? extends DictSerializerAbstract> dictSerializerAbstractClass) {
+        this.dictSerializerAbstractClass = dictSerializerAbstractClass;
     }
 
     /**
@@ -42,8 +42,16 @@ public class DictBeanSerializerModifier extends BeanSerializerModifier {
     @Override
     public List<BeanPropertyWriter> changeProperties(SerializationConfig config, BeanDescription beanDesc, List<BeanPropertyWriter> beanProperties) {
         for (BeanPropertyWriter beanProperty : beanProperties) {
-            Translate dictAnnotation = beanProperty.getAnnotation(Translate.class);
+            Dict dictAnnotation = beanProperty.getAnnotation(Dict.class);
             if (dictAnnotation != null) {
+                DictSerializerAbstract dictSerializerAbstract = null;
+                try {
+                    dictSerializerAbstract = dictSerializerAbstractClass.newInstance();
+                } catch (InstantiationException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
                 dictSerializerAbstract.setDict(dictAnnotation);
                 // 设置自定义的序列化器
                 beanProperty.assignSerializer(dictSerializerAbstract);
