@@ -1,10 +1,10 @@
-package cn.daenx.myadmin.framework.translate.core;
+package cn.daenx.myadmin.common.serializer;
 
 import cn.daenx.myadmin.common.annotation.Dict;
+import cn.daenx.myadmin.common.annotation.Masked;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.fasterxml.jackson.databind.ser.std.NullSerializer;
 
 import java.util.List;
@@ -17,15 +17,12 @@ import java.util.List;
  * modifySerializer() 序列化器修改
  * changeProperties() 属性变化
  * updateProperties() 属性更新
- *
- * @author gltqe
- * @date 2023/6/14 15:00
  **/
-public class DictBeanSerializerModifier extends BeanSerializerModifier {
+public class BeanSerializerModifier extends com.fasterxml.jackson.databind.ser.BeanSerializerModifier {
 
-    private Class<? extends DictSerializerAbstract> dictSerializerAbstractClass;
+    private Class<? extends SerializerAbstract> dictSerializerAbstractClass;
 
-    public DictBeanSerializerModifier(Class<? extends DictSerializerAbstract> dictSerializerAbstractClass) {
+    public BeanSerializerModifier(Class<? extends SerializerAbstract> dictSerializerAbstractClass) {
         this.dictSerializerAbstractClass = dictSerializerAbstractClass;
     }
 
@@ -36,25 +33,25 @@ public class DictBeanSerializerModifier extends BeanSerializerModifier {
      * @param beanDesc       Java Bean 对象的描述信息
      * @param beanProperties Java Bean 对象的属性列表
      * @return: java.util.List<com.fasterxml.jackson.databind.ser.BeanPropertyWriter>
-     * @author gltqe
-     * @date 2023/6/14 13:40
      **/
     @Override
     public List<BeanPropertyWriter> changeProperties(SerializationConfig config, BeanDescription beanDesc, List<BeanPropertyWriter> beanProperties) {
         for (BeanPropertyWriter beanProperty : beanProperties) {
             Dict dictAnnotation = beanProperty.getAnnotation(Dict.class);
-            if (dictAnnotation != null) {
-                DictSerializerAbstract dictSerializerAbstract = null;
+            Masked masked = beanProperty.getAnnotation(Masked.class);
+            if (dictAnnotation != null || masked != null) {
+                SerializerAbstract serializerAbstract = null;
                 try {
-                    dictSerializerAbstract = dictSerializerAbstractClass.newInstance();
+                    serializerAbstract = dictSerializerAbstractClass.newInstance();
                 } catch (InstantiationException e) {
                     throw new RuntimeException(e);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
-                dictSerializerAbstract.setDict(dictAnnotation);
+                serializerAbstract.setDict(dictAnnotation);
+                serializerAbstract.setMasked(masked);
                 // 设置自定义的序列化器
-                beanProperty.assignSerializer(dictSerializerAbstract);
+                beanProperty.assignSerializer(serializerAbstract);
                 // null值序列器
                 beanProperty.assignNullSerializer(NullSerializer.instance);
             }

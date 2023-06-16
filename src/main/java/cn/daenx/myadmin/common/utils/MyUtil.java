@@ -42,6 +42,53 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class MyUtil {
+    public static String repeat(String str, int repeatCount) {
+        String repeatedStr = "";
+        for (int i = 0; i < repeatCount; i++) {
+            repeatedStr += str;
+        }
+        return repeatedStr;
+    }
+
+    /**
+     * 数据脱敏（中国）
+     *
+     * @param type  数据类型，0=姓名，1=手机号，2=身份证号码，3=银行卡号，4=电子邮箱，5=地址信息，6=IP地址
+     * @param value 待脱敏的数据值
+     * @return
+     */
+    public static String masked(Integer type, String value) {
+        if (ObjectUtil.isEmpty(value)) {
+            return null;
+        }
+        String maskedValue = value;
+        switch (type) {
+            case 0: // 姓名
+                maskedValue = value.replaceAll("([\\u4e00-\\u9fa5])(.*)", "$1" + repeat("*", value.length() - 1));
+                break;
+            case 1: // 手机号
+                maskedValue = value.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+                break;
+            case 2: // 身份证号码
+                maskedValue = value.replaceAll("(\\d{4})\\d{10}(\\w{4})", "$1**********$2");
+                break;
+            case 3: // 银行卡号
+                maskedValue = value.replaceAll("(\\d{4})\\d+(\\d{4})", "$1 **** **** $2");
+                break;
+            case 4: // 电子邮箱
+                maskedValue = value.replaceAll("(\\w{1})\\w*@(.*)", "$1****@$2");
+                break;
+            case 5: // 地址信息
+                maskedValue = value.replaceAll("([\\u4e00-\\u9fa5])(.*)", "$1" + repeat("*", value.length() - 1));
+                break;
+            case 6: // IP地址
+                maskedValue = value.replaceAll("(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})", "$1.$2.*.*");
+                break;
+            default:
+                break;
+        }
+        return maskedValue;
+    }
 
     /**
      * SM4加密

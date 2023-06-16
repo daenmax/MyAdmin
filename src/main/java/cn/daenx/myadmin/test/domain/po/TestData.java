@@ -3,6 +3,8 @@ package cn.daenx.myadmin.test.domain.po;
 
 import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.annotation.DictDetail;
+import cn.daenx.myadmin.common.annotation.Masked;
+import cn.daenx.myadmin.common.constant.enums.MaskedType;
 import cn.daenx.myadmin.common.vo.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -31,6 +33,8 @@ public class TestData extends BaseEntity implements Serializable {
     private String title;
 
     @TableField(value = "content")
+    //字段脱敏
+    @Masked(type = MaskedType.NAME)
     private String content;
 
     /**

@@ -13,6 +13,4 @@ public class CommonConstant {
 
     public static final String IS_HTTPS_YES = "1";
     public static final String IS_HTTPS_NO = "0";
-
-
 }

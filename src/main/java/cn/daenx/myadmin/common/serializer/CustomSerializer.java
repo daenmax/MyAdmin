@@ -1,34 +1,39 @@
-package cn.daenx.myadmin.framework.translate.core;
+package cn.daenx.myadmin.common.serializer;
 
 import cn.daenx.myadmin.common.annotation.Dict;
 import cn.daenx.myadmin.common.annotation.DictDetail;
+import cn.daenx.myadmin.common.annotation.Masked;
+import cn.daenx.myadmin.common.constant.enums.MaskedType;
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.system.domain.po.SysDictDetail;
 import cn.daenx.myadmin.system.service.SysDictDetailService;
 import cn.hutool.extra.spring.SpringUtil;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author Silence
- * @date 2023/6/15 15:31
+ * 自定义序列化处理器
  */
 @Configuration
-public class CustomDictSerializer extends DictSerializerAbstract {
+public class CustomSerializer extends SerializerAbstract {
+    /**
+     * 字典翻译处理
+     *
+     * @param dict
+     * @param fieldValue
+     * @return
+     */
     @Override
-    public Object getDictContent(Dict dict, String fieldValue) {
+    public Object handleDict(Dict dict, String fieldValue) {
         Map<String, String> map = new HashMap<>();
         if (StringUtils.isNotBlank(dict.dictCode())) {
             List<SysDictDetail> list = SpringUtil.getBean(SysDictDetailService.class).getDictDetailByCodeFromRedis(dict.dictCode());
             for (SysDictDetail sysDictDetail : list) {
-                if(sysDictDetail.getValue().equals(fieldValue)){
+                if (sysDictDetail.getValue().equals(fieldValue)) {
                     map.put("cssClass", sysDictDetail.getCssClass());
                     map.put("listClass", sysDictDetail.getListClass());
                     map.put("label", sysDictDetail.getLabel());
@@ -38,7 +43,7 @@ public class CustomDictSerializer extends DictSerializerAbstract {
                     return map;
                 }
             }
-        }else {
+        } else {
             //根据自定义字典翻译
             DictDetail[] custom = dict.custom();
             for (DictDetail dictDetail : custom) {
@@ -53,27 +58,15 @@ public class CustomDictSerializer extends DictSerializerAbstract {
     }
 
     /**
-     * 重写默认后缀
-     * 如果不重写，将使用默认的后缀：Dict
+     * 数据脱敏处理
      *
+     * @param masked
+     * @param fieldValue
      * @return
      */
     @Override
-    public String getSuffix() {
-        //例如字段名是：dataType，那么添加的翻译对象为：dataTypeDict
-        return "Dict";
+    public Object handleMasker(Masked masked, String fieldValue) {
+        return MyUtil.masked(masked.type().getType(), fieldValue);
     }
 
-    @Bean
-    @Override
-    public Object jackson2ObjectMapperBuilderCustomizer() {
-        return new Jackson2ObjectMapperBuilderCustomizer() {
-            @Override
-            public void customize(Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder) {
-                SimpleModule module = new SimpleModule();
-                module.setSerializerModifier(new DictBeanSerializerModifier(CustomDictSerializer.class));
-                jacksonObjectMapperBuilder.modules(module);
-            }
-        };
-    }
 }
