@@ -27,7 +27,7 @@ public abstract class SerializerAbstract extends JsonSerializer<Object> {
         if (dict != null && o != null) {
             // 写入原值
             jsonGenerator.writeObject(o);
-            // 获取字典
+            // 进行翻译
             Object content = handleDict(dict, String.valueOf(o));
             // 获取当前字段名字
             String fieldName = jsonGenerator.getOutputContext().getCurrentName();
@@ -36,14 +36,10 @@ public abstract class SerializerAbstract extends JsonSerializer<Object> {
             jsonGenerator.writeObjectField(fieldName, content);
         }
         if (masked != null && o != null) {
-            // 写入原值
-            jsonGenerator.writeObject(o);
-            // 获取字典
+            // 进行脱敏
             Object content = handleMasker(masked, String.valueOf(o));
-            // 获取当前字段名字
-            String fieldName = jsonGenerator.getOutputContext().getCurrentName();
-            // 写入一个新字段
-            jsonGenerator.writeObjectField(fieldName, content);
+            // 写入值
+            jsonGenerator.writeObject(content);
         }
     }
 

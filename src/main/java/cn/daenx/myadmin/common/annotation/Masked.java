@@ -14,5 +14,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Masked {
+    /**
+     * 数据类型，0=姓名，1=手机号，2=身份证号码，3=银行卡号，4=电子邮箱，5=地址信息，6=IP地址
+     * 请使用MaskedType枚举类
+     *
+     * @return
+     */
     MaskedType type();
 }
