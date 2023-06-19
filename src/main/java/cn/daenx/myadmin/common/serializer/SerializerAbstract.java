@@ -81,7 +81,7 @@ public abstract class SerializerAbstract extends JsonSerializer<Object> {
             @Override
             public void customize(Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder) {
                 SimpleModule module = new SimpleModule();
-                module.setSerializerModifier(new BeanSerializerModifier(CustomSerializer.class));
+                module.setSerializerModifier(new MyBeanSerializerModifier(CustomSerializer.class));
                 jacksonObjectMapperBuilder.modules(module);
             }
         };

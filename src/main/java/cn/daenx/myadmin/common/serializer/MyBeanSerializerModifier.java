@@ -5,6 +5,7 @@ import cn.daenx.myadmin.common.annotation.Masked;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
+import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.fasterxml.jackson.databind.ser.std.NullSerializer;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
  * changeProperties() 属性变化
  * updateProperties() 属性更新
  **/
-public class BeanSerializerModifier extends com.fasterxml.jackson.databind.ser.BeanSerializerModifier {
+public class MyBeanSerializerModifier extends BeanSerializerModifier {
 
     private Class<? extends SerializerAbstract> dictSerializerAbstractClass;
 
-    public BeanSerializerModifier(Class<? extends SerializerAbstract> dictSerializerAbstractClass) {
+    public MyBeanSerializerModifier(Class<? extends SerializerAbstract> dictSerializerAbstractClass) {
         this.dictSerializerAbstractClass = dictSerializerAbstractClass;
     }
 
