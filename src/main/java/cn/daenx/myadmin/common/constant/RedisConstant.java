@@ -26,4 +26,6 @@ public class RedisConstant {
     public static final String API_LIMIT_SINGLE_KEY = "apiLimit:single:";
     public static final String API_LIMIT_WHOLE_KEY = "apiLimit:whole:";
     public static final String API_LIMIT_WHOLE_LIMITER_KEY = "apiLimit:whole:limiter:";
+
+    public static final String REPEAT_SUBMIT_KEY = "repeatSubmit:";
 }

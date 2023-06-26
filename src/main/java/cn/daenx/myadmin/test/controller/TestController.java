@@ -2,6 +2,7 @@ package cn.daenx.myadmin.test.controller;
 
 
 import cn.daenx.myadmin.common.vo.Result;
+import cn.daenx.myadmin.framework.repeatSubmit.annotation.RepeatSubmit;
 import cn.dev33.satoken.annotation.SaIgnore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +25,19 @@ public class TestController {
     @Operation(method = "肯定是GET啦", summary = "测试接口", description = "我是description")
     @GetMapping("/test")
     public Result test() {
+        return Result.ok("查询成功");
+    }
+
+
+    /**
+     * 测试接口
+     *
+     * @return
+     */
+    @Operation(method = "肯定是GET啦", summary = "测试接口", description = "我是description")
+    @GetMapping("/test2")
+    @RepeatSubmit
+    public Result test2() {
         return Result.ok("查询成功");
     }
 
