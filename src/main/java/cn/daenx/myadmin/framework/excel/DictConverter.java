@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.framework.excel;
 
-import cn.daenx.myadmin.common.annotation.Dict;
-import cn.daenx.myadmin.common.annotation.DictDetail;
+import cn.daenx.myadmin.framework.serializer.annotation.Dict;
+import cn.daenx.myadmin.framework.serializer.annotation.DictDetail;
 import cn.daenx.myadmin.system.domain.po.SysDictDetail;
 import cn.daenx.myadmin.system.service.SysDictDetailService;
 import cn.hutool.core.convert.Convert;

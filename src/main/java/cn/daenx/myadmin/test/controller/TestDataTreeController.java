@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.test.controller;
 
-import cn.daenx.myadmin.common.annotation.Log;
+import cn.daenx.myadmin.framework.logSave.annotation.Log;
 import cn.daenx.myadmin.common.constant.enums.LogOperType;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;

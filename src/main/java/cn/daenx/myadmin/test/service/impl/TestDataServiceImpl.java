@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.test.service.impl;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.framework.dataScope.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.system.constant.SystemConstant;

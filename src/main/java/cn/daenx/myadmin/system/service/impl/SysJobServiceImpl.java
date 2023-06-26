@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.service.impl;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.framework.dataScope.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.utils.DingTalkUtil;
 import cn.daenx.myadmin.common.utils.EmailUtil;

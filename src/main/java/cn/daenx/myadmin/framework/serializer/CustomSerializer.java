@@ -1,9 +1,8 @@
-package cn.daenx.myadmin.common.serializer;
+package cn.daenx.myadmin.framework.serializer;
 
-import cn.daenx.myadmin.common.annotation.Dict;
-import cn.daenx.myadmin.common.annotation.DictDetail;
-import cn.daenx.myadmin.common.annotation.Masked;
-import cn.daenx.myadmin.common.constant.enums.MaskedType;
+import cn.daenx.myadmin.framework.serializer.annotation.Dict;
+import cn.daenx.myadmin.framework.serializer.annotation.DictDetail;
+import cn.daenx.myadmin.framework.serializer.annotation.Masked;
 import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.system.domain.po.SysDictDetail;
 import cn.daenx.myadmin.system.service.SysDictDetailService;

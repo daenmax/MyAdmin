@@ -1,9 +1,9 @@
 package cn.daenx.myadmin.test.domain.po;
 
 
-import cn.daenx.myadmin.common.annotation.Dict;
-import cn.daenx.myadmin.common.annotation.DictDetail;
-import cn.daenx.myadmin.common.annotation.Masked;
+import cn.daenx.myadmin.framework.serializer.annotation.Dict;
+import cn.daenx.myadmin.framework.serializer.annotation.DictDetail;
+import cn.daenx.myadmin.framework.serializer.annotation.Masked;
 import cn.daenx.myadmin.common.constant.enums.MaskedType;
 import cn.daenx.myadmin.common.vo.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;

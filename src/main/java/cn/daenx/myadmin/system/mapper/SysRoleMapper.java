@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.mapper;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.framework.dataScope.annotation.DataScope;
 import cn.daenx.myadmin.system.domain.po.SysRole;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

@@ -1,7 +1,7 @@
-package cn.daenx.myadmin.common.aspectj;
+package cn.daenx.myadmin.framework.logSave.aspectj;
 
 
-import cn.daenx.myadmin.common.annotation.Log;
+import cn.daenx.myadmin.framework.logSave.annotation.Log;
 import cn.daenx.myadmin.common.constant.CommonConstant;
 import cn.daenx.myadmin.common.constant.enums.LogOperType;
 import cn.daenx.myadmin.common.utils.MyUtil;
@@ -41,7 +41,7 @@ public class LogAspect {
     /**
      * 配置织入点
      */
-    @Pointcut("@annotation(cn.daenx.myadmin.common.annotation.Log)")
+    @Pointcut("@annotation(cn.daenx.myadmin.framework.logSave.annotation.Log)")
     public void logPointCut() {
     }
 
@@ -62,7 +62,7 @@ public class LogAspect {
      * @param point
      * @param e
      */
-    @AfterThrowing(value = "@annotation(cn.daenx.myadmin.common.annotation.Log)", throwing = "e")
+    @AfterThrowing(value = "@annotation(cn.daenx.myadmin.framework.logSave.annotation.Log)", throwing = "e")
     public void logThrowing(JoinPoint point, Throwable e) {
         saveLog(point, e, null);
     }

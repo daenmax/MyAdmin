@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.system.mapper;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.framework.dataScope.annotation.DataScope;
 import cn.daenx.myadmin.system.domain.dto.SysNoticePageDto;
 import cn.daenx.myadmin.system.domain.po.SysNotice;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;

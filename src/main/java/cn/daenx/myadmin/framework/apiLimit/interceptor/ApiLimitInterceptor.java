@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.interceptor;
+package cn.daenx.myadmin.framework.apiLimit.interceptor;
 
 import cn.daenx.myadmin.common.constant.RedisConstant;
 import cn.daenx.myadmin.common.exception.MyException;

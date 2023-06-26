@@ -1,6 +1,6 @@
-package cn.daenx.myadmin.common.aspectj;
+package cn.daenx.myadmin.framework.dataScope.aspectj;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.framework.dataScope.annotation.DataScope;
 import cn.daenx.myadmin.common.vo.DataScopeParam;
 import cn.daenx.myadmin.framework.satoken.utils.LoginUtil;
 import cn.daenx.myadmin.system.constant.SystemConstant;
@@ -35,7 +35,7 @@ import java.util.List;
 @Component
 //@Intercepts注解用于拦截StatementHandler对象的预编译方法。类似的还有：拦截Executor对象的查找方法，自行百度
 @Intercepts(@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}))
-public class DataScopeInterceptor implements DataPermissionHandler {
+public class DataScopeAspect implements DataPermissionHandler {
 
 
 
@@ -44,7 +44,7 @@ public class DataScopeInterceptor implements DataPermissionHandler {
     //用于实现以下功能：虽然每次执行SQL都会进入该拦截器，但是拦截器里可以判断mapper方法上是否有@DataScope注解，如果没有，那就直接放行，不进行修改SQL
     ThreadLocal<DataScopeParam> threadLocal = new ThreadLocal<>();
 
-    @Pointcut("@annotation(cn.daenx.myadmin.common.annotation.DataScope)")
+    @Pointcut("@annotation(cn.daenx.myadmin.framework.dataScope.annotation.DataScope)")
     public void dataScope() {
     }
 

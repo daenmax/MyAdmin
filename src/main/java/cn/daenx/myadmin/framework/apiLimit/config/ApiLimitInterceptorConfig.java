@@ -1,6 +1,6 @@
-package cn.daenx.myadmin.common.config;
+package cn.daenx.myadmin.framework.apiLimit.config;
 
-import cn.daenx.myadmin.common.interceptor.ApiLimitInterceptor;
+import cn.daenx.myadmin.framework.apiLimit.interceptor.ApiLimitInterceptor;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

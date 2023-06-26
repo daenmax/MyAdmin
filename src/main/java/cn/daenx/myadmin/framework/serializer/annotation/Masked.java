@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.annotation;
+package cn.daenx.myadmin.framework.serializer.annotation;
 
 import cn.daenx.myadmin.common.constant.enums.MaskedType;
 

@@ -1,7 +1,7 @@
-package cn.daenx.myadmin.common.serializer;
+package cn.daenx.myadmin.framework.serializer;
 
-import cn.daenx.myadmin.common.annotation.Dict;
-import cn.daenx.myadmin.common.annotation.Masked;
+import cn.daenx.myadmin.framework.serializer.annotation.Dict;
+import cn.daenx.myadmin.framework.serializer.annotation.Masked;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
@@ -21,10 +21,10 @@ import java.util.List;
  **/
 public class MyBeanSerializerModifier extends BeanSerializerModifier {
 
-    private Class<? extends SerializerAbstract> dictSerializerAbstractClass;
+    private Class<? extends SerializerAbstract> serializerAbstractClass;
 
     public MyBeanSerializerModifier(Class<? extends SerializerAbstract> dictSerializerAbstractClass) {
-        this.dictSerializerAbstractClass = dictSerializerAbstractClass;
+        this.serializerAbstractClass = dictSerializerAbstractClass;
     }
 
     /**
@@ -43,7 +43,7 @@ public class MyBeanSerializerModifier extends BeanSerializerModifier {
             if (dictAnnotation != null || masked != null) {
                 SerializerAbstract serializerAbstract = null;
                 try {
-                    serializerAbstract = dictSerializerAbstractClass.newInstance();
+                    serializerAbstract = serializerAbstractClass.newInstance();
                 } catch (InstantiationException e) {
                     throw new RuntimeException(e);
                 } catch (IllegalAccessException e) {

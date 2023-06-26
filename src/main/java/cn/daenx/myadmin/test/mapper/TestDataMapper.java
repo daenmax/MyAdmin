@@ -1,6 +1,6 @@
 package cn.daenx.myadmin.test.mapper;
 
-import cn.daenx.myadmin.common.annotation.DataScope;
+import cn.daenx.myadmin.framework.dataScope.annotation.DataScope;
 import cn.daenx.myadmin.test.domain.dto.TestDataPageDto;
 import cn.daenx.myadmin.test.domain.po.TestData;
 import cn.daenx.myadmin.test.domain.vo.TestDataPageVo;

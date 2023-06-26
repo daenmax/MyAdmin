@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 项目启动后，初始化
  */
 @Component
-public class ApplicationRunnerImpl implements ApplicationRunner {
+public class AppRunner implements ApplicationRunner {
     @Resource
     private SysDictService sysDictService;
     @Resource

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @Component
-public class MyMetaObjectHandler implements MetaObjectHandler {
+public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
 
 
 

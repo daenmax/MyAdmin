@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.annotation;
+package cn.daenx.myadmin.framework.logSave.annotation;
 
 
 import cn.daenx.myadmin.common.constant.enums.LogOperType;

@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.annotation;
+package cn.daenx.myadmin.framework.serializer.annotation;
 
 
 import java.lang.annotation.*;
