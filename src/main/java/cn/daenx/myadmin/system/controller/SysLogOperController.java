@@ -53,7 +53,7 @@ public class SysLogOperController {
      * @return
      */
     @SaCheckPermission("monitor:logOper:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -69,7 +69,7 @@ public class SysLogOperController {
      * @return
      */
     @SaCheckPermission("monitor:logOper:remove")
-    @DeleteMapping("/clean")
+    @PostMapping("/clean")
     public Result clean() {
         sysLogOperService.clean();
         return Result.ok();

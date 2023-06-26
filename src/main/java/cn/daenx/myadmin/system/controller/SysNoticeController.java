@@ -43,7 +43,7 @@ public class SysNoticeController {
      * @return
      */
     @SaCheckPermission("monitor:notice:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysNoticeAddVo vo) {
         sysNoticeService.addInfo(vo);
         return Result.ok();
@@ -69,7 +69,7 @@ public class SysNoticeController {
      * @return
      */
     @SaCheckPermission("monitor:notice:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysNoticeUpdVo vo) {
         sysNoticeService.editInfo(vo);
         return Result.ok();
@@ -82,7 +82,7 @@ public class SysNoticeController {
      * @return
      */
     @SaCheckPermission("monitor:notice:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

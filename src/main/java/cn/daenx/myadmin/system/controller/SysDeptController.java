@@ -74,7 +74,7 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:dept:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysDeptUpdVo vo) {
         sysDeptService.editInfo(vo);
         return Result.ok();
@@ -87,7 +87,7 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:dept:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysDeptAddVo vo) {
         sysDeptService.addInfo(vo);
         return Result.ok();
@@ -100,7 +100,7 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:dept:remove")
-    @DeleteMapping("/{id}")
+    @PostMapping("/remove/{id}")
     public Result remove(@PathVariable("id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");

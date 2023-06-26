@@ -46,7 +46,7 @@ public class SysUserController {
      *
      * @return
      */
-    @PutMapping("/profile")
+    @PostMapping("/editProfile")
     public Result edit(@Validated @RequestBody SysUserUpdInfoVo vo) {
         sysUserService.updInfo(vo);
         return Result.ok();
@@ -57,7 +57,7 @@ public class SysUserController {
      *
      * @return
      */
-    @PutMapping("/updatePwd")
+    @PostMapping("/updatePwd")
     public Result updatePwd(@Validated @RequestBody SysUserUpdPwdVo vo) {
         sysUserService.updatePwd(vo);
         return Result.ok("修改成功，请重新登录", null);
@@ -131,7 +131,7 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysUserUpdVo vo) {
         sysUserService.editInfo(vo);
         return Result.ok();
@@ -144,7 +144,7 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysUserAddVo vo) {
         sysUserService.addInfo(vo);
         return Result.ok();
@@ -158,7 +158,7 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:edit")
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         sysUserService.changeStatus(vo);
         return Result.ok();
@@ -172,7 +172,7 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:resetPwd")
-    @PutMapping("/resetPwd")
+    @PostMapping("/resetPwd")
     public Result resetPwd(@Validated @RequestBody SysUserResetPwdVo vo) {
         sysUserService.resetPwd(vo);
         return Result.ok();
@@ -185,7 +185,7 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -214,7 +214,7 @@ public class SysUserController {
      * @param vo
      */
     @SaCheckPermission("system:user:edit")
-    @PutMapping("/authRole")
+    @PostMapping("/authRole")
     public Result saveAuthRole(@Validated @RequestBody SysUserUpdAuthRoleVo vo) {
         sysUserService.saveAuthRole(vo);
         return Result.ok();

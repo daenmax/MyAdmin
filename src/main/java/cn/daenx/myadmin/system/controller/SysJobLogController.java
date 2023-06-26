@@ -68,7 +68,7 @@ public class SysJobLogController {
      * @return
      */
     @SaCheckPermission("monitor:jobLog:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -83,7 +83,7 @@ public class SysJobLogController {
      * @return
      */
     @SaCheckPermission("monitor:jobLog:remove")
-    @DeleteMapping("/clean")
+    @PostMapping("/clean")
     public Result clean() {
         sysJobLogService.clean();
         return Result.ok();

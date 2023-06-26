@@ -78,7 +78,7 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysRoleUpdVo vo) {
         sysRoleService.editInfo(vo);
         return Result.ok();
@@ -91,7 +91,7 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysRoleAddVo vo) {
         sysRoleService.addInfo(vo);
         return Result.ok();
@@ -104,7 +104,7 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -136,7 +136,7 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:edit")
-    @PutMapping("/dataScope")
+    @PostMapping("/dataScope")
     public Result dataScope(@Validated @RequestBody SysRoleDataScopeUpdVo vo) {
         sysRoleService.dataScope(vo);
         return Result.ok();
@@ -175,7 +175,7 @@ public class SysRoleController {
      * @param vo
      */
     @SaCheckPermission("system:role:edit")
-    @PutMapping("/authUser/cancel")
+    @PostMapping("/authUser/cancel")
     public Result cancelAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
         sysRoleService.cancelAuthUser(vo);
         return Result.ok();
@@ -187,7 +187,7 @@ public class SysRoleController {
      * @param vo
      */
     @SaCheckPermission("system:role:edit")
-    @PutMapping("/authUser/save")
+    @PostMapping("/authUser/save")
     public Result saveAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
         sysRoleService.saveAuthUser(vo);
         return Result.ok();
@@ -201,7 +201,7 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:edit")
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         sysRoleService.changeStatus(vo);
         return Result.ok();

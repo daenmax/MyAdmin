@@ -83,7 +83,7 @@ public class SysConfigController {
      * @return
      */
     @SaCheckPermission("system:config:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysConfigUpdVo vo) {
         sysConfigService.editInfo(vo);
         return Result.ok();
@@ -96,7 +96,7 @@ public class SysConfigController {
      * @return
      */
     @SaCheckPermission("system:config:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysConfigAddVo vo) {
         sysConfigService.addInfo(vo);
         return Result.ok();
@@ -109,7 +109,7 @@ public class SysConfigController {
      * @return
      */
     @SaCheckPermission("system:config:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

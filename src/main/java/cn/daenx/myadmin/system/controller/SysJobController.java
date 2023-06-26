@@ -58,7 +58,7 @@ public class SysJobController {
      * @return
      */
     @SaCheckPermission("monitor:job:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysJobAddVo vo) {
         sysJobService.addInfo(vo);
         return Result.ok();
@@ -71,7 +71,7 @@ public class SysJobController {
      * @return
      */
     @SaCheckPermission("monitor:job:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysJobUpdVo vo) {
         sysJobService.editInfo(vo);
         return Result.ok();
@@ -84,7 +84,7 @@ public class SysJobController {
      * @return
      */
     @SaCheckPermission("monitor:job:edit")
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         sysJobService.changeStatus(vo);
         return Result.ok();
@@ -97,7 +97,7 @@ public class SysJobController {
      * @return
      */
     @SaCheckPermission("monitor:job:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

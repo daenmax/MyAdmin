@@ -69,7 +69,7 @@ public class SysOssConfigController {
      * @return
      */
     @SaCheckPermission("monitor:ossConfig:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysOssConfigUpdVo vo) {
         sysOssConfigService.editInfo(vo);
         return Result.ok();
@@ -82,7 +82,7 @@ public class SysOssConfigController {
      * @return
      */
     @SaCheckPermission("monitor:ossConfig:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysOssConfigAddVo vo) {
         sysOssConfigService.addInfo(vo);
         return Result.ok();
@@ -95,7 +95,7 @@ public class SysOssConfigController {
      * @return
      */
     @SaCheckPermission("monitor:ossConfig:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -111,7 +111,7 @@ public class SysOssConfigController {
      * @return
      */
     @SaCheckPermission("monitor:ossConfig:edit")
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         sysOssConfigService.changeStatus(vo);
         return Result.ok();
@@ -124,7 +124,7 @@ public class SysOssConfigController {
      * @return
      */
     @SaCheckPermission("monitor:ossConfig:edit")
-    @PutMapping("/changeInUse")
+    @PostMapping("/changeInUse")
     public Result changeInUse(@Validated @RequestBody ComStatusUpdVo vo) {
         sysOssConfigService.changeInUse(vo);
         return Result.ok();

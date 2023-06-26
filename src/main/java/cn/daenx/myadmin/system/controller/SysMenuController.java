@@ -57,7 +57,7 @@ public class SysMenuController {
      * @return
      */
     @SaCheckPermission("system:menu:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysMenuUpdVo vo) {
         sysMenuService.editInfo(vo);
         return Result.ok();
@@ -70,7 +70,7 @@ public class SysMenuController {
      * @return
      */
     @SaCheckPermission("system:menu:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysMenuAddVo vo) {
         sysMenuService.addInfo(vo);
         return Result.ok();
@@ -83,7 +83,7 @@ public class SysMenuController {
      * @return
      */
     @SaCheckPermission("system:menu:remove")
-    @DeleteMapping("/{id}")
+    @PostMapping("/remove/{id}")
     public Result remove(@PathVariable("id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");

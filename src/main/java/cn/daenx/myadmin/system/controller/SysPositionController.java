@@ -73,7 +73,7 @@ public class SysPositionController {
      * @return
      */
     @SaCheckPermission("system:position:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysPositionUpdVo vo) {
         sysPositionService.editInfo(vo);
         return Result.ok();
@@ -86,7 +86,7 @@ public class SysPositionController {
      * @return
      */
     @SaCheckPermission("system:position:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysPositionAddVo vo) {
         sysPositionService.addInfo(vo);
         return Result.ok();
@@ -99,7 +99,7 @@ public class SysPositionController {
      * @return
      */
     @SaCheckPermission("system:position:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -142,7 +142,7 @@ public class SysPositionController {
      * @param vo
      */
     @SaCheckPermission("system:position:edit")
-    @PutMapping("/authUser/cancel")
+    @PostMapping("/authUser/cancel")
     public Result cancelAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
         sysPositionService.cancelAuthUser(vo);
         return Result.ok();
@@ -154,7 +154,7 @@ public class SysPositionController {
      * @param vo
      */
     @SaCheckPermission("system:position:edit")
-    @PutMapping("/authUser/save")
+    @PostMapping("/authUser/save")
     public Result saveAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
         sysPositionService.saveAuthUser(vo);
         return Result.ok();

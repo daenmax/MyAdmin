@@ -66,7 +66,7 @@ public class SysDictDetailController {
      * @return
      */
     @SaCheckPermission("system:dict:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysDictDetailAddVo vo) {
         sysDictDetailService.addInfo(vo);
         return Result.ok();
@@ -92,7 +92,7 @@ public class SysDictDetailController {
      * @return
      */
     @SaCheckPermission("system:dict:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysDictDetailUpdVo vo) {
         sysDictDetailService.editInfo(vo);
         return Result.ok();
@@ -105,7 +105,7 @@ public class SysDictDetailController {
      * @return
      */
     @SaCheckPermission("system:dict:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

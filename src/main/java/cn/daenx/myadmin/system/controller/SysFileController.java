@@ -62,7 +62,7 @@ public class SysFileController {
      * @return
      */
     @SaCheckPermission("monitor:file:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

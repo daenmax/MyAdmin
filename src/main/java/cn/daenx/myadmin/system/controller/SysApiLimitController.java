@@ -57,7 +57,7 @@ public class SysApiLimitController {
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody SysApiLimitAddVo vo) {
         SysApiLimitService.addInfo(vo);
         return Result.ok();
@@ -70,7 +70,7 @@ public class SysApiLimitController {
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody SysApiLimitUpdVo vo) {
         SysApiLimitService.editInfo(vo);
         return Result.ok();
@@ -83,7 +83,7 @@ public class SysApiLimitController {
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:edit")
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         SysApiLimitService.changeStatus(vo);
         return Result.ok();
@@ -96,7 +96,7 @@ public class SysApiLimitController {
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

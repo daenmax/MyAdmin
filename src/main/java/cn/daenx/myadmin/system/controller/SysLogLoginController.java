@@ -53,7 +53,7 @@ public class SysLogLoginController {
      * @return
      */
     @SaCheckPermission("monitor:logLogin:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -69,7 +69,7 @@ public class SysLogLoginController {
      * @return
      */
     @SaCheckPermission("monitor:logLogin:remove")
-    @DeleteMapping("/clean")
+    @PostMapping("/clean")
     public Result clean() {
         sysLogLoginService.clean();
         return Result.ok();

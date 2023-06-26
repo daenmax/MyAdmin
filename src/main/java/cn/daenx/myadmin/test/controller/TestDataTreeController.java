@@ -46,7 +46,7 @@ public class TestDataTreeController {
      */
     @Log(name = "测试树表数据", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody TestDataTreeAddVo vo) {
         testDataTreeService.addInfo(vo);
         return Result.ok();
@@ -74,7 +74,7 @@ public class TestDataTreeController {
      */
     @Log(name = "测试树表数据", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody TestDataTreeUpdVo vo) {
         testDataTreeService.editInfo(vo);
         return Result.ok();
@@ -88,7 +88,7 @@ public class TestDataTreeController {
      */
     @Log(name = "测试树表数据", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:remove")
-    @DeleteMapping("/{id}")
+    @PostMapping("/remove/{id}")
     public Result remove(@PathVariable("id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");
@@ -105,7 +105,7 @@ public class TestDataTreeController {
      */
     @Log(name = "测试数据-修改状态", type = LogOperType.EDIT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:edit")
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         testDataTreeService.changeStatus(vo);
         return Result.ok();

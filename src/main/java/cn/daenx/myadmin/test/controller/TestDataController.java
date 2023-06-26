@@ -83,7 +83,7 @@ public class TestDataController {
      */
     @Log(name = "测试数据", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:add")
-    @PostMapping
+    @PostMapping("/add")
     public Result add(@Validated @RequestBody TestDataAddVo vo) {
         testDataService.addInfo(vo);
         return Result.ok();
@@ -111,7 +111,7 @@ public class TestDataController {
      */
     @Log(name = "测试数据", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:edit")
-    @PutMapping
+    @PostMapping("/edit")
     public Result edit(@Validated @RequestBody TestDataUpdVo vo) {
         testDataService.editInfo(vo);
         return Result.ok();
@@ -125,7 +125,7 @@ public class TestDataController {
      */
     @Log(name = "测试数据", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:remove")
-    @DeleteMapping()
+    @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
@@ -175,7 +175,7 @@ public class TestDataController {
      */
     @Log(name = "测试数据-修改状态", type = LogOperType.EDIT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:edit")
-    @PutMapping("/changeStatus")
+    @PostMapping("/changeStatus")
     public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
         testDataService.changeStatus(vo);
         return Result.ok();
