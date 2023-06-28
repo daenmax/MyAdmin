@@ -120,7 +120,7 @@
         <!-- 阿里巴巴druid数据库连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid-spring-boot-3-starter</artifactId>
             <version>${druid.version}</version>
         </dependency>
         <!-- 阿里巴巴fastjson2 -->
