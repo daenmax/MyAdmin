@@ -117,6 +117,11 @@
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
         </dependency>
+        <!-- PostgreSql驱动包 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
         <!-- 阿里巴巴druid数据库连接池 -->
         <dependency>
             <groupId>com.alibaba</groupId>

@@ -41,13 +41,13 @@ public class TestDataTree extends BaseEntity implements Serializable {
     /**
      * 类型，0=民生，1=科技
      */
-    @TableField(value = "`type`")
+    @TableField(value = "type")
     private String type;
 
     /**
      * 状态，0=正常，1=停用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

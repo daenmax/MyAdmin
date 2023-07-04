@@ -89,7 +89,7 @@ public class SysApiLimit extends BaseEntity implements Serializable {
     /**
      * 限制状态，0=正常，1=停用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

@@ -30,7 +30,7 @@
   <select id="getPageWrapper" resultType="cn.daenx.myadmin.system.domain.dto.SysFilePageDto">
     SELECT
       sf.*,
-      soc.`name` AS ossName
+      soc.name AS ossName
     FROM
       sys_file sf
         LEFT JOIN sys_oss_config soc ON soc.id = sf.oss_id

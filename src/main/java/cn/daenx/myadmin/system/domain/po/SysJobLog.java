@@ -75,7 +75,7 @@ public class SysJobLog extends BaseEntity implements Serializable {
     /**
      * 执行结果，0=成功，1=失败
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

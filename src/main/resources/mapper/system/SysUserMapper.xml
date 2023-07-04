@@ -50,14 +50,13 @@
                sud.real_name,
                sud.age,
                sud.sex,
-               sud.`profile`,
+               sud.profile,
                sud.user_sign,
                sf.file_url                  AS avatar,
                sud.money,
-               sd.`name`                    AS deptName,
+               sd.name                    AS deptName,
                su1.username                 AS createName,
-               su2.username                 AS updateName,
-               IF(su.id = '1', TRUE, FALSE) as admin
+               su2.username                 AS updateName
         FROM sys_user su
                  LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
                  LEFT JOIN sys_dept sd ON sd.id = su.dept_id

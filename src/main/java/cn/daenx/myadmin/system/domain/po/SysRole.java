@@ -35,7 +35,7 @@ public class SysRole extends BaseEntity implements Serializable {
     /**
      * 角色名称
      */
-    @TableField(value = "`name`")
+    @TableField(value = "name")
     @ExcelProperty(value = "角色名称")
     private String name;
 
@@ -76,7 +76,7 @@ public class SysRole extends BaseEntity implements Serializable {
     /**
      * 角色状态，0=正常，1=禁用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     @ExcelProperty(value = "角色状态", converter = DictConverter.class)
     @Dict(dictCode = "sys_normal_disable", custom = {})
     private String status;

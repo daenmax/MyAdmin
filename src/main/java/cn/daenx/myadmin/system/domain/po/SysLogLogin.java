@@ -46,7 +46,7 @@ public class SysLogLogin extends BaseEntity implements Serializable {
      * 登录地点
      */
     @ExcelProperty(value = "登录地点")
-    @TableField(value = "`location`")
+    @TableField(value = "location")
     private String location;
 
     /**
@@ -68,7 +68,7 @@ public class SysLogLogin extends BaseEntity implements Serializable {
      */
     @ExcelProperty(value = "登录结果", converter = DictConverter.class)
     @Dict(dictCode = "sys_common_status", custom = {})
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

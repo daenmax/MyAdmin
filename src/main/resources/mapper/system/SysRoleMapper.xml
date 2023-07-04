@@ -34,6 +34,6 @@
     WHERE
       sru.user_id = #{userId}
       AND sr.is_delete = 0
-      AND sr.`status` =0
+      AND sr.status = '0'
     </select>
 </mapper>

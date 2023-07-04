@@ -35,21 +35,21 @@ public class SysConfig extends BaseEntity implements Serializable {
      * 参数名称
      */
     @ExcelProperty(value = "参数名称")
-    @TableField(value = "`name`")
+    @TableField(value = "name")
     private String name;
 
     /**
      * 参数键值
      */
     @ExcelProperty(value = "参数键值")
-    @TableField(value = "`key`")
+    @TableField(value = "key")
     private String key;
 
     /**
      * 参数键值
      */
     @ExcelProperty(value = "参数键值")
-    @TableField(value = "`value`")
+    @TableField(value = "value")
     private String value;
 
     /**
@@ -58,7 +58,7 @@ public class SysConfig extends BaseEntity implements Serializable {
     @ExcelProperty(value = "系统内置", converter = DictConverter.class)
 //    @Dict(custom = {@DictDetail(value = "0", label = "否"), @DictDetail(value = "1", label = "是")})
     @Dict(dictCode = "sys_yes_no", custom = {})
-    @TableField(value = "`type`")
+    @TableField(value = "type")
     private String type;
 
     /**
@@ -67,7 +67,7 @@ public class SysConfig extends BaseEntity implements Serializable {
     @ExcelProperty(value = "参数状态", converter = DictConverter.class)
 //    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
     @Dict(dictCode = "sys_normal_disable", custom = {})
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

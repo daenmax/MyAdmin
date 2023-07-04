@@ -30,7 +30,7 @@ public class SysMenu extends TreeEntity<SysMenu> {
     /**
      * 菜单名称
      */
-    @TableField(value = "`menu_name`")
+    @TableField(value = "menu_name")
     private String menuName;
 
     /**
@@ -42,7 +42,7 @@ public class SysMenu extends TreeEntity<SysMenu> {
     /**
      * 路由地址
      */
-    @TableField(value = "`path`")
+    @TableField(value = "path")
     private String path;
 
     /**
@@ -78,13 +78,13 @@ public class SysMenu extends TreeEntity<SysMenu> {
     /**
      * 菜单状态，0=正常，1=禁用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**
      * 菜单类型，1=目录，2=菜单，3=按钮
      */
-    @TableField(value = "`menu_type`")
+    @TableField(value = "menu_type")
     private String menuType;
 
     /**

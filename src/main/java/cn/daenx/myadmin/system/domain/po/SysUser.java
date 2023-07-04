@@ -48,13 +48,13 @@ public class SysUser extends BaseEntity implements Serializable {
     /**
      * 用户密码
      */
-    @TableField(value = "`password`")
+    @TableField(value = "password")
     private String password;
 
     /**
      * 账号状态，0=正常，1=停用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

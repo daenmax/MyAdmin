@@ -29,6 +29,6 @@
            LEFT JOIN sys_position sp ON sp.id = spu.position_id
     WHERE spu.user_id = #{userId}
       AND sp.is_delete = 0
-      AND sp.`status` = 0
+      AND sp.STATUS = '0'
     </select>
 </mapper>

@@ -57,7 +57,7 @@ public class SysJob extends BaseEntity implements Serializable {
     /**
      * 任务状态，0=正常，1=暂停
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

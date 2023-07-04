@@ -35,7 +35,7 @@ public class SysDict extends BaseEntity implements Serializable {
      * 字典名称
      */
     @ExcelProperty(value = "字典名称")
-    @TableField(value = "`name`")
+    @TableField(value = "name")
     private String name;
 
     /**
@@ -51,7 +51,7 @@ public class SysDict extends BaseEntity implements Serializable {
     @ExcelProperty(value = "字典状态", converter = DictConverter.class)
 //    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
     @Dict(dictCode = "sys_normal_disable", custom = {})
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

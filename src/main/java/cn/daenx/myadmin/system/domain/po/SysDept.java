@@ -35,13 +35,13 @@ public class SysDept extends BaseEntity implements Serializable {
     /**
      * 部门名称
      */
-    @TableField(value = "`name`")
+    @TableField(value = "name")
     private String name;
 
     /**
      * 部门编号
      */
-    @TableField(value = "`code`")
+    @TableField(value = "code")
     private String code;
 
     /**
@@ -53,7 +53,7 @@ public class SysDept extends BaseEntity implements Serializable {
     /**
      * 部门状态，0=正常，1=停用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**
@@ -65,7 +65,7 @@ public class SysDept extends BaseEntity implements Serializable {
     /**
      * 层级，顶级为0
      */
-    @TableField(value = "`level`")
+    @TableField(value = "level")
     private Integer level;
 
     /**

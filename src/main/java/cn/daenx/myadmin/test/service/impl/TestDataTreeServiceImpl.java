@@ -1,5 +1,6 @@
 package cn.daenx.myadmin.test.service.impl;
 
+import cn.daenx.myadmin.common.utils.MyUtil;
 import cn.daenx.myadmin.framework.dataScope.annotation.DataScope;
 import cn.daenx.myadmin.common.exception.MyException;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
@@ -17,7 +18,9 @@ import cn.daenx.myadmin.test.mapper.TestDataTreeMapper;
 import cn.daenx.myadmin.test.domain.po.TestDataTree;
 import cn.daenx.myadmin.test.service.TestDataTreeService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TestDataTreeServiceImpl extends ServiceImpl<TestDataTreeMapper, TestDataTree> implements TestDataTreeService {
@@ -145,7 +148,29 @@ public class TestDataTreeServiceImpl extends ServiceImpl<TestDataTreeMapper, Tes
         }
         if (vo.getStatus().equals(SystemConstant.STATUS_DISABLE)) {
             //禁用所有子级
-            testDataTreeMapper.updateByParentId(vo.getId(), SystemConstant.STATUS_DISABLE);
+            List<TestDataTree> list = testDataTreeMapper.selectList(new LambdaQueryWrapper<>());
+            List<TestDataTree> retList = getListByParentId(list, vo.getId());
+            List<String> idList = MyUtil.joinToList(retList, TestDataTree::getId);
+            LambdaUpdateWrapper<TestDataTree> updateWrapper2 = new LambdaUpdateWrapper<>();
+            updateWrapper2.in(TestDataTree::getId, idList);
+            updateWrapper2.set(TestDataTree::getStatus, SystemConstant.STATUS_DISABLE);
+            testDataTreeMapper.update(new TestDataTree(), updateWrapper2);
         }
+    }
+
+    private List<TestDataTree> getListByParentId(List<TestDataTree> list, String id) {
+        List<TestDataTree> retList = new ArrayList<>();
+        List<TestDataTree> collect = list.stream().filter(item -> id.equals(item.getParentId())).collect(Collectors.toList());
+        if (collect.size() > 0) {
+            retList.addAll(collect);
+        }
+        while (collect.size() > 0) {
+            List<String> idList = MyUtil.joinToList(collect, TestDataTree::getId);
+            collect = list.stream().filter(item -> idList.contains(item.getParentId())).collect(Collectors.toList());
+            if (collect.size() > 0) {
+                retList.addAll(collect);
+            }
+        }
+        return retList;
     }
 }

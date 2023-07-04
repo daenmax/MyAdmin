@@ -41,14 +41,14 @@ public class SysDictDetail extends BaseEntity implements Serializable {
      * 字典标签
      */
     @ExcelProperty(value = "字典标签")
-    @TableField(value = "`label`")
+    @TableField(value = "label")
     private String label;
 
     /**
      * 字典键值
      */
     @ExcelProperty(value = "字典键值")
-    @TableField(value = "`value`")
+    @TableField(value = "value")
     private String value;
 
     /**
@@ -78,7 +78,7 @@ public class SysDictDetail extends BaseEntity implements Serializable {
     @ExcelProperty(value = "字典状态", converter = DictConverter.class)
 //    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
     @Dict(dictCode = "sys_normal_disable", custom = {})
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

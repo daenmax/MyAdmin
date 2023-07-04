@@ -50,7 +50,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     private SysUserMapper sysUserMapper;
 
 
-
     /**
      * 分页列表
      *
@@ -120,6 +119,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     public List<SysDept> getAll(SysDeptPageVo vo) {
         LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
         List<SysDept> sysDeptList = sysDeptMapper.selectListX(wrapper);
+        for (SysDept sysDept : sysDeptList) {
+            sysDept.getLeaderUser().setAdmin("1".equals(sysDept.getLeaderUser().getId()));
+        }
         return sysDeptList;
     }
 

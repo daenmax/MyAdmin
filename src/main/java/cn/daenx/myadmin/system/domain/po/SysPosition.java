@@ -35,7 +35,7 @@ public class SysPosition extends BaseEntity implements Serializable {
      * 岗位名称
      */
     @ExcelProperty(value = "岗位名称")
-    @TableField(value = "`name`")
+    @TableField(value = "name")
     private String name;
 
     /**
@@ -65,7 +65,7 @@ public class SysPosition extends BaseEntity implements Serializable {
     @ExcelProperty(value = "岗位状态", converter = DictConverter.class)
 //    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
     @Dict(dictCode = "sys_normal_disable", custom = {})
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

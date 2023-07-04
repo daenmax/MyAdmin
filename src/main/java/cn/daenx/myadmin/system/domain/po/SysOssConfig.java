@@ -28,7 +28,7 @@ public class SysOssConfig extends BaseEntity implements Serializable {
      * 配置名称
      * 例如：minio、阿里云、腾讯云、七牛云、京东云、华为云
      */
-    @TableField(value = "`name`")
+    @TableField(value = "name")
     private String name;
 
     /**
@@ -52,7 +52,7 @@ public class SysOssConfig extends BaseEntity implements Serializable {
     /**
      * 前缀
      */
-    @TableField(value = "`prefix`")
+    @TableField(value = "prefix")
     private String prefix;
 
     /**
@@ -64,7 +64,7 @@ public class SysOssConfig extends BaseEntity implements Serializable {
     /**
      * 自定义域名
      */
-    @TableField(value = "`domain`")
+    @TableField(value = "domain")
     private String domain;
 
     /**
@@ -94,7 +94,7 @@ public class SysOssConfig extends BaseEntity implements Serializable {
     /**
      * 配置状态，0=正常，1=禁用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

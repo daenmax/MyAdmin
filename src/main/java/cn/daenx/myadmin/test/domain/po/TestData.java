@@ -55,7 +55,7 @@ public class TestData extends BaseEntity implements Serializable {
     /**
      * 状态，0=正常，1=禁用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
 //    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
     //使用系统字典表里的翻译数据，推荐
     @Dict(dictCode = "sys_normal_disable", custom = {})

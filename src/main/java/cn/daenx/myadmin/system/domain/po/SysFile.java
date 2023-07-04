@@ -80,7 +80,7 @@ public class SysFile extends BaseEntity implements Serializable {
     /**
      * 文件状态，0=正常，1=禁用
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

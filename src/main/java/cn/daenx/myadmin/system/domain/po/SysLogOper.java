@@ -41,7 +41,7 @@ public class SysLogOper extends BaseEntity implements Serializable {
      * 操作名称
      */
     @ExcelProperty(value = "操作名称")
-    @TableField(value = "`name`")
+    @TableField(value = "name")
     private String name;
 
     /**
@@ -49,14 +49,14 @@ public class SysLogOper extends BaseEntity implements Serializable {
      */
     @ExcelProperty(value = "操作类型", converter = DictConverter.class)
     @Dict(dictCode = "sys_oper_type", custom = {})
-    @TableField(value = "`type`")
+    @TableField(value = "type")
     private String type;
 
     /**
      * 请求方法
      */
     @ExcelProperty(value = "请求方法")
-    @TableField(value = "`method`")
+    @TableField(value = "method")
     private String method;
 
     /**
@@ -140,7 +140,7 @@ public class SysLogOper extends BaseEntity implements Serializable {
      */
     @ExcelProperty(value = "请求结果", converter = DictConverter.class)
     @Dict(dictCode = "sys_common_status", custom = {})
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

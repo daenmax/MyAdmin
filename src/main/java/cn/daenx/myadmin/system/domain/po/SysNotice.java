@@ -40,13 +40,13 @@ public class SysNotice extends BaseEntity implements Serializable {
     /**
      * 类型，1=通知，2=公告
      */
-    @TableField(value = "`type`")
+    @TableField(value = "type")
     private String type;
 
     /**
      * 状态，0=正常，1=关闭
      */
-    @TableField(value = "`status`")
+    @TableField(value = "status")
     private String status;
 
     /**

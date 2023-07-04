@@ -40,7 +40,7 @@
         LEFT JOIN sys_role_menu srm ON sm.id = srm.menu_id
     WHERE
       sm.is_delete = 0
-      AND sm.STATUS = 0
+      AND sm.STATUS = '0'
       AND srm.role_id = #{roleId}
     </select>
 
@@ -53,7 +53,7 @@
         LEFT JOIN sys_role_user sru ON srm.role_id = sru.role_id
         LEFT JOIN sys_role sr ON sr.id = sru.role_id
     WHERE
-      sm.STATUS = 0
+      sm.STATUS = '0'
       AND sm.is_delete = 0
       AND sr.STATUS = '0'
       AND sr.is_delete = 0
@@ -82,9 +82,9 @@
                LEFT JOIN sys_role sr ON sru.role_id = sr.id
                LEFT JOIN sys_user su ON sru.user_id = su.id
       WHERE su.id = #{userId}
-        AND sm.menu_type IN (1, 2)
-        AND sm.STATUS = 0
-        AND sr.STATUS = 0
+        AND sm.menu_type IN ('1', '2')
+        AND sm.STATUS = '0'
+        AND sr.STATUS = '0'
       ORDER BY sm.parent_id,
                sm.order_num
   </select>

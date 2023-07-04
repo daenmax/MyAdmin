@@ -197,6 +197,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         wrapper.eq("su.id", userId);
         wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
         SysUserPageDto userInfoByUserId = sysUserMapper.getUserInfoByUserId(wrapper);
+        userInfoByUserId.setAdmin("1".equals(userInfoByUserId.getId()));
         return userInfoByUserId;
     }
 
@@ -357,6 +358,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public IPage<SysUserPageDto> getPage(SysUserPageVo vo) {
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        for (SysUserPageDto record : sysUserPage.getRecords()) {
+            record.setAdmin("1".equals(record.getId()));
+        }
         return sysUserPage;
     }
 
@@ -370,6 +374,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public List<SysUserPageDto> getAll(SysUserPageVo vo) {
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         List<SysUserPageDto> list = sysUserMapper.getAll(wrapper);
+        for (SysUserPageDto record : list) {
+            record.setAdmin("1".equals(record.getId()));
+        }
         return list;
     }
 
@@ -433,6 +440,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isEmpty(info)) {
             throw new MyException("你无权限操作该数据");
         }
+        info.setAdmin("1".equals(info.getId()));
         return info;
     }
 
@@ -704,6 +712,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         wrapper.exists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        for (SysUserPageDto record : sysUserPage.getRecords()) {
+            record.setAdmin("1".equals(record.getId()));
+        }
         return sysUserPage;
     }
 
@@ -719,6 +730,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         wrapper.notExists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        for (SysUserPageDto record : sysUserPage.getRecords()) {
+            record.setAdmin("1".equals(record.getId()));
+        }
         return sysUserPage;
     }
 
@@ -734,6 +748,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         wrapper.exists("SELECT * FROM sys_position_user spr WHERE spr.position_id = '" + positionId + "' AND spr.user_id = su.id");
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        for (SysUserPageDto record : sysUserPage.getRecords()) {
+            record.setAdmin("1".equals(record.getId()));
+        }
         return sysUserPage;
     }
 
@@ -749,6 +766,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         wrapper.notExists("SELECT * FROM sys_position_user spr WHERE spr.position_id = '" + positionId + "' AND spr.user_id = su.id");
         IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        for (SysUserPageDto record : sysUserPage.getRecords()) {
+            record.setAdmin("1".equals(record.getId()));
+        }
         return sysUserPage;
     }
 
@@ -783,6 +803,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             });
         }
         list = sysUserMapper.getAll(wrapper);
+        for (SysUserPageDto record : list) {
+            record.setAdmin("1".equals(record.getId()));
+        }
         return list;
     }
 
