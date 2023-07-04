@@ -150,7 +150,10 @@ public class DataScopeAspect implements DataPermissionHandler {
                     //本部门及以下数据
                     sql.append(" in ").append("(select x1.id from ")
                             .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id in ")
-                            .append("(WITH RECURSIVE recursion ( id ) AS ( SELECT sd1.id  FROM sys_dept sd1  WHERE sd1.is_delete = 0  AND sd1.id = '").append(deptId).append("' UNION ALL SELECT sd2.id  FROM sys_dept sd2, recursion t2  WHERE sd2.is_delete = 0  AND sd2.parent_id = t2.id  ) SELECT t1.id  FROM recursion t1)")
+                            //MySQL和PostgreSQL用这行
+//                            .append("(WITH RECURSIVE recursion ( id ) AS ( SELECT sd1.id  FROM sys_dept sd1  WHERE sd1.is_delete = 0  AND sd1.id = '").append(deptId).append("' UNION ALL SELECT sd2.id  FROM sys_dept sd2, recursion t2  WHERE sd2.is_delete = 0  AND sd2.parent_id = t2.id  ) SELECT t1.id  FROM recursion t1)")
+                            //Oracle用这行
+                            .append("(SELECT sd.id  FROM sys_dept sd  WHERE sd.is_delete = 0 START WITH sd.id = '").append(deptId).append("' CONNECT BY PRIOR sd.ID = sd.PARENT_ID)")
                             .append(")")
                             .append(" x1)");
                 } else if (SystemConstant.DATA_SCOPE_ALL.equals(dataScope)) {

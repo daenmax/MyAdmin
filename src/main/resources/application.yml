@@ -17,12 +17,24 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   type-aliases-package: cn.daenx.myadmin.*.po
   global-config:
-    banner: false # 关闭MP3.0自带的banner
+    # 关闭MP3.0自带的banner
+    banner: false
     db-config:
-      id-type: ASSIGN_UUID #主键类型  0:"数据库ID自增",1:"该类型为未设置主键类型", 2:"用户输入ID",3:"全局唯一ID (数字类型唯一ID)", 4:"全局唯一ID UUID",5:"字符串全局唯一ID (idWorker 的字符串表示)";
-      table-underline: true # 默认数据库表下划线命名
+      # 主键类型
+      # AUTO = 数据库ID自增
+      # NONE = 该类型为未设置主键类型
+      # INPUT = 用户输入ID
+      # ASSIGN_ID = 全局唯一ID (数字类型唯一ID)
+      # ASSIGN_UUID = 全局唯一ID (UUID)
+      id-type: ASSIGN_UUID
+      # 默认数据库表下划线命名
+      table-underline: true
   configuration:
-    map-underscore-to-camel-case: true #使用驼峰原模原样对应
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql打印，在开发或测试的时候可以用
-#    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl #关闭ql打印
-    call-setters-on-nulls: true # 返回类型为Map,显示null对应的字段
+    # 使用驼峰原模原样对应
+    map-underscore-to-camel-case: true
+    # 开启sql打印，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 关闭ql打印
+#    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    # 返回类型为Map,显示null对应的字段
+    call-setters-on-nulls: true

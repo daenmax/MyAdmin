@@ -1697,3 +1697,22 @@ ALTER TABLE "public"."test_data" ADD CONSTRAINT "test_data_pkey" PRIMARY KEY ("i
 ALTER TABLE "public"."test_data_tree" ADD CONSTRAINT "test_data_tree_pkey" PRIMARY KEY ("id");
 
 
+-- ----------------------------
+-- Table structure for dual
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."dual";
+CREATE TABLE "public"."dual" (
+    "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL
+)
+;
+COMMENT ON TABLE "public"."dual" IS 'DUAL兼容';
+
+-- ----------------------------
+-- Records of dual
+-- ----------------------------
+INSERT INTO "public"."dual" VALUES ('1');
+
+-- ----------------------------
+-- Primary Key structure for table dual
+-- ----------------------------
+ALTER TABLE "public"."dual" ADD CONSTRAINT "test_data_copy1_pkey" PRIMARY KEY ("id");

@@ -34,9 +34,9 @@
         LEFT JOIN sys_role_dept srd ON sd.id = srd.dept_id
     WHERE
       sd.is_delete = 0
-      AND srd.role_id = 2
+      AND srd.role_id = #{roleId}
       <if test="deptCheckStrictly">
-        AND sd.id NOT IN ( SELECT sd2.parent_id FROM sys_dept sd2 INNER JOIN sys_role_dept srd ON sd2.id = srd.dept_id AND srd.role_id = 2 )
+        AND sd.id NOT IN ( SELECT sd2.parent_id FROM sys_dept sd2 INNER JOIN sys_role_dept srd ON sd2.id = srd.dept_id AND srd.role_id = #{roleId} )
       </if>
     ORDER BY
       sd.parent_id,

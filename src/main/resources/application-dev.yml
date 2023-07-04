@@ -76,7 +76,7 @@ spring:
         # 是否验证连接的有效性
         test-while-idle: true
         # 验证连接有效性的SQL语句
-        validation-query: SELECT 1
+        validation-query: SELECT 1 FROM DUAL
         # 获取连接时候验证，会影响性能
         test-on-borrow: true
         # 在连接归还到连接池时是否测试该连接
@@ -105,28 +105,29 @@ spring:
           # 禁止访问的IP列表，(deny优先于allow)
       #        deny: 192.168.1.100
       # 默认使用下面哪个数据库（不加@DS注释的地方，就是使用这里配置的默认数据库）
-      primary: master
+      primary: db-oracle
       datasource:
-        # 主数据源，master是自己取的名字，你想叫啥就叫啥
-        master:
-          url: jdbc:mysql://rm-2ze631pi758b4666mbo.mysql.rds.aliyuncs.com/myadmin?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
-          username: myadmin
-          password: myadmin@2023
-          driverClassName: com.mysql.cj.jdbc.Driver
-          type: com.alibaba.druid.pool.DruidDataSource
-        # 数据源，postgresql，（如果用不到，就注释掉即可），db-pg是自己取的名字，你想叫啥就叫啥
-        db-pg:
-          url: jdbc:postgresql://127.0.0.1:5432/myadmin1
-          username: postgres
-          password: admin
-          driverClassName: org.postgresql.Driver
-          type: com.alibaba.druid.pool.DruidDataSource
-        # ORACLE数据库使用例子（框架暂未进行支持oracle数据库）
-#        slave-oracle:
-#          url: jdbc:oracle:thin:@//172.16.111.181:1521/orcl
+        # 数据源，db-mysql是自己取的名字，你想叫啥就叫啥
+#        db-mysql:
+#          url: jdbc:mysql://rm-2ze631pi758b4666mbo.mysql.rds.aliyuncs.com/myadmin?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
 #          username: myadmin
-#          password: myadmin
-#          driverClassName: oracle.jdbc.OracleDriver
+#          password: myadmin@2023
+#          driverClassName: com.mysql.cj.jdbc.Driver
+#          type: com.alibaba.druid.pool.DruidDataSource
+#        # 数据源，postgresql，（如果用不到，就注释掉即可），db-pg是自己取的名字，你想叫啥就叫啥
+#        db-postgresql:
+#          url: jdbc:postgresql://127.0.0.1:5432/myadmin
+#          username: postgres
+#          password: admin
+#          driverClassName: org.postgresql.Driver
+#          type: com.alibaba.druid.pool.DruidDataSource
+        # ORACLE数据库使用例子（框架暂未进行支持oracle数据库）
+        db-oracle:
+          url: jdbc:oracle:thin:@//172.16.111.246:1521/orcl
+          username: mddata
+          password: 123456
+          driverClassName: oracle.jdbc.OracleDriver
+          type: com.alibaba.druid.pool.DruidDataSource
 
   # redis配置
   data:
