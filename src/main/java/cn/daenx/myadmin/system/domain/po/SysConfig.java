@@ -42,8 +42,8 @@ public class SysConfig extends BaseEntity implements Serializable {
      * 参数键值
      */
     @ExcelProperty(value = "参数键值")
-    @TableField(value = "key")
-    private String key;
+    @TableField(value = "key_va")
+    private String keyVa;
 
     /**
      * 参数键值

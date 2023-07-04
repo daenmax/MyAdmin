@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class SysConfigPageVo extends BasePageVo {
     private String name;
-    private String key;
+    private String keyVa;
     private String value;
     private String type;
     private String status;

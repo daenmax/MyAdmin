@@ -35,7 +35,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     private LambdaQueryWrapper<SysConfig> getWrapper(SysConfigPageVo vo) {
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysConfig::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getKey()), SysConfig::getKey, vo.getKey());
+        wrapper.like(ObjectUtil.isNotEmpty(vo.getKeyVa()), SysConfig::getKeyVa, vo.getKeyVa());
         wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysConfig::getValue, vo.getValue());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), SysConfig::getType, vo.getType());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysConfig::getStatus, vo.getStatus());
@@ -93,7 +93,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public Boolean checkKeyExist(String key, String nowId) {
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysConfig::getKey, key);
+        wrapper.eq(SysConfig::getKeyVa, key);
         wrapper.ne(ObjectUtil.isNotEmpty(nowId), SysConfig::getId, nowId);
         boolean exists = sysConfigMapper.exists(wrapper);
         return exists;
@@ -106,13 +106,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public void editInfo(SysConfigUpdVo vo) {
-        if (checkKeyExist(vo.getKey(), vo.getId())) {
+        if (checkKeyExist(vo.getKeyVa(), vo.getId())) {
             throw new MyException("参数键值已存在");
         }
         LambdaUpdateWrapper<SysConfig> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysConfig::getId, vo.getId());
         wrapper.set(SysConfig::getName, vo.getName());
-        wrapper.set(SysConfig::getKey, vo.getKey());
+        wrapper.set(SysConfig::getKeyVa, vo.getKeyVa());
         wrapper.set(SysConfig::getValue, vo.getValue());
         wrapper.set(SysConfig::getType, vo.getType());
         wrapper.set(SysConfig::getStatus, vo.getStatus());
@@ -123,9 +123,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(vo.getId());
-        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info);
+        RedisUtil.setValue(RedisConstant.CONFIG + info.getKeyVa(), info);
         //刷新邮箱配置队列
-        updateSysEmailInfo(info.getKey(), 2);
+        updateSysEmailInfo(info.getKeyVa(), 2);
     }
 
     /**
@@ -135,12 +135,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public void addInfo(SysConfigAddVo vo) {
-        if (checkKeyExist(vo.getKey(), null)) {
-            throw new MyException("参数键值" + vo.getKey() + "已存在");
+        if (checkKeyExist(vo.getKeyVa(), null)) {
+            throw new MyException("参数键值" + vo.getKeyVa() + "已存在");
         }
         SysConfig sysConfig = new SysConfig();
         sysConfig.setName(vo.getName());
-        sysConfig.setKey(vo.getKey());
+        sysConfig.setKeyVa(vo.getKeyVa());
         sysConfig.setValue(vo.getValue());
         sysConfig.setType(vo.getType());
         sysConfig.setStatus(vo.getStatus());
@@ -151,9 +151,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(sysConfig.getId());
-        RedisUtil.setValue(RedisConstant.CONFIG + info.getKey(), info);
+        RedisUtil.setValue(RedisConstant.CONFIG + info.getKeyVa(), info);
         //刷新邮箱配置队列
-        updateSysEmailInfo(info.getKey(), 1);
+        updateSysEmailInfo(info.getKeyVa(), 1);
     }
 
     /**
@@ -168,9 +168,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         wrapper.in(SysConfig::getId, ids);
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
-            RedisUtil.del(RedisConstant.CONFIG + sysConfig.getKey());
+            RedisUtil.del(RedisConstant.CONFIG + sysConfig.getKeyVa());
             //刷新邮箱配置队列
-            updateSysEmailInfo(sysConfig.getKey(), 3);
+            updateSysEmailInfo(sysConfig.getKeyVa(), 3);
         }
         int i = sysConfigMapper.deleteBatchIds(ids);
         if (i < 1) {
@@ -209,9 +209,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
-            RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKey(), sysConfig);
+            RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKeyVa(), sysConfig);
             //刷新邮箱配置队列
-            updateSysEmailInfo(sysConfig.getKey(), 0);
+            updateSysEmailInfo(sysConfig.getKeyVa(), 0);
         }
     }
 

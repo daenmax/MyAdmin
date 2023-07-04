@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS "public"."sys_config";
 CREATE TABLE "public"."sys_config" (
   "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "name" varchar(255) COLLATE "pg_catalog"."default",
-  "key" varchar(255) COLLATE "pg_catalog"."default",
+  "key_va" varchar(255) COLLATE "pg_catalog"."default",
   "value" text COLLATE "pg_catalog"."default",
   "type" varchar(2) COLLATE "pg_catalog"."default",
   "status" varchar(2) COLLATE "pg_catalog"."default",
@@ -70,7 +70,7 @@ CREATE TABLE "public"."sys_config" (
 )
 ;
 COMMENT ON COLUMN "public"."sys_config"."name" IS '参数名称';
-COMMENT ON COLUMN "public"."sys_config"."key" IS '参数键值';
+COMMENT ON COLUMN "public"."sys_config"."key_va" IS '参数键值';
 COMMENT ON COLUMN "public"."sys_config"."value" IS '参数键值';
 COMMENT ON COLUMN "public"."sys_config"."type" IS '系统内置，0=否，1=是';
 COMMENT ON COLUMN "public"."sys_config"."status" IS '参数状态，0=正常，1=停用';

@@ -18,7 +18,7 @@ public class SysConfigUpdVo {
      * 参数键值
      */
     @NotBlank(message = "参数键值不能为空")
-    private String key;
+    private String keyVa;
 
     /**
      * 参数键值
