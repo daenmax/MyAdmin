@@ -149,7 +149,7 @@ public class TestDataTreeServiceImpl extends ServiceImpl<TestDataTreeMapper, Tes
         if (vo.getStatus().equals(SystemConstant.STATUS_DISABLE)) {
             //禁用所有子级
             List<TestDataTree> list = testDataTreeMapper.selectList(new LambdaQueryWrapper<>());
-            List<TestDataTree> retList = getListByParentId(list, vo.getId());
+            List<TestDataTree> retList = handleListByParentId(list, vo.getId());
             List<String> idList = MyUtil.joinToList(retList, TestDataTree::getId);
             LambdaUpdateWrapper<TestDataTree> updateWrapper2 = new LambdaUpdateWrapper<>();
             updateWrapper2.in(TestDataTree::getId, idList);
@@ -158,7 +158,7 @@ public class TestDataTreeServiceImpl extends ServiceImpl<TestDataTreeMapper, Tes
         }
     }
 
-    private List<TestDataTree> getListByParentId(List<TestDataTree> list, String id) {
+    private List<TestDataTree> handleListByParentId(List<TestDataTree> list, String id) {
         List<TestDataTree> retList = new ArrayList<>();
         List<TestDataTree> collect = list.stream().filter(item -> id.equals(item.getParentId())).collect(Collectors.toList());
         if (collect.size() > 0) {

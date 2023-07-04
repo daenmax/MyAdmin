@@ -114,14 +114,14 @@ spring:
           password: myadmin@2023
           driverClassName: com.mysql.cj.jdbc.Driver
           type: com.alibaba.druid.pool.DruidDataSource
-        # 第二个数据源（如果用不到，就注释掉即可），slave是自己取的名字，你想叫啥就叫啥
-#        slave:
-#          url: jdbc:mysql://127.0.0.1:3306/dbtest?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
-#          username: dbtest
-#          password: dbtest
-#          driverClassName: com.mysql.cj.jdbc.Driver
-#          type: com.alibaba.druid.pool.DruidDataSource
-        # ORACLE数据库使用例子
+        # 数据源，postgresql，（如果用不到，就注释掉即可），db-pg是自己取的名字，你想叫啥就叫啥
+        db-pg:
+          url: jdbc:postgresql://127.0.0.1:5432/myadmin1
+          username: postgres
+          password: admin
+          driverClassName: org.postgresql.Driver
+          type: com.alibaba.druid.pool.DruidDataSource
+        # ORACLE数据库使用例子（框架暂未进行支持oracle数据库）
 #        slave-oracle:
 #          url: jdbc:oracle:thin:@//172.16.111.181:1521/orcl
 #          username: myadmin

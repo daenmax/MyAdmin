@@ -18,6 +18,7 @@ import cn.daenx.myadmin.system.mapper.SysUserMapper;
 
 
 import cn.daenx.myadmin.system.domain.vo.system.SysLoginUserVo;
+import cn.daenx.myadmin.test.domain.po.TestDataTree;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
@@ -31,10 +32,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.myadmin.system.mapper.SysDeptMapper;
 import cn.daenx.myadmin.system.service.SysDeptService;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,7 +87,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             }
             if (roleMap.containsKey(SystemConstant.DATA_SCOPE_DEPT_DOWN)) {
                 //数据权限，2=本部门及以下数据
-                List<SysDept> deptList = sysDeptMapper.getListByParentId(deptId, "1");
+
+                List<SysDept> deptList = getListByParentId(deptId, true);
                 List<String> deptIds = MyUtil.joinToList(deptList, SysDept::getId);
                 deptSet.addAll(deptIds);
             }
@@ -177,7 +176,29 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public List<SysDept> getListByParentId(String parentId, Boolean keepSelf) {
-        return sysDeptMapper.getListByParentId(parentId, keepSelf ? null : "1");
+        List<SysDept> list = sysDeptMapper.selectList(new LambdaQueryWrapper<>());
+        List<SysDept> retList = handleListByParentId(list, parentId, keepSelf);
+        return retList;
+    }
+
+    private List<SysDept> handleListByParentId(List<SysDept> list, String id, Boolean keepSelf) {
+        List<SysDept> retList = new ArrayList<>();
+        if (keepSelf) {
+            List<SysDept> self = list.stream().filter(item -> id.equals(item.getId())).collect(Collectors.toList());
+            retList.addAll(self);
+        }
+        List<SysDept> collect = list.stream().filter(item -> id.equals(item.getParentId())).collect(Collectors.toList());
+        if (collect.size() > 0) {
+            retList.addAll(collect);
+        }
+        while (collect.size() > 0) {
+            List<String> idList = MyUtil.joinToList(collect, SysDept::getId);
+            collect = list.stream().filter(item -> idList.contains(item.getParentId())).collect(Collectors.toList());
+            if (collect.size() > 0) {
+                retList.addAll(collect);
+            }
+        }
+        return retList;
     }
 
     /**
