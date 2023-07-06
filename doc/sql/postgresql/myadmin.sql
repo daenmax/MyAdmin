@@ -103,14 +103,14 @@ INSERT INTO "public"."sys_config" VALUES ('0015263fa950c3ce40957fdb3b1e14a7', '�
 INSERT INTO "public"."sys_config" VALUES ('0ce0ea3dc352bb6838e4d008d9e849fc', '系统钉钉通知配置', 'sys.dingTalk.config', '{
 	"testbot": {
 		"keywords": "",
-		"secret": "SEC48ea902b5b3fb138765108354550ab5d0a240a18e38bcb607ced5108f71f24a7",
-		"accessToken": "e714cfa1e60734d19d3dd136215c97a29dce75f0d2f68d2fbc0c92b4dd42e57d",
+		"secret": "SEC48ea902b5b3fb13876666666666666660a18e38bcb607ced5108f71f24a7",
+		"accessToken": "e714cfa1e60734d196666666666666665f0d2f68d2fbc0c92b4dd42e57d",
 		"remark": "测试群的机器人"
 	},
 	"xiaobai": {
 		"keywords": "【定时任务异常】",
-		"secret": "SEC48ea902b5b3fb138765108354550ab5d0a240a18e38bcb607ced5108f71f24a7",
-		"accessToken": "e714cfa1e60734d19d3dd136215c97a29dce75f0d2f68d2fbc0c92b4dd42e57d",
+		"secret": "SEC48ea902b5b3fb13876566666666666666640a18e38bcb607ced5108f71f24a7",
+		"accessToken": "e714cfa1e60734d19d666666666666666e75f0d2f68d2fbc0c92b4dd42e57d",
 		"remark": "闲聊群的机器人"
 	}
 }', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送钉钉通知
@@ -189,15 +189,15 @@ INSERT INTO "public"."sys_config" VALUES ('4aa484dd076566c2e7d936525e36e8c4', '�
 	"aliyun": {
 		"enable": "true",
 		"endpoint": "dysmsapi.aliyuncs.com",
-		"accessKeyId": "LTAI5tN1L6r9WqHYse6RpcQ9",
-		"accessKeySecret": "N9GXnZctzCeRUVYntSYD10kX3GPqW8",
+		"accessKeyId": "LTAI5666666666666RpcQ9",
+		"accessKeySecret": "N9GXnZ66666666666kX3GPqW8",
 		"signName": "MyAdmin"
 	},
 	"tencent": {
 		"enable": "true",
 		"endpoint": "sms.tencentcloudapi.com",
-		"accessKeyId": "AKID2oPDoCYwmM0sb9nREwPdMp53mHfoYZGw",
-		"accessKeySecret": "e6JTP5ex2q9DXJtAkBMGvhHYBl7C5g05",
+		"accessKeyId": "AKID2oPDoCY66666666666dMp53mHfoYZGw",
+		"accessKeySecret": "e6JTP5ex66666666666vhHYBl7C5g05",
 		"signName": "个人开发记录网",
 		"sdkAppId": "1400820693"
 	}
@@ -266,7 +266,7 @@ CREATE TABLE "public"."sys_dept" (
   "summary" text COLLATE "pg_catalog"."default",
   "status" varchar(2) COLLATE "pg_catalog"."default",
   "leader_user_id" varchar(32) COLLATE "pg_catalog"."default",
-  "level" int4,
+  "dept_level" int4,
   "sort" int4,
   "remark" varchar(255) COLLATE "pg_catalog"."default",
   "create_id" varchar(32) COLLATE "pg_catalog"."default",
@@ -282,7 +282,7 @@ COMMENT ON COLUMN "public"."sys_dept"."code" IS '部门编号';
 COMMENT ON COLUMN "public"."sys_dept"."summary" IS '部门简介';
 COMMENT ON COLUMN "public"."sys_dept"."status" IS '部门状态，0=正常，1=停用';
 COMMENT ON COLUMN "public"."sys_dept"."leader_user_id" IS '部门负责人 关联用户ID';
-COMMENT ON COLUMN "public"."sys_dept"."level" IS '层级，顶级为0';
+COMMENT ON COLUMN "public"."sys_dept"."dept_level" IS '层级，顶级为0';
 COMMENT ON COLUMN "public"."sys_dept"."sort" IS '排序';
 COMMENT ON COLUMN "public"."sys_dept"."remark" IS '备注';
 COMMENT ON COLUMN "public"."sys_dept"."create_id" IS '创建人';

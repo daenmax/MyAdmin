@@ -357,7 +357,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public IPage<SysUserPageDto> getPage(SysUserPageVo vo) {
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
-        IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        vo.setOrderByColumn("su.create_time");
+        vo.setIsAsc("desc");
+        IPage<SysUserPageDto> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(false), wrapper);
         for (SysUserPageDto record : sysUserPage.getRecords()) {
             record.setAdmin("1".equals(record.getId()));
         }

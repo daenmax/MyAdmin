@@ -11,7 +11,7 @@
     <result column="summary" jdbcType="LONGVARCHAR" property="summary" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="leader_user_id" jdbcType="VARCHAR" property="leaderUserId" />
-    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="dept_level" jdbcType="INTEGER" property="deptLevel" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="VARCHAR" property="createId" />
@@ -22,7 +22,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, parent_id, `name`, `code`, summary, `status`, leader_user_id, `level`, sort, remark,
+    id, parent_id, `name`, `code`, summary, `status`, leader_user_id, `dept_level`, sort, remark,
     create_id, create_time, update_id, update_time, is_delete
   </sql>
 

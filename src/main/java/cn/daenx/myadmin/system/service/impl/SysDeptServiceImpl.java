@@ -299,7 +299,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         wrapper.set(SysDept::getStatus, vo.getStatus());
         wrapper.set(SysDept::getRemark, vo.getRemark());
         //修改level
-        wrapper.set(SysDept::getLevel, sysDeptParent.getLevel() + 1);
+        wrapper.set(SysDept::getDeptLevel, sysDeptParent.getDeptLevel() + 1);
         int update = sysDeptMapper.update(new SysDept(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
@@ -331,7 +331,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         sysDept.setStatus(vo.getStatus());
         sysDept.setRemark(vo.getRemark());
         //设置level
-        sysDept.setLevel(sysDeptParent.getLevel() + 1);
+        sysDept.setDeptLevel(sysDeptParent.getDeptLevel() + 1);
         int insert = sysDeptMapper.insert(sysDept);
         if (insert < 1) {
             throw new MyException("新增失败");

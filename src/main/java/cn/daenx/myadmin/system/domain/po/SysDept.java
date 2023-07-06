@@ -65,8 +65,8 @@ public class SysDept extends BaseEntity implements Serializable {
     /**
      * 层级，顶级为0
      */
-    @TableField(value = "level")
-    private Integer level;
+    @TableField(value = "dept_level")
+    private Integer deptLevel;
 
     /**
      * 排序

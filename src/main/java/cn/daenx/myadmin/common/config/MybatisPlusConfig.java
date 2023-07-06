@@ -20,12 +20,12 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        //数据权限插件
+        interceptor.addInnerInterceptor(dataScopeInterceptor());
         //分页插件
         interceptor.addInnerInterceptor(paginationInnerInterceptor());
         //乐观锁插件
         interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
-        //数据权限插件
-        interceptor.addInnerInterceptor(dataScopeInterceptor());
         return interceptor;
     }
 
