@@ -30,6 +30,7 @@
         <tencentcloudapi.sms.version>3.1.779</tencentcloudapi.sms.version>
         <aliyun.dysmsapi.version>2.0.23</aliyun.dysmsapi.version>
         <bouncycastle.version>1.72</bouncycastle.version>
+        <orai18n.version>21.9.0.0</orai18n.version>
     </properties>
     <profiles>
         <profile>
@@ -120,7 +121,7 @@
         <dependency>
             <groupId>com.oracle.database.nls</groupId>
             <artifactId>orai18n</artifactId>
-            <version>21.9.0.0</version>
+            <version>${orai18n.version}</version>
         </dependency>
         <!-- PostgreSql驱动包 -->
         <dependency>
