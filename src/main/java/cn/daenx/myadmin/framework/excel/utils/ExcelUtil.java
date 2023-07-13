@@ -1,4 +1,4 @@
-package cn.daenx.myadmin.common.utils;
+package cn.daenx.myadmin.framework.excel.utils;
 
 import cn.daenx.myadmin.framework.excel.DefaultExcelListener;
 import cn.daenx.myadmin.framework.excel.ExcelListener;

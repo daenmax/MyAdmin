@@ -30,7 +30,7 @@ public class TestDataTreeController {
      * @param vo
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据-列表", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:list")
     @GetMapping("/list")
     public Result list(TestDataTreePageVo vo) {
@@ -44,7 +44,7 @@ public class TestDataTreeController {
      * @param vo
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperType.ADD, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据-新增", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:add")
     @PostMapping("/add")
     public Result add(@Validated @RequestBody TestDataTreeAddVo vo) {
@@ -58,7 +58,7 @@ public class TestDataTreeController {
      * @param id
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据-查询", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
@@ -72,7 +72,7 @@ public class TestDataTreeController {
      * @param vo
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperType.EDIT, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据-修改", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:edit")
     @PostMapping("/edit")
     public Result edit(@Validated @RequestBody TestDataTreeUpdVo vo) {
@@ -86,7 +86,7 @@ public class TestDataTreeController {
      * @param id
      * @return
      */
-    @Log(name = "测试树表数据", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
+    @Log(name = "测试树表数据-删除", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:remove")
     @PostMapping("/remove/{id}")
     public Result remove(@PathVariable("id") String id) {

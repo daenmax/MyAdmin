@@ -1,7 +1,7 @@
 package cn.daenx.myadmin.system.controller;
 
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.ExcelUtil;
+import cn.daenx.myadmin.framework.excel.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.system.domain.po.SysLogLogin;
 import cn.daenx.myadmin.system.service.SysLogLoginService;

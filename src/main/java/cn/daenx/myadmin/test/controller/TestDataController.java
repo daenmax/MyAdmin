@@ -4,7 +4,7 @@ import cn.daenx.myadmin.framework.logSave.annotation.Log;
 import cn.daenx.myadmin.common.constant.enums.LogOperType;
 import cn.daenx.myadmin.framework.excel.ExcelResult;
 import cn.daenx.myadmin.common.exception.MyException;
-import cn.daenx.myadmin.common.utils.ExcelUtil;
+import cn.daenx.myadmin.framework.excel.utils.ExcelUtil;
 import cn.daenx.myadmin.common.vo.ComStatusUpdVo;
 import cn.daenx.myadmin.common.vo.Result;
 import cn.daenx.myadmin.test.domain.dto.TestDataPageDto;
@@ -39,7 +39,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据-分页列表_MP分页插件", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:list")
     @GetMapping("/list1")
     public Result list1(TestDataPageVo vo) {
@@ -53,7 +53,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据-分页列表_自己写的SQL", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:list")
     @GetMapping("/list2")
     public Result list2(TestDataPageVo vo) {
@@ -67,7 +67,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据-分页列表_MP自定义SQL", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:list")
     @GetMapping("/list3")
     public Result list3(TestDataPageVo vo) {
@@ -81,7 +81,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据", type = LogOperType.ADD, recordParams = true, recordResult = true)
+    @Log(name = "测试数据-新增", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:add")
     @PostMapping("/add")
     public Result add(@Validated @RequestBody TestDataAddVo vo) {
@@ -95,7 +95,7 @@ public class TestDataController {
      * @param id
      * @return
      */
-    @Log(name = "测试数据", type = LogOperType.QUERY, recordParams = true, recordResult = true)
+    @Log(name = "测试数据-查询", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:query")
     @GetMapping(value = "/{id}")
     public Result query(@PathVariable String id) {
@@ -109,7 +109,7 @@ public class TestDataController {
      * @param vo
      * @return
      */
-    @Log(name = "测试数据", type = LogOperType.EDIT, recordParams = true, recordResult = true)
+    @Log(name = "测试数据-修改", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:edit")
     @PostMapping("/edit")
     public Result edit(@Validated @RequestBody TestDataUpdVo vo) {
@@ -123,7 +123,7 @@ public class TestDataController {
      * @param ids
      * @return
      */
-    @Log(name = "测试数据", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
+    @Log(name = "测试数据-删除", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:remove")
     @PostMapping("/remove")
     public Result remove(@RequestBody List<String> ids) {
@@ -137,7 +137,7 @@ public class TestDataController {
     /**
      * 测试数据-导出
      */
-    @Log(name = "测试数据", type = LogOperType.EXPORT, recordParams = true, recordResult = false)
+    @Log(name = "测试数据-导出", type = LogOperType.EXPORT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:export")
     @PostMapping("/export")
     public void export(TestDataPageVo vo, HttpServletResponse response) {
@@ -148,7 +148,7 @@ public class TestDataController {
     /**
      * 测试数据-导入
      */
-    @Log(name = "测试数据", type = LogOperType.IMPORT, recordParams = false, recordResult = true)
+    @Log(name = "测试数据-导入", type = LogOperType.IMPORT, recordParams = false, recordResult = true)
     @SaCheckPermission("test:data:import")
     @PostMapping("/importData")
     public Result importData(@RequestPart("file") MultipartFile file) throws IOException {

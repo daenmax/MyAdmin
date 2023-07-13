@@ -269,7 +269,6 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             throw new MyException("该文件状态不可用");
         }
         MyUtil.setDownloadResponseHeaders(response, sysFile.getOriginalName());
-        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
         OssClient ossClient = OssUtil.getOssClientByOssConfigId(sysFile.getOssId());
         try (InputStream inputStream = ossClient.getObjectContent(sysFile.getFileName())) {
             int available = inputStream.available();
