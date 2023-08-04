@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.daenx.test.mapper.TestDataMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.test.domain.po.TestData">
+    <!--@mbg.generated-->
+    <!--@Table test_data-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_id" jdbcType="VARCHAR" property="createId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_id" jdbcType="VARCHAR" property="updateId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, title, content, type, status, remark, create_id, create_time, update_id, update_time, is_delete
+  </sql>
+
+  <select id="getPage" resultType="cn.daenx.test.domain.dto.TestDataPageDto">
+      SELECT td.*,
+             su1.username as createName,
+             su2.username as updateName,
+             sd.NAME      as createDept
+      FROM test_data td
+               LEFT JOIN sys_user su1 on su1.id = td.create_id
+               LEFT JOIN sys_user su2 on su2.id = td.update_id
+               LEFT JOIN sys_dept sd on sd.id = su1.dept_id
+      <where>
+          and td.is_delete = 0
+          <if test="vo.title != null and vo.title != ''">
+              and td.title = #{vo.title}
+          </if>
+          <if test="vo.content != null and vo.content != ''">
+              and td.content like CONCAT('%', #{vo.content}, '%')
+          </if>
+          <if test="vo.type != null and vo.type != ''">
+              and td.type = #{vo.type}
+          </if>
+          <if test="vo.remark != null and vo.remark != ''">
+              and td.remark like CONCAT('%', #{vo.remark}, '%')
+          </if>
+          <if test="vo.startTime != null and vo.startTime != '' and vo.endTime != null and vo.endTime != ''">
+              and td.create_time between #{vo.startTime} and #{vo.endTime}
+          </if>
+      </where>
+      <choose>
+          <when test='vo.orderByColumn != null and vo.orderByColumn != ""'>
+              order by td.${vo.orderByColumn}
+              <choose>
+                  <when test='vo.isAsc == null or vo.isAsc == "" or vo.isAsc == "ASC" or vo.isAsc == "asc" or vo.isAsc == "ascending"'>
+                      ASC
+                  </when>
+                  <otherwise>
+                      DESC
+                  </otherwise>
+              </choose>
+          </when>
+          <otherwise>
+              order by td.update_time DESC
+          </otherwise>
+      </choose>
+  </select>
+
+  <select id="getPageWrapper" resultType="cn.daenx.test.domain.dto.TestDataPageDto">
+      SELECT td.*,
+             su1.username as createName,
+             su2.username as updateName,
+             sd.NAME      as createDept
+      FROM test_data td
+               LEFT JOIN sys_user su1 on su1.id = td.create_id
+               LEFT JOIN sys_user su2 on su2.id = td.update_id
+               LEFT JOIN sys_dept sd on sd.id = su1.dept_id
+      ${ew.customSqlSegment}
+  </select>
+
+  <select id="getAll" resultType="cn.daenx.test.domain.dto.TestDataPageDto">
+      SELECT td.*,
+             su1.username as createName,
+             su2.username as updateName,
+             sd.NAME      as createDept
+      FROM test_data td
+               LEFT JOIN sys_user su1 on su1.id = td.create_id
+               LEFT JOIN sys_user su2 on su2.id = td.update_id
+               LEFT JOIN sys_dept sd on sd.id = su1.dept_id
+      ${ew.customSqlSegment}
+  </select>
+</mapper>
