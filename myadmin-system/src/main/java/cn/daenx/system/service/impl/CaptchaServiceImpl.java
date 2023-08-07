@@ -5,7 +5,7 @@ import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.vo.system.config.SysCaptchaConfigVo;
-import cn.daenx.framework.common.vo.other.SysSubmitCaptchaVo;
+import cn.daenx.system.domain.vo.SysSubmitCaptchaVo;
 import cn.daenx.system.service.CaptchaService;
 import cn.daenx.system.service.SysConfigService;
 import cn.hutool.captcha.*;

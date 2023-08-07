@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.framework.common.vo.system.other;
 
 import cn.daenx.framework.common.vo.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * 定时任务调度表
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SysJobVo extends BaseEntity implements Serializable {
     private String id;
 

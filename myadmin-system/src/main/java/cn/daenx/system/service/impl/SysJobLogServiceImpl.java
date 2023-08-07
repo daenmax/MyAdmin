@@ -2,7 +2,7 @@ package cn.daenx.system.service.impl;
 
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.other.SysJobLogVo;
+import cn.daenx.framework.common.vo.system.other.SysJobLogVo;
 import cn.daenx.system.domain.dto.SysJobLogPageDto;
 import cn.daenx.system.domain.po.SysJobLog;
 import cn.daenx.system.domain.vo.SysJobLogPageVo;

@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.framework.common.vo.system.other;
 
 import cn.daenx.framework.common.vo.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;

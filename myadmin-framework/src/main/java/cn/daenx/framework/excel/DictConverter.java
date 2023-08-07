@@ -2,7 +2,7 @@ package cn.daenx.framework.excel;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.utils.RedisUtil;
-import cn.daenx.framework.common.vo.other.SysDictDetailVo;
+import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;
 import cn.hutool.core.convert.Convert;

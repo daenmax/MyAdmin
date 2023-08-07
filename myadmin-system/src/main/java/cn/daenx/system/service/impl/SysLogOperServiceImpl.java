@@ -2,7 +2,7 @@ package cn.daenx.system.service.impl;
 
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.vo.other.SysLogOperVo;
+import cn.daenx.framework.common.vo.system.other.SysLogOperVo;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.system.domain.vo.SysLogOperPageVo;
 import cn.daenx.system.mapper.SysLogOperMapper;

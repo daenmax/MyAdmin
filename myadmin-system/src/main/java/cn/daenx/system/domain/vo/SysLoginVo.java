@@ -1,11 +1,13 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.system.domain.vo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 登录
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SysLoginVo extends SysSubmitCaptchaVo{
 
     /**

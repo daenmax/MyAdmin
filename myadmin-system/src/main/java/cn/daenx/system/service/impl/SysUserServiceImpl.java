@@ -6,7 +6,7 @@ import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysSmsTemplateConfigVo;
-import cn.daenx.framework.common.vo.other.SysLoginUserVo;
+import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
 import cn.daenx.framework.oss.vo.UploadResult;
 import cn.daenx.framework.common.utils.EmailUtil;

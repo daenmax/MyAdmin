@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.framework.common.vo;
 
 import cn.hutool.core.lang.Validator;
 import lombok.Data;

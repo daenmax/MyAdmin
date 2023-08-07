@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.system.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

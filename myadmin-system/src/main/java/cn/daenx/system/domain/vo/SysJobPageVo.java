@@ -2,9 +2,11 @@ package cn.daenx.system.domain.vo;
 
 import cn.daenx.framework.common.vo.BasePageVo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SysJobPageVo extends BasePageVo {
 
     /**

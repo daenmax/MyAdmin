@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.system.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

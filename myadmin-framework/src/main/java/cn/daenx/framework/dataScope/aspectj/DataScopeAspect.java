@@ -1,11 +1,11 @@
 package cn.daenx.framework.dataScope.aspectj;
 
-import cn.daenx.framework.common.vo.other.SysRoleVo;
+import cn.daenx.framework.common.vo.system.other.SysRoleVo;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.vo.DataScopeParam;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.vo.other.SysLoginUserVo;
+import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import lombok.SneakyThrows;

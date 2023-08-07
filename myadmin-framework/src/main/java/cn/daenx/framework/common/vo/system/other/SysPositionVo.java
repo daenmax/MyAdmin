@@ -1,13 +1,16 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.framework.common.vo.system.other;
 
 import cn.daenx.framework.common.vo.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 
 /**
  * 岗位表
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SysPositionVo extends BaseEntity implements Serializable {
     private String id;
 

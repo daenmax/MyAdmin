@@ -1,10 +1,12 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.system.domain.vo;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SysRegisterVo extends SysSubmitCaptchaVo {
 
 

@@ -2,9 +2,9 @@ package cn.daenx.system.service;
 
 
 import cn.daenx.framework.common.vo.Result;
-import cn.daenx.framework.common.vo.other.RouterVo;
-import cn.daenx.framework.common.vo.other.SysLoginVo;
-import cn.daenx.framework.common.vo.other.SysRegisterVo;
+import cn.daenx.framework.common.vo.RouterVo;
+import cn.daenx.system.domain.vo.SysLoginVo;
+import cn.daenx.system.domain.vo.SysRegisterVo;
 
 import java.util.List;
 import java.util.Map;

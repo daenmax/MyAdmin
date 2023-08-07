@@ -4,7 +4,7 @@ import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
-import cn.daenx.framework.common.vo.other.SysApiLimitVo;
+import cn.daenx.framework.common.vo.system.other.SysApiLimitVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.hutool.core.util.ObjectUtil;

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
  * @param <T>
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BaseEntity<T extends Model<T>> extends Model<T> {
 
     /**

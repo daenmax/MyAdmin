@@ -1,7 +1,8 @@
-package cn.daenx.framework.common.vo.other;
+package cn.daenx.framework.common.vo.system.other;
 
 import cn.daenx.framework.common.vo.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * 角色表
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SysRoleVo extends BaseEntity implements Serializable {
     private String id;
 
