@@ -1,7 +1,6 @@
 package cn.daenx.system.domain.vo;
 
-import cn.daenx.common.vo.BasePageVo;
-import com.baomidou.mybatisplus.annotation.TableField;
+import cn.daenx.framework.common.vo.BasePageVo;
 import lombok.Data;
 
 

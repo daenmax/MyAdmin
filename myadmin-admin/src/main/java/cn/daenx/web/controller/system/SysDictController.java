@@ -1,7 +1,7 @@
 package cn.daenx.web.controller.system;
 
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.po.SysDict;
 import cn.daenx.system.domain.vo.SysDictAddVo;

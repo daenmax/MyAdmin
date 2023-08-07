@@ -1,12 +1,12 @@
 package cn.daenx.framework.apiLimit.interceptor;
 
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.RedisUtil;
-import cn.daenx.common.utils.ServletUtils;
-import cn.daenx.common.vo.system.other.SysApiLimitVo;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.common.utils.ServletUtils;
+import cn.daenx.framework.common.vo.other.SysApiLimitVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
-import cn.daenx.common.constant.SystemConstant;
+import cn.daenx.framework.common.constant.SystemConstant;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.Resource;

@@ -1,8 +1,8 @@
 package cn.daenx.web.controller.system;
 
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.vo.Result;
-import cn.daenx.common.vo.system.other.ServerInfoVo;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.vo.other.ServerInfoVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.NumberUtil;
 import org.springframework.web.bind.annotation.GetMapping;

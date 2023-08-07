@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.vo;
 
-import cn.daenx.common.vo.system.other.SysSubmitCaptchaVo;
+import cn.daenx.framework.common.vo.other.SysSubmitCaptchaVo;
 import lombok.Data;
 
 @Data

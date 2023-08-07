@@ -1,9 +1,9 @@
 package cn.daenx.web.controller.system;
 
-import cn.daenx.common.constant.SystemConstant;
-import cn.daenx.common.constant.enums.LogOperType;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.constant.enums.LogOperType;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.oss.vo.UploadResult;
 import cn.daenx.system.domain.dto.SysFilePageDto;

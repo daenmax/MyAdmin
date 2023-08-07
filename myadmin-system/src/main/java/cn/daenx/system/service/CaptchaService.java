@@ -1,8 +1,8 @@
 package cn.daenx.system.service;
 
 
-import cn.daenx.common.vo.system.config.SysCaptchaConfigVo;
-import cn.daenx.common.vo.system.other.SysSubmitCaptchaVo;
+import cn.daenx.framework.common.vo.system.config.SysCaptchaConfigVo;
+import cn.daenx.framework.common.vo.other.SysSubmitCaptchaVo;
 
 import java.util.HashMap;
 

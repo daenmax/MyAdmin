@@ -1,8 +1,8 @@
 package cn.daenx.test.domain.po;
 
 
-import cn.daenx.common.constant.enums.MaskedType;
-import cn.daenx.common.vo.BaseEntity;
+import cn.daenx.framework.common.constant.enums.MaskedType;
+import cn.daenx.framework.common.vo.BaseEntity;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;
 import cn.daenx.framework.serializer.annotation.Masked;

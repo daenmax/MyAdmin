@@ -1,25 +1,24 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.common.constant.CommonConstant;
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.constant.SystemConstant;
-import cn.daenx.common.constant.enums.DeviceType;
-import cn.daenx.common.constant.enums.LoginType;
-import cn.daenx.common.vo.system.config.SysSendLimitConfigVo;
-import cn.daenx.common.vo.system.config.SysSmsTemplateConfigVo;
-import cn.daenx.common.vo.system.other.*;
-import cn.daenx.common.vo.system.utils.SmsSendResult;
+import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.constant.enums.DeviceType;
+import cn.daenx.framework.common.constant.enums.LoginType;
+import cn.daenx.framework.common.utils.*;
+import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
+import cn.daenx.framework.common.vo.system.config.SysSmsTemplateConfigVo;
+import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
 import cn.daenx.framework.satoken.utils.LoginUtil;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.*;
-import cn.daenx.common.vo.CheckSendVo;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.CheckSendVo;
+import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.vo.other.*;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.po.*;
 import cn.daenx.system.service.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -28,12 +27,10 @@ import cn.hutool.http.useragent.UserAgentUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -309,15 +306,9 @@ public class SysLoginServiceImpl implements SysLoginService {
         loginUserVo.setEmail(sysUser.getEmail());
         loginUserVo.setPhone(sysUser.getPhone());
         loginUserVo.setOpenId(sysUser.getOpenId());
-        //TODO 后续优化
-        List<SysRole> list1 = sysRoleService.getSysRoleListByUserId(sysUser.getId());
-        List<SysRoleVo> list2 = new ArrayList<>();
-        for (SysRole sysRole : list1) {
-            SysRoleVo sysRoleVo = new SysRoleVo();
-            BeanUtils.copyProperties(sysRoleVo, sysRole);
-            list2.add(sysRoleVo);
-        }
-        loginUserVo.setRoles(list2);
+        List<SysRole> roleList = sysRoleService.getSysRoleListByUserId(sysUser.getId());
+        List<SysRoleVo> roleVoList = MyUtil.getListOfType(roleList, SysRoleVo.class);
+        loginUserVo.setRoles(roleVoList);
         if (loginUserVo.getRoles().size() < 1) {
             //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
             throw new MyException("用户无可用角色");
@@ -333,15 +324,9 @@ public class SysLoginServiceImpl implements SysLoginService {
             //用户绑定的角色全部被禁用了
             throw new MyException("用户角色全部不可用");
         }
-        //TODO 后续优化
-        List<SysPosition> list3 = sysPositionService.getSysPositionListByUserId(sysUser.getId());
-        List<SysPositionVo> list4 = new ArrayList<>();
-        for (SysPosition sysPosition : list3) {
-            SysPositionVo sysPositionVo = new SysPositionVo();
-            BeanUtils.copyProperties(sysPositionVo, sysPosition);
-            list4.add(sysPositionVo);
-        }
-        loginUserVo.setPositions(list4);
+        List<SysPosition> positionList = sysPositionService.getSysPositionListByUserId(sysUser.getId());
+        List<SysPositionVo> positionVoList = MyUtil.getListOfType(positionList, SysPositionVo.class);
+        loginUserVo.setPositions(positionVoList);
         if (loginUserVo.getPositions().size() > 0) {
             Boolean isPositionOk = false;
             for (SysPositionVo sysPosition : loginUserVo.getPositions()) {

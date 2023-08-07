@@ -1,6 +1,6 @@
 package cn.daenx.framework.serializer.annotation;
 
-import cn.daenx.common.constant.enums.MaskedType;
+import cn.daenx.framework.common.constant.enums.MaskedType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

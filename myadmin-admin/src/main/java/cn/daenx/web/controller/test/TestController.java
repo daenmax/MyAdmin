@@ -1,7 +1,7 @@
 package cn.daenx.web.controller.test;
 
 
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.repeatSubmit.annotation.RepeatSubmit;
 import cn.dev33.satoken.annotation.SaIgnore;
 import io.swagger.v3.oas.annotations.Operation;

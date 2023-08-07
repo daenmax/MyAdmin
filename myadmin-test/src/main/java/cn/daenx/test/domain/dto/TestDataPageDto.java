@@ -1,6 +1,6 @@
 package cn.daenx.test.domain.dto;
 
-import cn.daenx.common.vo.BaseDto;
+import cn.daenx.framework.common.vo.BaseDto;
 import cn.daenx.framework.excel.DictConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;

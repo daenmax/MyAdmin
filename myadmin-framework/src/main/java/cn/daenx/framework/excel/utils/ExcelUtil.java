@@ -1,6 +1,6 @@
 package cn.daenx.framework.excel.utils;
 
-import cn.daenx.common.exception.MyException;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.excel.DefaultExcelListener;
 import cn.daenx.framework.excel.ExcelListener;
 import cn.daenx.framework.excel.ExcelResult;

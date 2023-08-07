@@ -1,9 +1,9 @@
 package cn.daenx.web.controller.test;
 
-import cn.daenx.common.constant.enums.LogOperType;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.vo.ComStatusUpdVo;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.constant.enums.LogOperType;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.test.domain.po.TestDataTree;
 import cn.daenx.test.domain.vo.TestDataTreeAddVo;

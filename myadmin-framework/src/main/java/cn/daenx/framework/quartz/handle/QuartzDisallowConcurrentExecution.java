@@ -1,6 +1,6 @@
 package cn.daenx.framework.quartz.handle;
 
-import cn.daenx.common.vo.system.other.SysJobVo;
+import cn.daenx.framework.common.vo.other.SysJobVo;
 import cn.daenx.framework.quartz.utils.AbstractQuartzJob;
 import cn.daenx.framework.quartz.utils.JobInvokeUtil;
 import org.quartz.JobExecutionContext;

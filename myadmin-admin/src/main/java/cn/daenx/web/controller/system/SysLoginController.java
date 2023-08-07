@@ -1,9 +1,9 @@
 package cn.daenx.web.controller.system;
 
-import cn.daenx.common.vo.Result;
-import cn.daenx.common.vo.system.other.RouterVo;
-import cn.daenx.common.vo.system.other.SysLoginVo;
-import cn.daenx.common.vo.system.other.SysRegisterVo;
+import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.vo.other.RouterVo;
+import cn.daenx.framework.common.vo.other.SysLoginVo;
+import cn.daenx.framework.common.vo.other.SysRegisterVo;
 import cn.daenx.system.service.SysLoginService;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.util.ObjectUtil;

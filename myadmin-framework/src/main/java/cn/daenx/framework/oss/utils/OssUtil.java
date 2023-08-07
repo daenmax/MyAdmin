@@ -1,8 +1,8 @@
 package cn.daenx.framework.oss.utils;
 
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.RedisUtil;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.oss.core.OssClient;
 import cn.daenx.framework.oss.vo.OssProperties;
 import cn.hutool.core.util.ObjectUtil;

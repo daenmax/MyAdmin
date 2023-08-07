@@ -1,13 +1,12 @@
 package cn.daenx.framework.serializer;
 
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.utils.RedisUtil;
-import cn.daenx.common.vo.system.other.SysDictDetailVo;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.common.vo.other.SysDictDetailVo;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;
 import cn.daenx.framework.serializer.annotation.Masked;
-import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;

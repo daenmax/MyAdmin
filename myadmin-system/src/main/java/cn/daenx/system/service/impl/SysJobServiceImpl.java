@@ -1,15 +1,15 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.common.constant.SystemConstant;
-import cn.daenx.common.vo.system.config.SysSmsTemplateConfigVo;
-import cn.daenx.common.vo.system.other.SysJobVo;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.vo.system.config.SysSmsTemplateConfigVo;
+import cn.daenx.framework.common.vo.other.SysJobVo;
 import cn.daenx.framework.dataScope.annotation.DataScope;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.DingTalkUtil;
-import cn.daenx.common.utils.EmailUtil;
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.utils.SmsUtil;
-import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.DingTalkUtil;
+import cn.daenx.framework.common.utils.EmailUtil;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.SmsUtil;
+import cn.daenx.framework.common.vo.ComStatusUpdVo;
 import cn.daenx.framework.quartz.constant.QuartzConstant;
 import cn.daenx.framework.quartz.constant.ScheduleConstants;
 import cn.daenx.framework.quartz.exception.TaskException;

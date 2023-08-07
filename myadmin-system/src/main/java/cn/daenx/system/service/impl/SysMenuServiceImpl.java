@@ -1,13 +1,13 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.common.constant.SystemConstant;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.utils.StreamUtils;
-import cn.daenx.common.utils.TreeBuildUtils;
-import cn.daenx.common.vo.system.other.RouterVo;
-import cn.daenx.common.vo.system.other.SysLoginUserVo;
-import cn.daenx.common.vo.system.other.SysRoleVo;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.StreamUtils;
+import cn.daenx.framework.common.utils.TreeBuildUtils;
+import cn.daenx.framework.common.vo.other.RouterVo;
+import cn.daenx.framework.common.vo.other.SysLoginUserVo;
+import cn.daenx.framework.common.vo.other.SysRoleVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.system.domain.po.SysMenu;
 import cn.daenx.system.domain.po.SysRole;

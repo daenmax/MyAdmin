@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.vo;
 
-import cn.daenx.common.vo.BasePageVo;
+import cn.daenx.framework.common.vo.BasePageVo;
 import lombok.Data;
 
 @Data

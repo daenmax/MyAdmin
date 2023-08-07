@@ -1,7 +1,7 @@
 package cn.daenx.system.domain.po;
 
-import cn.daenx.common.constant.SystemConstant;
-import cn.daenx.common.vo.BaseEntity;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.vo.BaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

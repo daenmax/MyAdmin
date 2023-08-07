@@ -1,6 +1,6 @@
 package cn.daenx.web.controller.system;
 
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.system.service.CaptchaService;
 import cn.dev33.satoken.annotation.SaIgnore;
 import jakarta.annotation.Resource;

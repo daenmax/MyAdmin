@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.po;
 
-import cn.daenx.common.vo.TreeEntity;
+import cn.daenx.framework.common.vo.TreeEntity;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.time.LocalDateTime;

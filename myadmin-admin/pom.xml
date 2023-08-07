@@ -25,11 +25,6 @@
         </dependency>
         <dependency>
             <groupId>cn.daenx</groupId>
-            <artifactId>myadmin-common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.daenx</groupId>
             <artifactId>myadmin-system</artifactId>
             <version>1.0.0</version>
         </dependency>
