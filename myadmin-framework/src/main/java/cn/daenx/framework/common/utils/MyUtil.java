@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
@@ -344,7 +345,7 @@ public class MyUtil {
         long size = file.getSize();
         BigDecimal sizeDecimal = new BigDecimal(size);
         BigDecimal kbDecimal = new BigDecimal(type == 1 ? "1024" : "1048576");
-        BigDecimal sizeKB = sizeDecimal.divide(kbDecimal, 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal sizeKB = sizeDecimal.divide(kbDecimal, 2, RoundingMode.HALF_UP);
         return sizeKB;
     }
 

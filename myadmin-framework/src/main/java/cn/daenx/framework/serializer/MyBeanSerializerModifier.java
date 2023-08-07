@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import com.fasterxml.jackson.databind.ser.std.NullSerializer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -43,10 +44,9 @@ public class MyBeanSerializerModifier extends BeanSerializerModifier {
             if (dictAnnotation != null || masked != null) {
                 SerializerAbstract serializerAbstract = null;
                 try {
-                    serializerAbstract = serializerAbstractClass.newInstance();
-                } catch (InstantiationException e) {
-                    throw new RuntimeException(e);
-                } catch (IllegalAccessException e) {
+                    serializerAbstract = serializerAbstractClass.getDeclaredConstructor().newInstance();
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                         InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
                 serializerAbstract.setDict(dictAnnotation);

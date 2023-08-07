@@ -2,8 +2,10 @@ package cn.daenx.test.domain.vo;
 
 import cn.daenx.framework.common.vo.BasePageVo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class TestDataPageVo extends BasePageVo {
     private String title;
     private String content;
