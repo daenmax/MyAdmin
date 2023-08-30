@@ -1,5 +1,6 @@
 package cn.daenx.framework.common.utils;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.vo.CheckSendVo;
@@ -154,7 +155,7 @@ public class EmailUtil {
             return null;
         }
         SysConfigVo sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfigVo.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysEmailConfigVo sysEmailConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysEmailConfigVo.class);

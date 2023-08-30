@@ -1,5 +1,6 @@
 package cn.daenx.test.service.impl;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.dataScope.annotation.DataScope;
@@ -146,14 +147,14 @@ public class TestDataTreeServiceImpl extends ServiceImpl<TestDataTreeMapper, Tes
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        if (vo.getStatus().equals(SystemConstant.STATUS_DISABLE)) {
+        if (vo.getStatus().equals(CommonConstant.STATUS_DISABLE)) {
             //禁用所有子级
             List<TestDataTree> list = testDataTreeMapper.selectList(new LambdaQueryWrapper<>());
             List<TestDataTree> retList = handleListByParentId(list, vo.getId());
             List<String> idList = MyUtil.joinToList(retList, TestDataTree::getId);
             LambdaUpdateWrapper<TestDataTree> updateWrapper2 = new LambdaUpdateWrapper<>();
             updateWrapper2.in(TestDataTree::getId, idList);
-            updateWrapper2.set(TestDataTree::getStatus, SystemConstant.STATUS_DISABLE);
+            updateWrapper2.set(TestDataTree::getStatus, CommonConstant.STATUS_DISABLE);
             testDataTreeMapper.update(new TestDataTree(), updateWrapper2);
         }
     }

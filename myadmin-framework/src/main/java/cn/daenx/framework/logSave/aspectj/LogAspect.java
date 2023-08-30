@@ -101,11 +101,11 @@ public class LogAspect {
         sysLogOper.setRequestIp(ServletUtils.getClientIP());
         // 判断响应结果
         if (throwable != null) {
-            sysLogOper.setStatus(SystemConstant.STATUS_DISABLE);
+            sysLogOper.setStatus(CommonConstant.STATUS_DISABLE);
             String message = StringUtils.substring(throwable.getMessage(), 0, CommonConstant.SAVE_LOG_LENGTH);
             sysLogOper.setErrorMsg(message);
         } else {
-            sysLogOper.setStatus(SystemConstant.STATUS_NORMAL);
+            sysLogOper.setStatus(CommonConstant.STATUS_NORMAL);
         }
         // 执行人ID
         sysLogOper.setCreateId(LoginUtil.getLoginUserId());

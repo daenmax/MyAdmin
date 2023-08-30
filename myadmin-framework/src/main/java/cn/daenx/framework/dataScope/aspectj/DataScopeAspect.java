@@ -1,5 +1,6 @@
 package cn.daenx.framework.dataScope.aspectj;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.vo.system.other.SysRoleVo;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.vo.DataScopeParam;
@@ -132,7 +133,7 @@ public class DataScopeAspect implements DataPermissionHandler {
         Boolean init = false;
         for (SysRoleVo sysRole : roleList) {
             //只有状态正常的角色，才可以使用
-            if (sysRole.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            if (sysRole.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
                 if (init) {
                     sql.append(" or ");
                 }

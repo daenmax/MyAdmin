@@ -1,5 +1,6 @@
 package cn.daenx.framework.common.utils;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.system.config.SysUploadConfigVo;
@@ -555,15 +556,15 @@ public class MyUtil {
         if (timeI == 0) {
             return 0;
         }
-        if (SystemConstant.SYS_TIME_UNIT_SECOND.equals(unit)) {
+        if (CommonConstant.SYS_TIME_UNIT_SECOND.equals(unit)) {
             return timeI;
-        } else if (SystemConstant.SYS_TIME_UNIT_MINUTE.equals(unit)) {
+        } else if (CommonConstant.SYS_TIME_UNIT_MINUTE.equals(unit)) {
             timeI = timeI * 60;
             return timeI;
-        } else if (SystemConstant.SYS_TIME_UNIT_HOUR.equals(unit)) {
+        } else if (CommonConstant.SYS_TIME_UNIT_HOUR.equals(unit)) {
             timeI = timeI * 60 * 60;
             return timeI;
-        } else if (SystemConstant.SYS_TIME_UNIT_DAY.equals(unit)) {
+        } else if (CommonConstant.SYS_TIME_UNIT_DAY.equals(unit)) {
             timeI = timeI * 60 * 60 * 24;
             return timeI;
         }

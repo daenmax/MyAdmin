@@ -1,5 +1,6 @@
 package cn.daenx.system.service.impl;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
@@ -37,7 +38,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     public List<SysDict> getSysDictList() {
         LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDict::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.eq(SysDict::getStatus, CommonConstant.STATUS_NORMAL);
         List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
         return sysDictList;
     }
@@ -200,7 +201,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         RedisUtil.delBatch(RedisConstant.DICT + "*");
         List<SysDict> sysDictList = getSysDictList();
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDictDetail::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.eq(SysDictDetail::getStatus, CommonConstant.STATUS_NORMAL);
         wrapper.orderByAsc(SysDictDetail::getSort);
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         for (SysDict sysDict : sysDictList) {

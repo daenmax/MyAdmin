@@ -1,5 +1,6 @@
 package cn.daenx.system.service.impl;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.constant.RedisConstant;
@@ -265,7 +266,7 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
         RedisUtil.delBatch(RedisConstant.API_LIMIT_WHOLE_KEY + "*");
         RedisUtil.delBatch(RedisConstant.API_LIMIT_CLOSE_KEY + "*");
         LambdaQueryWrapper<SysApiLimit> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysApiLimit::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.eq(SysApiLimit::getStatus, CommonConstant.STATUS_NORMAL);
         List<SysApiLimit> list = sysApiLimitMapper.selectList(wrapper);
         for (SysApiLimit sysApiLimit : list) {
             initApiLimit(sysApiLimit);
@@ -276,7 +277,7 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
         if (sysApiLimit.getLimitType().equals(SystemConstant.API_LIMIT_CURRENT)) {
             //限流
             cleanCache(sysApiLimit);
-            if (!SystemConstant.STATUS_NORMAL.equals(sysApiLimit.getStatus())) {
+            if (!CommonConstant.STATUS_NORMAL.equals(sysApiLimit.getStatus())) {
                 return;
             }
             if (ObjectUtil.isNotEmpty(sysApiLimit.getSingleFrequency()) && ObjectUtil.isNotEmpty(sysApiLimit.getSingleTime()) && ObjectUtil.isNotEmpty(sysApiLimit.getSingleTimeUnit())) {
@@ -298,7 +299,7 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
         } else {
             //停用
             cleanCache(sysApiLimit);
-            if (!SystemConstant.STATUS_NORMAL.equals(sysApiLimit.getStatus())) {
+            if (!CommonConstant.STATUS_NORMAL.equals(sysApiLimit.getStatus())) {
                 return;
             }
             RedisUtil.setValue(RedisConstant.API_LIMIT_CLOSE_KEY + sysApiLimit.getApiUri(), sysApiLimit);

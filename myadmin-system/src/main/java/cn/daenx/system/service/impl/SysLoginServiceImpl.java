@@ -322,7 +322,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         }
         Boolean isRoleOk = false;
         for (SysRoleVo role : loginUserVo.getRoles()) {
-            if (role.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+            if (role.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
                 isRoleOk = true;
                 break;
             }
@@ -337,7 +337,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (loginUserVo.getPositions().size() > 0) {
             Boolean isPositionOk = false;
             for (SysPositionVo sysPosition : loginUserVo.getPositions()) {
-                if (sysPosition.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+                if (sysPosition.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
                     isPositionOk = true;
                     break;
                 }
@@ -394,7 +394,7 @@ public class SysLoginServiceImpl implements SysLoginService {
             throw new MyException("系统当前无法注册[0x3]");
         }
         SysDept sysDeptByCode = sysDeptService.getSysDeptByCode(sysRegisterDefaultInfoVo.getDeptCode());
-        if (!sysDeptByCode.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysDeptByCode.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             throw new MyException("系统当前无法注册[0x4]");
         }
         //查询账号是否已存在

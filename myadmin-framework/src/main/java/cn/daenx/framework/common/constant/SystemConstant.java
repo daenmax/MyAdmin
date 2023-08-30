@@ -104,15 +104,6 @@ public class SystemConstant {
     public static final String DATA_SCOPE_CUSTOM = "4";
 
     /**
-     * 通用状态：正常
-     */
-    public static final String STATUS_NORMAL = "0";
-    /**
-     * 通用状态：禁用
-     */
-    public static final String STATUS_DISABLE = "1";
-
-    /**
      * OSS正在使用：否
      */
     public static final String IN_USE_NO = "0";
@@ -197,13 +188,4 @@ public class SystemConstant {
      * 接口限流redis lua脚本返回值： 超过全部用户访问限制
      */
     public static final Long API_LIMIT_WHOLE_LIMIT_EXCEED = -2L;
-
-
-    /**
-     * 系统时间单位
-     */
-    public static final String SYS_TIME_UNIT_SECOND = "0";
-    public static final String SYS_TIME_UNIT_MINUTE = "1";
-    public static final String SYS_TIME_UNIT_HOUR = "2";
-    public static final String SYS_TIME_UNIT_DAY = "3";
 }

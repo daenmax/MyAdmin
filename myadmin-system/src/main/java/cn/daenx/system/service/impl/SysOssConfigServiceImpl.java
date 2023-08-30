@@ -1,5 +1,6 @@
 package cn.daenx.system.service.impl;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
@@ -41,7 +42,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     @Override
     public void initOssConfig() {
         LambdaQueryWrapper<SysOssConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysOssConfig::getStatus, SystemConstant.STATUS_NORMAL);
+        wrapper.eq(SysOssConfig::getStatus, CommonConstant.STATUS_NORMAL);
         List<SysOssConfig> sysOssConfigs = sysOssConfigMapper.selectList(wrapper);
         RedisUtil.delBatch(RedisConstant.OSS + "*");
         RedisUtil.del(RedisConstant.OSS_USE);
@@ -199,7 +200,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         LambdaUpdateWrapper<SysOssConfig> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysOssConfig::getId, vo.getId());
         wrapper.set(SysOssConfig::getStatus, vo.getStatus());
-        if (!vo.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!vo.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             //不是启用，那么强制设置使用状态为否
             wrapper.set(SysOssConfig::getInUse, SystemConstant.IN_USE_NO);
         }
@@ -219,7 +220,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     @Override
     public void changeInUse(ComStatusUpdVo vo) {
         SysOssConfig info = getInfo(vo.getId());
-        if (!info.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!info.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             throw new MyException("OSS配置状态非正常，无法启用");
         }
         if (info.getInUse().equals(vo.getStatus())) {

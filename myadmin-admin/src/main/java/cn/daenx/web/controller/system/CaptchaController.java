@@ -28,14 +28,4 @@ public class CaptchaController {
         return Result.ok(map);
     }
 
-    /**
-     * 测试接口
-     *
-     * @return
-     */
-    @GetMapping("/testApi")
-    public Result testApi() {
-        return Result.ok();
-    }
-
 }

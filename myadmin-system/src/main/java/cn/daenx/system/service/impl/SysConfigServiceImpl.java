@@ -1,5 +1,6 @@
 package cn.daenx.system.service.impl;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
@@ -196,7 +197,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return "";
         }
         return sysConfig.getValue();
@@ -230,7 +231,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return SystemConstant.UPLOAD_CONFIG_IMAGE;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysUploadConfigVo sysUploadConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysUploadConfigVo.class);
@@ -250,7 +251,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return SystemConstant.UPLOAD_CONFIG_FILE;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysUploadConfigVo sysUploadConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysUploadConfigVo.class);
@@ -271,7 +272,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysRegisterDefaultInfoVo sysRegisterDefaultInfoVo = JSONObject.parseObject(sysConfig.getValue(), SysRegisterDefaultInfoVo.class);
@@ -292,7 +293,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysLoginFailInfoVo sysLoginFailInfoVo = JSONObject.parseObject(sysConfig.getValue(), SysLoginFailInfoVo.class);
@@ -313,7 +314,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysCaptchaConfigVo sysCaptchaConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysCaptchaConfigVo.class);
@@ -334,7 +335,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysSmsTemplateConfigVo sysSmsTemplateConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysSmsTemplateConfigVo.class);
@@ -355,7 +356,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysSendLimitConfigVo sysSendLimitConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysSendLimitConfigVo.class);
@@ -375,7 +376,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return null;
         }
         SysConfig sysConfig = JSON.parseObject(JSON.toJSONString(object), SysConfig.class);
-        if (!sysConfig.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
         SysEmailConfigVo sysEmailConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysEmailConfigVo.class);

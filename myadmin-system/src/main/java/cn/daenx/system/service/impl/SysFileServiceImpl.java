@@ -1,5 +1,6 @@
 package cn.daenx.system.service.impl;
 
+import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.vo.system.config.SysUploadConfigVo;
 import cn.daenx.framework.dataScope.annotation.DataScope;
@@ -119,7 +120,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         sysFile.setFileMd5(upload.getFileMd5());
         sysFile.setFileType(upload.getFileType());
         sysFile.setOssId(ossClient.getOssProperties().getId());
-        sysFile.setStatus(SystemConstant.STATUS_NORMAL);
+        sysFile.setStatus(CommonConstant.STATUS_NORMAL);
         sysFile.setRemark(remark);
         sysFileMapper.insert(sysFile);
         upload.setSysFileId(sysFile.getId());
@@ -264,7 +265,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         if (sysFile == null) {
             throw new MyException("文件不存在");
         }
-        if (!sysFile.getStatus().equals(SystemConstant.STATUS_NORMAL)) {
+        if (!sysFile.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             throw new MyException("该文件状态不可用");
         }
         MyUtil.setDownloadResponseHeaders(response, sysFile.getOriginalName());
