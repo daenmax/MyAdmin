@@ -147,7 +147,7 @@ public class MyUtil {
     }
 
     /**
-     * 检查腾讯滑块验证码是否有效
+     * 检查腾讯验证码是否有效
      *
      * @param randStr
      * @param ticket

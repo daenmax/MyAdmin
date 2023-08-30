@@ -24,7 +24,7 @@ public interface CaptchaService {
     HashMap<String, Object> createCaptchaImgToBase64(SysCaptchaConfigVo sysCaptchaConfigVo);
 
     /**
-     * 创建腾讯滑块验证码
+     * 创建腾讯验证码
      *
      * @param sysCaptchaConfigVo
      * @return

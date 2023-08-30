@@ -20,11 +20,11 @@ public class SysSubmitCaptchaVo {
 
 
     /**
-     * 滑块验证码：随机字符
+     * 腾讯验证码：随机字符
      */
     private String randStr;
     /**
-     * 滑块验证码：票据
+     * 腾讯验证码：票据
      */
     private String ticket;
 }
