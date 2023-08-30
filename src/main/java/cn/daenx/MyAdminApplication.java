@@ -1,4 +1,4 @@
-package cn.daenx.admin;
+package cn.daenx;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
