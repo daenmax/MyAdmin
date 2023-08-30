@@ -45,14 +45,14 @@ public class CaptchaServiceImpl implements CaptchaService {
             return map;
         }
         map.put("captchaType", sysCaptchaConfigVo.getConfig().getType());
-        //0=图片验证码，1=滑块验证码
+        //0=图片验证码，1=腾讯验证码
         if (sysCaptchaConfigVo.getConfig().getType() == 0) {
             //0=图片验证码
             HashMap<String, Object> captchaImgToBase64 = createCaptchaImgToBase64(sysCaptchaConfigVo);
             map.put("image", captchaImgToBase64);
             return map;
         } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
-            //1=滑块验证码
+            //1=腾讯验证码
             HashMap<String, Object> captchaSlider = createCaptchaSlider(sysCaptchaConfigVo);
             map.put("slider", captchaSlider);
             return map;
@@ -123,7 +123,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     /**
-     * 创建腾讯滑块验证码
+     * 创建腾讯验证码
      *
      * @param sysCaptchaConfigVo
      * @return
@@ -163,7 +163,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             }
             RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
         } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
-            //滑块验证码
+            //腾讯验证码
             if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket()) || ObjectUtil.isEmpty(vo.getUuid())) {
                 throw new MyException("验证码相关参数不能为空");
             }
@@ -173,7 +173,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             }
             String md5 = SecureUtil.md5(vo.getRandStr() + vo.getTicket());
             if (!MyUtil.checkTencentCaptchaSlider(vo.getRandStr(), vo.getTicket())) {
-                throw new MyException("滑块验证失败，请重试");
+                throw new MyException("验证失败，请重试");
             }
             RedisUtil.del(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
         }

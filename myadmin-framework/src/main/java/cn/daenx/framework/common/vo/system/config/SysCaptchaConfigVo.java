@@ -23,7 +23,7 @@ public class SysCaptchaConfigVo implements Serializable {
     public static class Config {
         /**
          * 验证码类型
-         * 0=图片验证码，1=滑块验证码
+         * 0=图片验证码，1=腾讯验证码
          */
         private Integer type;
 
@@ -68,7 +68,7 @@ public class SysCaptchaConfigVo implements Serializable {
     }
 
     /**
-     * 滑块验证码（目前不需要任何配置）
+     * 腾讯验证码（目前不需要任何配置）
      */
     @Data
     public static class Slider {

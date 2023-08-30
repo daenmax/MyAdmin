@@ -1,7 +1,6 @@
 package cn.daenx.framework.common.utils;
 
 import cn.daenx.framework.common.constant.CommonConstant;
-import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.system.config.SysUploadConfigVo;
 import cn.hutool.core.collection.CollUtil;
@@ -148,7 +147,7 @@ public class MyUtil {
     }
 
     /**
-     * 检查腾讯滑块验证码是否有效
+     * 检查腾讯验证码是否有效
      *
      * @param randStr
      * @param ticket
