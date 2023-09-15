@@ -18,7 +18,7 @@ public class SaTokenUserEventListener implements SaTokenListener {
      */
     @Override
     public void doLogin(String loginType, Object loginId, String tokenValue, SaLoginModel loginModel) {
-        log.info("userId{}登录成功", loginId);
+        log.info("用户[{}]登录成功", loginId);
     }
 
     /**
@@ -26,7 +26,7 @@ public class SaTokenUserEventListener implements SaTokenListener {
      */
     @Override
     public void doLogout(String loginType, Object loginId, String tokenValue) {
-        log.info("userId{}注销", loginId);
+        log.info("用户[{}]注销", loginId);
     }
 
     /**
@@ -34,7 +34,7 @@ public class SaTokenUserEventListener implements SaTokenListener {
      */
     @Override
     public void doKickout(String loginType, Object loginId, String tokenValue) {
-        log.info("userId{}被踢下线", loginId);
+        log.info("用户[{}]被踢下线", loginId);
     }
 
     /**
@@ -42,7 +42,7 @@ public class SaTokenUserEventListener implements SaTokenListener {
      */
     @Override
     public void doReplaced(String loginType, Object loginId, String tokenValue) {
-        log.info("userId{}被顶下线", loginId);
+        log.info("用户[{}]被顶下线", loginId);
     }
 
     /**
