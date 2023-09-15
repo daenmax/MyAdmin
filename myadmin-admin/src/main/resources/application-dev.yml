@@ -42,7 +42,7 @@ spring:
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
         session-stat-enable: true
         session-stat-max-count: 100
-      # 监控页（spring6与spring boot3会采用Jakarta作为新的命名空间，由于Druid没有实现Jakarta导致监控页面不能用）
+      # 监控页面
       stat-view-servlet:
         # 是否启用
         enabled: true
