@@ -16,7 +16,7 @@
 
 正如你所看到的，我也想做一个适用于大部分场景的快速开发框架，所以，沿用`My系列`的`MyAdmin`便诞生了
 
-框架基于SpringBoot3.x开发，使用了Mybatis-Plus、dynamic-datasource多数据源、druid数据库连接池、Sa-Token权限认证、SpringDoc接口文档、lombok、actuator健康监控、retry重试等组件
+框架基于SpringBoot3.x开发，使用了Mybatis-Plus、dynamic-datasource多数据源、druid数据库连接池、Sa-Token权限认证、SpringDoc接口文档、lombok、retry重试等组件
 
 在开发过程中，参考了[RuoYi-Vue-Plus](https://gitee.com/dromara/RuoYi-Vue-Plus/)以及其他前辈的开源项目，在此表示深深的感谢
 

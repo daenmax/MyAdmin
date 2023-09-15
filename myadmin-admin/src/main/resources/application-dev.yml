@@ -12,30 +12,6 @@ springdoc:
     # API路由，一般用于导入到第三方API管理工具（例如ApiFox），受到上面开关影响
     path: /api-docs
 
-# 应用监控与配置
-management:
-  server:
-    # 指定监听端口，不指定则与server端口一致
-#    port: 8055
-  endpoint:
-    # 其他命令请参考：https://blog.csdn.net/adparking/article/details/114701388
-    # 开启shutdown命令，POST请求
-    shutdown:
-      enabled: true
-    # 开启health命令，GET请求
-    health:
-      enabled: true
-      # 生产谨慎开启这个
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-      # 访问路径，不配置的话，默认是 /actuator，例如：http://localhost:8033/my/actuator/health
-      base-path: "/actuator"
-  # 调用以上接口时，是否验证head里的token，如果不填写，则不验证（危），建议设置一个，并防止泄露
-  token: sGd5v1SG6sd4gSDs6d@8gsdDg
-
 # 防止XSS攻击
 xss:
   # 过滤开关

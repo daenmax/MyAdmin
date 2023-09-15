@@ -1,6 +1,5 @@
 package cn.daenx.framework.common.config;
 
-import cn.daenx.framework.common.filter.ActuatorFilter;
 import cn.daenx.framework.common.filter.RepeatableFilter;
 import cn.daenx.framework.common.filter.XssFilter;
 import cn.daenx.framework.common.properties.XssProperties;
@@ -24,10 +23,6 @@ import java.util.Map;
 public class FilterConfig {
     @Resource
     private XssProperties xssProperties;
-    @Value("${management.endpoints.web.base-path}")
-    private String actuatorBasePath;
-    @Value("${management.token}")
-    private String actuatorToken;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Bean
@@ -55,16 +50,4 @@ public class FilterConfig {
         registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
         return registration;
     }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Bean
-    public FilterRegistrationBean actuatorFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new ActuatorFilter(actuatorToken));
-        registration.addUrlPatterns(actuatorBasePath + "/*");
-        registration.setName("actuatorFilter");
-        registration.setOrder(FilterRegistrationBean.LOWEST_PRECEDENCE);
-        return registration;
-    }
-
 }
