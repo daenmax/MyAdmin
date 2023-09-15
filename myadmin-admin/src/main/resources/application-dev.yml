@@ -33,6 +33,30 @@ spring:
 
   # 数据库配置
   datasource:
+    druid:
+      # 基础监控配置
+      web-stat-filter:
+        enabled: false
+        url-pattern: /*
+        #设置不统计哪些URL
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+        session-stat-enable: true
+        session-stat-max-count: 100
+      # 监控页（spring6与spring boot3会采用Jakarta作为新的命名空间，由于Druid没有实现Jakarta导致监控页面不能用）
+      stat-view-servlet:
+        # 是否启用
+        enabled: true
+        # 访问地址规则
+        url-pattern: /druid/*
+        # 是否允许清空统计数据
+        reset-enable: true
+        # 设置监控页面的登录名和密码
+        login-username: myadmin
+        login-password: myadmin
+        # 授权允许访问的IP列表，多个用,隔开 (没有配置或者为空，则允许所有访问)
+        # allow: 127.0.0.1
+        # 禁止访问的IP列表，(deny优先于allow)
+        # deny: 192.168.1.100
     dynamic:
       druid:
         # 初始化连接个数
@@ -57,29 +81,6 @@ spring:
         test-on-borrow: true
         # 在连接归还到连接池时是否测试该连接
         test-on-return: false
-        # 基础监控配置
-        web-stat-filter:
-          enabled: false
-          url-pattern: /*
-          #设置不统计哪些URL
-          exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
-          session-stat-enable: true
-          session-stat-max-count: 100
-        # 监控页（spring6与spring boot3会采用Jakarta作为新的命名空间，由于Druid没有实现Jakarta导致监控页面不能用）
-        stat-view-servlet:
-          # 是否启用
-          enabled: true
-          # 访问地址规则
-          url-pattern: /druid/*
-          # 是否允许清空统计数据
-          reset-enable: true
-          # 设置监控页面的登录名和密码
-          login-username: myadmin
-          login-password: myadmin
-          # 授权允许访问的IP列表，多个用,隔开 (没有配置或者为空，则允许所有访问)
-          # allow: 127.0.0.1
-          # 禁止访问的IP列表，(deny优先于allow)
-          # deny: 192.168.1.100
       # 默认使用下面哪个数据库（不加@DS注释的地方，就是使用这里配置的默认数据库）
       primary: db-mysql
       datasource:
