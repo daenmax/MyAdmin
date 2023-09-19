@@ -31,6 +31,7 @@ public class StreamUtils {
         if (CollUtil.isEmpty(collection)) {
             return CollUtil.newArrayList();
         }
+        // 注意此处不要使用 .toList() 新语法 因为返回的是不可变List 会导致序列化问题
         return collection.stream().filter(function).collect(Collectors.toList());
     }
 
@@ -71,7 +72,8 @@ public class StreamUtils {
         if (CollUtil.isEmpty(collection)) {
             return CollUtil.newArrayList();
         }
-        return collection.stream().sorted(comparing).collect(Collectors.toList());
+        // 注意此处不要使用 .toList() 新语法 因为返回的是不可变List 会导致序列化问题
+        return collection.stream().filter(Objects::nonNull).sorted(comparing).collect(Collectors.toList());
     }
 
     /**
@@ -88,7 +90,7 @@ public class StreamUtils {
         if (CollUtil.isEmpty(collection)) {
             return MapUtil.newHashMap();
         }
-        return collection.stream().collect(Collectors.toMap(key, Function.identity(), (l, r) -> l));
+        return collection.stream().filter(Objects::nonNull).collect(Collectors.toMap(key, Function.identity(), (l, r) -> l));
     }
 
     /**
@@ -107,7 +109,7 @@ public class StreamUtils {
         if (CollUtil.isEmpty(collection)) {
             return MapUtil.newHashMap();
         }
-        return collection.stream().collect(Collectors.toMap(key, value, (l, r) -> l));
+        return collection.stream().filter(Objects::nonNull).collect(Collectors.toMap(key, value, (l, r) -> l));
     }
 
     /**
@@ -125,8 +127,8 @@ public class StreamUtils {
             return MapUtil.newHashMap();
         }
         return collection
-            .stream()
-            .collect(Collectors.groupingBy(key, LinkedHashMap::new, Collectors.toList()));
+                .stream().filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(key, LinkedHashMap::new, Collectors.toList()));
     }
 
     /**
@@ -146,8 +148,8 @@ public class StreamUtils {
             return MapUtil.newHashMap();
         }
         return collection
-            .stream()
-            .collect(Collectors.groupingBy(key1, LinkedHashMap::new, Collectors.groupingBy(key2, LinkedHashMap::new, Collectors.toList())));
+                .stream().filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(key1, LinkedHashMap::new, Collectors.groupingBy(key2, LinkedHashMap::new, Collectors.toList())));
     }
 
     /**
@@ -167,8 +169,8 @@ public class StreamUtils {
             return MapUtil.newHashMap();
         }
         return collection
-            .stream()
-            .collect(Collectors.groupingBy(key1, LinkedHashMap::new, Collectors.toMap(key2, Function.identity(), (l, r) -> l)));
+                .stream().filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(key1, LinkedHashMap::new, Collectors.toMap(key2, Function.identity(), (l, r) -> l)));
     }
 
     /**
@@ -186,10 +188,11 @@ public class StreamUtils {
             return CollUtil.newArrayList();
         }
         return collection
-            .stream()
-            .map(function)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+                .stream()
+                .map(function)
+                .filter(Objects::nonNull)
+                // 注意此处不要使用 .toList() 新语法 因为返回的是不可变List 会导致序列化问题
+                .collect(Collectors.toList());
     }
 
     /**
@@ -207,10 +210,10 @@ public class StreamUtils {
             return CollUtil.newHashSet();
         }
         return collection
-            .stream()
-            .map(function)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toSet());
+                .stream()
+                .map(function)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
 
