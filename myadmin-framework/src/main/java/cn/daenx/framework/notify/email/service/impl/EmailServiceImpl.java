@@ -13,6 +13,17 @@ import java.util.Properties;
 
 @Service("email")
 public class EmailServiceImpl implements EmailService {
+    /**
+     * 实际发送邮件协议
+     *
+     * @param email
+     * @param toEmail  多个用,隔开
+     * @param subject
+     * @param content
+     * @param isHtml   是否是HTML
+     * @param fileList 附件内容，留空则无
+     * @return
+     */
     @Override
     public Boolean sendMail(SysEmailConfigVo.Email email, String toEmail, String subject, String content, Boolean isHtml, List<File> fileList) {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();

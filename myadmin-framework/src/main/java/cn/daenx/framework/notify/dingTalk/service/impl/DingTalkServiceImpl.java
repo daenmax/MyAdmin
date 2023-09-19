@@ -15,6 +15,13 @@ import java.net.URLEncoder;
 
 @Service("dingTalk")
 public class DingTalkServiceImpl implements DingTalkService {
+    /**
+     * 发送钉钉群通知_实际算法
+     *
+     * @param sysSmsConfigVo
+     * @param content
+     * @return
+     */
     @Override
     public DingTalkSendResult sendMsg(SysDingTalkConfigVo sysSmsConfigVo, String content) {
         if (ObjectUtil.isEmpty(sysSmsConfigVo)) {
