@@ -2,37 +2,25 @@ package cn.daenx.framework.common.utils;
 
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
-import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.vo.CheckSendVo;
 import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysSmsConfigVo;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ArrayUtil;
+import cn.daenx.framework.notify.sms.service.SmsService;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.aliyun.dysmsapi20170525.Client;
-import com.aliyun.dysmsapi20170525.models.SendSmsResponse;
-import com.aliyun.teaopenapi.models.Config;
-import com.tencentcloudapi.common.Credential;
-import com.tencentcloudapi.common.profile.ClientProfile;
-import com.tencentcloudapi.common.profile.HttpProfile;
-import com.tencentcloudapi.sms.v20190711.SmsClient;
-import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
-import com.tencentcloudapi.sms.v20190711.models.SendStatus;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * Sms短信工具类
@@ -42,7 +30,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class SmsUtil {
-
 
     /**
      * 发送短信
@@ -80,18 +67,17 @@ public class SmsUtil {
             log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, msg);
             return SmsSendResult.builder().isSuccess(false).msg(msg).build();
         }
-        if ("aliyun".equals(sysSmsConfigVo.getConfig().getType())) {
-            SmsSendResult smsSendResult = sendSmsAliyun(sysSmsConfigVo.getAliyun(), phones, templateId, param);
+        try {
+            SmsService smsService = SpringUtil.getApplicationContext().getBean(sysSmsConfigVo.getConfig().getType(), SmsService.class);
+            SmsSendResult smsSendResult = smsService.sendSms(sysSmsConfigVo.getPlatform().get(sysSmsConfigVo.getConfig().getType()), phones, templateId, param);
             log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, smsSendResult.getMsg());
             return smsSendResult;
-        } else if ("tencent".equals(sysSmsConfigVo.getConfig().getType())) {
-            SmsSendResult smsSendResult = sendSmsTencent(sysSmsConfigVo.getTencent(), phones, templateId, param);
-            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, smsSendResult.getMsg());
-            return smsSendResult;
+        } catch (NoSuchBeanDefinitionException e) {
+            String msg = "未知的type";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
         }
-        String msg = "未知的type";
-        log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", sysSmsConfigVo.getConfig().getType(), phones, templateId, param, msg);
-        return SmsSendResult.builder().isSuccess(false).msg(msg).build();
+
     }
 
     /**
@@ -136,91 +122,15 @@ public class SmsUtil {
             log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
             return SmsSendResult.builder().isSuccess(false).msg(msg).build();
         }
-        if ("aliyun".equals(type)) {
-            SmsSendResult smsSendResult = sendSmsAliyun(sysSmsConfigVo.getAliyun(), phones, templateId, param);
+        try {
+            SmsService smsService = SpringUtil.getApplicationContext().getBean(type, SmsService.class);
+            SmsSendResult smsSendResult = smsService.sendSms(sysSmsConfigVo.getPlatform().get(type), phones, templateId, param);
             log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", type, phones, templateId, param, smsSendResult.getMsg());
             return smsSendResult;
-        } else if ("tencent".equals(type)) {
-            SmsSendResult smsSendResult = sendSmsTencent(sysSmsConfigVo.getTencent(), phones, templateId, param);
-            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", smsSendResult.isSuccess() ? "成功" : "失败", type, phones, templateId, param, smsSendResult.getMsg());
-            return smsSendResult;
-        }
-        String msg = "未知的type";
-        log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
-        return SmsSendResult.builder().isSuccess(false).msg(msg).build();
-    }
-
-    /**
-     * 发送短信协议，阿里云
-     *
-     * @param smsInfo
-     * @param phones     多个手机号用,隔开
-     * @param templateId
-     * @param param      例如模板为：您的验证码为：${code}，请勿泄露于他人！那么key=code，value=1234
-     * @return
-     */
-    private static SmsSendResult sendSmsAliyun(SysSmsConfigVo.SmsInfo smsInfo, String phones, String templateId, Map<String, String> param) {
-        try {
-            Config config = new Config();
-            config.setAccessKeyId(smsInfo.getAccessKeyId());
-            config.setAccessKeySecret(smsInfo.getAccessKeySecret());
-            config.setEndpoint(smsInfo.getEndpoint());
-            Client client = new Client(config);
-            com.aliyun.dysmsapi20170525.models.SendSmsRequest req = new com.aliyun.dysmsapi20170525.models.SendSmsRequest()
-                    .setPhoneNumbers(phones)
-                    .setSignName(smsInfo.getSignName())
-                    .setTemplateCode(templateId)
-                    .setTemplateParam(JSON.toJSONString(param));
-            SendSmsResponse resp = client.sendSms(req);
-            SmsSendResult smsSendResult = SmsSendResult.builder().isSuccess("OK".equals(resp.getBody().getCode())).msg(resp.getBody().getMessage()).aliyunRes(resp).build();
-            return smsSendResult;
-        } catch (Exception e) {
-            e.printStackTrace();
-            SmsSendResult smsSendResult = SmsSendResult.builder().isSuccess(false).msg(e.getMessage()).build();
-            return smsSendResult;
-        }
-    }
-
-    /**
-     * 发送短信协议，腾讯云
-     *
-     * @param smsInfo
-     * @param phones     多个手机号用,隔开，需要加+86等前缀
-     * @param templateId
-     * @param param      例如模板为：例如模板为：验证码为：{1}，有效期为{2}分钟，如非本人操作，请忽略本短信。那么key=1，value=6666，key=2，value=5
-     * @return
-     */
-    private static SmsSendResult sendSmsTencent(SysSmsConfigVo.SmsInfo smsInfo, String phones, String templateId, Map<String, String> param) {
-        try {
-            Credential credential = new Credential(smsInfo.getAccessKeyId(), smsInfo.getAccessKeySecret());
-            HttpProfile httpProfile = new HttpProfile();
-            httpProfile.setEndpoint(smsInfo.getEndpoint());
-            ClientProfile clientProfile = new ClientProfile();
-            clientProfile.setHttpProfile(httpProfile);
-            SmsClient client = new SmsClient(credential, "", clientProfile);
-            com.tencentcloudapi.sms.v20190711.models.SendSmsRequest req = new SendSmsRequest();
-            Set<String> set = Arrays.stream(phones.split(",")).collect(Collectors.toSet());
-            req.setPhoneNumberSet(ArrayUtil.toArray(set, String.class));
-            if (CollUtil.isNotEmpty(param)) {
-                req.setTemplateParamSet(ArrayUtil.toArray(param.values(), String.class));
-            }
-            req.setTemplateID(templateId);
-            req.setSign(smsInfo.getSignName());
-            req.setSmsSdkAppid(smsInfo.getSdkAppId());
-            com.tencentcloudapi.sms.v20190711.models.SendSmsResponse resp = client.SendSms(req);
-            SmsSendResult smsSendResult = SmsSendResult.builder().isSuccess(true).msg("ok").tencentRes(resp).build();
-            for (SendStatus sendStatus : resp.getSendStatusSet()) {
-                if (!"Ok".equals(sendStatus.getCode())) {
-                    smsSendResult.setSuccess(false);
-                    sendStatus.setMessage(sendStatus.getMessage());
-                    break;
-                }
-            }
-            return smsSendResult;
-        } catch (Exception e) {
-            e.printStackTrace();
-            SmsSendResult smsSendResult = SmsSendResult.builder().isSuccess(false).msg(e.getMessage()).build();
-            return smsSendResult;
+        } catch (NoSuchBeanDefinitionException e) {
+            String msg = "未知的type";
+            log.info("发送短信{}，平台={}，对象={}，templateId：{}，param：{}，原因：{}", false ? "成功" : "失败", type, phones, templateId, param, msg);
+            return SmsSendResult.builder().isSuccess(false).msg(msg).build();
         }
     }
 

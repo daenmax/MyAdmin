@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 系统短信配置
@@ -13,40 +14,15 @@ import java.io.Serializable;
 public class SysSmsConfigVo implements Serializable {
 
     private Config config;
-    private SmsInfo aliyun;
-    private SmsInfo tencent;
+    private Map<String, Map<String, String>> platform;
 
     @Data
     public static class Config {
         /**
          * 使用平台
-         * aliyun=阿里云，tencent=腾讯云
+         * 例如：aliyun=阿里云，tencent=腾讯云等
          */
         private String type;
     }
-
-    @Data
-    public static class SmsInfo {
-        /**
-         * 是否启用该平台，true/false
-         */
-        private String enable;
-        /**
-         * 阿里云固定为：dysmsapi.aliyuncs.com
-         * 腾讯云固定为：sms.tencentcloudapi.com
-         */
-        private String endpoint;
-        private String accessKeyId;
-        private String accessKeySecret;
-        /**
-         * 签名
-         */
-        private String signName;
-        /**
-         * 应用ID，腾讯云专属
-         */
-        private String sdkAppId;
-    }
-
 
 }
