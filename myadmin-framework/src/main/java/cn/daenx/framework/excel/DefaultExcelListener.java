@@ -1,6 +1,6 @@
 package cn.daenx.framework.excel;
 
-import cn.daenx.framework.common.utils.StreamUtils;
+import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.ValidatorUtils;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.context.AnalysisContext;
@@ -69,7 +69,7 @@ public class DefaultExcelListener<T> extends AnalysisEventListener<T> implements
         if (exception instanceof ConstraintViolationException) {
             ConstraintViolationException constraintViolationException = (ConstraintViolationException) exception;
             Set<ConstraintViolation<?>> constraintViolations = constraintViolationException.getConstraintViolations();
-            String constraintViolationsMsg = StreamUtils.join(constraintViolations, ConstraintViolation::getMessage, ", ");
+            String constraintViolationsMsg = MyUtil.join(constraintViolations, ConstraintViolation::getMessage, ", ");
             errMsg = StrUtil.format("第{}行数据校验异常: {}", context.readRowHolder().getRowIndex() + 1, constraintViolationsMsg);
             if (log.isDebugEnabled()) {
                 log.error(errMsg);

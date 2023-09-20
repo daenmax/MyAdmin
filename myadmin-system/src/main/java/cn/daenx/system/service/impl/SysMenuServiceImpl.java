@@ -4,7 +4,6 @@ import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.StreamUtils;
 import cn.daenx.framework.common.utils.TreeBuildUtils;
 import cn.daenx.framework.common.vo.RouterVo;
 import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
@@ -33,6 +32,7 @@ import cn.daenx.system.mapper.SysMenuMapper;
 import cn.daenx.system.service.SysMenuService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
@@ -422,7 +422,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      * 得到子节点列表
      */
     private List<SysMenu> getChildList(List<SysMenu> list, SysMenu t) {
-        return StreamUtils.filter(list, n -> n.getParentId().equals(t.getId()));
+        if (CollUtil.isEmpty(list)) {
+            return CollUtil.newArrayList();
+        }
+        return list.stream().filter(n -> n.getParentId().equals(t.getId())).collect(Collectors.toList());
     }
 
     /**
