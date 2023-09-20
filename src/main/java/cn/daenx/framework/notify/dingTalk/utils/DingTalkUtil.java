@@ -1,23 +1,22 @@
-package cn.daenx.framework.common.utils;
+package cn.daenx.framework.notify.dingTalk.utils;
 
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.vo.system.utils.DingTalkSendResult;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysDingTalkConfigVo;
+import cn.daenx.framework.notify.dingTalk.service.DingTalkService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.http.HttpRequest;
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +48,13 @@ public class DingTalkUtil {
             return null;
         }
         List<DingTalkSendResult> list = new ArrayList<>();
+        DingTalkService dingTalkService;
+        try {
+            dingTalkService = SpringUtil.getApplicationContext().getBean("dingTalk", DingTalkService.class);
+        } catch (NoSuchBeanDefinitionException e) {
+            log.info("发送钉钉{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, msg);
+            return null;
+        }
         for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
             log.info("发送钉钉ing，botName={}，msg：{}", false ? "成功" : "失败", sysSmsConfigVo.getBotName(), msg);
             JSONObject req = new JSONObject();
@@ -56,7 +62,7 @@ public class DingTalkUtil {
             JSONObject text = new JSONObject();
             text.put("content", ObjectUtil.isEmpty(sysSmsConfigVo.getKeywords()) ? msg : sysSmsConfigVo.getKeywords() + msg);
             req.put("text", text);
-            DingTalkSendResult dingTalkSendResult = sendMsg(sysSmsConfigVo, req.toJSONString());
+            DingTalkSendResult dingTalkSendResult = dingTalkService.sendMsg(sysSmsConfigVo, req.toJSONString());
             dingTalkSendResult.setBotName(botName);
             list.add(dingTalkSendResult);
             log.info("发送钉钉{}，botName={}，msg：{}，原因", dingTalkSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getBotName(), msg, dingTalkSendResult.getMsg());
@@ -80,63 +86,21 @@ public class DingTalkUtil {
             return null;
         }
         List<DingTalkSendResult> list = new ArrayList<>();
+        DingTalkService dingTalkService;
+        try {
+            dingTalkService = SpringUtil.getApplicationContext().getBean("dingTalk", DingTalkService.class);
+        } catch (NoSuchBeanDefinitionException e) {
+            log.info("发送钉钉{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, content);
+            return null;
+        }
         for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
             log.info("发送钉钉ing，botName={}，content：{}", false ? "成功" : "失败", sysSmsConfigVo.getBotName(), content);
-            DingTalkSendResult dingTalkSendResult = sendMsg(sysSmsConfigVo, content);
+            DingTalkSendResult dingTalkSendResult = dingTalkService.sendMsg(sysSmsConfigVo, content);
             dingTalkSendResult.setBotName(botName);
             list.add(dingTalkSendResult);
             log.info("发送钉钉{}，botName={}，content：{}，原因", dingTalkSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getBotName(), content, dingTalkSendResult.getMsg());
         }
         return list;
-    }
-
-    /**
-     * 发送钉钉群通知_实际算法
-     *
-     * @param sysSmsConfigVo
-     * @param content
-     * @return
-     */
-    private static DingTalkSendResult sendMsg(SysDingTalkConfigVo sysSmsConfigVo, String content) {
-        if (ObjectUtil.isEmpty(sysSmsConfigVo)) {
-            return new DingTalkSendResult(false, 9999, "系统钉钉通知配置不可用", null);
-        }
-        String sign = "";
-        if (ObjectUtil.isNotEmpty(sysSmsConfigVo.getSecret())) {
-            try {
-                sign = getSign(sysSmsConfigVo.getSecret());
-            } catch (Exception e) {
-                return new DingTalkSendResult(false, 9999, "计算签名失败", null);
-            }
-        }
-        String url = "https://oapi.dingtalk.com/robot/send?access_token=" + sysSmsConfigVo.getAccessToken() + sign;
-        String body = HttpRequest.post(url).header("Content-Type", "application/json").body(content).execute().body();
-        if (ObjectUtil.isEmpty(body)) {
-            return new DingTalkSendResult(false, 9999, "请求接收为空", null);
-        }
-        JSONObject jsonObject = JSONObject.parseObject(body);
-        Integer errcode = jsonObject.getInteger("errcode");
-        if (errcode == 0) {
-            return new DingTalkSendResult(true, errcode, jsonObject.getString("errmsg"), null);
-        }
-        return new DingTalkSendResult(false, errcode, jsonObject.getString("errmsg"), null);
-    }
-
-    /**
-     * 加签模式下，计算签名
-     *
-     * @param secret
-     * @return
-     * @throws Exception
-     */
-    private static String getSign(String secret) throws Exception {
-        Long timestamp = System.currentTimeMillis();
-        String stringToSign = timestamp + "\n" + secret;
-        Mac mac = Mac.getInstance("HmacSHA256");
-        mac.init(new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256"));
-        byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
-        String sign = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
-        return "&sign=" + sign + "&timestamp=" + timestamp;
     }
 
 
