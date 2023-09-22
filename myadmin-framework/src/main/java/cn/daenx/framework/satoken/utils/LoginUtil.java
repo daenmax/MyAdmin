@@ -88,7 +88,7 @@ public class LoginUtil {
         loginTokenList.parallelStream().forEach(key -> {
             String token = key.replace("Authorization:login:token:", "");
             // 如果已经过期则跳过
-            if (getTokenActivityTimeoutByToken(token) < -1) {
+            if (getTokenActiveTimeoutByToken(token) < -1) {
                 return;
             }
             SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
@@ -115,7 +115,7 @@ public class LoginUtil {
         loginTokenList.parallelStream().forEach(key -> {
             String token = key.replace("Authorization:login:token:", "");
             // 如果已经过期则跳过
-            if (getTokenActivityTimeoutByToken(token) < -1) {
+            if (getTokenActiveTimeoutByToken(token) < -1) {
                 return;
             }
             SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
@@ -142,7 +142,7 @@ public class LoginUtil {
         loginTokenList.parallelStream().forEach(key -> {
             String token = key.replace("Authorization:login:token:", "");
             // 如果已经过期则跳过
-            if (getTokenActivityTimeoutByToken(token) < -1) {
+            if (getTokenActiveTimeoutByToken(token) < -1) {
                 return;
             }
             SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
@@ -168,7 +168,7 @@ public class LoginUtil {
         loginTokenList.parallelStream().forEach(key -> {
             String token = key.replace("Authorization:login:token:", "");
             // 如果已经过期则跳过
-            if (getTokenActivityTimeoutByToken(token) < -1) {
+            if (getTokenActiveTimeoutByToken(token) < -1) {
                 return;
             }
             SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
@@ -275,7 +275,7 @@ public class LoginUtil {
      * @param token
      * @return
      */
-    public static long getTokenActivityTimeoutByToken(String token) {
-        return StpUtil.stpLogic.getTokenActivityTimeoutByToken(token);
+    public static long getTokenActiveTimeoutByToken(String token) {
+        return StpUtil.stpLogic.getTokenActiveTimeoutByToken(token);
     }
 }
