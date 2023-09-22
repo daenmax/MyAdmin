@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.daenx</groupId>
         <artifactId>MyAdmin</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </parent>
 
     <artifactId>myadmin-admin</artifactId>
@@ -21,17 +21,17 @@
         <dependency>
             <groupId>cn.daenx</groupId>
             <artifactId>myadmin-framework</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>cn.daenx</groupId>
             <artifactId>myadmin-system</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>cn.daenx</groupId>
             <artifactId>myadmin-test</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 
