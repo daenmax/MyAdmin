@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.3</version>
+        <version>3.1.4</version>
         <relativePath/>
     </parent>
     <groupId>cn.daenx</groupId>
@@ -15,22 +15,22 @@
     <description>MyAdmin</description>
     <properties>
         <java.version>17</java.version>
-        <spring.boot.version>3.1.3</spring.boot.version>
+        <spring.boot.version>3.1.4</spring.boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <druid.version>1.2.18</druid.version>
-        <fastjson2.version>2.0.39</fastjson2.version>
+        <druid.version>1.2.19</druid.version>
+        <fastjson2.version>2.0.40</fastjson2.version>
         <mybatis.plus.version>3.5.3.2</mybatis.plus.version>
         <mybatis.dynamic.datasource.version>4.1.3</mybatis.dynamic.datasource.version>
         <springdoc.webmvc-ui.version>2.2.0</springdoc.webmvc-ui.version>
-        <sa-token.version>1.34.0</sa-token.version>
-        <hutool.version>5.8.21</hutool.version>
+        <sa-token.version>1.36.0</sa-token.version>
+        <hutool.version>5.8.22</hutool.version>
         <easyexcel.version>3.3.2</easyexcel.version>
-        <aws-s3.version>1.12.540</aws-s3.version>
+        <aws-s3.version>1.12.555</aws-s3.version>
         <oshi.core.version>6.4.5</oshi.core.version>
-        <tencentcloud.sms.version>3.1.840</tencentcloud.sms.version>
+        <tencentcloud.sms.version>3.1.853</tencentcloud.sms.version>
         <aliyun.dysmsapi.version>2.0.24</aliyun.dysmsapi.version>
-        <bouncycastle.version>1.72</bouncycastle.version>
-        <orai18n.version>21.9.0.0</orai18n.version>
+        <bouncycastle.version>1.76</bouncycastle.version>
+        <orai18n.version>23.2.0.0</orai18n.version>
     </properties>
     <profiles>
         <profile>
@@ -180,7 +180,7 @@
         <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
         <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-dao-redis-jackson</artifactId>
+            <artifactId>sa-token-redis-jackson</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
         <!-- Hutool -->
