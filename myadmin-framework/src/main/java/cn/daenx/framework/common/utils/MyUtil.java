@@ -128,9 +128,13 @@ public class MyUtil {
      * @return
      */
     public static String sm4Encrypt(String data, String key) {
-        SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
-        String encryptHex = sm4.encryptHex(data);
-        return encryptHex;
+        try {
+            SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
+            String encryptHex = sm4.encryptHex(data);
+            return encryptHex;
+        } catch (Exception e) {
+            return data;
+        }
     }
 
     /**
@@ -141,9 +145,13 @@ public class MyUtil {
      * @return
      */
     public static String sm4Decrypt(String data, String key) {
-        SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
-        String decryptStr = sm4.decryptStr(data, CharsetUtil.CHARSET_UTF_8);
-        return decryptStr;
+        try {
+            SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
+            String decryptStr = sm4.decryptStr(data, CharsetUtil.CHARSET_UTF_8);
+            return decryptStr;
+        } catch (Exception e) {
+            return data;
+        }
     }
 
     /**
