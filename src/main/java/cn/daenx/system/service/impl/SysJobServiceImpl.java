@@ -8,8 +8,10 @@ import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.notify.dingTalk.utils.DingTalkUtil;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
 import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.notify.feishu.utils.FeishuUtil;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.framework.notify.wecom.utils.WecomUtil;
 import cn.daenx.framework.quartz.constant.QuartzConstant;
 import cn.daenx.framework.quartz.constant.ScheduleConstants;
 import cn.daenx.framework.quartz.exception.TaskException;
@@ -320,6 +322,14 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
             //钉钉
             String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
             DingTalkUtil.sendMsg(sysJob.getNotifyObjs(), msg);
+        } else if (SystemConstant.NOTIFY_CHANNEL_FEISHU.equals(sysJob.getNotifyChannel())) {
+            //飞书
+            String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
+            FeishuUtil.sendMsg(sysJob.getNotifyObjs(), msg);
+        } else if (SystemConstant.NOTIFY_CHANNEL_WECOM.equals(sysJob.getNotifyChannel())) {
+            //企业微信
+            String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
+            WecomUtil.sendMsg(sysJob.getNotifyObjs(), msg);
         }
     }
 

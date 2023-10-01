@@ -167,6 +167,14 @@ public class SystemConstant {
      * 通知渠道，钉钉
      */
     public static final String NOTIFY_CHANNEL_DING = "3";
+    /**
+     * 通知渠道，飞书
+     */
+    public static final String NOTIFY_CHANNEL_FEISHU = "4";
+    /**
+     * 通知渠道，企业微信
+     */
+    public static final String NOTIFY_CHANNEL_WECOM = "5";
 
 
     /**
