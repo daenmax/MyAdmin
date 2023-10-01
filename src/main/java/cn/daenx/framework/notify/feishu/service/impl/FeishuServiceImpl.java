@@ -1,10 +1,7 @@
 package cn.daenx.framework.notify.feishu.service.impl;
 
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.vo.system.config.SysDingTalkConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysFeishuConfigVo;
-import cn.daenx.framework.notify.dingTalk.service.DingTalkService;
-import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;
 import cn.daenx.framework.notify.feishu.service.FeishuService;
 import cn.daenx.framework.notify.feishu.vo.FeishuSendResult;
 import cn.hutool.core.util.ObjectUtil;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.net.URLEncoder;
 
 @Service("feishu")
 public class FeishuServiceImpl implements FeishuService {
