@@ -55,7 +55,7 @@ public class SysJobAddVo {
     private String remark;
 
     /**
-     * 异常时，通知渠道，0=不通知，1=邮件，2=短信，3=钉钉
+     * 异常时，通知渠道，0=不通知，1=邮件，2=短信，3=钉钉，4=飞书，5=企业微信
      */
     private String notifyChannel;
 
@@ -63,7 +63,7 @@ public class SysJobAddVo {
      * 异常时，通知对象，多个用,隔开
      * 邮件渠道时，写邮箱
      * 短信渠道时，写手机号
-     * 钉钉渠道时，写botName
+     * 钉钉、飞书、企业微信渠道时，写botName
      */
     private String notifyObjs;
 

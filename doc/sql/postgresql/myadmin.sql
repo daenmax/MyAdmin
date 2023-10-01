@@ -560,11 +560,11 @@ COMMENT ON COLUMN "public"."sys_job"."status" IS '任务状态，0=正常，1=�
 COMMENT ON COLUMN "public"."sys_job"."misfire_policy" IS '计划执行错误策略，1=立即执行，2=执行一次，3=放弃执行';
 COMMENT ON COLUMN "public"."sys_job"."concurrent" IS '是否并发执行，0=允许，1=禁止';
 COMMENT ON COLUMN "public"."sys_job"."remark" IS '备注';
-COMMENT ON COLUMN "public"."sys_job"."notify_channel" IS '异常时，通知渠道，0=不通知，1=邮件，2=短信，3=钉钉';
+COMMENT ON COLUMN "public"."sys_job"."notify_channel" IS '异常时，通知渠道，0=不通知，1=邮件，2=短信，3=钉钉，4=飞书，5=企业微信';
 COMMENT ON COLUMN "public"."sys_job"."notify_objs" IS '异常时，通知对象，多个用,隔开
      * 邮件渠道时，写邮箱
      * 短信渠道时，写手机号
-     * 钉钉渠道时，写botName';
+     * 钉钉、飞书、企业微信渠道时，写botName';
 COMMENT ON COLUMN "public"."sys_job"."create_id" IS '创建人';
 COMMENT ON COLUMN "public"."sys_job"."create_time" IS '创建时间';
 COMMENT ON COLUMN "public"."sys_job"."update_id" IS '修改人';
