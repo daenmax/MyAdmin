@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.system.utils;
+package cn.daenx.framework.notify.sms.vo;
 
 import lombok.Builder;
 import lombok.Data;

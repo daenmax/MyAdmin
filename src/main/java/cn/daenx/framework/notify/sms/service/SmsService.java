@@ -1,6 +1,6 @@
 package cn.daenx.framework.notify.sms.service;
 
-import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
+import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 
 import java.util.Map;
 

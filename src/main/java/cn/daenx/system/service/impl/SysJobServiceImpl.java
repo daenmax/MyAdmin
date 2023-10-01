@@ -319,7 +319,7 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
         } else if (SystemConstant.NOTIFY_CHANNEL_DING.equals(sysJob.getNotifyChannel())) {
             //钉钉
             String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
-            DingTalkUtil.sendTalk(sysJob.getNotifyObjs(), msg);
+            DingTalkUtil.sendMsg(sysJob.getNotifyObjs(), msg);
         }
     }
 

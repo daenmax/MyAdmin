@@ -1,6 +1,6 @@
 package cn.daenx.framework.notify.sms.service.impl;
 
-import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
+import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.notify.sms.service.SmsService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;

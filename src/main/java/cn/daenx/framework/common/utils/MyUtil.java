@@ -516,6 +516,17 @@ public class MyUtil {
     }
 
     /**
+     * 获取当前10位时间戳
+     *
+     * @return
+     */
+    public static long getTimestamp10() {
+        Instant now = Instant.now();
+        long timestamp = now.getEpochSecond();
+        return timestamp;
+    }
+
+    /**
      * 读取邮件HTLM模板，如果不存在就使用默认的
      *
      * @param systemName

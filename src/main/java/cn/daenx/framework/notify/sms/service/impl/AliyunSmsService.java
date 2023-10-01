@@ -1,6 +1,6 @@
 package cn.daenx.framework.notify.sms.service.impl;
 
-import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
+import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.notify.sms.service.SmsService;
 import com.alibaba.fastjson2.JSON;
 import com.aliyun.dysmsapi20170525.Client;

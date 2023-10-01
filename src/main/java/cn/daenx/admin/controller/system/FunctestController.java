@@ -1,11 +1,15 @@
 package cn.daenx.admin.controller.system;
 
 import cn.daenx.framework.notify.dingTalk.utils.DingTalkUtil;
+import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;
+import cn.daenx.framework.notify.dingTalk.vo.SendDingTalkVo;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
+import cn.daenx.framework.notify.email.vo.SendEmailVo;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.vo.Result;
-import cn.daenx.framework.common.vo.system.utils.*;
+import cn.daenx.framework.notify.sms.vo.SendSmsVo;
+import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
 import org.springframework.validation.annotation.Validated;
@@ -71,7 +75,7 @@ public class FunctestController {
     @PostMapping("/sendDingTalk")
     public Result sendDingTalk(@Validated @RequestBody SendDingTalkVo vo) {
         //发送普通文本消息
-        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendTalk(vo.getBotName(), vo.getMsg());
+        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendMsg(vo.getBotName(), vo.getMsg());
         if (dingTalkSendResults.get(0).isSuccess()) {
             return Result.ok("发送成功", null);
         }

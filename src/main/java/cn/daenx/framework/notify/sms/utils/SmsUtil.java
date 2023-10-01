@@ -6,7 +6,7 @@ import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
 import cn.daenx.framework.common.vo.CheckSendVo;
-import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
+import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysSmsConfigVo;

@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.system.utils;
+package cn.daenx.framework.notify.dingTalk.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

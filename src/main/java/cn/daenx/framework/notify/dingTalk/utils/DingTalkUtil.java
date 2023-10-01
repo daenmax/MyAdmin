@@ -3,7 +3,7 @@ package cn.daenx.framework.notify.dingTalk.utils;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.utils.RedisUtil;
-import cn.daenx.framework.common.vo.system.utils.DingTalkSendResult;
+import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysDingTalkConfigVo;
 import cn.daenx.framework.notify.dingTalk.service.DingTalkService;
@@ -34,38 +34,38 @@ public class DingTalkUtil {
 
     /**
      * 发送钉钉群通知
-     * text类型，如果需要其他消息类型，请自己组装报文，然后调用DingTalkSendResult方法
+     * text类型，如果需要其他消息类型，请自己组装报文，然后调用sendByContent方法
      *
      * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开
-     * @param msg     消息内容
+     * @param msg     消息内容，不需要自己写关键词
      * @return
      */
-    public static List<DingTalkSendResult> sendTalk(String botName, String msg) {
+    public static List<DingTalkSendResult> sendMsg(String botName, String msg) {
         log.info("发送钉钉头部开始ing，botName={}，msg：{}", botName, msg);
-        List<SysDingTalkConfigVo> sysSmsConfigVoList = getSysSmsConfigVo(botName);
-        if (CollUtil.isEmpty(sysSmsConfigVoList)) {
+        List<SysDingTalkConfigVo> configVo = getConfigVo(botName);
+        if (CollUtil.isEmpty(configVo)) {
             log.info("发送钉钉{}，botName={}，msg：{}", false ? "成功" : "失败", botName, msg);
             return null;
         }
         List<DingTalkSendResult> list = new ArrayList<>();
-        DingTalkService dingTalkService;
+        DingTalkService service;
         try {
-            dingTalkService = SpringUtil.getApplicationContext().getBean("dingTalk", DingTalkService.class);
+            service = SpringUtil.getApplicationContext().getBean("dingTalk", DingTalkService.class);
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送钉钉{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, msg);
             return null;
         }
-        for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
-            log.info("发送钉钉ing，botName={}，msg：{}", false ? "成功" : "失败", sysSmsConfigVo.getBotName(), msg);
+        for (SysDingTalkConfigVo vo : configVo) {
+            log.info("发送钉钉ing，botName={}，msg：{}", false ? "成功" : "失败", vo.getBotName(), msg);
             JSONObject req = new JSONObject();
             req.put("msgtype", "text");
             JSONObject text = new JSONObject();
-            text.put("content", ObjectUtil.isEmpty(sysSmsConfigVo.getKeywords()) ? msg : sysSmsConfigVo.getKeywords() + msg);
+            text.put("content", ObjectUtil.isEmpty(vo.getKeywords()) ? msg : vo.getKeywords() + msg);
             req.put("text", text);
-            DingTalkSendResult dingTalkSendResult = dingTalkService.sendMsg(sysSmsConfigVo, req.toJSONString());
-            dingTalkSendResult.setBotName(botName);
-            list.add(dingTalkSendResult);
-            log.info("发送钉钉{}，botName={}，msg：{}，原因", dingTalkSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getBotName(), msg, dingTalkSendResult.getMsg());
+            DingTalkSendResult result = service.sendMsg(vo, req.toJSONString());
+            result.setBotName(botName);
+            list.add(result);
+            log.info("发送钉钉{}，botName={}，msg：{}，原因", result.isSuccess() ? "成功" : "失败", vo.getBotName(), msg, result.getMsg());
         }
         return list;
     }
@@ -75,30 +75,30 @@ public class DingTalkUtil {
      * 自己组装报文，以便实现更多消息类型
      *
      * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开
-     * @param content JSON格式的数据
+     * @param content JSON格式的数据，参考钉钉官网文档，不需要自己计算签名，但是需要写关键词（如果有的话）
      * @return
      */
-    public static List<DingTalkSendResult> sendTalkContent(String botName, String content) {
+    public static List<DingTalkSendResult> sendByContent(String botName, String content) {
         log.info("发送钉钉头部开始ing，botName={}，content：{}", botName, content);
-        List<SysDingTalkConfigVo> sysSmsConfigVoList = getSysSmsConfigVo(botName);
-        if (CollUtil.isEmpty(sysSmsConfigVoList)) {
+        List<SysDingTalkConfigVo> configVo = getConfigVo(botName);
+        if (CollUtil.isEmpty(configVo)) {
             log.info("发送钉钉{}，botName={}，content：{}", false ? "成功" : "失败", botName, content);
             return null;
         }
         List<DingTalkSendResult> list = new ArrayList<>();
-        DingTalkService dingTalkService;
+        DingTalkService service;
         try {
-            dingTalkService = SpringUtil.getApplicationContext().getBean("dingTalk", DingTalkService.class);
+            service = SpringUtil.getApplicationContext().getBean("dingTalk", DingTalkService.class);
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送钉钉{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, content);
             return null;
         }
-        for (SysDingTalkConfigVo sysSmsConfigVo : sysSmsConfigVoList) {
-            log.info("发送钉钉ing，botName={}，content：{}", false ? "成功" : "失败", sysSmsConfigVo.getBotName(), content);
-            DingTalkSendResult dingTalkSendResult = dingTalkService.sendMsg(sysSmsConfigVo, content);
-            dingTalkSendResult.setBotName(botName);
-            list.add(dingTalkSendResult);
-            log.info("发送钉钉{}，botName={}，content：{}，原因", dingTalkSendResult.isSuccess() ? "成功" : "失败", sysSmsConfigVo.getBotName(), content, dingTalkSendResult.getMsg());
+        for (SysDingTalkConfigVo vo : configVo) {
+            log.info("发送钉钉ing，botName={}，content：{}", false ? "成功" : "失败", vo.getBotName(), content);
+            DingTalkSendResult result = service.sendMsg(vo, content);
+            result.setBotName(botName);
+            list.add(result);
+            log.info("发送钉钉{}，botName={}，content：{}，原因", result.isSuccess() ? "成功" : "失败", vo.getBotName(), content, result.getMsg());
         }
         return list;
     }
@@ -111,7 +111,7 @@ public class DingTalkUtil {
      * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开
      * @return
      */
-    private static List<SysDingTalkConfigVo> getSysSmsConfigVo(String botName) {
+    private static List<SysDingTalkConfigVo> getConfigVo(String botName) {
         Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.dingTalk.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
@@ -125,10 +125,10 @@ public class DingTalkUtil {
         String[] array = ArrayUtil.toArray(set, String.class);
         for (String name : array) {
             JSONObject jsonObject = JSONObject.parseObject(sysConfig.getValue());
-            SysDingTalkConfigVo sysDingTalkConfigVo = jsonObject.getObject(name, SysDingTalkConfigVo.class);
-            if (ObjectUtil.isNotEmpty(sysDingTalkConfigVo)) {
-                sysDingTalkConfigVo.setBotName(name);
-                list.add(sysDingTalkConfigVo);
+            SysDingTalkConfigVo vo = jsonObject.getObject(name, SysDingTalkConfigVo.class);
+            if (ObjectUtil.isNotEmpty(vo)) {
+                vo.setBotName(name);
+                list.add(vo);
             }
         }
         return list;

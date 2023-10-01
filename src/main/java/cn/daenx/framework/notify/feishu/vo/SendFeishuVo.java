@@ -1,13 +1,13 @@
-package cn.daenx.framework.common.vo.system.utils;
+package cn.daenx.framework.notify.feishu.vo;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 钉钉测试
+ * 飞书发送消息
  */
 @Data
-public class SendDingTalkVo {
+public class SendFeishuVo {
     /**
      * 机器人名称，在系统参数里自己填的
      */

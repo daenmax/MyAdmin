@@ -1,4 +1,4 @@
-package cn.daenx.framework.common.vo.system.utils;
+package cn.daenx.framework.notify.email.vo;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

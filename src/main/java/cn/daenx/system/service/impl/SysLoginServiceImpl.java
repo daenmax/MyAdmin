@@ -12,7 +12,7 @@ import cn.daenx.framework.common.vo.system.config.SysSmsTemplateConfigVo;
 import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.common.vo.system.other.SysPositionVo;
 import cn.daenx.framework.common.vo.system.other.SysRoleVo;
-import cn.daenx.framework.common.vo.system.utils.SmsSendResult;
+import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.satoken.utils.LoginUtil;

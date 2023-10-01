@@ -1,7 +1,7 @@
 package cn.daenx.framework.notify.dingTalk.service.impl;
 
 import cn.daenx.framework.common.vo.system.config.SysDingTalkConfigVo;
-import cn.daenx.framework.common.vo.system.utils.DingTalkSendResult;
+import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;
 import cn.daenx.framework.notify.dingTalk.service.DingTalkService;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
@@ -18,24 +18,24 @@ public class DingTalkServiceImpl implements DingTalkService {
     /**
      * 发送钉钉群通知_实际算法
      *
-     * @param sysSmsConfigVo
+     * @param configVo
      * @param content
      * @return
      */
     @Override
-    public DingTalkSendResult sendMsg(SysDingTalkConfigVo sysSmsConfigVo, String content) {
-        if (ObjectUtil.isEmpty(sysSmsConfigVo)) {
+    public DingTalkSendResult sendMsg(SysDingTalkConfigVo configVo, String content) {
+        if (ObjectUtil.isEmpty(configVo)) {
             return new DingTalkSendResult(false, 9999, "系统钉钉通知配置不可用", null);
         }
         String sign = "";
-        if (ObjectUtil.isNotEmpty(sysSmsConfigVo.getSecret())) {
+        if (ObjectUtil.isNotEmpty(configVo.getSecret())) {
             try {
-                sign = getSign(sysSmsConfigVo.getSecret());
+                sign = getSign(configVo.getSecret());
             } catch (Exception e) {
                 return new DingTalkSendResult(false, 9999, "计算签名失败", null);
             }
         }
-        String url = "https://oapi.dingtalk.com/robot/send?access_token=" + sysSmsConfigVo.getAccessToken() + sign;
+        String url = "https://oapi.dingtalk.com/robot/send?access_token=" + configVo.getAccessToken() + sign;
         String body = HttpRequest.post(url).header("Content-Type", "application/json").body(content).execute().body();
         if (ObjectUtil.isEmpty(body)) {
             return new DingTalkSendResult(false, 9999, "请求接收为空", null);
