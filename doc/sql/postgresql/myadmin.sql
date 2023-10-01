@@ -475,6 +475,8 @@ INSERT INTO "public"."sys_dict_detail" VALUES ('ee69bc49e73716f01b4f369f1323a9e9
 INSERT INTO "public"."sys_dict_detail" VALUES ('f328b5c9651db1236cdf1d3682ac7f64', 'sys_oss_type', '京东云', '京东云', 0, NULL, 'danger', '0', NULL, '1', '2023-04-16 23:55:04', '1', '2023-04-20 22:52:49', 0);
 INSERT INTO "public"."sys_dict_detail" VALUES ('ff1467cd4b4d4d84868a8f31a4f32fec', 'sys_common_status', '失败', '1', 2, NULL, 'danger', '0', '停用状态', '1', '2023-03-15 16:36:49', '1', '2023-03-15 16:36:49', 0);
 INSERT INTO "public"."sys_dict_detail" VALUES ('ff3eed8202940077df815bfdf0b5d836', 'sys_time_unit', '天', '3', 3, NULL, 'warning', '0', NULL, '1', '2023-05-23 14:48:37', '1', '2023-06-26 15:49:09', 0);
+INSERT INTO "public"."sys_dict_detail" VALUES ('7e4e1fc182c3cbc573a32eb7fbc9a749', 'sys_notify_channel', '飞书', '4', 4, NULL, 'warning', '0', NULL, '1', '2023-10-01 14:33:28', '1', '2023-10-01 14:33:28', 0);
+INSERT INTO "public"."sys_dict_detail" VALUES ('87f33838c66f34a94d7c19c384e4758c', 'sys_notify_channel', '企业微信', '5', 5, NULL, 'warning', '0', NULL, '1', '2023-10-01 14:33:39', '1', '2023-10-01 14:33:39', 0);
 
 -- ----------------------------
 -- Table structure for sys_file
