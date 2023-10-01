@@ -2,6 +2,7 @@ package cn.daenx.framework.notify.feishu.utils;
 
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysFeishuConfigVo;
@@ -45,7 +46,7 @@ public class FeishuUtil {
         List<SysFeishuConfigVo> configVoList = getConfigVo(botName);
         if (CollUtil.isEmpty(configVoList)) {
             log.info("发送飞书{}，botName={}，msg：{}", false ? "成功" : "失败", botName, msg);
-            return null;
+            throw new MyException("未找到对应配置");
         }
         List<FeishuSendResult> list = new ArrayList<>();
         FeishuService service;
@@ -53,12 +54,12 @@ public class FeishuUtil {
             service = SpringUtil.getApplicationContext().getBean("feishu", FeishuService.class);
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送飞书{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, msg);
-            return null;
+            throw new MyException("接口实现类未找到");
         }
         for (SysFeishuConfigVo vo : configVoList) {
             log.info("发送飞书ing，botName={}，msg：{}", false ? "成功" : "失败", vo.getBotName(), msg);
             JSONObject req = new JSONObject();
-            req.put("msgtype", "text");
+            req.put("msg_type", "text");
             JSONObject text = new JSONObject();
             text.put("text", ObjectUtil.isEmpty(vo.getKeywords()) ? msg : vo.getKeywords() + msg);
             req.put("content", text);
@@ -83,7 +84,7 @@ public class FeishuUtil {
         List<SysFeishuConfigVo> configVoList = getConfigVo(botName);
         if (CollUtil.isEmpty(configVoList)) {
             log.info("发送飞书{}，botName={}，content：{}", false ? "成功" : "失败", botName, content);
-            return null;
+            throw new MyException("未找到对应配置");
         }
         List<FeishuSendResult> list = new ArrayList<>();
         FeishuService service;
@@ -91,7 +92,7 @@ public class FeishuUtil {
             service = SpringUtil.getApplicationContext().getBean("feishu", FeishuService.class);
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送飞书{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, content);
-            return null;
+            throw new MyException("接口实现类未找到");
         }
         for (SysFeishuConfigVo vo : configVoList) {
             log.info("发送飞书ing，botName={}，content：{}", false ? "成功" : "失败", vo.getBotName(), content);
@@ -105,7 +106,7 @@ public class FeishuUtil {
 
 
     /**
-     * 从redis里获取系统飞书通知配置
+     * 从redis里获取系统飞书配置
      * 不存在或者被禁用或者数量为0返回null
      *
      * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开

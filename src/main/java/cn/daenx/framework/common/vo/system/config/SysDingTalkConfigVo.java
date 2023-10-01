@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 系统钉钉通知配置
+ * 系统钉钉配置
  */
 @Data
 @AllArgsConstructor

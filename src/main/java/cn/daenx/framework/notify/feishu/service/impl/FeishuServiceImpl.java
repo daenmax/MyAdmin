@@ -25,7 +25,7 @@ public class FeishuServiceImpl implements FeishuService {
     @Override
     public FeishuSendResult sendMsg(SysFeishuConfigVo configVo, String content) {
         if (ObjectUtil.isEmpty(configVo)) {
-            return new FeishuSendResult(false, 9999, "系统飞书通知配置不可用", null);
+            return new FeishuSendResult(false, 9999, "系统飞书配置不可用", null);
         }
         if (ObjectUtil.isNotEmpty(configVo.getSecret())) {
             try {

@@ -11,11 +11,11 @@ public class WecomSendResult {
      */
     private boolean isSuccess;
     /**
-     * 飞书返回的
+     * 企业微信返回的
      */
     private Integer code;
     /**
-     * 飞书返回的
+     * 企业微信返回的
      */
     private String msg;
     private String botName;

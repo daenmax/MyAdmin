@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 飞书发送消息
+ * 企业微信发送消息
  */
 @Data
 public class SendWecomVo {

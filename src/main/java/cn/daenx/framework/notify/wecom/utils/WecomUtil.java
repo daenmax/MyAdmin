@@ -2,6 +2,7 @@ package cn.daenx.framework.notify.wecom.utils;
 
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysWecomConfigVo;
@@ -45,7 +46,7 @@ public class WecomUtil {
         List<SysWecomConfigVo> configVoList = getConfigVo(botName);
         if (CollUtil.isEmpty(configVoList)) {
             log.info("发送企业微信{}，botName={}，msg：{}", false ? "成功" : "失败", botName, msg);
-            return null;
+            throw new MyException("未找到对应配置");
         }
         List<WecomSendResult> list = new ArrayList<>();
         WecomService service;
@@ -53,7 +54,7 @@ public class WecomUtil {
             service = SpringUtil.getApplicationContext().getBean("wecom", WecomService.class);
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送企业微信{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, msg);
-            return null;
+            throw new MyException("接口实现类未找到");
         }
         for (SysWecomConfigVo vo : configVoList) {
             log.info("发送企业微信ing，botName={}，msg：{}", false ? "成功" : "失败", vo.getBotName(), msg);
@@ -83,7 +84,7 @@ public class WecomUtil {
         List<SysWecomConfigVo> configVoList = getConfigVo(botName);
         if (CollUtil.isEmpty(configVoList)) {
             log.info("发送企业微信{}，botName={}，content：{}", false ? "成功" : "失败", botName, content);
-            return null;
+            throw new MyException("未找到对应配置");
         }
         List<WecomSendResult> list = new ArrayList<>();
         WecomService service;
@@ -91,7 +92,7 @@ public class WecomUtil {
             service = SpringUtil.getApplicationContext().getBean("wecom", WecomService.class);
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送企业微信{}，botName={}，content：{}，接口实现类未找到", false ? "成功" : "失败", botName, content);
-            return null;
+            throw new MyException("接口实现类未找到");
         }
         for (SysWecomConfigVo vo : configVoList) {
             log.info("发送企业微信ing，botName={}，content：{}", false ? "成功" : "失败", vo.getBotName(), content);
@@ -105,7 +106,7 @@ public class WecomUtil {
 
 
     /**
-     * 从redis里获取系统企业微信通知配置
+     * 从redis里获取系统企业微信配置
      * 不存在或者被禁用或者数量为0返回null
      *
      * @param botName 机器人名称，在系统参数里自己填的，多个用,隔开

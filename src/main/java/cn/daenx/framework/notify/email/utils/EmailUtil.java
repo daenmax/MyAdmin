@@ -3,6 +3,7 @@ package cn.daenx.framework.notify.email.utils;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
@@ -69,7 +70,7 @@ public class EmailUtil {
         SysEmailConfigVo.Email email = getOneEmailConfig();
         if (ObjectUtil.isEmpty(email)) {
             log.info("发送邮件{}，对象={}，标题：{}，内容：{}", false ? "成功" : "失败", toEmail, subject, content);
-            return false;
+            throw new MyException("未找到对应配置");
         }
         try {
             EmailService emailService = SpringUtil.getApplicationContext().getBean("email", EmailService.class);
@@ -78,7 +79,7 @@ public class EmailUtil {
             return aBoolean;
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送邮件{}，对象={}，标题：{}，内容：{}，接口实现类未找到", false ? "成功" : "失败", toEmail, subject, content);
-            return false;
+            throw new MyException("接口实现类未找到");
         }
     }
 
@@ -99,7 +100,7 @@ public class EmailUtil {
         SysEmailConfigVo.Email email = getOneEmailConfig(fromEmail);
         if (ObjectUtil.isEmpty(email)) {
             log.info("发送邮件{}，对象={}，标题：{}，内容：{}", false ? "成功" : "失败", toEmail, subject, content);
-            return false;
+            throw new MyException("未找到对应配置");
         }
         try {
             EmailService emailService = SpringUtil.getApplicationContext().getBean("email", EmailService.class);
@@ -108,7 +109,7 @@ public class EmailUtil {
             return aBoolean;
         } catch (NoSuchBeanDefinitionException e) {
             log.info("发送邮件{}，对象={}，标题：{}，内容：{}，接口实现类未找到", false ? "成功" : "失败", toEmail, subject, content);
-            return false;
+            throw new MyException("接口实现类未找到");
         }
 
     }

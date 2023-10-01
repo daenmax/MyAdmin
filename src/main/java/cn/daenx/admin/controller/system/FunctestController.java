@@ -5,11 +5,17 @@ import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;
 import cn.daenx.framework.notify.dingTalk.vo.SendDingTalkVo;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
 import cn.daenx.framework.notify.email.vo.SendEmailVo;
+import cn.daenx.framework.notify.feishu.utils.FeishuUtil;
+import cn.daenx.framework.notify.feishu.vo.FeishuSendResult;
+import cn.daenx.framework.notify.feishu.vo.SendFeishuVo;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.notify.sms.vo.SendSmsVo;
 import cn.daenx.framework.notify.sms.vo.SmsSendResult;
+import cn.daenx.framework.notify.wecom.utils.WecomUtil;
+import cn.daenx.framework.notify.wecom.vo.SendWecomVo;
+import cn.daenx.framework.notify.wecom.vo.WecomSendResult;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.ObjectUtil;
 import org.springframework.validation.annotation.Validated;
@@ -59,11 +65,11 @@ public class FunctestController {
                 smsMap.put(split[0], split[1]);
             }
         }
-        SmsSendResult smsSendResult = SmsUtil.sendSms(MyUtil.join(vo.getPhones(), String::trim, ","), vo.getTemplateId(), smsMap, vo.getType());
-        if (smsSendResult.isSuccess()) {
+        SmsSendResult result = SmsUtil.sendSms(MyUtil.join(vo.getPhones(), String::trim, ","), vo.getTemplateId(), smsMap, vo.getType());
+        if (result.isSuccess()) {
             return Result.ok("发送成功", null);
         }
-        return Result.error(smsSendResult.getMsg());
+        return Result.error(result.getMsg());
     }
 
     /**
@@ -75,11 +81,42 @@ public class FunctestController {
     @PostMapping("/sendDingTalk")
     public Result sendDingTalk(@Validated @RequestBody SendDingTalkVo vo) {
         //发送普通文本消息
-        List<DingTalkSendResult> dingTalkSendResults = DingTalkUtil.sendMsg(vo.getBotName(), vo.getMsg());
-        if (dingTalkSendResults.get(0).isSuccess()) {
+        List<DingTalkSendResult> result = DingTalkUtil.sendMsg(vo.getBotName(), vo.getMsg());
+        if (result.get(0).isSuccess()) {
             return Result.ok("发送成功", null);
         }
-        return Result.error(dingTalkSendResults.get(0).getMsg());
+        return Result.error(result.get(0).getMsg());
     }
 
+    /**
+     * 飞书测试
+     *
+     * @return
+     */
+    @SaCheckPermission("tool:functest:sendFeishu")
+    @PostMapping("/sendFeishu")
+    public Result sendFeishu(@Validated @RequestBody SendFeishuVo vo) {
+        //发送普通文本消息
+        List<FeishuSendResult> result = FeishuUtil.sendMsg(vo.getBotName(), vo.getMsg());
+        if (result.get(0).isSuccess()) {
+            return Result.ok("发送成功", null);
+        }
+        return Result.error(result.get(0).getMsg());
+    }
+
+    /**
+     * 企业微信测试
+     *
+     * @return
+     */
+    @SaCheckPermission("tool:functest:sendWecom")
+    @PostMapping("/sendWecom")
+    public Result sendWecom(@Validated @RequestBody SendWecomVo vo) {
+        //发送普通文本消息
+        List<WecomSendResult> result = WecomUtil.sendMsg(vo.getBotName(), vo.getMsg());
+        if (result.get(0).isSuccess()) {
+            return Result.ok("发送成功", null);
+        }
+        return Result.error(result.get(0).getMsg());
+    }
 }

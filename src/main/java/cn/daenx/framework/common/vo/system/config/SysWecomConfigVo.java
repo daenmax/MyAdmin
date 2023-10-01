@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 系统企业微信通知配置
+ * 系统企业微信配置
  */
 @Data
 @AllArgsConstructor

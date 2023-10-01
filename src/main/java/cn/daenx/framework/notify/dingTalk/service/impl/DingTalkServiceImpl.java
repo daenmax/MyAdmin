@@ -25,7 +25,7 @@ public class DingTalkServiceImpl implements DingTalkService {
     @Override
     public DingTalkSendResult sendMsg(SysDingTalkConfigVo configVo, String content) {
         if (ObjectUtil.isEmpty(configVo)) {
-            return new DingTalkSendResult(false, 9999, "系统钉钉通知配置不可用", null);
+            return new DingTalkSendResult(false, 9999, "系统钉钉配置不可用", null);
         }
         String sign = "";
         if (ObjectUtil.isNotEmpty(configVo.getSecret())) {

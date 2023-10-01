@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 系统飞书通知配置
+ * 系统飞书配置
  */
 @Data
 @AllArgsConstructor

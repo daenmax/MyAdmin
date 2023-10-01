@@ -100,7 +100,7 @@ INSERT INTO "public"."sys_config" VALUES ('0015263fa950c3ce40957fdb3b1e14a7', '�
 	"slider": {}
 }', '1', '0', '如果删除或者禁用此参数，那么系统将不开启验证码
 具体参数说明参考文档', '1', '2023-04-25 20:23:07', '1', '2023-05-19 22:03:25', 0);
-INSERT INTO "public"."sys_config" VALUES ('0ce0ea3dc352bb6838e4d008d9e849fc', '系统钉钉通知配置', 'sys.dingTalk.config', '{
+INSERT INTO "public"."sys_config" VALUES ('0ce0ea3dc352bb6838e4d008d9e849fc', '系统钉钉配置', 'sys.dingTalk.config', '{
 	"testbot": {
 		"keywords": "",
 		"secret": "SEC48ea902b5b3fb13876666666666666660a18e38bcb607ced5108f71f24a7",
@@ -253,6 +253,23 @@ INSERT INTO "public"."sys_config" VALUES ('83332089ca838d1816498f2bfd874ad3', '�
 }', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送邮件
 具体参数说明参考文档
 ', '1', '2023-05-11 10:21:42', '1', '2023-05-22 16:42:58', 0);
+INSERT INTO "public"."sys_config" VALUES ('cc1dd434b089df0a6e97fbe446c39377', '系统飞书配置', 'sys.feishu.config', '{
+	"testbot": {
+		"keywords": "",
+		"secret": "",
+		"accessToken": "207b5526-****-****-****-b57ac302626f",
+		"remark": "测试群的机器人"
+	}
+}', '0', '0', '如果删除或者禁用此参数，那么系统将无法发送飞书通知
+具体参数说明参考文档', '1', '2023-10-01 13:40:50', '1', '2023-10-01 13:40:50', 0);
+INSERT INTO "public"."sys_config" VALUES ('64c70f1e91cbcd3cfc390e3966aeef6b', '系统企微配置', 'sys.wecom.config', '{
+	"testbot": {
+		"key": "b5caa377-****-****-****-3d656ed93b12",
+		"remark": "测试群的机器人"
+	}
+}', '0', '0', '如果删除或者禁用此参数，那么系统将无法发送企业微信通知
+具体参数说明参考文档', '1', '2023-10-01 13:41:53', '1', '2023-10-01 13:43:57', 0);
+
 
 -- ----------------------------
 -- Table structure for sys_dept

@@ -21,7 +21,7 @@ public class WecomServiceImpl implements WecomService {
     @Override
     public WecomSendResult sendMsg(SysWecomConfigVo configVo, String content) {
         if (ObjectUtil.isEmpty(configVo)) {
-            return new WecomSendResult(false, 9999, "系统企业微信通知配置不可用", null);
+            return new WecomSendResult(false, 9999, "系统企业微信配置不可用", null);
         }
         String url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=" + configVo.getKey();
         String body = HttpRequest.post(url).header("Content-Type", "application/json").body(content).execute().body();
