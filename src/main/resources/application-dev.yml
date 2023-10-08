@@ -92,6 +92,8 @@ spring:
           url: jdbc:mysql://rm-2ze631pi758b4666mbo.mysql.rds.aliyuncs.com/myadmin?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
           username: myadmin
           password: myadmin@2023
+          # mysql5及以下需要使用com.mysql.jdbc.Driver
+          # mysql8及以上需要使用com.mysql.cj.jdbc.Driver
           driverClassName: com.mysql.cj.jdbc.Driver
           type: com.alibaba.druid.pool.DruidDataSource
         # postgresql数据源例子（如果用不到，就注释掉即可），db-postgresql是自己取的名字，你想叫啥就叫啥
@@ -102,11 +104,10 @@ spring:
 #          driverClassName: org.postgresql.Driver
 #          type: com.alibaba.druid.pool.DruidDataSource
         # oracle数据源例子（如果用不到，就注释掉即可），db-oracle是自己取的名字，你想叫啥就叫啥
-        # 注意，使用Oracle，注意修改DataScopeAspect文件中的DbType
 #        db-oracle:
-#          url: jdbc:oracle:thin:@//172.16.111.246:1520/orcl
-#          username: mddata
-#          password: 123456
+#          url: jdbc:oracle:thin:@//127.0.0.1:1521/orcl
+#          username: MYADMIN
+#          password: myadmin@2023
 #          driverClassName: oracle.jdbc.OracleDriver
 #          type: com.alibaba.druid.pool.DruidDataSource
 
@@ -161,6 +162,8 @@ sa-token:
   token-prefix: "Bearer"
   # jwt秘钥
   jwt-secret-key: 1qTJiBvZMaDloBOnRrngkzr5g7vuQyZA
+  # 关闭启动时logo和版本号打印
+  is-print: false
 
 # 设置忽略鉴权的地址
 check-login:
