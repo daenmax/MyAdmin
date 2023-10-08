@@ -19,6 +19,7 @@ import cn.daenx.system.mapper.SysRoleMapper;
 import cn.daenx.system.mapper.SysUserMapper;
 
 
+import cn.daenx.system.service.SysDeptParentService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
@@ -46,6 +47,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     private SysRoleDeptMapper sysRoleDeptMapper;
     @Resource
     private SysUserMapper sysUserMapper;
+    @Resource
+    private SysDeptParentService sysDeptParentService;
 
 
     /**
@@ -87,7 +90,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             }
             if (roleMap.containsKey(SystemConstant.DATA_SCOPE_DEPT_DOWN)) {
                 //数据权限，2=本部门及以下数据
-
                 List<SysDept> deptList = getListByParentId(deptId, true);
                 List<String> deptIds = MyUtil.joinToList(deptList, SysDept::getId);
                 deptSet.addAll(deptIds);
@@ -119,7 +121,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
         List<SysDept> sysDeptList = sysDeptMapper.selectListX(wrapper);
         for (SysDept sysDept : sysDeptList) {
-            sysDept.getLeaderUser().setAdmin("1".equals(sysDept.getLeaderUser().getId()));
+            if (sysDept.getLeaderUser() != null) {
+                sysDept.getLeaderUser().setAdmin("1".equals(sysDept.getLeaderUser().getId()));
+            }
         }
         return sysDeptList;
     }
@@ -215,17 +219,17 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return strings;
     }
 
-    private Boolean checkScope(String id) {
+    private SysDept checkScope(String id) {
         SysDeptPageVo sysDeptPageVo = new SysDeptPageVo();
         sysDeptPageVo.setId(id);
         LambdaQueryWrapper<SysDept> wrapper = getWrapper(sysDeptPageVo);
         List<SysDept> sysDeptList = sysDeptMapper.selectList(wrapper);
         for (SysDept sysDept : sysDeptList) {
             if (sysDept.getId().equals(id)) {
-                return true;
+                return sysDept;
             }
         }
-        return false;
+        return null;
     }
 
     private Boolean checkChild(String id) {
@@ -264,7 +268,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public SysDept getInfo(String id) {
-        if (!checkScope(id)) {
+        if (checkScope(id) == null) {
             throw new MyException("你无权限操作此数据");
         }
         return sysDeptMapper.selectById(id);
@@ -277,7 +281,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public void editInfo(SysDeptUpdVo vo) {
-        if (!checkScope(vo.getId())) {
+        SysDept sysDeptOld = checkScope(vo.getId());
+        if (sysDeptOld == null) {
             throw new MyException("你无权限操作此数据");
         }
         if (checkCodeExist(vo.getCode(), vo.getId())) {
@@ -303,6 +308,10 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         int update = sysDeptMapper.update(new SysDept(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
+        }
+        if (!sysDeptOld.getParentId().equals(vo.getParentId())) {
+            //修改了父ID，重新计算所有层级结构
+            sysDeptParentService.handleAll();
         }
     }
 
@@ -336,6 +345,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         if (insert < 1) {
             throw new MyException("新增失败");
         }
+        sysDeptParentService.handleInsert(sysDept.getId());
     }
 
     /**
@@ -345,7 +355,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public void deleteById(String id) {
-        if (!checkScope(id)) {
+        if (checkScope(id) == null) {
             throw new MyException("你无权限操作此数据");
         }
         if (checkChild(id)) {
@@ -358,6 +368,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         if (i < 1) {
             throw new MyException("删除失败");
         }
+        sysDeptParentService.handleDelete(id);
     }
 
     /**

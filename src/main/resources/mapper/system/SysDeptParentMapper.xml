@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.daenx.system.mapper.SysDeptParentMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.system.domain.po.SysDeptParent">
+    <!--@mbg.generated-->
+    <!--@Table sys_dept_parent-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="dept_id" jdbcType="VARCHAR" property="deptId" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, dept_id, parent_id
+  </sql>
+</mapper>

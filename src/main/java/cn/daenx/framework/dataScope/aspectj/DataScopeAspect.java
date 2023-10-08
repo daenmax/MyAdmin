@@ -38,13 +38,6 @@ import java.util.List;
 @Intercepts(@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}))
 public class DataScopeAspect implements DataPermissionHandler {
 
-    /**
-     * 数据库类型
-     * 0=MySQL、Postgresql，1=Oracle
-     */
-    private int DbType = 0;
-
-
     //线程局部变量
     //ThreadLocal的作用主要是做数据隔离，填充的数据只属于当前线程
     //用于实现以下功能：虽然每次执行SQL都会进入该拦截器，但是拦截器里可以判断mapper方法上是否有@DataScope注解，如果没有，那就直接放行，不进行修改SQL
@@ -156,13 +149,7 @@ public class DataScopeAspect implements DataPermissionHandler {
                     //本部门及以下数据
                     sql.append(" in ").append("(select x1.id from ")
                             .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id in ");
-                    if (DbType == 0) {
-                        //MySQL和PostgreSQL用这行
-                        sql.append("(WITH RECURSIVE recursion ( id ) AS ( SELECT sd1.id  FROM sys_dept sd1  WHERE sd1.is_delete = 0  AND sd1.id = '").append(deptId).append("' UNION ALL SELECT sd2.id  FROM sys_dept sd2, recursion t2  WHERE sd2.is_delete = 0  AND sd2.parent_id = t2.id  ) SELECT t1.id  FROM recursion t1)");
-                    } else if (DbType == 1) {
-                        //Oracle用这行
-                        sql.append("(SELECT sd.id  FROM sys_dept sd  WHERE sd.is_delete = 0 START WITH sd.id = '").append(deptId).append("' CONNECT BY PRIOR sd.ID = sd.PARENT_ID)");
-                    }
+                    sql.append("(SELECT sdp.dept_id  FROM sys_dept_parent sdp  WHERE sdp.parent_id = '").append(deptId).append("')");
                     sql.append(")").append(" x1)");
                 } else if (SystemConstant.DATA_SCOPE_ALL.equals(dataScope)) {
                     //全部数据
