@@ -84,7 +84,7 @@ spring:
         test-on-borrow: true
         # 在连接归还到连接池时是否测试该连接
         test-on-return: false
-      # 默认使用下面哪个数据库（不加@DS注释的地方，就是使用这里配置的默认数据库）
+      # 默认使用下面哪个数据库（不加@DS注解的地方，就是使用这里配置的默认数据库）
       primary: db-mysql
       datasource:
         # mysql数据源例子（如果用不到，就注释掉即可），db-mysql是自己取的名字，你想叫啥就叫啥
