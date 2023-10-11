@@ -78,8 +78,8 @@ spring:
         max-evictable-idle-time-millis: 30000
         # 是否验证连接的有效性
         test-while-idle: true
-        # 验证连接有效性的SQL语句
-        validation-query: SELECT 1 FROM DUAL
+        # 默认验证连接有效性的SQL语句
+        validation-query: SELECT 1
         # 获取连接时候验证，会影响性能
         test-on-borrow: true
         # 在连接归还到连接池时是否测试该连接
@@ -110,6 +110,9 @@ spring:
 #          password: myadmin@2023
 #          driverClassName: oracle.jdbc.OracleDriver
 #          type: com.alibaba.druid.pool.DruidDataSource
+#          druid:
+#            # 重新指定验证SQL
+#            validation-query: SELECT 1 FROM DUAL
 
   # redis配置
   data:
