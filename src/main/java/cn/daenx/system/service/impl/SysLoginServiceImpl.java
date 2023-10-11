@@ -66,8 +66,8 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private CaptchaService captchaService;
 
-    @Value("${system-info.name}")
-    private String systemInfoName;
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     /**
      * 获取邮箱验证码
@@ -104,8 +104,8 @@ public class SysLoginServiceImpl implements SysLoginService {
         }
         //生成验证码
         String code = RandomUtil.randomNumbers(6);
-        String subject = "【" + systemInfoName + "】" + "邮件验证";
-        String content = MyUtil.buildCodeValida(systemInfoName, code);
+        String subject = "【" + applicationName + "】" + "邮件验证";
+        String content = MyUtil.buildCodeValida(applicationName, code);
         Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
         if (!aBoolean) {
             throw new MyException("发送邮件失败，请联系管理员");

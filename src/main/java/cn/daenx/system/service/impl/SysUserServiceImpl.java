@@ -73,8 +73,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private SysConfigService sysConfigService;
 
-    @Value("${system-info.name}")
-    private String systemInfoName;
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     /**
      * 通过手机号检查用户是否存在
@@ -870,8 +870,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         //生成验证码
         String code = RandomUtil.randomNumbers(6);
-        String subject = "【" + systemInfoName + "】" + "邮件验证";
-        String content = MyUtil.buildCodeValida(systemInfoName, code);
+        String subject = "【" + applicationName + "】" + "邮件验证";
+        String content = MyUtil.buildCodeValida(applicationName, code);
         Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
         if (!aBoolean) {
             throw new MyException("发送邮件失败，请联系管理员");

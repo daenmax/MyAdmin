@@ -177,8 +177,3 @@ check-login:
     - /swagger-ui/**
     - /api-docs
     - /api-docs/**
-
-# 系统的一些信息
-system-info:
-  # 系统名称，例如在发送邮件时会用到
-  name: MyAdmin

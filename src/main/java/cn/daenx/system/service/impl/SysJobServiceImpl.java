@@ -58,8 +58,8 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
     private SysConfigService sysConfigService;
     @Resource
     private Scheduler scheduler;
-    @Value("${system-info.name}")
-    private String systemInfoName;
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     /**
      * 初始化定时任务
@@ -300,7 +300,7 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
             //不通知
         } else if (SystemConstant.NOTIFY_CHANNEL_EMAIL.equals(sysJob.getNotifyChannel())) {
             //邮件
-            String subject = "【" + systemInfoName + "】" + "[定时任务执行异常]" + sysJob.getJobName();
+            String subject = "【" + applicationName + "】" + "[定时任务执行异常]" + sysJob.getJobName();
             String content = "异常信息：\n" + errorMsg;
             EmailUtil.sendEmail(sysJob.getNotifyObjs(), subject, content, false, null);
         } else if (SystemConstant.NOTIFY_CHANNEL_SMS.equals(sysJob.getNotifyChannel())) {
@@ -320,15 +320,15 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
             SmsUtil.sendSms(sysJob.getNotifyObjs(), sysSmsTemplateConfigVo.getJobError().getTemplateId(), smsMap);
         } else if (SystemConstant.NOTIFY_CHANNEL_DING.equals(sysJob.getNotifyChannel())) {
             //钉钉
-            String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
+            String msg = "【" + applicationName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
             DingTalkUtil.sendMsg(sysJob.getNotifyObjs(), msg);
         } else if (SystemConstant.NOTIFY_CHANNEL_FEISHU.equals(sysJob.getNotifyChannel())) {
             //飞书
-            String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
+            String msg = "【" + applicationName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
             FeishuUtil.sendMsg(sysJob.getNotifyObjs(), msg);
         } else if (SystemConstant.NOTIFY_CHANNEL_WECOM.equals(sysJob.getNotifyChannel())) {
             //企业微信
-            String msg = "【" + systemInfoName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
+            String msg = "【" + applicationName + "】" + "[定时任务执行异常]\n任务名称：" + sysJob.getJobName() + "\n" + "异常信息：\n" + errorMsg;
             WecomUtil.sendMsg(sysJob.getNotifyObjs(), msg);
         }
     }
