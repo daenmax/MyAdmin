@@ -1,5 +1,4 @@
 
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -35,7 +34,7 @@ CREATE TABLE `sys_api_limit`  (
 -- ----------------------------
 INSERT INTO `sys_api_limit` VALUES ('700df1aab01ead0db7ce6105a9be90a5', '测试接口', '/test/test', 10, 30, '0', 20, 30, '0', '0', NULL, '0', '测试', '1', '2023-05-23 15:28:08', '1', '2023-05-24 18:07:46', 0);
 INSERT INTO `sys_api_limit` VALUES ('71736a3b981f87f504bc4ae7bfb88008', '签到接口', '/sign', 0, 0, '0', 0, 0, '0', '1', '618期间，签到接口暂时停用', '0', '6月20日恢复', '1', '2023-05-23 15:32:12', '1', '2023-05-23 15:37:30', 0);
-INSERT INTO `sys_api_limit` VALUES ('ab6ac1ae29d57e70879e8af885f6f668', '测试单表分页', '/test/data/list3', 5, 30, '0', NULL, NULL, '0', '0', '618期间暂时关闭，6月20日恢复', '0', NULL, '1', '2023-05-24 15:27:49', '1', '2023-05-24 17:53:36', 0);
+INSERT INTO `sys_api_limit` VALUES ('ab6ac1ae29d57e70879e8af885f6f668', '测试单表分页', '/test/data/list3', 5, 30, '0', NULL, NULL, '0', '0', '618期间暂时关闭，6月20日恢复', '0', NULL, '1', '2023-05-24 15:27:49', '1', '2023-09-22 14:26:00', 0);
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -60,20 +59,21 @@ CREATE TABLE `sys_config`  (
 -- ----------------------------
 -- Records of sys_config
 -- ----------------------------
-INSERT INTO `sys_config` VALUES ('0015263fa950c3ce40957fdb3b1e14a7', '系统验证码配置', 'sys.captcha.config', '{\n	\"config\": {\n		\"type\": 0,\n		\"lock\": \"true\"\n	},\n	\"image\": {\n		\"type\": 5,\n		\"width\": 200,\n		\"height\": 100,\n		\"codeCount\": 4,\n		\"olCount\": 10\n	},\n	\"slider\": {}\n}', '1', '0', '如果删除或者禁用此参数，那么系统将不开启验证码\n具体参数说明参考文档', '1', '2023-04-25 20:23:07', '1', '2023-05-19 22:03:25', 0);
-INSERT INTO `sys_config` VALUES ('0ce0ea3dc352bb6838e4d008d9e849fc', '系统钉钉配置', 'sys.dingTalk.config', '{\n	\"testbot\": {\n		\"keywords\": \"\",\n		\"secret\": \"SEC48ea902b5b3fb138765166666666666666638bcb607ced5108f71f24a7\",\n		\"accessToken\": \"e714cfa1e60734d19d3dd13666666666666666d2fbc0c92b4dd42e57d\",\n		\"remark\": \"测试群的机器人\"\n	},\n	\"xiaobai\": {\n		\"keywords\": \"【定时任务异常】\",\n		\"secret\": \"SEC48ea902b5b3fb13876516666666665108f71f24a7\",\n		\"accessToken\": \"e714cfa1e60734d19d3666666666666668d2fbc0c92b4dd42e57d\",\n		\"remark\": \"闲聊群的机器人\"\n	}\n}', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送钉钉通知\n具体参数说明参考文档', '1', '2023-05-13 18:27:24', '1', '2023-05-13 20:40:29', 0);
+INSERT INTO `sys_config` VALUES ('0015263fa950c3ce40957fdb3b1e14a7', '系统验证码配置', 'sys.captcha.config', '{\n	\"config\": {\n		\"type\": 0,\n		\"lock\": \"true\"\n	},\n	\"image\": {\n		\"type\": 5,\n		\"width\": 200,\n		\"height\": 100,\n		\"codeCount\": 4,\n		\"olCount\": 10\n	},\n	\"slider\": {}\n}', '1', '0', '如果删除或者禁用此参数，那么系统将不开启验证码\n具体参数说明参考文档', '1', '2023-04-25 20:23:07', '1', '2023-08-30 22:10:42', 0);
+INSERT INTO `sys_config` VALUES ('0ce0ea3dc352bb6838e4d008d9e849fc', '系统钉钉配置', 'sys.dingTalk.config', '{\n	\"testbot\": {\n		\"keywords\": \"\",\n		\"secret\": \"SEC48ea902b5b3fb138765108354550ab5d0a240a18e38bcb607ced5108f71f24a7\",\n		\"accessToken\": \"e714cfa1e60734d19d3dd136215c97a29dce75f0d2f68d2fbc0c92b4dd42e57d\",\n		\"remark\": \"测试群的机器人\"\n	},\n	\"xiaobai\": {\n		\"keywords\": \"【定时任务异常】\",\n		\"secret\": \"SEC48ea902b5b3fb138765108354550ab5d0a240a18e38bcb607ced5108f71f24a7\",\n		\"accessToken\": \"e714cfa1e60734d19d3dd136215c97a29dce75f0d2f68d2fbc0c92b4dd42e57d\",\n		\"remark\": \"闲聊群的机器人\"\n	}\n}', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送钉钉通知\n具体参数说明参考文档', '1', '2023-05-13 18:27:24', '1', '2023-10-01 13:36:57', 0);
 INSERT INTO `sys_config` VALUES ('0e4d78f5e0601e87489a563f40e30ff5', '图片上传限制策略', 'sys.upload.image', '{\n    \"limit\": 6,\n    \"fileSize\": 4,\n    \"fileType\": [\"bmp\", \"gif\", \"jpg\", \"jpeg\", \"png\"],\n    \"isShowTip\": true\n}', '1', '0', '如果删除此参数的话，系统将使用默认参数\n如果禁用此参数的话，系统 将禁止图片上传\nlimit=同时上传个数\nfileSize=文件最大尺寸，单位MB\nfileType=[]，支持的文件类型数组，不包含小数点\nisShowTip=是否显示提示', '1', '2023-04-17 22:24:15', '1', '2023-05-14 09:34:24', 0);
 INSERT INTO `sys_config` VALUES ('101fbed52418ce72ffe30143c66fdd06', '系统注册默认信息', 'sys.register.default.info', '{\n    \"userType\": \"2\",\n    \"deptCode\": \"XMY-JN-3\",\n    \"positionCodes\": [\"user\"],\n    \"roleCodes\": [\"user\"]\n}', '1', '0', '此参数必存在，不存在的话，系统将禁止注册\nuserType，用户类型，必填，参考字典内\ndeptCode，部门编号，必填\npositionCodes，岗位编码，非必填，可多个\nroleCodes，角色编码，必填，可多个', '1', '2023-04-25 21:00:26', '1', '2023-04-25 21:07:58', 0);
 INSERT INTO `sys_config` VALUES ('1a91bf36a72d9dcb253a941a94fa28fa', '文件上传限制策略', 'sys.upload.file', '{\n    \"limit\": 5,\n    \"fileSize\": 5,\n    \"fileType\": [\"zip\", \"txt\"],\n    \"isShowTip\": true\n}', '1', '0', '如果删除此参数的话，系统将使用默认参数\n如果禁用此参数的话，系统 将禁止文件上传\nlimit=同时上传个数\nfileSize=文件最大尺寸，单位MB\nfileType=[]，支持的文件类型数组，不包含小数点\nisShowTip=是否显示提示', '1', '2023-04-17 22:06:58', '1', '2023-04-25 21:00:37', 0);
 INSERT INTO `sys_config` VALUES ('1c86983f628ffe1949171b01858d1aa5', '系统登录错误次数限制信息', 'sys.login.fail.info', '{\n    \"failCount\": 5,\n    \"banSecond\": 3600\n}', '1', '0', '此参数如果不存在或者被禁用的话，那么将没有限制\nfailCount，错误次数将锁定，必填\nbanSecond，锁定的秒数，必填', '1', '2023-05-10 09:29:46', '1', '2023-05-10 09:34:40', 0);
-INSERT INTO `sys_config` VALUES ('2cd7adf8ceeb1386d85b5477ee03d0fe', '系统短信模板ID配置', 'sys.smsTemplate.config', '{\n	\"register\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"login\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"bindPhone\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"findPassword\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"jobError\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 70\n	}\n}', '1', '0', '如果删除或者禁用此参数，那么系统在以上特定场景将无法发送短信\n具体参数说明参考文档', '1', '2023-05-14 16:29:54', '1', '2023-05-14 16:29:54', 0);
+INSERT INTO `sys_config` VALUES ('2cd7adf8ceeb1386d85b5477ee03d0fe', '系统短信模板ID配置', 'sys.smsTemplate.config', '{\n	\"register\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"login\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"bindPhone\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"findPassword\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 6\n	},\n	\"jobError\": {\n		\"variable\": \"code\",\n		\"templateId\": \"SMS_460755481\",\n		\"length\": 70\n	}\n}', '1', '0', '如果删除或者禁用此参数，那么系统在以上特定场景将无法发送短信\n具体参数说明参考文档', '1', '2023-05-14 16:29:54', '1', '2023-09-19 14:23:07', 0);
 INSERT INTO `sys_config` VALUES ('3d940640a0c040a0025c2c350da036f3', '系统注册开关', 'sys.lock.register', 'true', '1', '0', 'true=开启，false=关闭', '1', '2023-04-14 22:34:46', '1', '2023-04-25 21:31:29', 0);
-INSERT INTO `sys_config` VALUES ('4aa484dd076566c2e7d936525e36e8c4', '系统短信配置', 'sys.sms.config', '{\n	\"config\": {\n		\"type\": \"aliyun\"\n	},\n	\"aliyun\": {\n		\"enable\": \"true\",\n		\"endpoint\": \"dysmsapi.aliyuncs.com\",\n		\"accessKeyId\": \"LTAI566666666666se6RpcQ9\",\n		\"accessKeySecret\": \"N9GXnZct66666666666kX3GPqW8\",\n		\"signName\": \"MyAdmin\"\n	},\n	\"tencent\": {\n		\"enable\": \"true\",\n		\"endpoint\": \"sms.tencentcloudapi.com\",\n		\"accessKeyId\": \"AKID2oPD66666666666dMp53mHfoYZGw\",\n		\"accessKeySecret\": \"e6JTP5e66666666666YBl7C5g05\",\n		\"signName\": \"个人开发记录网\",\n		\"sdkAppId\": \"1400820693\"\n	}\n}', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送短信\n具体参数说明参考文档', '1', '2023-05-13 10:05:25', '1', '2023-05-13 11:39:54', 0);
+INSERT INTO `sys_config` VALUES ('4aa484dd076566c2e7d936525e36e8c4', '系统短信配置', 'sys.sms.config', '{\r\n    \"config\": {\r\n        \"type\": \"aliyun\"\r\n    },\r\n    \"platform\": {\r\n        \"aliyun\": {\r\n            \"enable\": \"true\",\r\n            \"endpoint\": \"dysmsapi.aliyuncs.com\",\r\n            \"accessKeyId\": \"LTAI5tN1L6r9WqHYse6RpcQ9\",\r\n            \"accessKeySecret\": \"N9GXnZctzCeRUVYntSYD10kX3GPqW8\",\r\n            \"signName\": \"MyAdmin\"\r\n        },\r\n        \"tencent\": {\r\n            \"enable\": \"true\",\r\n            \"endpoint\": \"sms.tencentcloudapi.com\",\r\n            \"accessKeyId\": \"AKID2oPDoCYwmM0sb9nREwPdMp53mHfoYZGw\",\r\n            \"accessKeySecret\": \"e6JTP5ex2q9DXJtAkBMGvhHYBl7C5g05\",\r\n            \"signName\": \"个人开发记录网\",\r\n            \"sdkAppId\": \"1400820693\"\r\n        }\r\n    }\r\n}', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送短信\n具体参数说明参考文档', '1', '2023-05-13 10:05:25', '1', '2023-05-13 11:39:54', 0);
+INSERT INTO `sys_config` VALUES ('64c70f1e91cbcd3cfc390e3966aeef6b', '系统企微配置', 'sys.wecom.config', '{\n	\"testbot\": {\n		\"key\": \"b5caa377-c430-43e7-8f00-3d656ed93b12\",\n		\"remark\": \"测试群的机器人\"\n	}\n}', '0', '0', '如果删除或者禁用此参数，那么系统将无法发送企业微信通知\n具体参数说明参考文档', '1', '2023-10-01 13:41:53', '1', '2023-10-01 13:43:57', 0);
 INSERT INTO `sys_config` VALUES ('65600f7210f507b143421c4ed33a9b07', '文件列表是否开启预览', 'sys.file.previewListResource', 'true', '1', '0', 'true=开启，false=关闭', '1', '2023-04-16 23:37:01', '1', '2023-04-25 21:00:40', 0);
-INSERT INTO `sys_config` VALUES ('784d0f730c442a42bd6331e81516ebd8', '系统发送限制配置', 'sys.sendLimit.config', '{\n	\"email\": {\n		\"limitType\": 1,\n		\"needWait\": 60,\n		\"dayMax\": 8,\n		\"keepLive\": 1800\n	},\n	\"sms\": {\n		\"limitType\": 1,\n		\"needWait\": 60,\n		\"dayMax\": 8,\n		\"keepLive\": 300\n	}\n}', '1', '0', '如果删除或者禁用此参数，那么系统发送验证码时将没有任何限制\n具体参数说明参考文档', '1', '2023-05-19 15:09:31', '1', '2023-05-19 15:09:31', 0);
-INSERT INTO `sys_config` VALUES ('83332089ca838d1816498f2bfd874ad3', '系统邮箱配置', 'sys.email.config', '{\n    \"config\": {\n        \"mode\": \"0\"\n    },\n    \"emails\": [{\n        \"enable\": \"true\",\n        \"host\": \"smtp.qq.com\",\n        \"port\": 587,\n        \"encode\": \"UTF-8\",\n        \"protocol\": \"smtp\",\n        \"email\": \"1330166564@qq.com\",\n        \"from\": \"MyAdmin<1330166564@qq.com>\",\n        \"password\": \"6666666666666666\",\n        \"timeout\": \"25000\",\n        \"auth\": \"true\",\n        \"socketFactoryClass\": \"javax.net.ssl.SSLSocketFactory\",\n        \"weight\": \"100\"\n    },{\n        \"enable\": \"true\",\n        \"host\": \"smtp.qq.com\",\n        \"port\": 587,\n        \"encode\": \"UTF-8\",\n        \"protocol\": \"smtp\",\n        \"email\": \"1330166565@qq.com\",\n        \"from\": \"MyAdmin<1330166565@qq.com>\",\n        \"password\": \"jifutmxruxjiffhg\",\n        \"timeout\": \"25000\",\n        \"auth\": \"true\",\n        \"socketFactoryClass\": \"javax.net.ssl.SSLSocketFactory\",\n        \"weight\": \"100\"\n    }]\n}', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送邮件\n具体参数说明参考文档\n', '1', '2023-05-11 10:21:42', '1', '2023-05-22 16:42:58', 0);
-INSERT INTO `sys_config` VALUES ('cc1dd434b089df0a6e97fbe446c39377', '系统飞书配置', 'sys.feishu.config', '{\n	\"testbot\": {\n		\"keywords\": \"\",\n		\"secret\": \"\",\n		\"accessToken\": \"207b5526-****-****-****-b57ac302626f\",\n		\"remark\": \"测试群的机器人\"\n	}\n}', '0', '0', '如果删除或者禁用此参数，那么系统将无法发送飞书通知\n具体参数说明参考文档', '1', '2023-10-01 13:40:50', '1', '2023-10-01 13:40:50', 0);
-INSERT INTO `sys_config` VALUES ('64c70f1e91cbcd3cfc390e3966aeef6b', '系统企微配置', 'sys.wecom.config', '{\n	\"testbot\": {\n		\"key\": \"b5caa377-****-****-8f00-3d656ed93b12\",\n		\"remark\": \"测试群的机器人\"\n	}\n}', '0', '0', '如果删除或者禁用此参数，那么系统将无法发送企业微信通知\n具体参数说明参考文档', '1', '2023-10-01 13:41:53', '1', '2023-10-01 13:43:57', 0);
+INSERT INTO `sys_config` VALUES ('784d0f730c442a42bd6331e81516ebd8', '系统发送限制配置', 'sys.sendLimit.config', '{\n	\"email\": {\n		\"limitType\": 1,\n		\"needWait\": 60,\n		\"dayMax\": 8,\n		\"keepLive\": 1800\n	},\n	\"sms\": {\n		\"limitType\": 1,\n		\"needWait\": 60,\n		\"dayMax\": 8,\n		\"keepLive\": 300\n	}\n}', '1', '0', '如果删除或者禁用此参数，那么系统发送验证码时将没有任何限制\n具体参数说明参考文档', '1', '2023-05-19 15:09:31', '1', '2023-09-19 14:17:41', 0);
+INSERT INTO `sys_config` VALUES ('83332089ca838d1816498f2bfd874ad3', '系统邮箱配置', 'sys.email.config', '{\n    \"config\": {\n        \"mode\": \"0\"\n    },\n    \"emails\": [{\n        \"enable\": \"true\",\n        \"host\": \"smtp.qq.com\",\n        \"port\": 587,\n        \"encode\": \"UTF-8\",\n        \"protocol\": \"smtp\",\n        \"email\": \"1330166564@qq.com\",\n        \"from\": \"MyAdmin<1330166564@qq.com>\",\n        \"password\": \"jifutmxruxjiffhg\",\n        \"timeout\": \"25000\",\n        \"auth\": \"true\",\n        \"socketFactoryClass\": \"javax.net.ssl.SSLSocketFactory\",\n        \"weight\": \"100\"\n    },{\n        \"enable\": \"true\",\n        \"host\": \"smtp.qq.com\",\n        \"port\": 587,\n        \"encode\": \"UTF-8\",\n        \"protocol\": \"smtp\",\n        \"email\": \"1330166565@qq.com\",\n        \"from\": \"MyAdmin<1330166565@qq.com>\",\n        \"password\": \"jifutmxruxjiffhg\",\n        \"timeout\": \"25000\",\n        \"auth\": \"true\",\n        \"socketFactoryClass\": \"javax.net.ssl.SSLSocketFactory\",\n        \"weight\": \"100\"\n    }]\n}', '1', '0', '如果删除或者禁用此参数，那么系统将无法发送邮件\n具体参数说明参考文档\n', '1', '2023-05-11 10:21:42', '1', '2023-05-22 16:42:58', 0);
+INSERT INTO `sys_config` VALUES ('cc1dd434b089df0a6e97fbe446c39377', '系统飞书配置', 'sys.feishu.config', '{\n	\"testbot\": {\n		\"keywords\": \"\",\n		\"secret\": \"\",\n		\"accessToken\": \"207b5526-1d06-4398-b3a1-b57ac302626f\",\n		\"remark\": \"测试群的机器人\"\n	}\n}', '0', '0', '如果删除或者禁用此参数，那么系统将无法发送飞书通知\n具体参数说明参考文档', '1', '2023-10-01 13:40:50', '1', '2023-10-01 13:40:50', 0);
+
 -- ----------------------------
 -- Table structure for sys_dept
 -- ----------------------------
@@ -101,15 +101,66 @@ CREATE TABLE `sys_dept`  (
 -- Records of sys_dept
 -- ----------------------------
 INSERT INTO `sys_dept` VALUES ('100', '0', '熊猫眼集团', 'XMY', NULL, '0', '1', 0, 0, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
-INSERT INTO `sys_dept` VALUES ('101', '100', '济南分公司', 'XMY-JN', NULL, '0', '1', 1, 1, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
+INSERT INTO `sys_dept` VALUES ('101', '100', '济南分公司', 'XMY-JN', NULL, '0', '1', 1, 1, NULL, '1', '2023-04-10 14:35:22', '1', '2023-10-08 14:02:37', 0);
 INSERT INTO `sys_dept` VALUES ('102', '100', '北京分公司', 'XMY-BJ', NULL, '0', '1', 1, 2, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
 INSERT INTO `sys_dept` VALUES ('103', '101', '研发部门', 'XMY-JN-1', NULL, '0', '1', 2, 1, '', '1', '2023-04-10 14:35:22', '1', '2023-04-25 20:54:24', 0);
 INSERT INTO `sys_dept` VALUES ('104', '101', '市场部门', 'XMY-JN-2', NULL, '0', '1', 2, 2, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-12 21:26:01', 0);
 INSERT INTO `sys_dept` VALUES ('105', '101', '测试部门', 'XMY-JN-3', NULL, '0', '1', 2, 3, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-12 21:25:51', 0);
 INSERT INTO `sys_dept` VALUES ('106', '101', '财务部门', 'XMY-JN-4', NULL, '0', '1', 2, 4, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
-INSERT INTO `sys_dept` VALUES ('107', '101', '运维部门', 'XMY-JN-5', NULL, '0', '1', 2, 5, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
+INSERT INTO `sys_dept` VALUES ('107', '101', '运维部门', 'XMY-JN-5', NULL, '0', '1', 2, 5, NULL, '1', '2023-04-10 14:35:22', '1', '2023-10-08 14:02:51', 0);
 INSERT INTO `sys_dept` VALUES ('108', '102', '市场部门', 'XMY-BJ-1', NULL, '0', '1', 2, 1, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
 INSERT INTO `sys_dept` VALUES ('109', '102', '财务部门', 'XMY-BJ-2', NULL, '0', '1', 2, 2, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
+
+-- ----------------------------
+-- Table structure for sys_dept_parent
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dept_parent`;
+CREATE TABLE `sys_dept_parent`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `dept_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '部门ID',
+  `parent_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父级部门ID，顶级为0',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门层级关系表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_dept_parent
+-- ----------------------------
+INSERT INTO `sys_dept_parent` VALUES ('06d36f0f8901fb4ffbe781b080f07dd6', '107', '100');
+INSERT INTO `sys_dept_parent` VALUES ('1a0b09c29f5470ac94079b303b0ad12b', '101', '101');
+INSERT INTO `sys_dept_parent` VALUES ('1fd041e9beb93fa50133d2d7321e1cb0', '108', '100');
+INSERT INTO `sys_dept_parent` VALUES ('222c3eaf636f8edf7f83eda4f90d26f2', '105', '100');
+INSERT INTO `sys_dept_parent` VALUES ('268027691ee65797e33da228ea194b6c', '107', '107');
+INSERT INTO `sys_dept_parent` VALUES ('26d358c6733335e1bcb9aae9ee3e54db', '102', '0');
+INSERT INTO `sys_dept_parent` VALUES ('28070f8ff40f690d48c308b76e59a993', '105', '105');
+INSERT INTO `sys_dept_parent` VALUES ('2d6c36d425ff5be02ae48940f701c3ef', '103', '103');
+INSERT INTO `sys_dept_parent` VALUES ('384202fb5d68394c886cbeefadaf01ce', '109', '100');
+INSERT INTO `sys_dept_parent` VALUES ('3d41adfbf70d1af146f9b22cfa3c4903', '100', '100');
+INSERT INTO `sys_dept_parent` VALUES ('4222314fa5495df9d762a953cfcf65ac', '107', '0');
+INSERT INTO `sys_dept_parent` VALUES ('494ccdf978d57d8bc96b02d72a9f5a3a', '108', '108');
+INSERT INTO `sys_dept_parent` VALUES ('550ccf63f48406ebf42219e7d3219582', '107', '101');
+INSERT INTO `sys_dept_parent` VALUES ('59f10bf5e1c6f714b4f1be02910553fa', '103', '101');
+INSERT INTO `sys_dept_parent` VALUES ('617f7108449586ef211c0955a189b222', '108', '102');
+INSERT INTO `sys_dept_parent` VALUES ('68b753537bc2bfa1b09e677077a5e1cc', '109', '102');
+INSERT INTO `sys_dept_parent` VALUES ('700950267ddc9c18243472f68a2e0c62', '106', '101');
+INSERT INTO `sys_dept_parent` VALUES ('886b217dcfb0a77b4b281f6a5981c69b', '102', '102');
+INSERT INTO `sys_dept_parent` VALUES ('96b6974412095ef1f056f5596d1df48d', '103', '0');
+INSERT INTO `sys_dept_parent` VALUES ('98faed672906375a309a2ac4c2ce47f1', '104', '100');
+INSERT INTO `sys_dept_parent` VALUES ('9d125f57b2a7251caac817bed4ddd6ee', '103', '100');
+INSERT INTO `sys_dept_parent` VALUES ('a63973aaebc357a568b9ec3e15bdb774', '104', '101');
+INSERT INTO `sys_dept_parent` VALUES ('a95a29cd20b7a3ee0deabdd83b468bd9', '101', '100');
+INSERT INTO `sys_dept_parent` VALUES ('b19a436916284476e08aacfbc1012e17', '101', '0');
+INSERT INTO `sys_dept_parent` VALUES ('b264e91699df1ed6db2253203308452d', '106', '106');
+INSERT INTO `sys_dept_parent` VALUES ('bf0399783891c2e9df37b693fdadf6d2', '105', '0');
+INSERT INTO `sys_dept_parent` VALUES ('c57966fa37859a0c0c153c5dd5ca2a6d', '106', '100');
+INSERT INTO `sys_dept_parent` VALUES ('d56ed387ac2c6105ffbe3faa8d99f5eb', '100', '0');
+INSERT INTO `sys_dept_parent` VALUES ('d570bd153cc62d2a8c346bf55769bceb', '105', '101');
+INSERT INTO `sys_dept_parent` VALUES ('d6cd40b06e1a20bc20d741d52fb03fed', '109', '0');
+INSERT INTO `sys_dept_parent` VALUES ('e0754a80b8ef4531839db616d6a4f797', '104', '104');
+INSERT INTO `sys_dept_parent` VALUES ('e5a25858e3e18b34cf4e51dcd45ffee3', '106', '0');
+INSERT INTO `sys_dept_parent` VALUES ('e651fc9a844a23121783ace242907138', '102', '100');
+INSERT INTO `sys_dept_parent` VALUES ('f0f6e94712736e9cb689bf044f5667af', '104', '0');
+INSERT INTO `sys_dept_parent` VALUES ('f5cd73b71673848ce9a5a7543ccd38fa', '109', '109');
+INSERT INTO `sys_dept_parent` VALUES ('fae666e9d536d28b28dcf84674e34aaf', '108', '0');
 
 -- ----------------------------
 -- Table structure for sys_dict
@@ -141,7 +192,7 @@ INSERT INTO `sys_dict` VALUES ('709ac842d94f444cb50c94e1d5bea3e7', '测试数据
 INSERT INTO `sys_dict` VALUES ('7d7457a0562a4c9a80e6f3de0426f7e7', '用户性别', 'sys_user_sex', '0', NULL, '1', '2023-03-13 09:58:45', '1', '2023-03-13 09:58:45', 0);
 INSERT INTO `sys_dict` VALUES ('7e9cdefc71e446ba8ea69cf401913890', '系统开关', 'sys_normal_disable', '0', NULL, '1', '2023-02-13 09:58:45', '1', '2023-03-13 09:58:45', 0);
 INSERT INTO `sys_dict` VALUES ('824bf83ca68c8c235e75dc731088d2f8', '系统通知渠道', 'sys_notify_channel', '0', '', '1', '2023-05-13 19:08:34', '1', '2023-05-13 19:08:37', 0);
-INSERT INTO `sys_dict` VALUES ('98c39286b939f05fb514782a4779a5bf', '系统时间单位', 'sys_time_unit', '0', NULL, '1', '2023-05-23 14:47:07', '1', '2023-05-23 14:47:07', 0);
+INSERT INTO `sys_dict` VALUES ('98c39286b939f05fb514782a4779a5bf', '系统时间单位', 'sys_time_unit', '0', NULL, '1', '2023-05-23 14:47:07', '1', '2023-06-26 15:49:09', 0);
 INSERT INTO `sys_dict` VALUES ('9b86e9ae2728400189d76f9b8710c269', '系统是否', 'sys_yes_no', '0', NULL, '1', '2023-02-13 09:58:45', '1', '2023-03-13 09:58:45', 0);
 INSERT INTO `sys_dict` VALUES ('a08cf8bf214b49f68bcc03d5b8ecef7d', '通知公告状态', 'sys_notice_status', '0', NULL, '1', '2023-03-13 09:58:45', '1', '2023-04-20 22:51:25', 0);
 INSERT INTO `sys_dict` VALUES ('bc4fd7d4cdb70ac8b48532de2f7410f7', '任务分组', 'sys_job_group', '0', NULL, '1', '2023-05-01 14:56:03', '1', '2023-05-01 14:56:03', 0);
@@ -186,7 +237,7 @@ INSERT INTO `sys_dict_detail` VALUES ('0a77ebdc362f6c039aec7e8261402a82', 'sys_o
 INSERT INTO `sys_dict_detail` VALUES ('0ab7306ac5aaf342514eeed9488e4216', 'data_scope', '本人数据', '0', 0, NULL, 'info', '0', NULL, '1', '2023-03-29 10:38:22', '1', '2023-03-29 10:38:22', 0);
 INSERT INTO `sys_dict_detail` VALUES ('0eee47140c4a07a008365f9fa8d8cdc1', 'sys_job_group', '默认', 'DEFAULT', 1, NULL, 'success', '0', NULL, '1', '2023-05-01 14:56:53', '1', '2023-05-01 14:57:01', 0);
 INSERT INTO `sys_dict_detail` VALUES ('11abad5a8a2ac077c362b044bc99778e', 'sys_oper_type', '其他', '0', 0, NULL, 'info', '0', NULL, '1', '2023-04-19 22:23:37', '1', '2023-04-19 22:23:37', 0);
-INSERT INTO `sys_dict_detail` VALUES ('1638c4c1734530de841be71cc5ebd8b3', 'sys_time_unit', '分钟', '1', 1, NULL, 'primary', '0', NULL, '1', '2023-05-23 14:48:01', '1', '2023-05-23 15:28:33', 0);
+INSERT INTO `sys_dict_detail` VALUES ('1638c4c1734530de841be71cc5ebd8b3', 'sys_time_unit', '分钟', '1', 1, NULL, 'primary', '0', NULL, '1', '2023-05-23 14:48:01', '1', '2023-06-26 15:49:09', 0);
 INSERT INTO `sys_dict_detail` VALUES ('19c1384a77f2421a95a75cb99ddbadd4', 'sys_yes_no', '是', '1', 2, NULL, 'primary', '0', '系统默认是', '1', '2023-03-15 16:36:49', '1', '2023-03-15 16:36:49', 0);
 INSERT INTO `sys_dict_detail` VALUES ('1c48afa8c9c14fb8a3aec4c255b89769', 'test_data_type', '科技', '1', 2, NULL, 'info', '0', '科技', '1', '2023-03-15 16:36:49', '1', '2023-04-20 22:50:55', 0);
 INSERT INTO `sys_dict_detail` VALUES ('325a4db1eb9c3d73ab4754875e2ef9bb', 'sys_oss_type', 'minio', 'minio', 0, '', 'primary', '0', NULL, '1', '2023-04-16 23:49:45', '1', '2023-04-20 22:52:49', 0);
@@ -206,8 +257,10 @@ INSERT INTO `sys_dict_detail` VALUES ('6f6212d3ee407955b6e1606d6bc692fa', 'sys_o
 INSERT INTO `sys_dict_detail` VALUES ('703f50ed1e45a4d8f43ca7644a3b5703', 'data_scope', '本部门数据', '1', 1, NULL, 'primary', '0', NULL, '1', '2023-03-29 10:38:44', '1', '2023-03-29 10:38:44', 0);
 INSERT INTO `sys_dict_detail` VALUES ('707107e22b1e4021aad925c891652f0e', 'test_data_type', '民生', '0', 1, NULL, 'primary', '0', '民生', '1', '2023-03-15 16:36:49', '1', '2023-04-20 22:50:55', 0);
 INSERT INTO `sys_dict_detail` VALUES ('74538cc5e03118a8f95bec4b9f60ac20', 'sys_oper_type', '查询', '4', 4, NULL, 'success', '0', NULL, '1', '2023-04-19 22:24:40', '1', '2023-04-19 22:24:40', 0);
+INSERT INTO `sys_dict_detail` VALUES ('7e4e1fc182c3cbc573a32eb7fbc9a749', 'sys_notify_channel', '飞书', '4', 4, NULL, 'warning', '0', NULL, '1', '2023-10-01 14:33:28', '1', '2023-10-01 14:33:28', 0);
 INSERT INTO `sys_dict_detail` VALUES ('7e85865f7e80a1f20b4f5767a6d6f8b5', 'sys_job_group', '系统', 'SYSTEM', 0, NULL, 'primary', '0', NULL, '1', '2023-05-01 14:56:36', '1', '2023-05-01 14:56:36', 0);
 INSERT INTO `sys_dict_detail` VALUES ('847f21debb0a59235347dad479309d67', 'sys_api_limit_type', '限流', '0', 0, NULL, 'warning', '0', NULL, '1', '2023-05-23 11:02:37', '1', '2023-05-23 11:02:37', 0);
+INSERT INTO `sys_dict_detail` VALUES ('87f33838c66f34a94d7c19c384e4758c', 'sys_notify_channel', '企业微信', '5', 5, NULL, 'warning', '0', NULL, '1', '2023-10-01 14:33:39', '1', '2023-10-01 14:33:39', 0);
 INSERT INTO `sys_dict_detail` VALUES ('8cf5ea8761164a1e93f5524fad6df101', 'sys_normal_disable', '正常', '0', 1, NULL, 'primary', '0', '正常状态', '1', '2023-03-15 16:36:49', '1', '2023-03-15 16:36:49', 0);
 INSERT INTO `sys_dict_detail` VALUES ('8d9fb34470f5f0351efd0dcf2f733577', 'sys_user_type', '开发', '1', 0, NULL, 'danger', '0', NULL, '1', '2023-03-23 11:04:52', '1', '2023-04-20 22:50:58', 0);
 INSERT INTO `sys_dict_detail` VALUES ('8fff0e476aabc28003c96852dd515995', 'data_scope', '自定义权限', '4', 4, NULL, 'warning', '0', NULL, '1', '2023-03-29 10:39:40', '1', '2023-03-29 10:39:40', 0);
@@ -216,7 +269,7 @@ INSERT INTO `sys_dict_detail` VALUES ('9908f3fc165afb446b2a469b848c84ea', 'sys_o
 INSERT INTO `sys_dict_detail` VALUES ('9d68e851142d435b88d12ba633f7e4ea', 'sys_user_sex', '未知', '2', 3, NULL, NULL, '0', '性别未知', '1', '2023-03-15 16:36:49', '1', '2023-03-15 16:36:49', 0);
 INSERT INTO `sys_dict_detail` VALUES ('a30fee8cece01061abbe27922e94b7dd', 'sys_oper_type', '新增', '1', 1, NULL, 'primary', '0', NULL, '1', '2023-04-19 22:23:47', '1', '2023-04-19 22:24:15', 0);
 INSERT INTO `sys_dict_detail` VALUES ('a741425d33008d8b69adde307897bff9', 'sys_oss_scope', 'private', '0', 0, NULL, 'success', '0', NULL, '1', '2023-04-18 23:46:26', '1', '2023-04-20 22:52:38', 0);
-INSERT INTO `sys_dict_detail` VALUES ('a981115becdc2a8643ff774ac36dafe1', 'sys_time_unit', '秒', '0', 0, NULL, 'success', '0', NULL, '1', '2023-05-23 14:47:51', '1', '2023-05-23 14:48:21', 0);
+INSERT INTO `sys_dict_detail` VALUES ('a981115becdc2a8643ff774ac36dafe1', 'sys_time_unit', '秒', '0', 0, NULL, 'success', '0', NULL, '1', '2023-05-23 14:47:51', '1', '2023-06-26 15:49:09', 0);
 INSERT INTO `sys_dict_detail` VALUES ('a9c8f290b3fe2e21e0e57953da78e8ff', 'sys_user_status', '停用', '1', 0, NULL, 'warning', '0', NULL, '1', '2023-03-27 11:10:43', '1', '2023-04-14 23:07:34', 0);
 INSERT INTO `sys_dict_detail` VALUES ('b633a41a4c816cfb8622c2e874fbbb47', 'sys_oper_type', '上传', '7', 7, NULL, 'primary', '0', NULL, '1', '2023-04-19 22:25:26', '1', '2023-04-19 22:25:26', 0);
 INSERT INTO `sys_dict_detail` VALUES ('b825663a1745a0aa65307acceff1e87c', 'data_scope', '本部门及以下数据', '2', 2, NULL, 'success', '0', NULL, '1', '2023-03-29 10:39:04', '1', '2023-03-29 10:39:04', 0);
@@ -233,14 +286,12 @@ INSERT INTO `sys_dict_detail` VALUES ('e1720b95d3be9ce033efd041ea649134', 'sys_u
 INSERT INTO `sys_dict_detail` VALUES ('e1961a649aa19edaae657b88fd19e91b', 'sys_notify_channel', '不通知', '0', 0, NULL, 'info', '0', NULL, '1', '2023-05-13 19:09:01', '1', '2023-05-13 19:09:54', 0);
 INSERT INTO `sys_dict_detail` VALUES ('e5e1239310b9383f5ce42d557093bac8', 'sys_user_status', '注销', '2', 0, NULL, 'danger', '0', NULL, '1', '2023-03-27 11:10:51', '1', '2023-04-14 23:07:34', 0);
 INSERT INTO `sys_dict_detail` VALUES ('e83acff859cf850825835a80e7c9dc00', 'sys_oss_scope', 'public', '1', 1, NULL, 'danger', '0', NULL, '1', '2023-04-18 23:46:37', '1', '2023-04-20 22:52:38', 0);
-INSERT INTO `sys_dict_detail` VALUES ('eadebaa7234ca12881ac845803b978a1', 'sys_time_unit', '小时', '2', 2, '', 'info', '0', NULL, '1', '2023-05-23 14:48:15', '1', '2023-05-23 14:48:15', 0);
+INSERT INTO `sys_dict_detail` VALUES ('eadebaa7234ca12881ac845803b978a1', 'sys_time_unit', '小时', '2', 2, '', 'info', '0', NULL, '1', '2023-05-23 14:48:15', '1', '2023-06-26 15:49:09', 0);
 INSERT INTO `sys_dict_detail` VALUES ('eaeffc348c4e40cf9a45e91db17d0902', 'sys_normal_disable', '停用', '1', 2, NULL, 'danger', '0', '停用状态', '1', '2023-03-15 16:36:49', '1', '2023-03-15 16:36:49', 0);
 INSERT INTO `sys_dict_detail` VALUES ('ee69bc49e73716f01b4f369f1323a9e9', 'sys_oper_type', '导入', '5', 5, NULL, 'primary', '0', NULL, '1', '2023-04-19 22:24:55', '1', '2023-04-19 22:24:55', 0);
 INSERT INTO `sys_dict_detail` VALUES ('f328b5c9651db1236cdf1d3682ac7f64', 'sys_oss_type', '京东云', '京东云', 0, NULL, 'danger', '0', NULL, '1', '2023-04-16 23:55:04', '1', '2023-04-20 22:52:49', 0);
 INSERT INTO `sys_dict_detail` VALUES ('ff1467cd4b4d4d84868a8f31a4f32fec', 'sys_common_status', '失败', '1', 2, NULL, 'danger', '0', '停用状态', '1', '2023-03-15 16:36:49', '1', '2023-03-15 16:36:49', 0);
-INSERT INTO `sys_dict_detail` VALUES ('ff3eed8202940077df815bfdf0b5d836', 'sys_time_unit', '天', '3', 3, NULL, 'warning', '0', NULL, '1', '2023-05-23 14:48:37', '1', '2023-05-23 14:48:37', 0);
-INSERT INTO `sys_dict_detail` VALUES ('7e4e1fc182c3cbc573a32eb7fbc9a749', 'sys_notify_channel', '飞书', '4', 4, NULL, 'warning', '0', NULL, '1', '2023-10-01 14:33:28', '1', '2023-10-01 14:33:28', 0);
-INSERT INTO `sys_dict_detail` VALUES ('87f33838c66f34a94d7c19c384e4758c', 'sys_notify_channel', '企业微信', '5', 5, NULL, 'warning', '0', NULL, '1', '2023-10-01 14:33:39', '1', '2023-10-01 14:33:39', 0);
+INSERT INTO `sys_dict_detail` VALUES ('ff3eed8202940077df815bfdf0b5d836', 'sys_time_unit', '天', '3', 3, NULL, 'warning', '0', NULL, '1', '2023-05-23 14:48:37', '1', '2023-06-26 15:49:09', 0);
 
 -- ----------------------------
 -- Table structure for sys_file
@@ -269,15 +320,6 @@ CREATE TABLE `sys_file`  (
 -- ----------------------------
 -- Records of sys_file
 -- ----------------------------
-INSERT INTO `sys_file` VALUES ('27b92872738c67201195486eb73f5d3a', '药水配方[MC小助手].png', 'MyAdmin/2023/04/20/5a4e7344c73743e4836c11dca627e484.png', '.png', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/20/5a4e7344c73743e4836c11dca627e484.png', 317604, '190b4fd1f9c33c1aa5d3955e0ae27574', 'image/png', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-20 21:07:48', '1', '2023-04-20 21:07:48', 0);
-INSERT INTO `sys_file` VALUES ('541db2ca27cc0ad4d4474ece3bf562ea', '电影.txt', 'MyAdmin/2023/04/19/bdedd4b25f6849998fda260ca031a1d1.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/19/bdedd4b25f6849998fda260ca031a1d1.txt', 364, '4e87892fff8826595faac378df26e1c8', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-19 22:12:38', '1', '2023-04-19 22:12:38', 0);
-INSERT INTO `sys_file` VALUES ('54478d3af3ff4c107db45cc0eb73d59d', '46两个定时任务增加参数-上传后是否发送socket通知.txt', 'MyAdmin/2023/04/19/d24428703f184311881d718afa1b62c3.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/19/d24428703f184311881d718afa1b62c3.txt', 9, 'bab8fa920c19b90cb37cc3b5d6ddd256', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-19 15:20:08', '1', '2023-04-19 15:20:08', 0);
-INSERT INTO `sys_file` VALUES ('625bcbc99e7524b543c81ffaed6dd2ab', 'QQ截图20230531104623.png', 'MyAdmin/2023/05/31/12016829de8d43288f8ea849b95437b5.png', '.png', 'http://127.0.0.1:9000/test/MyAdmin/2023/05/31/12016829de8d43288f8ea849b95437b5.png', 15201, '38d4743e3e59425797bc312186d91da1', 'image/png', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户头像', '1', '2023-05-31 11:04:27', '1', '2023-05-31 11:04:27', 0);
-INSERT INTO `sys_file` VALUES ('6a3de907b905e6a329d82f813b0c6fa8', '测试.txt', 'MyAdmin/2023/04/18/2822df6654ae49e88e98b641078033bc.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/18/2822df6654ae49e88e98b641078033bc.txt', 0, 'd41d8cd98f00b204e9800998ecf8427e', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-18 21:37:00', '1', '2023-04-18 21:37:00', 0);
-INSERT INTO `sys_file` VALUES ('70cc98892d2018a880045cdc16ba3248', 'qwasd.txt', 'MyAdmin/2023/04/18/b1ca76f8be404a14afb9c2596347074e.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/18/b1ca76f8be404a14afb9c2596347074e.txt', 15, 'd51a00ff6d15fab7e73382c8ae1bb7b0', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-18 21:59:22', '1', '2023-04-18 21:59:22', 0);
-INSERT INTO `sys_file` VALUES ('75366be0cec33b2a7c1e3ddbe670867a', '大恩的头像.jpg', 'MyAdmin/2023/04/20/5fb55e08a5644ccc8cc33d07bbfe9f31.jpg', '.jpg', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/20/5fb55e08a5644ccc8cc33d07bbfe9f31.jpg', 27279, '4879054b23eb68d156eb7d92906aa113', 'image/jpeg', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-20 22:30:39', '1', '2023-04-20 22:30:39', 0);
-INSERT INTO `sys_file` VALUES ('9e69194c848e1d045bf67c1a3457ed4a', '46两个定时任务增加参数-上传后是否发送socket通知.txt', 'MyAdmin/2023/04/19/61905a7a27d7498bbd2592c15ffb4ab9.txt', '.txt', 'https://qiniu.daenx.cn/MyAdmin/2023/04/19/61905a7a27d7498bbd2592c15ffb4ab9.txt', 9, 'bab8fa920c19b90cb37cc3b5d6ddd256', 'text/plain', '02a4c0e40c271fd516ea3ea566ade22e', '0', '用户上传', '1', '2023-04-19 17:15:44', '1', '2023-04-19 17:15:44', 0);
-INSERT INTO `sys_file` VALUES ('eb8e7e58e43a12acc7873066a1c9734b', 'dev.zip', 'MyAdmin/2023/04/19/eb67e5f40c8a4c119fc3474322ef094c.zip', '.zip', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/19/eb67e5f40c8a4c119fc3474322ef094c.zip', 5531582, '01cbbb91def7ae611954a7e03766eb9f', 'application/x-zip-compressed', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-19 16:18:27', '1', '2023-04-19 16:18:27', 0);
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -308,7 +350,7 @@ CREATE TABLE `sys_job`  (
 -- ----------------------------
 INSERT INTO `sys_job` VALUES ('0a8d20cd101aad4a761e548ff062f593', '测试（无参数）', 'DEFAULT', 'TestTask.noParams', '6 2 * * * ?', '1', '1', '1', NULL, '1', '1330166565@qq.com,1747846658@qq.com', '1', '2023-05-01 16:57:10', '1', '2023-06-05 18:21:20', 0);
 INSERT INTO `sys_job` VALUES ('5ce12d1934bb1d67d4c3787aa037bc7c', '测试（多个参数）', 'DEFAULT', 'TestTask.multipleParams(\'test\', true, 666L, 365.16D, 200)', '* * * * * ?', '1', '2', '1', NULL, '0', NULL, '1', '2023-05-01 15:45:55', '1', '2023-06-05 18:21:31', 0);
-INSERT INTO `sys_job` VALUES ('b28738a16605721937a74cd3a1089fb8', '测试（一个参数）', 'DEFAULT', 'TestTask.oneParams(\'阿萨德\')', '0 0 * * * ?', '1', '1', '1', NULL, '0', NULL, '1', '2023-05-01 16:53:05', '1', '2023-06-05 18:21:25', 0);
+INSERT INTO `sys_job` VALUES ('b28738a16605721937a74cd3a1089fb8', '测试（一个参数）', 'DEFAULT', 'TestTask.oneParams(\'阿萨德\')', '0 0 * * * ?', '1', '1', '1', NULL, '4', 'testbot', '1', '2023-05-01 16:53:05', '1', '2023-10-01 14:36:33', 0);
 
 -- ----------------------------
 -- Table structure for sys_job_log
@@ -335,16 +377,6 @@ CREATE TABLE `sys_job_log`  (
 -- ----------------------------
 -- Records of sys_job_log
 -- ----------------------------
-INSERT INTO `sys_job_log` VALUES ('1d7b6a06adb142c42ae06c43baef896b', 'b28738a16605721937a74cd3a1089fb8', '测试（一个参数） 总共耗时：0毫秒', NULL, '2023-06-05 18:24:44', '2023-06-05 18:24:44', 0, '0', NULL, NULL, '2023-06-05 18:24:44', NULL, '2023-06-05 18:24:44', 0);
-INSERT INTO `sys_job_log` VALUES ('4f31180d86efdefe35fac730083fe44d', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1005毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 20:42:10', '2023-05-13 20:42:11', 1005, '1', NULL, NULL, '2023-05-13 20:42:11', NULL, '2023-05-13 20:42:11', 0);
-INSERT INTO `sys_job_log` VALUES ('51ccba09b85330008e305d804f86e4c5', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1003毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 23:02:06', '2023-05-13 23:02:07', 1003, '1', NULL, NULL, '2023-05-13 23:02:07', NULL, '2023-05-13 23:02:07', 0);
-INSERT INTO `sys_job_log` VALUES ('53a7351c459386fc508910e00d563042', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1005毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 20:40:50', '2023-05-13 20:40:51', 1005, '1', NULL, NULL, '2023-05-13 20:40:51', NULL, '2023-05-13 20:40:51', 0);
-INSERT INTO `sys_job_log` VALUES ('7c62f0f924f4f09b949d63026127cdb1', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1004毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 21:18:30', '2023-05-13 21:18:31', 1004, '1', NULL, NULL, '2023-05-13 21:18:31', NULL, '2023-05-13 21:18:31', 0);
-INSERT INTO `sys_job_log` VALUES ('83c7cdad3631739e2c79734087425427', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1013毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 22:02:06', '2023-05-13 22:02:07', 1013, '1', NULL, NULL, '2023-05-13 22:02:07', NULL, '2023-05-13 22:02:07', 0);
-INSERT INTO `sys_job_log` VALUES ('b37ffceddfa44e87e58afd0135466863', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1015毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 21:25:00', '2023-05-13 21:25:01', 1015, '1', NULL, NULL, '2023-05-13 21:25:01', NULL, '2023-05-13 21:25:01', 0);
-INSERT INTO `sys_job_log` VALUES ('d22c14ee817bcd19c81fe257480012f6', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1002毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 21:02:06', '2023-05-13 21:02:07', 1002, '1', NULL, NULL, '2023-05-13 21:02:07', NULL, '2023-05-13 21:02:07', 0);
-INSERT INTO `sys_job_log` VALUES ('dad425ed902526367353e646b74b1d79', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1003毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 21:20:46', '2023-05-13 21:20:47', 1003, '1', NULL, NULL, '2023-05-13 21:20:47', NULL, '2023-05-13 21:20:47', 0);
-INSERT INTO `sys_job_log` VALUES ('dc4ef9016d217e37c9811359f32f9a86', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1003毫秒', 'java.lang.reflect.InvocationTargetException\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\r\n	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.base/java.lang.reflect.Method.invoke(Method.java:568)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)\r\n	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)\r\n	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)\r\n	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: cn.daenx.myadmin.common.exception.MyException: 执行失败\r\n	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)\r\n	... 10 more\r\n', '2023-05-13 21:15:42', '2023-05-13 21:15:43', 1003, '1', NULL, NULL, '2023-05-13 21:15:43', NULL, '2023-05-13 21:15:43', 0);
 
 -- ----------------------------
 -- Table structure for sys_log_login
@@ -436,115 +468,115 @@ CREATE TABLE `sys_menu`  (
 -- Records of sys_menu
 -- ----------------------------
 INSERT INTO `sys_menu` VALUES ('0451a199b76ce5725fc8003ba7cc56d4', 'd5d81e35c103ed1dac93a70b97819877', '刷新限制缓存', 6, NULL, NULL, NULL, 'monitor:apiLimit:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
-INSERT INTO `sys_menu` VALUES ('1', '0', '系统管理', 1, 'system', NULL, NULL, NULL, 'system', '0', '0', '1', '1', '0', '系统管理目录', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('100', '1', '用户管理', 1, 'user', NULL, 'system/user/index', 'system:user:list', 'user', '0', '0', '2', '1', '0', '用户管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1001', '100', '用户查询', 1, NULL, NULL, NULL, 'system:user:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1002', '100', '用户新增', 2, NULL, NULL, NULL, 'system:user:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1003', '100', '用户修改', 3, NULL, NULL, NULL, 'system:user:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1004', '100', '用户删除', 4, NULL, NULL, NULL, 'system:user:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1005', '100', '用户导出', 5, NULL, NULL, NULL, 'system:user:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1006', '100', '用户导入', 6, NULL, NULL, NULL, 'system:user:import', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1007', '100', '重置密码', 7, NULL, NULL, NULL, 'system:user:resetPwd', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1008', '101', '角色查询', 1, NULL, NULL, NULL, 'system:role:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1009', '101', '角色新增', 2, NULL, NULL, NULL, 'system:role:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('101', '1', '角色管理', 2, 'role', NULL, 'system/role/index', 'system:role:list', 'peoples', '0', '0', '2', '1', '0', '角色管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1010', '101', '角色修改', 3, NULL, NULL, NULL, 'system:role:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1011', '101', '角色删除', 4, NULL, NULL, NULL, 'system:role:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1012', '101', '角色导出', 5, NULL, NULL, NULL, 'system:role:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1013', '102', '菜单查询', 1, NULL, NULL, NULL, 'system:menu:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1014', '102', '菜单新增', 2, NULL, NULL, NULL, 'system:menu:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1015', '102', '菜单修改', 3, NULL, NULL, NULL, 'system:menu:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1016', '102', '菜单删除', 4, NULL, NULL, NULL, 'system:menu:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1017', '103', '部门查询', 1, NULL, NULL, NULL, 'system:dept:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1018', '103', '部门新增', 2, NULL, NULL, NULL, 'system:dept:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1019', '103', '部门修改', 3, NULL, NULL, NULL, 'system:dept:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('102', '1', '菜单管理', 3, 'menu', NULL, 'system/menu/index', 'system:menu:list', 'tree-table', '0', '0', '2', '1', '0', '菜单管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1020', '103', '部门删除', 4, NULL, NULL, NULL, 'system:dept:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1021', '104', '岗位查询', 1, NULL, NULL, NULL, 'system:position:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1022', '104', '岗位新增', 2, NULL, NULL, NULL, 'system:position:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1023', '104', '岗位修改', 3, NULL, NULL, NULL, 'system:position:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1024', '104', '岗位删除', 4, NULL, NULL, NULL, 'system:position:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1025', '104', '岗位导出', 5, NULL, NULL, NULL, 'system:position:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1026', '105', '字典查询', 1, '#', NULL, NULL, 'system:dict:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1027', '105', '字典新增', 2, '#', NULL, NULL, 'system:dict:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1028', '105', '字典修改', 3, '#', NULL, NULL, 'system:dict:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1029', '105', '字典删除', 4, '#', NULL, NULL, 'system:dict:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('103', '1', '部门管理', 4, 'dept', NULL, 'system/dept/index', 'system:dept:list', 'tree', '0', '0', '2', '1', '0', '部门管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1030', '105', '字典导出', 5, '#', NULL, NULL, 'system:dict:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1031', '106', '参数查询', 1, '#', NULL, NULL, 'system:config:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1032', '106', '参数新增', 2, '#', NULL, NULL, 'system:config:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1033', '106', '参数修改', 3, '#', NULL, NULL, 'system:config:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1034', '106', '参数删除', 4, '#', NULL, NULL, 'system:config:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1035', '106', '参数导出', 5, '#', NULL, NULL, 'system:config:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1036', '107', '公告查询', 1, '#', NULL, NULL, 'monitor:notice:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:05', 0);
-INSERT INTO `sys_menu` VALUES ('1037', '107', '公告新增', 2, '#', NULL, NULL, 'monitor:notice:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:08', 0);
-INSERT INTO `sys_menu` VALUES ('1038', '107', '公告修改', 3, '#', NULL, NULL, 'monitor:notice:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:12', 0);
-INSERT INTO `sys_menu` VALUES ('1039', '107', '公告删除', 4, '#', NULL, NULL, 'monitor:notice:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:16', 0);
-INSERT INTO `sys_menu` VALUES ('104', '1', '岗位管理', 5, 'position', NULL, 'system/position/index', 'system:position:list', 'post', '0', '0', '2', '1', '0', '岗位管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1040', '500', '操作日志查询', 1, '#', NULL, NULL, 'monitor:logOper:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:40', 0);
-INSERT INTO `sys_menu` VALUES ('1041', '500', '操作日志删除', 2, '#', NULL, NULL, 'monitor:logOper:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:50', 0);
-INSERT INTO `sys_menu` VALUES ('1042', '500', '操作日志导出', 4, '#', NULL, NULL, 'monitor:logOper:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:53', 0);
-INSERT INTO `sys_menu` VALUES ('1043', '501', '登录日志查询', 1, '#', NULL, NULL, 'monitor:logLogin:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:58', 0);
-INSERT INTO `sys_menu` VALUES ('1044', '501', '登录日志删除', 2, '#', NULL, NULL, 'monitor:logLogin:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:29:02', 0);
-INSERT INTO `sys_menu` VALUES ('1045', '501', '日志日志导出', 3, '#', NULL, NULL, 'monitor:logLogin:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:29:06', 0);
-INSERT INTO `sys_menu` VALUES ('105', '1', '字典管理', 6, 'dict', NULL, 'system/dict/index', 'system:dict:list', 'dict', '0', '0', '2', '1', '0', '字典管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('106', '1', '参数设置', 7, 'config', NULL, 'system/config/index', 'system:config:list', 'edit', '0', '0', '2', '1', '0', '参数设置菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('107', '2', '通知公告', 5, 'notice', NULL, 'monitor/notice/index', 'monitor:notice:list', 'message', '0', '0', '2', '1', '0', '通知公告菜单', NULL, NULL, '1', '2023-05-23 13:48:58', 0);
-INSERT INTO `sys_menu` VALUES ('108', '2', '日志管理', 1, 'log', NULL, NULL, NULL, 'log', '0', '0', '1', '1', '0', '日志管理菜单', NULL, NULL, '1', '2023-04-20 20:25:15', 0);
-INSERT INTO `sys_menu` VALUES ('111', '63854784d5ac52bfd2ac578a48f0a46f', '数据监控', 1, 'druid', NULL, 'monitor/druid/index', 'monitor:druid:list', 'druid', '0', '0', '2', '1', '0', '数据监控菜单', NULL, NULL, '1', '2023-05-23 11:13:35', 0);
-INSERT INTO `sys_menu` VALUES ('114', '3', '表单构建', 1, 'build', NULL, 'tool/build/index', 'tool:build:list', 'build', '0', '0', '2', '1', '0', '表单构建菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('118', '2', '文件管理', 6, 'file', NULL, 'monitor/file/index', 'monitor:file:list', 'upload', '0', '0', '2', '1', '0', '文件管理菜单', NULL, NULL, '1', '2023-05-23 13:43:12', 0);
-INSERT INTO `sys_menu` VALUES ('13cbe1c8683a41dae7bccb289fd5dfd9', '42708c34ab41a691ef032ab1f4cf5db0', '任务修改', 3, NULL, NULL, NULL, 'monitor:job:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:34:07', '1', '2023-05-01 14:34:07', 0);
-INSERT INTO `sys_menu` VALUES ('1500', '5', '测试单表', 1, 'data', NULL, 'test/data/index', 'test:data:list', '#', '0', '0', '2', '1', '0', '测试单表菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1501', '1500', '测试单表查询', 1, '#', NULL, NULL, 'test:data:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1502', '1500', '测试单表新增', 2, '#', NULL, NULL, 'test:data:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1503', '1500', '测试单表修改', 3, '#', NULL, NULL, 'test:data:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1504', '1500', '测试单表删除', 4, '#', NULL, NULL, 'test:data:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1505', '1500', '测试单表导出', 5, '#', NULL, NULL, 'test:data:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1506', '5', '测试树表', 1, 'dataTree', NULL, 'test/dataTree/index', 'test:dataTree:list', '#', '0', '0', '2', '1', '0', '测试树表菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1507', '1506', '测试树表查询', 1, '#', NULL, NULL, 'test:dataTree:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1508', '1506', '测试树表新增', 2, '#', NULL, NULL, 'test:dataTree:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1509', '1506', '测试树表修改', 3, '#', NULL, NULL, 'test:dataTree:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1510', '1506', '测试树表删除', 4, '#', NULL, NULL, 'test:dataTree:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('1600', '118', '文件查询', 1, '#', NULL, NULL, 'monitor:file:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:19', 0);
-INSERT INTO `sys_menu` VALUES ('1601', '118', '文件上传', 2, '#', NULL, NULL, 'monitor:file:upload', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:23', 0);
-INSERT INTO `sys_menu` VALUES ('1602', '118', '文件下载', 3, '#', NULL, NULL, 'monitor:file:download', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:27', 0);
-INSERT INTO `sys_menu` VALUES ('1603', '118', '文件删除', 4, '#', NULL, NULL, 'monitor:file:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:31', 0);
-INSERT INTO `sys_menu` VALUES ('1604', '118', '配置添加', 5, '#', NULL, NULL, 'monitor:ossConig:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:36', 0);
-INSERT INTO `sys_menu` VALUES ('1605', '118', '配置编辑', 6, '#', NULL, NULL, 'monitor:ossConig:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:40', 0);
-INSERT INTO `sys_menu` VALUES ('1698eeba543e9f12542edba21ae2d16f', '42708c34ab41a691ef032ab1f4cf5db0', '任务删除', 4, NULL, NULL, NULL, 'monitor:job:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:34:22', '1', '2023-05-01 14:34:22', 0);
-INSERT INTO `sys_menu` VALUES ('1f7c8a04250067db11e6fcae4298234e', 'd5d81e35c103ed1dac93a70b97819877', '限制修改', 3, NULL, NULL, NULL, 'monitor:apiLimit:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:07:40', '1', '2023-05-23 11:07:40', 0);
-INSERT INTO `sys_menu` VALUES ('2', '0', '系统运维', 2, 'monitor', NULL, NULL, NULL, 'monitor', '0', '0', '1', '1', '0', '系统监控目录', NULL, NULL, '1', '2023-05-23 11:09:51', 0);
-INSERT INTO `sys_menu` VALUES ('268571f3b6e74a1fc5bde8df2594ed81', '42708c34ab41a691ef032ab1f4cf5db0', '任务查询', 1, NULL, NULL, NULL, 'monitor:job:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:33:32', '1', '2023-05-01 14:33:32', 0);
-INSERT INTO `sys_menu` VALUES ('2add827d98c3b366ce0aa160d8a281ee', 'd5d81e35c103ed1dac93a70b97819877', '限制查询', 1, NULL, NULL, NULL, 'monitor:apiLimit:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:06:52', '1', '2023-05-23 11:06:52', 0);
-INSERT INTO `sys_menu` VALUES ('2b6cc0d2b8a0907d2832f9557089a682', 'd5d81e35c103ed1dac93a70b97819877', '限制新增', 2, NULL, NULL, NULL, 'monitor:apiLimit:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:07:24', '1', '2023-05-23 11:07:24', 0);
-INSERT INTO `sys_menu` VALUES ('2d562fa236077b42b5142eb869db6b18', '63854784d5ac52bfd2ac578a48f0a46f', '服务监控', 2, 'server', NULL, 'monitor/server/index', 'monitor:server:list', 'server', '0', '0', '2', '1', '0', NULL, '1', '2023-04-21 20:19:16', '1', '2023-05-23 11:13:39', 0);
-INSERT INTO `sys_menu` VALUES ('3', '0', '系统工具', 3, 'tool', NULL, NULL, NULL, 'tool', '0', '0', '1', '1', '0', '系统工具目录', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('36c032b1a5af71ad776641f68cbbeb60', '42708c34ab41a691ef032ab1f4cf5db0', '任务状态修改', 5, NULL, NULL, NULL, 'monitor:job:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:34:40', '1', '2023-05-23 11:08:31', 0);
-INSERT INTO `sys_menu` VALUES ('39cfe621da13b55952f2af58edc3e53a', '6b70f47f76199b8cd35aae0cda15d449', '发送钉钉', 3, NULL, NULL, NULL, 'tool:functest:sendDingTalk', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-19 22:48:31', '1', '2023-05-23 13:52:23', 0);
-INSERT INTO `sys_menu` VALUES ('42708c34ab41a691ef032ab1f4cf5db0', '2', '定时任务', 3, 'job', NULL, 'monitor/job/index', 'monitor:job:list', 'job', '0', '0', '2', '1', '0', NULL, '1', '2023-05-01 14:33:01', '1', '2023-05-23 11:12:55', 0);
-INSERT INTO `sys_menu` VALUES ('5', '0', '测试菜单', 5, 'demo', NULL, NULL, NULL, 'star', '0', '0', '1', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('500', '108', '操作日志', 1, 'logOper', NULL, 'monitor/logOper/index', 'monitor:logOper:list', 'form', '0', '0', '2', '1', '0', '操作日志菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('501', '108', '登录日志', 2, 'logLogin', NULL, 'monitor/logLogin/index', 'monitor:logLogin:list', 'logininfor', '0', '0', '2', '1', '0', '登录日志菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('63854784d5ac52bfd2ac578a48f0a46f', '2', '系统监控', 2, 'monitor', NULL, NULL, NULL, 'time-range', '0', '0', '1', '1', '0', NULL, '1', '2023-05-23 11:12:43', '1', '2023-05-23 11:12:43', 0);
-INSERT INTO `sys_menu` VALUES ('69519bae5ffa67623e8bfb1c8fabdd00', '118', '配置查询', 8, NULL, NULL, NULL, 'monitor:ossConig:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-16 22:12:36', '1', '2023-05-23 13:43:49', 0);
-INSERT INTO `sys_menu` VALUES ('6971d165938715753fef8a07c112ba98', '42708c34ab41a691ef032ab1f4cf5db0', '任务新增', 2, NULL, NULL, NULL, 'monitor:job:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:33:51', '1', '2023-05-01 14:33:51', 0);
-INSERT INTO `sys_menu` VALUES ('6b70f47f76199b8cd35aae0cda15d449', '3', '功能测试', 3, 'functest', NULL, 'tool/functest/index', 'tool:functest:main', 'example', '0', '0', '2', '1', '0', NULL, '1', '2023-05-19 22:46:14', '1', '2023-05-23 13:52:30', 0);
-INSERT INTO `sys_menu` VALUES ('74456b2c60b6e0b5edd5559a8e0cc108', '106', '刷新参数缓存', 6, NULL, NULL, NULL, 'system:config:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-14 23:08:43', '1', '2023-04-14 23:08:43', 0);
-INSERT INTO `sys_menu` VALUES ('7a5af154f7d305797b56b9488207b04a', '118', '配置管理', 9, NULL, NULL, NULL, 'monitor:ossConig:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-16 22:13:25', '1', '2023-05-23 13:43:53', 0);
-INSERT INTO `sys_menu` VALUES ('7aea821f10adc345dc4a003170bb7f16', 'd5d81e35c103ed1dac93a70b97819877', '限制删除', 4, NULL, NULL, NULL, 'monitor:apiLimit:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:07:59', '1', '2023-05-23 11:07:59', 0);
-INSERT INTO `sys_menu` VALUES ('85d0cbd4e4441e09f5df53214acddad9', '42708c34ab41a691ef032ab1f4cf5db0', '立即执行一次', 7, NULL, NULL, NULL, 'monitor:job:run', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 16:45:55', '1', '2023-05-01 16:45:55', 0);
-INSERT INTO `sys_menu` VALUES ('8833e71489eb0dfeb36d0769573408bd', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志导出', 9, NULL, NULL, NULL, 'monitor:jobLog:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:49:17', '1', '2023-05-01 20:49:17', 0);
-INSERT INTO `sys_menu` VALUES ('928015b29ffdad7c6621f3b92ba85c6c', '63854784d5ac52bfd2ac578a48f0a46f', '缓存监控', 3, 'cache', NULL, 'monitor/cache/index', 'monitor:cache:list', 'redis', '0', '0', '2', '1', '0', NULL, '1', '2023-04-28 23:15:24', '1', '2023-05-23 11:13:43', 0);
-INSERT INTO `sys_menu` VALUES ('937f0292079a4b62d9a26ebd5e8d57ed', '6b70f47f76199b8cd35aae0cda15d449', '发送短信', 2, NULL, NULL, NULL, 'tool:functest:sendSms', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-19 22:48:02', '1', '2023-05-23 13:52:19', 0);
-INSERT INTO `sys_menu` VALUES ('9901', '105', '刷新字典缓存', 6, '#', NULL, NULL, 'system:dict:refreshCache', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO `sys_menu` VALUES ('adec0c7b9d6b37672dcb6b1315f8f4eb', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志查询', 10, NULL, NULL, NULL, 'monitor:jobLog:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:49:33', '1', '2023-05-01 20:49:33', 0);
-INSERT INTO `sys_menu` VALUES ('b87a985b4ef717afe650f2df9cdbe087', '118', '配置删除', 7, NULL, NULL, NULL, 'monitor:ossConig:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-16 22:12:05', '1', '2023-05-23 13:43:45', 0);
-INSERT INTO `sys_menu` VALUES ('c0a98c5b6e56602800968efcacfa4e47', '6b70f47f76199b8cd35aae0cda15d449', '发送邮件', 1, NULL, NULL, NULL, 'tool:functest:sendEmail', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-19 22:47:47', '1', '2023-05-23 13:52:13', 0);
-INSERT INTO `sys_menu` VALUES ('c6e5f363977c052a6a6d6098b0736c8e', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志删除', 11, NULL, NULL, NULL, 'monitor:jobLog:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:50:09', '1', '2023-05-01 20:50:09', 0);
-INSERT INTO `sys_menu` VALUES ('d5d81e35c103ed1dac93a70b97819877', '2', '接口限制', 4, 'apiLimit', NULL, 'monitor/apiLimit/index', 'monitor:apiLimit:list', 'lock', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:05:19', '1', '2023-05-23 11:13:01', 0);
-INSERT INTO `sys_menu` VALUES ('ea70f3a842730a50686acc46fb981800', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志列表', 8, NULL, NULL, NULL, 'monitor:jobLog:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:48:52', '1', '2023-05-01 20:48:52', 0);
-INSERT INTO `sys_menu` VALUES ('f37ba75d3347c084b50727ff35a386fa', 'd5d81e35c103ed1dac93a70b97819877', '限制状态修改', 5, NULL, NULL, NULL, 'monitor:apiLimit:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:08:24', '1', '2023-05-23 11:08:24', 0);
+INSERT INTO `sys_menu` VALUES ('1', '0', '系统管理', 1, 'system', NULL, NULL, NULL, 'system', '0', '0', '1', '1', '0', '系统管理目录', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('100', '1', '用户管理', 1, 'user', NULL, 'system/user/index', 'system:user:list', 'user', '0', '0', '2', '1', '0', '用户管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1001', '100', '用户查询', 1, NULL, NULL, NULL, 'system:user:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1002', '100', '用户新增', 2, NULL, NULL, NULL, 'system:user:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1003', '100', '用户修改', 3, NULL, NULL, NULL, 'system:user:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1004', '100', '用户删除', 4, NULL, NULL, NULL, 'system:user:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1005', '100', '用户导出', 5, NULL, NULL, NULL, 'system:user:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1006', '100', '用户导入', 6, NULL, NULL, NULL, 'system:user:import', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1007', '100', '重置密码', 7, NULL, NULL, NULL, 'system:user:resetPwd', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1008', '101', '角色查询', 1, NULL, NULL, NULL, 'system:role:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1009', '101', '角色新增', 2, NULL, NULL, NULL, 'system:role:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('101', '1', '角色管理', 2, 'role', NULL, 'system/role/index', 'system:role:list', 'peoples', '0', '0', '2', '1', '0', '角色管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1010', '101', '角色修改', 3, NULL, NULL, NULL, 'system:role:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1011', '101', '角色删除', 4, NULL, NULL, NULL, 'system:role:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1012', '101', '角色导出', 5, NULL, NULL, NULL, 'system:role:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1013', '102', '菜单查询', 1, NULL, NULL, NULL, 'system:menu:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1014', '102', '菜单新增', 2, NULL, NULL, NULL, 'system:menu:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1015', '102', '菜单修改', 3, NULL, NULL, NULL, 'system:menu:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1016', '102', '菜单删除', 4, NULL, NULL, NULL, 'system:menu:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1017', '103', '部门查询', 1, NULL, NULL, NULL, 'system:dept:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1018', '103', '部门新增', 2, NULL, NULL, NULL, 'system:dept:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1019', '103', '部门修改', 3, NULL, NULL, NULL, 'system:dept:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('102', '1', '菜单管理', 3, 'menu', NULL, 'system/menu/index', 'system:menu:list', 'tree-table', '0', '0', '2', '1', '0', '菜单管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1020', '103', '部门删除', 4, NULL, NULL, NULL, 'system:dept:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1021', '104', '岗位查询', 1, NULL, NULL, NULL, 'system:position:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1022', '104', '岗位新增', 2, NULL, NULL, NULL, 'system:position:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1023', '104', '岗位修改', 3, NULL, NULL, NULL, 'system:position:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1024', '104', '岗位删除', 4, NULL, NULL, NULL, 'system:position:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1025', '104', '岗位导出', 5, NULL, NULL, NULL, 'system:position:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1026', '105', '字典查询', 1, '#', NULL, NULL, 'system:dict:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1027', '105', '字典新增', 2, '#', NULL, NULL, 'system:dict:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1028', '105', '字典修改', 3, '#', NULL, NULL, 'system:dict:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1029', '105', '字典删除', 4, '#', NULL, NULL, 'system:dict:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('103', '1', '部门管理', 4, 'dept', NULL, 'system/dept/index', 'system:dept:list', 'tree', '0', '0', '2', '1', '0', '部门管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1030', '105', '字典导出', 5, '#', NULL, NULL, 'system:dict:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1031', '106', '参数查询', 1, '#', NULL, NULL, 'system:config:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1032', '106', '参数新增', 2, '#', NULL, NULL, 'system:config:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1033', '106', '参数修改', 3, '#', NULL, NULL, 'system:config:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1034', '106', '参数删除', 4, '#', NULL, NULL, 'system:config:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1035', '106', '参数导出', 5, '#', NULL, NULL, 'system:config:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1036', '107', '公告查询', 1, '#', NULL, NULL, 'monitor:notice:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1037', '107', '公告新增', 2, '#', NULL, NULL, 'monitor:notice:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1038', '107', '公告修改', 3, '#', NULL, NULL, 'monitor:notice:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1039', '107', '公告删除', 4, '#', NULL, NULL, 'monitor:notice:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('104', '1', '岗位管理', 5, 'position', NULL, 'system/position/index', 'system:position:list', 'post', '0', '0', '2', '1', '0', '岗位管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1040', '500', '操作日志查询', 1, '#', NULL, NULL, 'monitor:logOper:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1041', '500', '操作日志删除', 2, '#', NULL, NULL, 'monitor:logOper:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1042', '500', '操作日志导出', 4, '#', NULL, NULL, 'monitor:logOper:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1043', '501', '登录日志查询', 1, '#', NULL, NULL, 'monitor:logLogin:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1044', '501', '登录日志删除', 2, '#', NULL, NULL, 'monitor:logLogin:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1045', '501', '日志日志导出', 3, '#', NULL, NULL, 'monitor:logLogin:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('105', '1', '字典管理', 6, 'dict', NULL, 'system/dict/index', 'system:dict:list', 'dict', '0', '0', '2', '1', '0', '字典管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('106', '1', '参数设置', 7, 'config', NULL, 'system/config/index', 'system:config:list', 'edit', '0', '0', '2', '1', '0', '参数设置菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('107', '2', '通知公告', 5, 'notice', NULL, 'monitor/notice/index', 'monitor:notice:list', 'message', '0', '0', '2', '1', '0', '通知公告菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('108', '2', '日志管理', 1, 'log', NULL, NULL, NULL, 'log', '0', '0', '1', '1', '0', '日志管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('111', '63854784d5ac52bfd2ac578a48f0a46f', '数据监控', 1, 'druid', NULL, 'monitor/druid/index', 'monitor:druid:list', 'druid', '0', '0', '2', '1', '0', '数据监控菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('114', '3', '表单构建', 1, 'build', NULL, 'tool/build/index', 'tool:build:list', 'build', '0', '0', '2', '1', '0', '表单构建菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('118', '2', '文件管理', 6, 'file', NULL, 'monitor/file/index', 'monitor:file:list', 'upload', '0', '0', '2', '1', '0', '文件管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('13cbe1c8683a41dae7bccb289fd5dfd9', '42708c34ab41a691ef032ab1f4cf5db0', '任务修改', 3, NULL, NULL, NULL, 'monitor:job:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1500', '5', '测试单表', 1, 'data', NULL, 'test/data/index', 'test:data:list', '#', '0', '0', '2', '1', '0', '测试单表菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1501', '1500', '测试单表查询', 1, '#', NULL, NULL, 'test:data:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1502', '1500', '测试单表新增', 2, '#', NULL, NULL, 'test:data:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1503', '1500', '测试单表修改', 3, '#', NULL, NULL, 'test:data:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1504', '1500', '测试单表删除', 4, '#', NULL, NULL, 'test:data:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1505', '1500', '测试单表导出', 5, '#', NULL, NULL, 'test:data:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1506', '5', '测试树表', 1, 'dataTree', NULL, 'test/dataTree/index', 'test:dataTree:list', '#', '0', '0', '2', '1', '0', '测试树表菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1507', '1506', '测试树表查询', 1, '#', NULL, NULL, 'test:dataTree:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1508', '1506', '测试树表新增', 2, '#', NULL, NULL, 'test:dataTree:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1509', '1506', '测试树表修改', 3, '#', NULL, NULL, 'test:dataTree:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1510', '1506', '测试树表删除', 4, '#', NULL, NULL, 'test:dataTree:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1600', '118', '文件查询', 1, '#', NULL, NULL, 'monitor:file:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1601', '118', '文件上传', 2, '#', NULL, NULL, 'monitor:file:upload', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1602', '118', '文件下载', 3, '#', NULL, NULL, 'monitor:file:download', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1603', '118', '文件删除', 4, '#', NULL, NULL, 'monitor:file:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1604', '118', '配置添加', 5, '#', NULL, NULL, 'monitor:ossConig:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1605', '118', '配置编辑', 6, '#', NULL, NULL, 'monitor:ossConig:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1698eeba543e9f12542edba21ae2d16f', '42708c34ab41a691ef032ab1f4cf5db0', '任务删除', 4, NULL, NULL, NULL, 'monitor:job:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('1f7c8a04250067db11e6fcae4298234e', 'd5d81e35c103ed1dac93a70b97819877', '限制修改', 3, NULL, NULL, NULL, 'monitor:apiLimit:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('2', '0', '系统运维', 2, 'monitor', NULL, NULL, NULL, 'monitor', '0', '0', '1', '1', '0', '系统监控目录', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('268571f3b6e74a1fc5bde8df2594ed81', '42708c34ab41a691ef032ab1f4cf5db0', '任务查询', 1, NULL, NULL, NULL, 'monitor:job:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('2add827d98c3b366ce0aa160d8a281ee', 'd5d81e35c103ed1dac93a70b97819877', '限制查询', 1, NULL, NULL, NULL, 'monitor:apiLimit:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('2b6cc0d2b8a0907d2832f9557089a682', 'd5d81e35c103ed1dac93a70b97819877', '限制新增', 2, NULL, NULL, NULL, 'monitor:apiLimit:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('2d562fa236077b42b5142eb869db6b18', '63854784d5ac52bfd2ac578a48f0a46f', '服务监控', 2, 'server', NULL, 'monitor/server/index', 'monitor:server:list', 'server', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('3', '0', '系统工具', 3, 'tool', NULL, NULL, NULL, 'tool', '0', '0', '1', '1', '0', '系统工具目录', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('36c032b1a5af71ad776641f68cbbeb60', '42708c34ab41a691ef032ab1f4cf5db0', '任务状态修改', 5, NULL, NULL, NULL, 'monitor:job:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('39cfe621da13b55952f2af58edc3e53a', '6b70f47f76199b8cd35aae0cda15d449', '发送钉钉', 3, NULL, NULL, NULL, 'tool:functest:sendDingTalk', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('42708c34ab41a691ef032ab1f4cf5db0', '2', '定时任务', 3, 'job', NULL, 'monitor/job/index', 'monitor:job:list', 'job', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('5', '0', '测试菜单', 5, 'demo', NULL, NULL, NULL, 'star', '0', '0', '1', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('500', '108', '操作日志', 1, 'logOper', NULL, 'monitor/logOper/index', 'monitor:logOper:list', 'form', '0', '0', '2', '1', '0', '操作日志菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('501', '108', '登录日志', 2, 'logLogin', NULL, 'monitor/logLogin/index', 'monitor:logLogin:list', 'logininfor', '0', '0', '2', '1', '0', '登录日志菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('63854784d5ac52bfd2ac578a48f0a46f', '2', '系统监控', 2, 'monitor', NULL, NULL, NULL, 'time-range', '0', '0', '1', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('69519bae5ffa67623e8bfb1c8fabdd00', '118', '配置查询', 8, NULL, NULL, NULL, 'monitor:ossConig:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('6971d165938715753fef8a07c112ba98', '42708c34ab41a691ef032ab1f4cf5db0', '任务新增', 2, NULL, NULL, NULL, 'monitor:job:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('6b70f47f76199b8cd35aae0cda15d449', '3', '功能测试', 3, 'functest', NULL, 'tool/functest/index', 'tool:functest:main', 'example', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('74456b2c60b6e0b5edd5559a8e0cc108', '106', '刷新参数缓存', 6, NULL, NULL, NULL, 'system:config:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('7a5af154f7d305797b56b9488207b04a', '118', '配置管理', 9, NULL, NULL, NULL, 'monitor:ossConig:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('7aea821f10adc345dc4a003170bb7f16', 'd5d81e35c103ed1dac93a70b97819877', '限制删除', 4, NULL, NULL, NULL, 'monitor:apiLimit:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('85d0cbd4e4441e09f5df53214acddad9', '42708c34ab41a691ef032ab1f4cf5db0', '立即执行一次', 7, NULL, NULL, NULL, 'monitor:job:run', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('8833e71489eb0dfeb36d0769573408bd', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志导出', 9, NULL, NULL, NULL, 'monitor:jobLog:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('928015b29ffdad7c6621f3b92ba85c6c', '63854784d5ac52bfd2ac578a48f0a46f', '缓存监控', 3, 'cache', NULL, 'monitor/cache/index', 'monitor:cache:list', 'redis', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('937f0292079a4b62d9a26ebd5e8d57ed', '6b70f47f76199b8cd35aae0cda15d449', '发送短信', 2, NULL, NULL, NULL, 'tool:functest:sendSms', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('9901', '105', '刷新字典缓存', 6, '#', NULL, NULL, 'system:dict:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('adec0c7b9d6b37672dcb6b1315f8f4eb', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志查询', 10, NULL, NULL, NULL, 'monitor:jobLog:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('b87a985b4ef717afe650f2df9cdbe087', '118', '配置删除', 7, NULL, NULL, NULL, 'monitor:ossConig:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('c0a98c5b6e56602800968efcacfa4e47', '6b70f47f76199b8cd35aae0cda15d449', '发送邮件', 1, NULL, NULL, NULL, 'tool:functest:sendEmail', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('c6e5f363977c052a6a6d6098b0736c8e', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志删除', 11, NULL, NULL, NULL, 'monitor:jobLog:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('d5d81e35c103ed1dac93a70b97819877', '2', '接口限制', 4, 'apiLimit', NULL, 'monitor/apiLimit/index', 'monitor:apiLimit:list', 'lock', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('ea70f3a842730a50686acc46fb981800', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志列表', 8, NULL, NULL, NULL, 'monitor:jobLog:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO `sys_menu` VALUES ('f37ba75d3347c084b50727ff35a386fa', 'd5d81e35c103ed1dac93a70b97819877', '限制状态修改', 5, NULL, NULL, NULL, 'monitor:apiLimit:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -601,9 +633,9 @@ CREATE TABLE `sys_oss_config`  (
 -- ----------------------------
 -- Records of sys_oss_config
 -- ----------------------------
-INSERT INTO `sys_oss_config` VALUES ('02a4c0e40c271fd516ea3ea566ade22e', '七牛云', '1', '13m', 'my-dev-test', 'MyAdmin', 's3-cn-north-1.qiniucs.com', 'qiniu.daenx.cn', '1', 'cn-north-1', '1', '0', '0', NULL, '1', '2023-04-13 22:38:26', '1', '2023-04-19 22:12:21', 0);
-INSERT INTO `sys_oss_config` VALUES ('3c59bfcc59b182930fe2d9c41246c50a', 'minio', '2', '2', 'test', 'MyAdmin', '127.0.0.1:9000', '', '0', '', '1', '1', '0', NULL, '1', '2023-04-16 17:03:47', '1', '2023-04-19 22:12:21', 0);
-INSERT INTO `sys_oss_config` VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr', '腾讯云', '3', '3', 'daen-1251663445', 'MyAdmin', 'cos.ap-nanjing.myqcloud.com', '', '0', 'ap-nanjing', '1', '0', '0', NULL, '1', '2023-04-16 20:06:31', '1', '2023-04-19 22:12:21', 0);
+INSERT INTO `sys_oss_config` VALUES ('02a4c0e40c271fd516ea3ea566ade22e', '七牛云', '1', '13m', 'my-dev-test', 'MyAdmin', 's3-cn-north-1.qiniucs.com', 'qiniu.daenx.cn', '1', 'cn-north-1', '1', '0', '0', NULL, '1', '2023-04-13 22:38:26', '1', '2023-09-19 14:34:46', 0);
+INSERT INTO `sys_oss_config` VALUES ('3c59bfcc59b182930fe2d9c41246c50a', 'minio', '2', '2', 'test', 'MyAdmin', '127.0.0.1:9000', '', '0', '', '1', '1', '0', NULL, '1', '2023-04-16 17:03:47', '1', '2023-09-19 14:34:46', 0);
+INSERT INTO `sys_oss_config` VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr', '腾讯云', '3', '3', 'daen-1251663445', 'MyAdmin', 'cos.ap-nanjing.myqcloud.com', '', '0', 'ap-nanjing', '1', '0', '0', NULL, '1', '2023-04-16 20:06:31', '1', '2023-09-19 14:34:46', 0);
 
 -- ----------------------------
 -- Table structure for sys_position
@@ -648,12 +680,12 @@ CREATE TABLE `sys_position_user`  (
 -- Records of sys_position_user
 -- ----------------------------
 INSERT INTO `sys_position_user` VALUES ('1', '1', '1');
+INSERT INTO `sys_position_user` VALUES ('1a31ee7fd56906a5ca54936771ff9e74', '3', '2');
 INSERT INTO `sys_position_user` VALUES ('2', '3', '1');
+INSERT INTO `sys_position_user` VALUES ('217b12c2ee17d54d1e1915d104fbe013', '4', '2');
 INSERT INTO `sys_position_user` VALUES ('42e86a19ad715b820d5c8cf7b3b72903', '4', '1650855280223846402');
-INSERT INTO `sys_position_user` VALUES ('717fdf27dcdd03d408eb36a1ef984758', '4', '2');
-INSERT INTO `sys_position_user` VALUES ('b3c2b07469aaf75e3a713a26ace28fee', '3', '2');
+INSERT INTO `sys_position_user` VALUES ('517d21035a2a98a4f700750784f6a484', '4', '1640613543627415553');
 INSERT INTO `sys_position_user` VALUES ('ca85f7ed198da507a18615493bcb88ae', '4', '1657562040456413185');
-INSERT INTO `sys_position_user` VALUES ('f0f6c52d96ddb3348c09119bf8bab858', '4', '1640613543627415553');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -681,7 +713,7 @@ CREATE TABLE `sys_role`  (
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES ('1', '超级管理员', 'admin', 1, '3', 1, 1, '0', NULL, '1', '2023-03-31 21:04:06', '1', '2023-03-31 21:04:09', 0);
-INSERT INTO `sys_role` VALUES ('2', '普通用户', 'user', 2, '0', 1, 1, '0', NULL, '1', '2023-03-31 21:04:08', '1', '2023-06-12 09:45:20', 0);
+INSERT INTO `sys_role` VALUES ('2', '普通用户', 'user', 2, '2', 1, 1, '0', NULL, '1', '2023-03-31 21:04:08', '1', '2023-10-08 13:59:37', 0);
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -712,93 +744,93 @@ CREATE TABLE `sys_role_menu`  (
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
-INSERT INTO `sys_role_menu` VALUES ('010e144047516a84fc15cf639df13a76', '2', '1604');
-INSERT INTO `sys_role_menu` VALUES ('0442a38a627b41631433a2b8a134f460', '2', '1015');
-INSERT INTO `sys_role_menu` VALUES ('04967f1e50ae400476949b6d488e8368', '2', '1028');
-INSERT INTO `sys_role_menu` VALUES ('04992e2858f6174c89953bf9963394b1', '2', '106');
-INSERT INTO `sys_role_menu` VALUES ('059593dc769e38c8c334a4216c90c444', '2', '1039');
-INSERT INTO `sys_role_menu` VALUES ('083f98427d45d5254cd260aa36754923', '2', '118');
-INSERT INTO `sys_role_menu` VALUES ('096284fdae4ac4c45e0168a9cc09207f', '2', '103');
-INSERT INTO `sys_role_menu` VALUES ('09f15e83eb86899aa3016675831ff6e4', '2', '1508');
-INSERT INTO `sys_role_menu` VALUES ('0c2832d252a4519b89ea16f5d5667cd3', '2', '1507');
-INSERT INTO `sys_role_menu` VALUES ('0f18520aa1a03964afa0e90ef6f2d1de', '2', '3');
-INSERT INTO `sys_role_menu` VALUES ('134ed69e973e1f12e2cf05c23f456d47', '2', '1024');
-INSERT INTO `sys_role_menu` VALUES ('1455d3272bbf52deb1e4801102df8acc', '2', '937f0292079a4b62d9a26ebd5e8d57ed');
-INSERT INTO `sys_role_menu` VALUES ('17c1c7b2c455c59c7e1a035ccb4aa334', '2', '1002');
-INSERT INTO `sys_role_menu` VALUES ('17ff84f9922d1ec1d1c488000f7d9650', '2', '1021');
-INSERT INTO `sys_role_menu` VALUES ('1f73ea18235b80a6865faffba1ba871d', '2', '1032');
-INSERT INTO `sys_role_menu` VALUES ('20a95f48fd4de639ca9f426d37ad2e81', '2', '105');
-INSERT INTO `sys_role_menu` VALUES ('221ff7ffe9e3dc4ef90fb8ee4bd557ed', '2', '1042');
-INSERT INTO `sys_role_menu` VALUES ('23c9aabdb43a8178309a8681e1951683', '2', '1010');
-INSERT INTO `sys_role_menu` VALUES ('2481a08f1c848869dd814102febe1904', '2', '1');
-INSERT INTO `sys_role_menu` VALUES ('2dc1d7359c6687a6456802e1d3d9362b', '2', '1038');
-INSERT INTO `sys_role_menu` VALUES ('2ddb711279213abfe6cbd9cf7d78d445', '2', '1502');
-INSERT INTO `sys_role_menu` VALUES ('30fbfad02e7d9f1c1fd1092d56aefd91', '2', '1020');
-INSERT INTO `sys_role_menu` VALUES ('339ad61ae8cc820051c88da232db4d45', '2', '1003');
-INSERT INTO `sys_role_menu` VALUES ('3600c28e83efcf4ccb9c8df43777fa76', '2', '114');
-INSERT INTO `sys_role_menu` VALUES ('37f0f31815e06c4b2124194350fc2689', '2', '1501');
-INSERT INTO `sys_role_menu` VALUES ('39349f2070d298787e7a1531236d7d53', '2', '1029');
-INSERT INTO `sys_role_menu` VALUES ('3c5c0780039a7e16b2f38c2481b192d3', '2', '1027');
-INSERT INTO `sys_role_menu` VALUES ('41a2c7c92bf8436b727ba454fb9863a2', '2', '1505');
-INSERT INTO `sys_role_menu` VALUES ('46e194517968aa60dc6bdf44c4181429', '2', '69519bae5ffa67623e8bfb1c8fabdd00');
-INSERT INTO `sys_role_menu` VALUES ('4903d49065e23c68dc880db1248e6039', '2', 'b87a985b4ef717afe650f2df9cdbe087');
-INSERT INTO `sys_role_menu` VALUES ('49253b13004c15ad6c88064a787d6398', '2', '1006');
-INSERT INTO `sys_role_menu` VALUES ('4e8f3278c9db0b5f28a0b43e877162df', '2', '1605');
-INSERT INTO `sys_role_menu` VALUES ('58214e427dc03b0134f5283d4a5feccc', '2', 'c0a98c5b6e56602800968efcacfa4e47');
-INSERT INTO `sys_role_menu` VALUES ('598fb925ea65211e37ee2d976b43b03f', '2', '1506');
-INSERT INTO `sys_role_menu` VALUES ('5b044380ef24ff067934acd419c93935', '2', '2d562fa236077b42b5142eb869db6b18');
-INSERT INTO `sys_role_menu` VALUES ('5c431aaf26ee0ae6fc6544d141c00694', '2', '1040');
-INSERT INTO `sys_role_menu` VALUES ('64db475d623d29556ce6846e725e7778', '2', '1030');
-INSERT INTO `sys_role_menu` VALUES ('659645051d2c3a5f3186e95f2f02458b', '2', '6b70f47f76199b8cd35aae0cda15d449');
-INSERT INTO `sys_role_menu` VALUES ('660d48dceea79ebaa7ca29a4bc76e867', '2', '1500');
-INSERT INTO `sys_role_menu` VALUES ('6cc1d3c6030ac4a6daf52d301e8d5130', '2', '63854784d5ac52bfd2ac578a48f0a46f');
-INSERT INTO `sys_role_menu` VALUES ('6ce0aa79b167176bd10dc82cf4511321', '2', '1001');
-INSERT INTO `sys_role_menu` VALUES ('6d431f6df7d19e09ab4a157629e969f2', '2', '1005');
-INSERT INTO `sys_role_menu` VALUES ('710045b55eed9d79d4198984dead8359', '2', '1035');
-INSERT INTO `sys_role_menu` VALUES ('72d70a683fc836cf99daf5e161507ee2', '2', '1022');
-INSERT INTO `sys_role_menu` VALUES ('7356e376180d8a2795e75987312ce959', '2', '1007');
-INSERT INTO `sys_role_menu` VALUES ('764c287b3ccf95eac148f0a0e2e8c756', '2', '1504');
-INSERT INTO `sys_role_menu` VALUES ('79ced85499e46af653928e63f9cdd66a', '2', '1026');
-INSERT INTO `sys_role_menu` VALUES ('7bddfaf7e64262a85fc149c73b72b8eb', '2', '1013');
-INSERT INTO `sys_role_menu` VALUES ('7e8f1d0e77b174a93cd28665698a28b3', '2', '1008');
-INSERT INTO `sys_role_menu` VALUES ('80a71c4a9e21922bbe582a3e3b9fba5a', '2', '1023');
-INSERT INTO `sys_role_menu` VALUES ('828f59bcb7e306c68816468437469e61', '2', '501');
-INSERT INTO `sys_role_menu` VALUES ('8bd733bd34d3297fed3845be9c9466af', '2', '1034');
-INSERT INTO `sys_role_menu` VALUES ('8f77b9b099df75349d378a1eb42f41ec', '2', '1017');
-INSERT INTO `sys_role_menu` VALUES ('934ff858eebebf28fa2364d0dd7efdc5', '2', '1043');
-INSERT INTO `sys_role_menu` VALUES ('96d7b500a08728d11c4a2cb953598e56', '2', '1044');
-INSERT INTO `sys_role_menu` VALUES ('9a97fabed733a7dcba2000cac33de671', '2', '7a5af154f7d305797b56b9488207b04a');
-INSERT INTO `sys_role_menu` VALUES ('9daeb32b6f985ade43c2b0e052771ef2', '2', '100');
-INSERT INTO `sys_role_menu` VALUES ('a2ce0930df87870d78d4008e444689f8', '2', '5');
-INSERT INTO `sys_role_menu` VALUES ('a73949740b67262365b49d0f5ec75e17', '2', '1033');
-INSERT INTO `sys_role_menu` VALUES ('aa2f14fec48b6da5b4821ad22eb061a0', '2', '1011');
-INSERT INTO `sys_role_menu` VALUES ('aa30ec405c81e24a83226a22e1d426b9', '2', '1601');
-INSERT INTO `sys_role_menu` VALUES ('ab972376b8a9082cba0a7bd84c8a116d', '2', '1045');
-INSERT INTO `sys_role_menu` VALUES ('afa719c5d645a365bf910ebbb32b227c', '2', '108');
-INSERT INTO `sys_role_menu` VALUES ('b9e74e369f7e0f410a05f82ff51d19c8', '2', '102');
-INSERT INTO `sys_role_menu` VALUES ('c116881cb3c3fc012f396475d00b49f3', '2', '104');
-INSERT INTO `sys_role_menu` VALUES ('c2d6f3184eaae24dc784cb10b40e644f', '2', '1510');
-INSERT INTO `sys_role_menu` VALUES ('c49e969855bf0b98477e3301141b337e', '2', '39cfe621da13b55952f2af58edc3e53a');
-INSERT INTO `sys_role_menu` VALUES ('ca5968e0a84015865ce5b886f26640ec', '2', '111');
-INSERT INTO `sys_role_menu` VALUES ('ccc35335c199e05c8e5020444abef18b', '2', '500');
-INSERT INTO `sys_role_menu` VALUES ('cdf14f2dfc13bfbe684e39a97899bbdc', '2', '1014');
-INSERT INTO `sys_role_menu` VALUES ('d55aa1b25ec6b4db929793532b69e8b9', '2', '1037');
-INSERT INTO `sys_role_menu` VALUES ('d84c0d4fb4e50df5ee690e7e855960bd', '2', '1012');
-INSERT INTO `sys_role_menu` VALUES ('deb53079c64334ae7ef6edccddaba0b7', '2', '101');
-INSERT INTO `sys_role_menu` VALUES ('e1c98c8cf71a0307b8eda1a0a2f44f72', '2', '1025');
-INSERT INTO `sys_role_menu` VALUES ('e24d2b9811c6c9a7f9e41976b0b1335e', '2', '1019');
-INSERT INTO `sys_role_menu` VALUES ('e2c3126cf2799f8cc1e78ac900c5a46f', '2', '1004');
-INSERT INTO `sys_role_menu` VALUES ('e5a9d3ffeb6559c27992ee0b747cc91d', '2', '1509');
-INSERT INTO `sys_role_menu` VALUES ('e9870cd1a138158d6b2c1b902e25b4ce', '2', '1041');
-INSERT INTO `sys_role_menu` VALUES ('ea58cbc4210bf4810c8d86d9cbc404a6', '2', '1600');
-INSERT INTO `sys_role_menu` VALUES ('ea9d229b2a5c859f414528a5b2449194', '2', '1009');
-INSERT INTO `sys_role_menu` VALUES ('ed7f5e174396e092bedd878283b68318', '2', '2');
-INSERT INTO `sys_role_menu` VALUES ('ef34997f6f4c80b8377d6ec32cc0b948', '2', '1503');
-INSERT INTO `sys_role_menu` VALUES ('f169475beb8e05e90618bb89fb939f4f', '2', '1018');
-INSERT INTO `sys_role_menu` VALUES ('f28d06f07d1b32b4f6a2335d63f1337b', '2', '1031');
-INSERT INTO `sys_role_menu` VALUES ('f29d8b556b6d3f84e3c1099305bfaa0a', '2', '107');
-INSERT INTO `sys_role_menu` VALUES ('f404c15c05ff60c6b269afd153605d3a', '2', '1036');
-INSERT INTO `sys_role_menu` VALUES ('f4515d9717e0085d6cbcd68a73062bfb', '2', '1016');
+INSERT INTO `sys_role_menu` VALUES ('02532770ccd6d4674bb8edc7c5eb9313', '2', '1605');
+INSERT INTO `sys_role_menu` VALUES ('02c1629ad47aa15581fe50628b748be8', '2', '1023');
+INSERT INTO `sys_role_menu` VALUES ('05681709ae0a6277141cfecd66548c9b', '2', '1022');
+INSERT INTO `sys_role_menu` VALUES ('072864f618c9245150723c87ef3b7a96', '2', '104');
+INSERT INTO `sys_role_menu` VALUES ('0ae458975646c8b6b3a0f8936c26c017', '2', '1019');
+INSERT INTO `sys_role_menu` VALUES ('0d3d29c0a13fb294438b5285595cb935', '2', '1509');
+INSERT INTO `sys_role_menu` VALUES ('0de5e4dab5780f287106c85d1d9d94d0', '2', '1016');
+INSERT INTO `sys_role_menu` VALUES ('0fe8f35fef314e9bc77cceed72fc392d', '2', '1001');
+INSERT INTO `sys_role_menu` VALUES ('1279ce6c507ab0609ad3ab8d86a4c76f', '2', '1507');
+INSERT INTO `sys_role_menu` VALUES ('1343a72052259fc2181592055d8bc36f', '2', '1502');
+INSERT INTO `sys_role_menu` VALUES ('13fc0858a7c43bd8a7894fa4690e576e', '2', '1004');
+INSERT INTO `sys_role_menu` VALUES ('159ab171347c52f6720f472a8fe14769', '2', 'c0a98c5b6e56602800968efcacfa4e47');
+INSERT INTO `sys_role_menu` VALUES ('1984b41de1e4c16684cf312a4d67bfdd', '2', '1505');
+INSERT INTO `sys_role_menu` VALUES ('1b59f634f74ec25b34088669c8ad2e15', '2', '1014');
+INSERT INTO `sys_role_menu` VALUES ('1f0f876008c2d0050d385afaf71f2e26', '2', '1041');
+INSERT INTO `sys_role_menu` VALUES ('23cb195adbb0e40526aafa2183041fcc', '2', '1033');
+INSERT INTO `sys_role_menu` VALUES ('2a0a3b8ba54fd4549da5a305451e8325', '2', '1026');
+INSERT INTO `sys_role_menu` VALUES ('3491cebddd5f17a7c7a3e7967a7eef52', '2', '1008');
+INSERT INTO `sys_role_menu` VALUES ('35724a5193a93ae38c01c8036a475e3a', '2', '1034');
+INSERT INTO `sys_role_menu` VALUES ('381e0eb0105cb87b28513fd9b1d1a8f6', '2', 'b87a985b4ef717afe650f2df9cdbe087');
+INSERT INTO `sys_role_menu` VALUES ('40c76cd64847d343620f728c7de093a1', '2', '1042');
+INSERT INTO `sys_role_menu` VALUES ('45e4e05039dc4803b2f09d2f4b237e65', '2', '1039');
+INSERT INTO `sys_role_menu` VALUES ('47e159c0671320cd28fc223de5a35350', '2', '1005');
+INSERT INTO `sys_role_menu` VALUES ('49632ef6f1c49338a1c973ffe666f8a4', '2', '1013');
+INSERT INTO `sys_role_menu` VALUES ('5253bc5e029a57815e4a9be9d55ccd8b', '2', '103');
+INSERT INTO `sys_role_menu` VALUES ('582ca7ebc079ee8c1e985670f3fbeadd', '2', '1010');
+INSERT INTO `sys_role_menu` VALUES ('58f3bf9ae7283057f32c79bdfabfcb42', '2', '1012');
+INSERT INTO `sys_role_menu` VALUES ('66b1bacb4157504b1f1cbb8399ae550e', '2', '69519bae5ffa67623e8bfb1c8fabdd00');
+INSERT INTO `sys_role_menu` VALUES ('66c9561f0efe227df1cb1c70200483d8', '2', '1035');
+INSERT INTO `sys_role_menu` VALUES ('678f3fedb1e83ee62166c68bb60b31bd', '2', '501');
+INSERT INTO `sys_role_menu` VALUES ('6a6e0b54f9b90b7d63eec2f81d3497b6', '2', '118');
+INSERT INTO `sys_role_menu` VALUES ('6bb16ffcd49a25b456959fbcd7aa8fdc', '2', '1020');
+INSERT INTO `sys_role_menu` VALUES ('6cfa11faa96ea88786129069e2acc338', '2', '1024');
+INSERT INTO `sys_role_menu` VALUES ('726fbed93295a7ec80172aaf499b2917', '2', '108');
+INSERT INTO `sys_role_menu` VALUES ('7275479ded9905306199ba3c91f3b8f3', '2', '500');
+INSERT INTO `sys_role_menu` VALUES ('75d7ff75eb247eb16a85f40cb4180e84', '2', '1031');
+INSERT INTO `sys_role_menu` VALUES ('764498a2a36559f573ff3fb546c61dd6', '2', '1030');
+INSERT INTO `sys_role_menu` VALUES ('783ad1222af2e38a86b7bf94c51c1484', '2', '1007');
+INSERT INTO `sys_role_menu` VALUES ('78ea96f8298a7fcb9c14f2889f8220f6', '2', '1504');
+INSERT INTO `sys_role_menu` VALUES ('7ae8ad738e6a903edafedcaaa5dd3454', '2', '105');
+INSERT INTO `sys_role_menu` VALUES ('7b767c66175c8d955b528d48435ddda8', '2', '1027');
+INSERT INTO `sys_role_menu` VALUES ('7bac765bfb43347ec3c386f6865d79c3', '2', '7a5af154f7d305797b56b9488207b04a');
+INSERT INTO `sys_role_menu` VALUES ('7d450cba1fa81eb5552809915117a3e4', '2', '1028');
+INSERT INTO `sys_role_menu` VALUES ('7e87cc4e6cd10c98918d6899d183009f', '2', '1029');
+INSERT INTO `sys_role_menu` VALUES ('80982125508f13ae48d59fef1b843be0', '2', '937f0292079a4b62d9a26ebd5e8d57ed');
+INSERT INTO `sys_role_menu` VALUES ('80efa6c64c96aaf64c9073331088fee7', '2', '1501');
+INSERT INTO `sys_role_menu` VALUES ('82f9c480dfd6b6fdead258e6b463ee85', '2', '39cfe621da13b55952f2af58edc3e53a');
+INSERT INTO `sys_role_menu` VALUES ('86f7ba881da5a7dbac02564ef938873d', '2', '3');
+INSERT INTO `sys_role_menu` VALUES ('8d48959b17281336ad07938a03dfe80a', '2', '1032');
+INSERT INTO `sys_role_menu` VALUES ('924b234116306695c481028c80bf4e79', '2', '1601');
+INSERT INTO `sys_role_menu` VALUES ('954fafb48de20d7bc0da445b9ee98693', '2', '107');
+INSERT INTO `sys_role_menu` VALUES ('960f3f62d3b79816fd515a7ab325a649', '2', '6b70f47f76199b8cd35aae0cda15d449');
+INSERT INTO `sys_role_menu` VALUES ('9fcc8d002dc9ba25cd8bddfb8a8dd0e1', '2', '1038');
+INSERT INTO `sys_role_menu` VALUES ('a2c3f22381a9af73e3c5f10745d7b84b', '2', '1009');
+INSERT INTO `sys_role_menu` VALUES ('a308a18a3bb7be4184a27c22e87f299b', '2', '1510');
+INSERT INTO `sys_role_menu` VALUES ('a33bf2a8bafe0ce924b72141b0bbae33', '2', '1040');
+INSERT INTO `sys_role_menu` VALUES ('a46e13419004516cb35d906cd99e643a', '2', '1506');
+INSERT INTO `sys_role_menu` VALUES ('aac08237779b45345017519497e09db5', '2', '2d562fa236077b42b5142eb869db6b18');
+INSERT INTO `sys_role_menu` VALUES ('ab30cec827b16efe9f32bcba3adaf284', '2', '101');
+INSERT INTO `sys_role_menu` VALUES ('ad2349ce2c31c19fc7b34a248c477fe2', '2', '1044');
+INSERT INTO `sys_role_menu` VALUES ('b0c853cfe0aa1775c86a1cbd05462a2d', '2', '1015');
+INSERT INTO `sys_role_menu` VALUES ('b9c1c9918e9b94d1e0b537c0cd62216d', '2', '1017');
+INSERT INTO `sys_role_menu` VALUES ('bf2900bac02ae6a1bd097b325f91383b', '2', '63854784d5ac52bfd2ac578a48f0a46f');
+INSERT INTO `sys_role_menu` VALUES ('c119334264bac946d2c845f28d8674db', '2', '1043');
+INSERT INTO `sys_role_menu` VALUES ('c4095accc7a974d0e1428fb23958e86f', '2', '100');
+INSERT INTO `sys_role_menu` VALUES ('c563231dbf7bd1dc3df9e7782183c6bb', '2', '111');
+INSERT INTO `sys_role_menu` VALUES ('c6b75b27dc3b3939aa2aa4657d9c124a', '2', '1006');
+INSERT INTO `sys_role_menu` VALUES ('c968fce703ae4cab217f573fa794cb7c', '2', '1018');
+INSERT INTO `sys_role_menu` VALUES ('caa0fa9f5c0b20254cc6ac91055a34f3', '2', '1011');
+INSERT INTO `sys_role_menu` VALUES ('cde845687c7f5d27ed986fd5c522d972', '2', '1021');
+INSERT INTO `sys_role_menu` VALUES ('cecbe74d4d49e8859fe349ce09f1274c', '2', '1036');
+INSERT INTO `sys_role_menu` VALUES ('cf8d57072c37f52f30e57ffa2730a7b4', '2', '114');
+INSERT INTO `sys_role_menu` VALUES ('d2f177889d07883b027d71fcc1a66d2b', '2', '1600');
+INSERT INTO `sys_role_menu` VALUES ('d7a363c0ce33adfbd11a9a65f245522e', '2', '5');
+INSERT INTO `sys_role_menu` VALUES ('dcc946803a67174fd97301b1ae77279a', '2', '106');
+INSERT INTO `sys_role_menu` VALUES ('de2b4ac11823eb63979441811085b437', '2', '1508');
+INSERT INTO `sys_role_menu` VALUES ('df55a35ee70b7254cf61f375ca7e2e39', '2', '1045');
+INSERT INTO `sys_role_menu` VALUES ('e1e2196a03c24413f5fabd181d25fbaf', '2', '1500');
+INSERT INTO `sys_role_menu` VALUES ('e6ff560056cd81f135de19f140fbda70', '2', '102');
+INSERT INTO `sys_role_menu` VALUES ('eb8fd0e5f641e2c0c8d6942c47fd2a2e', '2', '1003');
+INSERT INTO `sys_role_menu` VALUES ('eef664ac515067f9230e76f8904c7f57', '2', '2');
+INSERT INTO `sys_role_menu` VALUES ('f22906140a1d6b8251c1022dcaf71919', '2', '1503');
+INSERT INTO `sys_role_menu` VALUES ('f2d1e55123fb5893c3770317eebb69ec', '2', '1037');
+INSERT INTO `sys_role_menu` VALUES ('fb828076c6615fff7856861aae5ec75c', '2', '1604');
+INSERT INTO `sys_role_menu` VALUES ('fcd76a2ac444d4ce75237aa50b8b397e', '2', '1002');
+INSERT INTO `sys_role_menu` VALUES ('fd7c89946f038db52ea9f62d3ace12a9', '2', '1025');
+INSERT INTO `sys_role_menu` VALUES ('fee185061de207aba60be1c3c77a016d', '2', '1');
 
 -- ----------------------------
 -- Table structure for sys_role_user
@@ -815,11 +847,48 @@ CREATE TABLE `sys_role_user`  (
 -- Records of sys_role_user
 -- ----------------------------
 INSERT INTO `sys_role_user` VALUES ('174eceae15692e5091c28f3d6a3a1f54', '2', '1650855280223846402');
-INSERT INTO `sys_role_user` VALUES ('1d6f2251b32492648a8b1c488f8a1f2f', '2', '1643141570206871554');
+INSERT INTO `sys_role_user` VALUES ('324278c72420d197e3ddbfaa0ea86d32', '2', '1640613543627415553');
+INSERT INTO `sys_role_user` VALUES ('63578445258df9ce8ba9e9b15eb20ca2', '2', '2');
 INSERT INTO `sys_role_user` VALUES ('678a429aa947e14570e5077ebcea755a', '1', '1');
-INSERT INTO `sys_role_user` VALUES ('735afe9f516a5cf19e09326d05ea6190', '2', '1640613543627415553');
+INSERT INTO `sys_role_user` VALUES ('84ad78b7cf812e176217fe126ac29298', '2', '1643141570206871554');
 INSERT INTO `sys_role_user` VALUES ('e12edec621a0f93ce2a9643d7e79b99e', '2', '1657562040456413185');
-INSERT INTO `sys_role_user` VALUES ('fed886b635dfcdb135ff7ca51b908861', '2', '2');
+
+-- ----------------------------
+-- Table structure for sys_social
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_social`;
+CREATE TABLE `sys_social`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
+  `is_delete` int NULL DEFAULT 0 COMMENT '是否删除，0=正常，1=删除',
+  `uuid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方系统的唯一ID',
+  `source` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方用户来源',
+  `access_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户的授权令牌',
+  `expire_in` int NULL DEFAULT NULL COMMENT '第三方用户的授权令牌的有效期',
+  `refresh_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '刷新令牌',
+  `open_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方用户的 open id',
+  `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方用户的 ID',
+  `access_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '个别平台的授权信息',
+  `union_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方用户的 union id',
+  `scope` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方用户授予的权限',
+  `token_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '个别平台的授权信息',
+  `id_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'id token',
+  `mac_algorithm` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '小米平台用户的附带属性',
+  `mac_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '小米平台用户的附带属性',
+  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户的授权code',
+  `oauth_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Twitter平台用户的附带属性',
+  `oauth_token_secret` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Twitter平台用户的附带属性',
+  `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关联用户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '三方Auth绑定表（暂未启用）' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_social
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -850,12 +919,12 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', '100', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18888888888', '1330166565@qq.com', NULL, NULL, NULL, NULL, '1', '宇宙第一帅的人', '1', '2023-03-01 13:42:39', '1', '2023-05-14 16:31:39', 0);
-INSERT INTO `sys_user` VALUES ('1640613543627415553', '101', 'liumm', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-03-28 15:15:25', '1', '2023-04-14 10:05:02', 0);
-INSERT INTO `sys_user` VALUES ('1643141570206871554', '100', 'abcdefg', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-04-04 14:40:53', '1', '2023-04-13 23:02:42', 0);
+INSERT INTO `sys_user` VALUES ('1', '100', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18731054244', '1330166565@qq.com', NULL, NULL, NULL, NULL, '1', '宇宙第一帅的人', '1', '2023-03-01 13:42:39', '1', '2023-05-14 16:31:39', 0);
+INSERT INTO `sys_user` VALUES ('1640613543627415553', '101', 'liumm', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-03-28 15:15:25', '1', '2023-09-22 14:19:05', 0);
+INSERT INTO `sys_user` VALUES ('1643141570206871554', '100', 'abcdefg', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-04-04 14:40:53', '1', '2023-09-22 14:18:23', 0);
 INSERT INTO `sys_user` VALUES ('1650855280223846402', '105', 'test01', '678e82d907d3e6e71f81d5cf3ddacc3671dc618c38a1b7a9f9393a83d025b296', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, '2023-04-25 21:32:25', NULL, '2023-04-25 21:32:25', 0);
 INSERT INTO `sys_user` VALUES ('1657562040456413185', '105', 'admin22', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, '2023-05-14 09:42:41', NULL, '2023-05-14 09:42:41', 0);
-INSERT INTO `sys_user` VALUES ('2', '102', 'test', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755533444', '555@163.com', '1', '2', '2023-05-10 11:01:47', NULL, '2', '4', '1', '2023-03-01 14:09:35', '1', '2023-03-01 14:09:35', 0);
+INSERT INTO `sys_user` VALUES ('2', '102', 'test', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755533444', '555@163.com', '1', '2', '2023-05-10 11:01:47', NULL, '2', '4', '1', '2023-03-01 14:09:35', '1', '2023-09-22 14:19:21', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_detail
@@ -883,12 +952,12 @@ CREATE TABLE `sys_user_detail`  (
 -- ----------------------------
 -- Records of sys_user_detail
 -- ----------------------------
-INSERT INTO `sys_user_detail` VALUES ('21366e78e6a156e9cf45061da65d06e5', '1', '我是管理员', 'Daen', '18', '1', '每一次离开都是为了更好的相遇\n你好世界', '不一样的烟花', '625bcbc99e7524b543c81ffaed6dd2ab', 350, NULL, '2023-03-01 13:42:39', '1', '2023-05-31 11:04:27', 0);
-INSERT INTO `sys_user_detail` VALUES ('7550e77dfbabea70ec44aaebda2f90ed', '2', '测试用户', '宝贝', '18', '0', 'ε=(´ο｀*)))唉', '生气气1', '', 0, NULL, '2023-03-01 14:09:35', '2', '2023-04-16 19:49:01', 0);
+INSERT INTO `sys_user_detail` VALUES ('21366e78e6a156e9cf45061da65d06e5', '1', '我是管理员', 'Daen', '18', '1', '每一次离开都是为了更好的相遇\n你好世界', '不一样的烟花', '625bcbc99e7524b543c81ffaed6dd2ab', 350, NULL, '2023-03-01 13:42:39', '1', '2023-06-26 15:49:37', 0);
+INSERT INTO `sys_user_detail` VALUES ('7550e77dfbabea70ec44aaebda2f90ed', '2', '测试用户', '宝贝', '18', '0', 'ε=(´ο｀*)))唉', '生气气1', '', 0, NULL, '2023-03-01 14:09:35', '1', '2023-09-22 14:19:21', 0);
 INSERT INTO `sys_user_detail` VALUES ('886c73e7e8f458649f3048f672f042e6', '1650855280223846402', NULL, NULL, '0', '2', NULL, NULL, NULL, 0, NULL, '2023-04-25 21:32:25', NULL, '2023-04-25 21:32:25', 0);
-INSERT INTO `sys_user_detail` VALUES ('945acc4f5450533dd672260cfa1d66c9', '1640613543627415553', '刘萌萌', '刘二萌', '18', '0', NULL, NULL, NULL, 85560, '1', '2023-03-28 15:15:25', '1', '2023-04-14 10:05:03', 0);
+INSERT INTO `sys_user_detail` VALUES ('945acc4f5450533dd672260cfa1d66c9', '1640613543627415553', '刘萌萌', '刘二萌', '18', '0', NULL, NULL, NULL, 85560, '1', '2023-03-28 15:15:25', '1', '2023-09-22 14:19:05', 0);
 INSERT INTO `sys_user_detail` VALUES ('ac5182e7b0e1c9ce11e7381e19b4733d', '1657562040456413185', NULL, NULL, '0', '2', NULL, NULL, NULL, 0, NULL, '2023-05-14 09:42:41', NULL, '2023-05-14 09:42:41', 0);
-INSERT INTO `sys_user_detail` VALUES ('f6d09bb65ad0ac3d6239214d7e456f8e', '1643141570206871554', '阿萨德', NULL, '0', '0', '2', NULL, NULL, 0, '1', '2023-04-04 14:40:53', '1', '2023-04-13 23:02:42', 0);
+INSERT INTO `sys_user_detail` VALUES ('f6d09bb65ad0ac3d6239214d7e456f8e', '1643141570206871554', '阿萨德', NULL, '0', '0', '2', NULL, NULL, 0, '1', '2023-04-04 14:40:53', '1', '2023-09-22 14:18:23', 0);
 
 -- ----------------------------
 -- Table structure for test_data
@@ -912,7 +981,10 @@ CREATE TABLE `test_data`  (
 -- ----------------------------
 -- Records of test_data
 -- ----------------------------
-INSERT INTO `test_data` VALUES ('8f05e1af476e3537e796c966ff4b7b53', '阿萨德', '阿萨德', '0', '0', '4', '1', '2023-06-03 10:56:21', '1', '2023-06-03 10:58:26', 0);
+INSERT INTO `test_data` VALUES ('3c59c3c11a2d3c5bcfac567dc326fa9b', '阿萨德1', '1', '0', '0', NULL, '1', '2023-09-22 09:36:32', '1', '2023-09-22 10:54:14', 0);
+INSERT INTO `test_data` VALUES ('6cbae38f86d25cb80fb34a9892cf01b2', '你好', '22', '0', '0', NULL, '1', '2023-09-22 10:54:59', '1', '2023-09-22 21:38:45', 0);
+INSERT INTO `test_data` VALUES ('70e15d15f8390b71ff38de32ec163c99', '我不好', '22', '0', '0', NULL, '1', '2023-09-22 09:10:33', '1', '2023-09-22 21:38:50', 0);
+INSERT INTO `test_data` VALUES ('7e5bfc56a3600d717786fbe0cccbfcd5', '哈哈哈哈', '1', '0', '0', NULL, '1', '2023-09-22 09:09:20', '1', '2023-09-22 21:38:56', 0);
 
 -- ----------------------------
 -- Table structure for test_data_tree
@@ -939,10 +1011,9 @@ CREATE TABLE `test_data_tree`  (
 -- ----------------------------
 INSERT INTO `test_data_tree` VALUES ('1', '0', '我1', '阿萨德', '0', '1', '个', '1', '2023-02-10 17:25:11', '1', '2023-04-26 22:16:35', 0);
 INSERT INTO `test_data_tree` VALUES ('11', '1', '我3', '3', '0', '0', '导入1', '1', '2023-02-26 17:25:16', '1', '2023-04-26 22:19:18', 0);
-INSERT INTO `test_data_tree` VALUES ('12', '2', '我51', '按时在', '0', '0', '官方', '2', '2023-02-22 17:25:21', '2', '2023-02-22 17:25:21', 1);
 INSERT INTO `test_data_tree` VALUES ('2', '0', '我4-', '按时-', '1', '0', '更换-', '2', '2023-01-30 17:25:18', '2', '2023-01-30 17:25:18', 0);
 INSERT INTO `test_data_tree` VALUES ('222', '11', '我2', '得过户', '1', '1', '个月', '1', '2023-02-15 17:25:14', '1', '2023-04-26 22:16:10', 0);
-INSERT INTO `test_data_tree` VALUES ('50fac88b36e64da3d8bd94ae11f85bc6', '2', '测试', '阿萨德', '0', '0', NULL, '1', '2023-04-26 22:02:34', '1', '2023-04-26 22:02:34', 1);
 INSERT INTO `test_data_tree` VALUES ('b53120f9af52dcdc229d42d8cb04623f', '2', '阿萨德', '阿萨德', '0', '0', NULL, '1', '2023-04-26 22:24:47', '1', '2023-04-26 22:24:47', 0);
+
 
 SET FOREIGN_KEY_CHECKS = 1;

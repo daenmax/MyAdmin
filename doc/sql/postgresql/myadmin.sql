@@ -1,4 +1,3 @@
-
 -- ----------------------------
 -- Table structure for sys_api_limit
 -- ----------------------------
@@ -270,7 +269,6 @@ INSERT INTO "public"."sys_config" VALUES ('64c70f1e91cbcd3cfc390e3966aeef6b', '�
 }', '0', '0', '如果删除或者禁用此参数，那么系统将无法发送企业微信通知
 具体参数说明参考文档', '1', '2023-10-01 13:41:53', '1', '2023-10-01 13:43:57', 0);
 
-
 -- ----------------------------
 -- Table structure for sys_dept
 -- ----------------------------
@@ -322,6 +320,60 @@ INSERT INTO "public"."sys_dept" VALUES ('106', '101', '财务部门', 'XMY-JN-4'
 INSERT INTO "public"."sys_dept" VALUES ('107', '101', '运维部门', 'XMY-JN-5', NULL, '0', '1', 2, 5, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
 INSERT INTO "public"."sys_dept" VALUES ('108', '102', '市场部门', 'XMY-BJ-1', NULL, '0', '1', 2, 1, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
 INSERT INTO "public"."sys_dept" VALUES ('109', '102', '财务部门', 'XMY-BJ-2', NULL, '0', '1', 2, 2, NULL, '1', '2023-04-10 14:35:22', '1', '2023-04-10 14:35:22', 0);
+
+-- ----------------------------
+-- Table structure for sys_dept_parent
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."sys_dept_parent";
+CREATE TABLE "public"."sys_dept_parent" (
+  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "dept_id" varchar(32) COLLATE "pg_catalog"."default",
+  "parent_id" varchar(32) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."sys_dept_parent"."dept_id" IS '部门ID';
+COMMENT ON COLUMN "public"."sys_dept_parent"."parent_id" IS '父级部门ID，顶级为0';
+COMMENT ON TABLE "public"."sys_dept_parent" IS '部门层级关系表';
+
+-- ----------------------------
+-- Records of sys_dept_parent
+-- ----------------------------
+INSERT INTO "public"."sys_dept_parent" VALUES ('06d36f0f8901fb4ffbe781b080f07dd6', '107', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('1a0b09c29f5470ac94079b303b0ad12b', '101', '101');
+INSERT INTO "public"."sys_dept_parent" VALUES ('1fd041e9beb93fa50133d2d7321e1cb0', '108', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('222c3eaf636f8edf7f83eda4f90d26f2', '105', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('268027691ee65797e33da228ea194b6c', '107', '107');
+INSERT INTO "public"."sys_dept_parent" VALUES ('26d358c6733335e1bcb9aae9ee3e54db', '102', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('28070f8ff40f690d48c308b76e59a993', '105', '105');
+INSERT INTO "public"."sys_dept_parent" VALUES ('2d6c36d425ff5be02ae48940f701c3ef', '103', '103');
+INSERT INTO "public"."sys_dept_parent" VALUES ('384202fb5d68394c886cbeefadaf01ce', '109', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('3d41adfbf70d1af146f9b22cfa3c4903', '100', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('4222314fa5495df9d762a953cfcf65ac', '107', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('494ccdf978d57d8bc96b02d72a9f5a3a', '108', '108');
+INSERT INTO "public"."sys_dept_parent" VALUES ('550ccf63f48406ebf42219e7d3219582', '107', '101');
+INSERT INTO "public"."sys_dept_parent" VALUES ('59f10bf5e1c6f714b4f1be02910553fa', '103', '101');
+INSERT INTO "public"."sys_dept_parent" VALUES ('617f7108449586ef211c0955a189b222', '108', '102');
+INSERT INTO "public"."sys_dept_parent" VALUES ('68b753537bc2bfa1b09e677077a5e1cc', '109', '102');
+INSERT INTO "public"."sys_dept_parent" VALUES ('700950267ddc9c18243472f68a2e0c62', '106', '101');
+INSERT INTO "public"."sys_dept_parent" VALUES ('886b217dcfb0a77b4b281f6a5981c69b', '102', '102');
+INSERT INTO "public"."sys_dept_parent" VALUES ('96b6974412095ef1f056f5596d1df48d', '103', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('98faed672906375a309a2ac4c2ce47f1', '104', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('9d125f57b2a7251caac817bed4ddd6ee', '103', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('a63973aaebc357a568b9ec3e15bdb774', '104', '101');
+INSERT INTO "public"."sys_dept_parent" VALUES ('a95a29cd20b7a3ee0deabdd83b468bd9', '101', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('b19a436916284476e08aacfbc1012e17', '101', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('b264e91699df1ed6db2253203308452d', '106', '106');
+INSERT INTO "public"."sys_dept_parent" VALUES ('bf0399783891c2e9df37b693fdadf6d2', '105', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('c57966fa37859a0c0c153c5dd5ca2a6d', '106', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('d56ed387ac2c6105ffbe3faa8d99f5eb', '100', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('d570bd153cc62d2a8c346bf55769bceb', '105', '101');
+INSERT INTO "public"."sys_dept_parent" VALUES ('d6cd40b06e1a20bc20d741d52fb03fed', '109', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('e0754a80b8ef4531839db616d6a4f797', '104', '104');
+INSERT INTO "public"."sys_dept_parent" VALUES ('e5a25858e3e18b34cf4e51dcd45ffee3', '106', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('e651fc9a844a23121783ace242907138', '102', '100');
+INSERT INTO "public"."sys_dept_parent" VALUES ('f0f6e94712736e9cb689bf044f5667af', '104', '0');
+INSERT INTO "public"."sys_dept_parent" VALUES ('f5cd73b71673848ce9a5a7543ccd38fa', '109', '109');
+INSERT INTO "public"."sys_dept_parent" VALUES ('fae666e9d536d28b28dcf84674e34aaf', '108', '0');
 
 -- ----------------------------
 -- Table structure for sys_dict
@@ -521,15 +573,6 @@ COMMENT ON TABLE "public"."sys_file" IS 'OSS文件表';
 -- ----------------------------
 -- Records of sys_file
 -- ----------------------------
-INSERT INTO "public"."sys_file" VALUES ('27b92872738c67201195486eb73f5d3a', '药水配方[MC小助手].png', 'MyAdmin/2023/04/20/5a4e7344c73743e4836c11dca627e484.png', '.png', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/20/5a4e7344c73743e4836c11dca627e484.png', 317604, '190b4fd1f9c33c1aa5d3955e0ae27574', 'image/png', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-20 21:07:48', '1', '2023-04-20 21:07:48', 0);
-INSERT INTO "public"."sys_file" VALUES ('541db2ca27cc0ad4d4474ece3bf562ea', '电影.txt', 'MyAdmin/2023/04/19/bdedd4b25f6849998fda260ca031a1d1.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/19/bdedd4b25f6849998fda260ca031a1d1.txt', 364, '4e87892fff8826595faac378df26e1c8', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-19 22:12:38', '1', '2023-04-19 22:12:38', 0);
-INSERT INTO "public"."sys_file" VALUES ('54478d3af3ff4c107db45cc0eb73d59d', '46两个定时任务增加参数-上传后是否发送socket通知.txt', 'MyAdmin/2023/04/19/d24428703f184311881d718afa1b62c3.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/19/d24428703f184311881d718afa1b62c3.txt', 9, 'bab8fa920c19b90cb37cc3b5d6ddd256', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-19 15:20:08', '1', '2023-04-19 15:20:08', 0);
-INSERT INTO "public"."sys_file" VALUES ('625bcbc99e7524b543c81ffaed6dd2ab', 'QQ截图20230531104623.png', 'MyAdmin/2023/05/31/12016829de8d43288f8ea849b95437b5.png', '.png', 'http://127.0.0.1:9000/test/MyAdmin/2023/05/31/12016829de8d43288f8ea849b95437b5.png', 15201, '38d4743e3e59425797bc312186d91da1', 'image/png', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户头像', '1', '2023-05-31 11:04:27', '1', '2023-05-31 11:04:27', 0);
-INSERT INTO "public"."sys_file" VALUES ('6a3de907b905e6a329d82f813b0c6fa8', '测试.txt', 'MyAdmin/2023/04/18/2822df6654ae49e88e98b641078033bc.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/18/2822df6654ae49e88e98b641078033bc.txt', 0, 'd41d8cd98f00b204e9800998ecf8427e', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-18 21:37:00', '1', '2023-04-18 21:37:00', 0);
-INSERT INTO "public"."sys_file" VALUES ('70cc98892d2018a880045cdc16ba3248', 'qwasd.txt', 'MyAdmin/2023/04/18/b1ca76f8be404a14afb9c2596347074e.txt', '.txt', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/18/b1ca76f8be404a14afb9c2596347074e.txt', 15, 'd51a00ff6d15fab7e73382c8ae1bb7b0', 'text/plain', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-18 21:59:22', '1', '2023-04-18 21:59:22', 0);
-INSERT INTO "public"."sys_file" VALUES ('75366be0cec33b2a7c1e3ddbe670867a', '大恩的头像.jpg', 'MyAdmin/2023/04/20/5fb55e08a5644ccc8cc33d07bbfe9f31.jpg', '.jpg', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/20/5fb55e08a5644ccc8cc33d07bbfe9f31.jpg', 27279, '4879054b23eb68d156eb7d92906aa113', 'image/jpeg', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-20 22:30:39', '1', '2023-04-20 22:30:39', 0);
-INSERT INTO "public"."sys_file" VALUES ('9e69194c848e1d045bf67c1a3457ed4a', '46两个定时任务增加参数-上传后是否发送socket通知.txt', 'MyAdmin/2023/04/19/61905a7a27d7498bbd2592c15ffb4ab9.txt', '.txt', 'https://qiniu.daenx.cn/MyAdmin/2023/04/19/61905a7a27d7498bbd2592c15ffb4ab9.txt', 9, 'bab8fa920c19b90cb37cc3b5d6ddd256', 'text/plain', '02a4c0e40c271fd516ea3ea566ade22e', '0', '用户上传', '1', '2023-04-19 17:15:44', '1', '2023-04-19 17:15:44', 0);
-INSERT INTO "public"."sys_file" VALUES ('eb8e7e58e43a12acc7873066a1c9734b', 'dev.zip', 'MyAdmin/2023/04/19/eb67e5f40c8a4c119fc3474322ef094c.zip', '.zip', 'http://127.0.0.1:9000/test/MyAdmin/2023/04/19/eb67e5f40c8a4c119fc3474322ef094c.zip', 5531582, '01cbbb91def7ae611954a7e03766eb9f', 'application/x-zip-compressed', '3c59bfcc59b182930fe2d9c41246c50a', '0', '用户上传', '1', '2023-04-19 16:18:27', '1', '2023-04-19 16:18:27', 0);
 
 -- ----------------------------
 -- Table structure for sys_job
@@ -620,142 +663,6 @@ COMMENT ON TABLE "public"."sys_job_log" IS '定时任务调度日志表';
 -- ----------------------------
 -- Records of sys_job_log
 -- ----------------------------
-INSERT INTO "public"."sys_job_log" VALUES ('1d7b6a06adb142c42ae06c43baef896b', 'b28738a16605721937a74cd3a1089fb8', '测试（一个参数） 总共耗时：0毫秒', NULL, '2023-06-05 18:24:44', '2023-06-05 18:24:44', 0, '0', NULL, NULL, '2023-06-05 18:24:44', NULL, '2023-06-05 18:24:44', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('4f31180d86efdefe35fac730083fe44d', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1005毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 20:42:10', '2023-05-13 20:42:11', 1005, '1', NULL, NULL, '2023-05-13 20:42:11', NULL, '2023-05-13 20:42:11', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('51ccba09b85330008e305d804f86e4c5', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1003毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 23:02:06', '2023-05-13 23:02:07', 1003, '1', NULL, NULL, '2023-05-13 23:02:07', NULL, '2023-05-13 23:02:07', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('53a7351c459386fc508910e00d563042', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1005毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 20:40:50', '2023-05-13 20:40:51', 1005, '1', NULL, NULL, '2023-05-13 20:40:51', NULL, '2023-05-13 20:40:51', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('7c62f0f924f4f09b949d63026127cdb1', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1004毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 21:18:30', '2023-05-13 21:18:31', 1004, '1', NULL, NULL, '2023-05-13 21:18:31', NULL, '2023-05-13 21:18:31', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('83c7cdad3631739e2c79734087425427', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1013毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 22:02:06', '2023-05-13 22:02:07', 1013, '1', NULL, NULL, '2023-05-13 22:02:07', NULL, '2023-05-13 22:02:07', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('b37ffceddfa44e87e58afd0135466863', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1015毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 21:25:00', '2023-05-13 21:25:01', 1015, '1', NULL, NULL, '2023-05-13 21:25:01', NULL, '2023-05-13 21:25:01', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('d22c14ee817bcd19c81fe257480012f6', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1002毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 21:02:06', '2023-05-13 21:02:07', 1002, '1', NULL, NULL, '2023-05-13 21:02:07', NULL, '2023-05-13 21:02:07', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('dad425ed902526367353e646b74b1d79', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1003毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 21:20:46', '2023-05-13 21:20:47', 1003, '1', NULL, NULL, '2023-05-13 21:20:47', NULL, '2023-05-13 21:20:47', 0);
-INSERT INTO "public"."sys_job_log" VALUES ('dc4ef9016d217e37c9811359f32f9a86', '0a8d20cd101aad4a761e548ff062f593', '测试（无参数） 总共耗时：1003毫秒', 'java.lang.reflect.InvocationTargetException
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:53)
-	at cn.daenx.myadmin.quartz.utils.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:31)
-	at cn.daenx.myadmin.quartz.handle.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:16)
-	at cn.daenx.myadmin.quartz.utils.AbstractQuartzJob.execute(AbstractQuartzJob.java:47)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
-Caused by: cn.daenx.myadmin.common.exception.MyException: 执行失败
-	at cn.daenx.myadmin.system.task.SystemTask.noParams(SystemTask.java:25)
-	... 10 more
-', '2023-05-13 21:15:42', '2023-05-13 21:15:43', 1003, '1', NULL, NULL, '2023-05-13 21:15:43', NULL, '2023-05-13 21:15:43', 0);
 
 -- ----------------------------
 -- Table structure for sys_log_login
@@ -794,30 +701,6 @@ COMMENT ON TABLE "public"."sys_log_login" IS '登录日志表';
 -- ----------------------------
 -- Records of sys_log_login
 -- ----------------------------
-INSERT INTO "public"."sys_log_login" VALUES ('0301c25679739f54aaf6dc78bf8d1a24', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-28 10:12:33', '1', '2023-06-28 10:12:33', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('04e6ce47e2f0e835450577e1cae81612', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 17:35:59', '1', '2023-06-15 17:35:59', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('0f3e900a3a2d4748859a69b671bca584', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 17:41:44', '1', '2023-06-15 17:41:44', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('193e058ea654fd094e6737482bc9b935', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 17:40:13', '1', '2023-06-15 17:40:13', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('26e7c23d2193042d4212edb582691f07', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-26 15:48:51', '1', '2023-06-26 15:48:51', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('2fae9bc74fe0097031773f00be6509c6', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-16 10:35:29', '1', '2023-06-16 10:35:29', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('32b0a546cc851dc70f82868427bcff28', 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '2', '2023-06-28 10:11:21', '2', '2023-06-28 10:11:21', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('3c0b846d10d545e9a0b7e1db6569c233', 'admin', '192.168.213.1', '本地局域网', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-30 08:51:20', '1', '2023-06-30 08:51:20', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('44299dde04fc6f529e5817df16aa0b84', 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '2', '2023-06-28 10:12:56', '2', '2023-06-28 10:12:56', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('670e4c9aeac9e19f8ca1f5964f330667', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-16 10:36:27', '1', '2023-06-16 10:36:27', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('6b939418fb402a291e320616d273bb01', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 17:36:55', '1', '2023-06-15 17:36:55', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('8a67d3d411e139502c311c19293608ed', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-16 10:43:09', '1', '2023-06-16 10:43:09', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('8af7f13ed26795b4576d5fed7b185633', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 17:38:11', '1', '2023-06-15 17:38:11', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('97473c0dc3943102f4b9d61b0b86d3fd', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-19 10:22:55', '1', '2023-06-19 10:22:55', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('9b3a9c16c8320c047dbf07dba0e1712b', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 16:26:17', '1', '2023-06-15 16:26:17', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('b1ec1aca9fbfd4a3cebf42bdee3aed20', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 17:34:24', '1', '2023-06-15 17:34:24', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('db2da067cf7b0c48640d2d1bbd46b5a8', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-06-15 17:35:45', '1', '2023-06-15 17:35:45', 0);
-INSERT INTO "public"."sys_log_login" VALUES ('219aea78615ec8c69c384d084a20606e', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-07-04 10:41:32.111512', '1', '2023-07-04 10:41:32.115259', NULL);
-INSERT INTO "public"."sys_log_login" VALUES ('e3de077d4acdc937c1ba7275ca5dc834', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-07-04 10:49:36.147874', '1', '2023-07-04 10:49:36.150869', NULL);
-INSERT INTO "public"."sys_log_login" VALUES ('0b6860cea3e0c94279858f052a5fa78d', 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '2', '2023-07-04 10:50:11.64003', '2', '2023-07-04 10:50:11.64003', NULL);
-INSERT INTO "public"."sys_log_login" VALUES ('448c9ec621a731b56c7a49ed447f3f6d', 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '2', '2023-07-04 10:55:40.737298', '2', '2023-07-04 10:55:40.740284', NULL);
-INSERT INTO "public"."sys_log_login" VALUES ('d31141aa67d0231a63aae5b6b59d92b6', 'test', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '2', '2023-07-04 10:57:48.758297', '2', '2023-07-04 10:57:48.762489', NULL);
-INSERT INTO "public"."sys_log_login" VALUES ('a0a8468b534b298b2675500e4c68ceb1', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-07-04 11:02:01.032121', '1', '2023-07-04 11:02:01.034102', NULL);
-INSERT INTO "public"."sys_log_login" VALUES ('913d0bb5112e0a1e0d1161243cb53dc7', 'admin', '127.0.0.1', '内网IP', 'Chrome', 'Windows 10 or Windows Server 2016', '0', 'PC登录/账号密码登录', '1', '2023-07-04 11:19:51.643277', '1', '2023-07-04 11:19:51.64527', NULL);
 
 -- ----------------------------
 -- Table structure for sys_log_oper
@@ -872,50 +755,6 @@ COMMENT ON TABLE "public"."sys_log_oper" IS '操作日志表';
 -- ----------------------------
 -- Records of sys_log_oper
 -- ----------------------------
-INSERT INTO "public"."sys_log_oper" VALUES ('177deeb24b0e72ba8b790c2f6b7a06e2', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-16 11:25:54', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686885954533}', '2023-06-16 11:25:55', NULL, 112, '0', NULL, '1', '2023-06-16 11:25:55', '1', '2023-06-16 11:25:55', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('1ebdc7e1abcfd9623842a89541f503df', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-16 11:38:53', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686886733394}', '2023-06-16 11:38:53', NULL, 197, '0', NULL, '1', '2023-06-16 11:38:53', '1', '2023-06-16 11:38:53', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('2957cf33ffe3a0b578f5ef0a5a8ad643', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:41:57', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686822116612}', '2023-06-15 17:41:57', NULL, 119, '0', NULL, '1', '2023-06-15 17:41:57', '1', '2023-06-15 17:41:57', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('4b29573ab822e6dd0c46d39e3acd61d8', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list3', 'GET', '/my/test/data/list3', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:07:10', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createDept":"熊猫眼集团","createId":"1","createName":"admin","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateName":"admin","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686820030360}', '2023-06-15 17:07:10', NULL, 106, '0', NULL, '1', '2023-06-15 17:07:10', '1', '2023-06-15 17:07:10', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('52458d04bac13bc6cc1ca07c1a437705', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:08:26', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686820106070}', '2023-06-15 17:08:26', NULL, 105, '0', NULL, '1', '2023-06-15 17:08:26', '1', '2023-06-15 17:08:26', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('5ef83143aae1769662c1e5c8fc53b50d', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-26 15:49:19', '{"code":200,"data":[{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"1","title":"我1","type":"0","updateId":"1","updateTime":"2023-04-26 22:16:35"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"0","title":"我3","type":"0","updateId":"1","updateTime":"2023-04-26 22:19:18"},{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"0","title":"我4-","type":"1","updateId":"2","updateTime":"2023-01-30 17:25:18"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-04-26 22:16:10"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-04-26 22:24:47"}],"msg":"操作成功","success":true,"timestamp":1687765758862}', '2023-06-26 15:49:19', NULL, 73, '0', NULL, '1', '2023-06-26 15:49:19', '1', '2023-06-26 15:49:19', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('809439e6a662b58dcc99893332c67516', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-26 15:49:16', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1687765756266}', '2023-06-26 15:49:16', NULL, 151, '0', NULL, '1', '2023-06-26 15:49:16', '1', '2023-06-26 15:49:16', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('8a4e037190b42a0f6c48980ad4ced41b', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:14:03', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686820443015}', '2023-06-15 17:14:03', NULL, 263, '0', NULL, '1', '2023-06-15 17:14:03', '1', '2023-06-15 17:14:03', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('9341d85dea5fa2911f3c5cafbed69f5c', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.query', 'GET', '/my/test/data/8f05e1af476e3537e796c966ff4b7b53', '127.0.0.1', '内网IP', '["8f05e1af476e3537e796c966ff4b7b53"]', '2023-06-16 11:38:55', '{"code":200,"data":{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"},"msg":"操作成功","success":true,"timestamp":1686886734758}', '2023-06-16 11:38:55', NULL, 56, '0', NULL, '1', '2023-06-16 11:38:55', '1', '2023-06-16 11:38:55', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('94143dc2bb365d4ffe0037c315b9a47f', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:10:17', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686820217577}', '2023-06-15 17:10:18', NULL, 490, '0', NULL, '1', '2023-06-15 17:10:18', '1', '2023-06-15 17:10:18', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('94e01b309ff9624058b5259faab82898', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-28 10:14:45', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1687918505047}', '2023-06-28 10:15:05', NULL, 20036, '0', NULL, '2', '2023-06-28 10:15:05', '2', '2023-06-28 10:15:05', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('a13325cdc377d2256b36d983d579366a', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-16 10:43:14', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686883394256}', '2023-06-16 10:43:14', NULL, 162, '0', NULL, '1', '2023-06-16 10:43:14', '1', '2023-06-16 10:43:14', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('a3a30022f2bd0d42d1dc5b8d43f2e35e', '测试数据', '6', 'cn.daenx.myadmin.test.controller.TestDataController.export', 'POST', '/my/test/data/export', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:43:57', NULL, '2023-06-15 17:43:58', NULL, 1001, '0', NULL, '1', '2023-06-15 17:43:58', '1', '2023-06-15 17:43:58', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('b67de896a0c468576833c4227e8afd92', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:05:36', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686819936448}', '2023-06-15 17:05:36', NULL, 202, '0', NULL, '1', '2023-06-15 17:05:37', '1', '2023-06-15 17:05:37', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('b7423f1bbcac173038ef85ab7905583c', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.query', 'GET', '/my/test/data/8f05e1af476e3537e796c966ff4b7b53', '127.0.0.1', '内网IP', '["8f05e1af476e3537e796c966ff4b7b53"]', '2023-06-15 16:26:41', '{"code":200,"data":{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"},"msg":"操作成功","success":true,"timestamp":1686817600806}', '2023-06-15 16:26:41', NULL, 56, '0', NULL, '1', '2023-06-15 16:26:41', '1', '2023-06-15 16:26:41', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('b91d349f27fcf0274a1cbf59b3fd3bd9', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-16 11:33:27', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686886407175}', '2023-06-16 11:33:27', NULL, 85, '0', NULL, '1', '2023-06-16 11:33:27', '1', '2023-06-16 11:33:27', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('bc33f15181c285b113c6db05ef0a704f', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 16:39:44', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686818384417}', '2023-06-15 16:39:44', NULL, 207, '0', NULL, '1', '2023-06-15 16:39:44', '1', '2023-06-15 16:39:44', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('bdb42d70d56a536f3a5d9461ef23eb9d', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.query', 'GET', '/my/test/data/8f05e1af476e3537e796c966ff4b7b53', '127.0.0.1', '内网IP', '["8f05e1af476e3537e796c966ff4b7b53"]', '2023-06-15 17:42:09', '{"code":200,"data":{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"},"msg":"操作成功","success":true,"timestamp":1686822129198}', '2023-06-15 17:42:09', NULL, 54, '0', NULL, '1', '2023-06-15 17:42:09', '1', '2023-06-15 17:42:09', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('be7d1391b80e533f92f5672516037924', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:07:34', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686820054308}', '2023-06-15 17:07:34', NULL, 106, '0', NULL, '1', '2023-06-15 17:07:34', '1', '2023-06-15 17:07:34', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('c09cc9fe7463cb84724811c41afb4024', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-16 10:55:32', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686884131937}', '2023-06-16 10:55:32', NULL, 178, '0', NULL, '1', '2023-06-16 10:55:32', '1', '2023-06-16 10:55:32', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('c43e1b8dae093827dda21bf078d060e2', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 16:26:23', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686817583198}', '2023-06-15 16:26:23', NULL, 185, '0', NULL, '1', '2023-06-15 16:26:23', '1', '2023-06-15 16:26:23', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('cfc2eea1ef1f75eb302eb98be4296d0f', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-16 11:37:32', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686886651735}', '2023-06-16 11:37:32', NULL, 138, '0', NULL, '1', '2023-06-16 11:37:32', '1', '2023-06-16 11:37:32', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('e4c05fa14d688d472f4e1f74d2b2128c', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-16 11:33:24', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[{"content":"阿萨德","createId":"1","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","isDelete":0,"remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686886404534}', '2023-06-16 11:33:25', NULL, 133, '0', NULL, '1', '2023-06-16 11:33:25', '1', '2023-06-16 11:33:25', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('fc391a9e551d4ddf3d8d299cd5079bf8', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list2', 'GET', '/my/test/data/list2', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-06-15 17:07:09', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[],"pages":1,"records":[{"content":"阿萨德","createDept":"熊猫眼集团","createId":"1","createName":"admin","createTime":"2023-06-03 10:56:21","id":"8f05e1af476e3537e796c966ff4b7b53","remark":"4","status":"0","title":"阿萨德","type":"0","updateId":"1","updateName":"admin","updateTime":"2023-06-03 10:58:26"}],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1686820028986}', '2023-06-15 17:07:09', NULL, 354, '0', NULL, '1', '2023-06-15 17:07:09', '1', '2023-06-15 17:07:09', 0);
-INSERT INTO "public"."sys_log_oper" VALUES ('633e653ccf0b744d3f71a8f36609a0cb', '测试数据', '4', 'cn.daenx.myadmin.test.controller.TestDataController.list1', 'GET', '/my/test/data/list1', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 10:58:14.186', '{"code":200,"data":{"current":1,"optimizeCountSql":true,"orders":[{"asc":false,"column":"create_time"}],"pages":1,"records":[],"searchCount":true,"size":10,"total":1},"msg":"操作成功","success":true,"timestamp":1688439494231}', '2023-07-04 10:58:14.262951', NULL, 78, '0', NULL, '2', '2023-07-04 10:58:14.270522', '2', '2023-07-04 10:58:14.270522', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('a8b66d8a64d68cd742fe2ec759011fc5', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 10:58:15.758', '{"code":200,"data":[{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"0","title":"我4-","type":"1","updateId":"2","updateTime":"2023-01-30 17:25:18"}],"msg":"操作成功","success":true,"timestamp":1688439495788}', '2023-07-04 10:58:15.805364', NULL, 47, '0', NULL, '2', '2023-07-04 10:58:15.805364', '2', '2023-07-04 10:58:15.805364', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('8f259f35635755a026dbca01586217b0', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:05.204', '{"code":200,"data":[{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"1","title":"我1","type":"0","updateId":"1","updateTime":"2023-04-26 22:16:35"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"0","title":"我3","type":"0","updateId":"1","updateTime":"2023-04-26 22:19:18"},{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"0","title":"我4-","type":"1","updateId":"2","updateTime":"2023-01-30 17:25:18"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-04-26 22:16:10"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-04-26 22:24:47"}],"msg":"操作成功","success":true,"timestamp":1688439725244}', '2023-07-04 11:02:05.277316', NULL, 73, '0', NULL, '1', '2023-07-04 11:02:05.28212', '1', '2023-07-04 11:02:05.28212', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('cb8677c69389c160127a81e7debc7551', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"1","status":"0"}]', '2023-07-04 11:02:09.778', NULL, '2023-07-04 11:02:09.802413', NULL, 24, '0', NULL, '1', '2023-07-04 11:02:09.803457', '1', '2023-07-04 11:02:09.803457', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('2efe44efe343e9a070a1d07336dacca1', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:09.971', '{"code":200,"data":[{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"0","title":"我3","type":"0","updateId":"1","updateTime":"2023-04-26 22:19:18"},{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"0","title":"我4-","type":"1","updateId":"2","updateTime":"2023-01-30 17:25:18"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-04-26 22:16:10"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-04-26 22:24:47"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"0","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:09"}],"msg":"操作成功","success":true,"timestamp":1688439729983}', '2023-07-04 11:02:09.983964', NULL, 12, '0', NULL, '1', '2023-07-04 11:02:09.984961', '1', '2023-07-04 11:02:09.984961', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('7d1404b67adace1d5e7855cba01f9817', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:13.661', '{"code":200,"data":[{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"0","title":"我3","type":"0","updateId":"1","updateTime":"2023-04-26 22:19:18"},{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"0","title":"我4-","type":"1","updateId":"2","updateTime":"2023-01-30 17:25:18"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-04-26 22:16:10"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"0","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-04-26 22:24:47"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"0","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:09"}],"msg":"操作成功","success":true,"timestamp":1688439733674}', '2023-07-04 11:02:13.675273', NULL, 14, '0', NULL, '1', '2023-07-04 11:02:13.67627', '1', '2023-07-04 11:02:13.67627', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('2e1d5030bb289cd7c65035b7691e6ca1', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"2","status":"1"}]', '2023-07-04 11:02:19.653', NULL, '2023-07-04 11:02:19.692058', NULL, 39, '0', NULL, '1', '2023-07-04 11:02:19.693057', '1', '2023-07-04 11:02:19.693057', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('c2a9e1319fe717b8fef7ab5bcf73a7d1', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:19.918', '{"code":200,"data":[{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"0","title":"我3","type":"0","updateId":"1","updateTime":"2023-04-26 22:19:18"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-04-26 22:16:10"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"0","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:09"},{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"1","title":"我4-","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"1","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:19"}],"msg":"操作成功","success":true,"timestamp":1688439739932}', '2023-07-04 11:02:19.933461', NULL, 15, '0', NULL, '1', '2023-07-04 11:02:19.935455', '1', '2023-07-04 11:02:19.935455', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('0ff7d4439d6af4e87a8da01c5938967e', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"1","status":"1"}]', '2023-07-04 11:02:32.149', NULL, '2023-07-04 11:02:32.180483', NULL, 31, '0', NULL, '1', '2023-07-04 11:02:32.18149', '1', '2023-07-04 11:02:32.18149', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('4f320c8c2a9065e22ad00358439463e6', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:32.537', '{"code":200,"data":[{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"1","title":"我4-","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"1","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"1","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:32"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"1","title":"我3","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:32"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:32"}],"msg":"操作成功","success":true,"timestamp":1688439752550}', '2023-07-04 11:02:32.550706', NULL, 13, '0', NULL, '1', '2023-07-04 11:02:32.551702', '1', '2023-07-04 11:02:32.551702', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('174cf534daeb8d107a980f892481746a', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"1","status":"0"}]', '2023-07-04 11:02:35.912', NULL, '2023-07-04 11:02:35.920524', NULL, 8, '0', NULL, '1', '2023-07-04 11:02:35.921522', '1', '2023-07-04 11:02:35.921522', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('047a3a1c843e75f98922fc3ab59558ff', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:36.269', '{"code":200,"data":[{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"1","title":"我4-","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"1","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"1","title":"我3","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:32"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:32"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"0","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:35"}],"msg":"操作成功","success":true,"timestamp":1688439756283}', '2023-07-04 11:02:36.283633', NULL, 14, '0', NULL, '1', '2023-07-04 11:02:36.28463', '1', '2023-07-04 11:02:36.28463', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('c05ca92b15d544d3ebbcb798a4e7ef3c', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"11","status":"0"}]', '2023-07-04 11:02:38.116', NULL, '2023-07-04 11:02:38.135824', NULL, 19, '0', NULL, '1', '2023-07-04 11:02:38.137813', '1', '2023-07-04 11:02:38.137813', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('88f66ffd3ff352d87d9f0006405f48c9', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:38.479', '{"code":200,"data":[{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"1","title":"我4-","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"1","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:32"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"0","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:35"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"0","title":"我3","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:38"}],"msg":"操作成功","success":true,"timestamp":1688439758493}', '2023-07-04 11:02:38.493169', NULL, 14, '0', NULL, '1', '2023-07-04 11:02:38.494162', '1', '2023-07-04 11:02:38.494162', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('5c622a74d42e899e7a23d0cf2c44a6ea', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"222","status":"0"}]', '2023-07-04 11:02:39.778', NULL, '2023-07-04 11:02:39.787197', NULL, 9, '0', NULL, '1', '2023-07-04 11:02:39.788188', '1', '2023-07-04 11:02:39.788188', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('6f4453e38f30a5aaf7a6d7ae5256e907', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:40.127', '{"code":200,"data":[{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"1","title":"我4-","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"1","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"0","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:35"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"0","title":"我3","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:38"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"0","title":"我2","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:39"}],"msg":"操作成功","success":true,"timestamp":1688439760142}', '2023-07-04 11:02:40.142547', NULL, 15, '0', NULL, '1', '2023-07-04 11:02:40.143543', '1', '2023-07-04 11:02:40.143543', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('e4c77667d8a7622ca5badfb6a001ec00', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"1","status":"1"}]', '2023-07-04 11:02:42.546', NULL, '2023-07-04 11:02:42.58347', NULL, 37, '0', NULL, '1', '2023-07-04 11:02:42.584469', '1', '2023-07-04 11:02:42.584469', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('d9b43042ba8dc1658394a8f58ec66dcf', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:42.926', '{"code":200,"data":[{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"1","title":"我4-","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"1","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"1","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:42"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"1","title":"我3","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:42"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:42"}],"msg":"操作成功","success":true,"timestamp":1688439762939}', '2023-07-04 11:02:42.94037', NULL, 14, '0', NULL, '1', '2023-07-04 11:02:42.941377', '1', '2023-07-04 11:02:42.942364', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('f80123d526ab961580581e58545919a6', '测试数据-修改状态', '3', 'cn.daenx.myadmin.test.controller.TestDataTreeController.changeStatus', 'POST', '/my/test/dataTree/changeStatus', '127.0.0.1', '内网IP', '[{"id":"1","status":"0"}]', '2023-07-04 11:02:45.359', NULL, '2023-07-04 11:02:45.377873', NULL, 18, '0', NULL, '1', '2023-07-04 11:02:45.37887', '1', '2023-07-04 11:02:45.37887', NULL);
-INSERT INTO "public"."sys_log_oper" VALUES ('babcde9d0f838b6ce551fe82d7fd8438', '测试树表数据', '4', 'cn.daenx.myadmin.test.controller.TestDataTreeController.list', 'GET', '/my/test/dataTree/list', '127.0.0.1', '内网IP', '[{"DEFAULT_ORDER_BY_ASC":false,"DEFAULT_ORDER_BY_COLUMN":"create_time","pageNum":1,"pageSize":10}]', '2023-07-04 11:02:45.715', '{"code":200,"data":[{"content":"按时-","createId":"2","createTime":"2023-01-30 17:25:18","id":"2","isDelete":0,"parentId":"0","remark":"更换-","status":"1","title":"我4-","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"阿萨德","createId":"1","createTime":"2023-04-26 22:24:47","id":"b53120f9af52dcdc229d42d8cb04623f","isDelete":0,"parentId":"2","status":"1","title":"阿萨德","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:19"},{"content":"3","createId":"1","createTime":"2023-02-26 17:25:16","id":"11","isDelete":0,"parentId":"1","remark":"导入1","status":"1","title":"我3","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:42"},{"content":"得过户","createId":"1","createTime":"2023-02-15 17:25:14","id":"222","isDelete":0,"parentId":"11","remark":"个月","status":"1","title":"我2","type":"1","updateId":"1","updateTime":"2023-07-04 11:02:42"},{"content":"阿萨德","createId":"1","createTime":"2023-02-10 17:25:11","id":"1","isDelete":0,"parentId":"0","remark":"个","status":"0","title":"我1","type":"0","updateId":"1","updateTime":"2023-07-04 11:02:45"}],"msg":"操作成功","success":true,"timestamp":1688439765728}', '2023-07-04 11:02:45.729108', NULL, 14, '0', NULL, '1', '2023-07-04 11:02:45.729108', '1', '2023-07-04 11:02:45.729108', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -968,116 +807,116 @@ COMMENT ON TABLE "public"."sys_menu" IS '菜单表';
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
+INSERT INTO "public"."sys_menu" VALUES ('1', '0', '系统管理', 1, 'system', NULL, NULL, NULL, 'system', '0', '0', '1', '1', '0', '系统管理目录', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('100', '1', '用户管理', 1, 'user', NULL, 'system/user/index', 'system:user:list', 'user', '0', '0', '2', '1', '0', '用户管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1001', '100', '用户查询', 1, NULL, NULL, NULL, 'system:user:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1003', '100', '用户修改', 3, NULL, NULL, NULL, 'system:user:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1004', '100', '用户删除', 4, NULL, NULL, NULL, 'system:user:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1005', '100', '用户导出', 5, NULL, NULL, NULL, 'system:user:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1007', '100', '重置密码', 7, NULL, NULL, NULL, 'system:user:resetPwd', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1008', '101', '角色查询', 1, NULL, NULL, NULL, 'system:role:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1009', '101', '角色新增', 2, NULL, NULL, NULL, 'system:role:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1010', '101', '角色修改', 3, NULL, NULL, NULL, 'system:role:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1011', '101', '角色删除', 4, NULL, NULL, NULL, 'system:role:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1012', '101', '角色导出', 5, NULL, NULL, NULL, 'system:role:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1013', '102', '菜单查询', 1, NULL, NULL, NULL, 'system:menu:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1015', '102', '菜单修改', 3, NULL, NULL, NULL, 'system:menu:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1016', '102', '菜单删除', 4, NULL, NULL, NULL, 'system:menu:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1018', '103', '部门新增', 2, NULL, NULL, NULL, 'system:dept:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1019', '103', '部门修改', 3, NULL, NULL, NULL, 'system:dept:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1020', '103', '部门删除', 4, NULL, NULL, NULL, 'system:dept:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1021', '104', '岗位查询', 1, NULL, NULL, NULL, 'system:position:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1022', '104', '岗位新增', 2, NULL, NULL, NULL, 'system:position:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1023', '104', '岗位修改', 3, NULL, NULL, NULL, 'system:position:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1024', '104', '岗位删除', 4, NULL, NULL, NULL, 'system:position:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1026', '105', '字典查询', 1, '#', NULL, NULL, 'system:dict:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1027', '105', '字典新增', 2, '#', NULL, NULL, 'system:dict:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1028', '105', '字典修改', 3, '#', NULL, NULL, 'system:dict:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('103', '1', '部门管理', 4, 'dept', NULL, 'system/dept/index', 'system:dept:list', 'tree', '0', '0', '2', '1', '0', '部门管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1030', '105', '字典导出', 5, '#', NULL, NULL, 'system:dict:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1031', '106', '参数查询', 1, '#', NULL, NULL, 'system:config:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1032', '106', '参数新增', 2, '#', NULL, NULL, 'system:config:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1034', '106', '参数删除', 4, '#', NULL, NULL, 'system:config:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1035', '106', '参数导出', 5, '#', NULL, NULL, 'system:config:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1037', '107', '公告新增', 2, '#', NULL, NULL, 'monitor:notice:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1038', '107', '公告修改', 3, '#', NULL, NULL, 'monitor:notice:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1039', '107', '公告删除', 4, '#', NULL, NULL, 'monitor:notice:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('104', '1', '岗位管理', 5, 'position', NULL, 'system/position/index', 'system:position:list', 'post', '0', '0', '2', '1', '0', '岗位管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1040', '500', '操作日志查询', 1, '#', NULL, NULL, 'monitor:logOper:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1041', '500', '操作日志删除', 2, '#', NULL, NULL, 'monitor:logOper:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1043', '501', '登录日志查询', 1, '#', NULL, NULL, 'monitor:logLogin:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1044', '501', '登录日志删除', 2, '#', NULL, NULL, 'monitor:logLogin:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1045', '501', '日志日志导出', 3, '#', NULL, NULL, 'monitor:logLogin:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('105', '1', '字典管理', 6, 'dict', NULL, 'system/dict/index', 'system:dict:list', 'dict', '0', '0', '2', '1', '0', '字典管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('107', '2', '通知公告', 5, 'notice', NULL, 'monitor/notice/index', 'monitor:notice:list', 'message', '0', '0', '2', '1', '0', '通知公告菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('108', '2', '日志管理', 1, 'log', NULL, NULL, NULL, 'log', '0', '0', '1', '1', '0', '日志管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('111', '63854784d5ac52bfd2ac578a48f0a46f', '数据监控', 1, 'druid', NULL, 'monitor/druid/index', 'monitor:druid:list', 'druid', '0', '0', '2', '1', '0', '数据监控菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('114', '3', '表单构建', 1, 'build', NULL, 'tool/build/index', 'tool:build:list', 'build', '0', '0', '2', '1', '0', '表单构建菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('118', '2', '文件管理', 6, 'file', NULL, 'monitor/file/index', 'monitor:file:list', 'upload', '0', '0', '2', '1', '0', '文件管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1500', '5', '测试单表', 1, 'data', NULL, 'test/data/index', 'test:data:list', '#', '0', '0', '2', '1', '0', '测试单表菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1501', '1500', '测试单表查询', 1, '#', NULL, NULL, 'test:data:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1502', '1500', '测试单表新增', 2, '#', NULL, NULL, 'test:data:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1503', '1500', '测试单表修改', 3, '#', NULL, NULL, 'test:data:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1504', '1500', '测试单表删除', 4, '#', NULL, NULL, 'test:data:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1505', '1500', '测试单表导出', 5, '#', NULL, NULL, 'test:data:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1507', '1506', '测试树表查询', 1, '#', NULL, NULL, 'test:dataTree:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1508', '1506', '测试树表新增', 2, '#', NULL, NULL, 'test:dataTree:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
 INSERT INTO "public"."sys_menu" VALUES ('0451a199b76ce5725fc8003ba7cc56d4', 'd5d81e35c103ed1dac93a70b97819877', '刷新限制缓存', 6, NULL, NULL, NULL, 'monitor:apiLimit:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1', '0', '系统管理', 1, 'system', NULL, NULL, NULL, 'system', '0', '0', '1', '1', '0', '系统管理目录', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('100', '1', '用户管理', 1, 'user', NULL, 'system/user/index', 'system:user:list', 'user', '0', '0', '2', '1', '0', '用户管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1001', '100', '用户查询', 1, NULL, NULL, NULL, 'system:user:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1002', '100', '用户新增', 2, NULL, NULL, NULL, 'system:user:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1003', '100', '用户修改', 3, NULL, NULL, NULL, 'system:user:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1004', '100', '用户删除', 4, NULL, NULL, NULL, 'system:user:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1005', '100', '用户导出', 5, NULL, NULL, NULL, 'system:user:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1006', '100', '用户导入', 6, NULL, NULL, NULL, 'system:user:import', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1007', '100', '重置密码', 7, NULL, NULL, NULL, 'system:user:resetPwd', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1008', '101', '角色查询', 1, NULL, NULL, NULL, 'system:role:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1009', '101', '角色新增', 2, NULL, NULL, NULL, 'system:role:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('101', '1', '角色管理', 2, 'role', NULL, 'system/role/index', 'system:role:list', 'peoples', '0', '0', '2', '1', '0', '角色管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1010', '101', '角色修改', 3, NULL, NULL, NULL, 'system:role:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1011', '101', '角色删除', 4, NULL, NULL, NULL, 'system:role:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1012', '101', '角色导出', 5, NULL, NULL, NULL, 'system:role:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1013', '102', '菜单查询', 1, NULL, NULL, NULL, 'system:menu:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1014', '102', '菜单新增', 2, NULL, NULL, NULL, 'system:menu:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1015', '102', '菜单修改', 3, NULL, NULL, NULL, 'system:menu:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1016', '102', '菜单删除', 4, NULL, NULL, NULL, 'system:menu:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1017', '103', '部门查询', 1, NULL, NULL, NULL, 'system:dept:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1018', '103', '部门新增', 2, NULL, NULL, NULL, 'system:dept:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1019', '103', '部门修改', 3, NULL, NULL, NULL, 'system:dept:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('102', '1', '菜单管理', 3, 'menu', NULL, 'system/menu/index', 'system:menu:list', 'tree-table', '0', '0', '2', '1', '0', '菜单管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1020', '103', '部门删除', 4, NULL, NULL, NULL, 'system:dept:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1021', '104', '岗位查询', 1, NULL, NULL, NULL, 'system:position:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1022', '104', '岗位新增', 2, NULL, NULL, NULL, 'system:position:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1023', '104', '岗位修改', 3, NULL, NULL, NULL, 'system:position:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1024', '104', '岗位删除', 4, NULL, NULL, NULL, 'system:position:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1025', '104', '岗位导出', 5, NULL, NULL, NULL, 'system:position:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1026', '105', '字典查询', 1, '#', NULL, NULL, 'system:dict:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1027', '105', '字典新增', 2, '#', NULL, NULL, 'system:dict:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1028', '105', '字典修改', 3, '#', NULL, NULL, 'system:dict:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1029', '105', '字典删除', 4, '#', NULL, NULL, 'system:dict:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('103', '1', '部门管理', 4, 'dept', NULL, 'system/dept/index', 'system:dept:list', 'tree', '0', '0', '2', '1', '0', '部门管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1030', '105', '字典导出', 5, '#', NULL, NULL, 'system:dict:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1031', '106', '参数查询', 1, '#', NULL, NULL, 'system:config:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1032', '106', '参数新增', 2, '#', NULL, NULL, 'system:config:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1033', '106', '参数修改', 3, '#', NULL, NULL, 'system:config:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1034', '106', '参数删除', 4, '#', NULL, NULL, 'system:config:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1035', '106', '参数导出', 5, '#', NULL, NULL, 'system:config:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1036', '107', '公告查询', 1, '#', NULL, NULL, 'monitor:notice:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:05', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1037', '107', '公告新增', 2, '#', NULL, NULL, 'monitor:notice:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:08', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1038', '107', '公告修改', 3, '#', NULL, NULL, 'monitor:notice:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:12', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1039', '107', '公告删除', 4, '#', NULL, NULL, 'monitor:notice:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:49:16', 0);
-INSERT INTO "public"."sys_menu" VALUES ('104', '1', '岗位管理', 5, 'position', NULL, 'system/position/index', 'system:position:list', 'post', '0', '0', '2', '1', '0', '岗位管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1040', '500', '操作日志查询', 1, '#', NULL, NULL, 'monitor:logOper:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:40', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1041', '500', '操作日志删除', 2, '#', NULL, NULL, 'monitor:logOper:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:50', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1042', '500', '操作日志导出', 4, '#', NULL, NULL, 'monitor:logOper:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:53', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1043', '501', '登录日志查询', 1, '#', NULL, NULL, 'monitor:logLogin:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:28:58', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1044', '501', '登录日志删除', 2, '#', NULL, NULL, 'monitor:logLogin:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:29:02', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1045', '501', '日志日志导出', 3, '#', NULL, NULL, 'monitor:logLogin:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-04-20 20:29:06', 0);
-INSERT INTO "public"."sys_menu" VALUES ('105', '1', '字典管理', 6, 'dict', NULL, 'system/dict/index', 'system:dict:list', 'dict', '0', '0', '2', '1', '0', '字典管理菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('106', '1', '参数设置', 7, 'config', NULL, 'system/config/index', 'system:config:list', 'edit', '0', '0', '2', '1', '0', '参数设置菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('107', '2', '通知公告', 5, 'notice', NULL, 'monitor/notice/index', 'monitor:notice:list', 'message', '0', '0', '2', '1', '0', '通知公告菜单', NULL, NULL, '1', '2023-05-23 13:48:58', 0);
-INSERT INTO "public"."sys_menu" VALUES ('108', '2', '日志管理', 1, 'log', NULL, NULL, NULL, 'log', '0', '0', '1', '1', '0', '日志管理菜单', NULL, NULL, '1', '2023-04-20 20:25:15', 0);
-INSERT INTO "public"."sys_menu" VALUES ('111', '63854784d5ac52bfd2ac578a48f0a46f', '数据监控', 1, 'druid', NULL, 'monitor/druid/index', 'monitor:druid:list', 'druid', '0', '0', '2', '1', '0', '数据监控菜单', NULL, NULL, '1', '2023-05-23 11:13:35', 0);
-INSERT INTO "public"."sys_menu" VALUES ('114', '3', '表单构建', 1, 'build', NULL, 'tool/build/index', 'tool:build:list', 'build', '0', '0', '2', '1', '0', '表单构建菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('118', '2', '文件管理', 6, 'file', NULL, 'monitor/file/index', 'monitor:file:list', 'upload', '0', '0', '2', '1', '0', '文件管理菜单', NULL, NULL, '1', '2023-05-23 13:43:12', 0);
-INSERT INTO "public"."sys_menu" VALUES ('13cbe1c8683a41dae7bccb289fd5dfd9', '42708c34ab41a691ef032ab1f4cf5db0', '任务修改', 3, NULL, NULL, NULL, 'monitor:job:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:34:07', '1', '2023-05-01 14:34:07', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1500', '5', '测试单表', 1, 'data', NULL, 'test/data/index', 'test:data:list', '#', '0', '0', '2', '1', '0', '测试单表菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1501', '1500', '测试单表查询', 1, '#', NULL, NULL, 'test:data:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1502', '1500', '测试单表新增', 2, '#', NULL, NULL, 'test:data:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1503', '1500', '测试单表修改', 3, '#', NULL, NULL, 'test:data:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1504', '1500', '测试单表删除', 4, '#', NULL, NULL, 'test:data:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1505', '1500', '测试单表导出', 5, '#', NULL, NULL, 'test:data:export', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1506', '5', '测试树表', 1, 'dataTree', NULL, 'test/dataTree/index', 'test:dataTree:list', '#', '0', '0', '2', '1', '0', '测试树表菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1507', '1506', '测试树表查询', 1, '#', NULL, NULL, 'test:dataTree:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1508', '1506', '测试树表新增', 2, '#', NULL, NULL, 'test:dataTree:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1509', '1506', '测试树表修改', 3, '#', NULL, NULL, 'test:dataTree:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1510', '1506', '测试树表删除', 4, '#', NULL, NULL, 'test:dataTree:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('1600', '118', '文件查询', 1, '#', NULL, NULL, 'monitor:file:query', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:19', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1601', '118', '文件上传', 2, '#', NULL, NULL, 'monitor:file:upload', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:23', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1602', '118', '文件下载', 3, '#', NULL, NULL, 'monitor:file:download', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:27', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1603', '118', '文件删除', 4, '#', NULL, NULL, 'monitor:file:remove', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:31', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1604', '118', '配置添加', 5, '#', NULL, NULL, 'monitor:ossConig:add', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:36', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1605', '118', '配置编辑', 6, '#', NULL, NULL, 'monitor:ossConig:edit', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, '1', '2023-05-23 13:43:40', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1698eeba543e9f12542edba21ae2d16f', '42708c34ab41a691ef032ab1f4cf5db0', '任务删除', 4, NULL, NULL, NULL, 'monitor:job:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:34:22', '1', '2023-05-01 14:34:22', 0);
-INSERT INTO "public"."sys_menu" VALUES ('1f7c8a04250067db11e6fcae4298234e', 'd5d81e35c103ed1dac93a70b97819877', '限制修改', 3, NULL, NULL, NULL, 'monitor:apiLimit:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:07:40', '1', '2023-05-23 11:07:40', 0);
-INSERT INTO "public"."sys_menu" VALUES ('2', '0', '系统运维', 2, 'monitor', NULL, NULL, NULL, 'monitor', '0', '0', '1', '1', '0', '系统监控目录', NULL, NULL, '1', '2023-05-23 11:09:51', 0);
-INSERT INTO "public"."sys_menu" VALUES ('268571f3b6e74a1fc5bde8df2594ed81', '42708c34ab41a691ef032ab1f4cf5db0', '任务查询', 1, NULL, NULL, NULL, 'monitor:job:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:33:32', '1', '2023-05-01 14:33:32', 0);
-INSERT INTO "public"."sys_menu" VALUES ('2add827d98c3b366ce0aa160d8a281ee', 'd5d81e35c103ed1dac93a70b97819877', '限制查询', 1, NULL, NULL, NULL, 'monitor:apiLimit:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:06:52', '1', '2023-05-23 11:06:52', 0);
-INSERT INTO "public"."sys_menu" VALUES ('2b6cc0d2b8a0907d2832f9557089a682', 'd5d81e35c103ed1dac93a70b97819877', '限制新增', 2, NULL, NULL, NULL, 'monitor:apiLimit:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:07:24', '1', '2023-05-23 11:07:24', 0);
-INSERT INTO "public"."sys_menu" VALUES ('2d562fa236077b42b5142eb869db6b18', '63854784d5ac52bfd2ac578a48f0a46f', '服务监控', 2, 'server', NULL, 'monitor/server/index', 'monitor:server:list', 'server', '0', '0', '2', '1', '0', NULL, '1', '2023-04-21 20:19:16', '1', '2023-05-23 11:13:39', 0);
-INSERT INTO "public"."sys_menu" VALUES ('3', '0', '系统工具', 3, 'tool', NULL, NULL, NULL, 'tool', '0', '0', '1', '1', '0', '系统工具目录', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('36c032b1a5af71ad776641f68cbbeb60', '42708c34ab41a691ef032ab1f4cf5db0', '任务状态修改', 5, NULL, NULL, NULL, 'monitor:job:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:34:40', '1', '2023-05-23 11:08:31', 0);
-INSERT INTO "public"."sys_menu" VALUES ('39cfe621da13b55952f2af58edc3e53a', '6b70f47f76199b8cd35aae0cda15d449', '发送钉钉', 3, NULL, NULL, NULL, 'tool:functest:sendDingTalk', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-19 22:48:31', '1', '2023-05-23 13:52:23', 0);
-INSERT INTO "public"."sys_menu" VALUES ('42708c34ab41a691ef032ab1f4cf5db0', '2', '定时任务', 3, 'job', NULL, 'monitor/job/index', 'monitor:job:list', 'job', '0', '0', '2', '1', '0', NULL, '1', '2023-05-01 14:33:01', '1', '2023-05-23 11:12:55', 0);
-INSERT INTO "public"."sys_menu" VALUES ('5', '0', '测试菜单', 5, 'demo', NULL, NULL, NULL, 'star', '0', '0', '1', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('500', '108', '操作日志', 1, 'logOper', NULL, 'monitor/logOper/index', 'monitor:logOper:list', 'form', '0', '0', '2', '1', '0', '操作日志菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('501', '108', '登录日志', 2, 'logLogin', NULL, 'monitor/logLogin/index', 'monitor:logLogin:list', 'logininfor', '0', '0', '2', '1', '0', '登录日志菜单', NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('63854784d5ac52bfd2ac578a48f0a46f', '2', '系统监控', 2, 'monitor', NULL, NULL, NULL, 'time-range', '0', '0', '1', '1', '0', NULL, '1', '2023-05-23 11:12:43', '1', '2023-05-23 11:12:43', 0);
-INSERT INTO "public"."sys_menu" VALUES ('69519bae5ffa67623e8bfb1c8fabdd00', '118', '配置查询', 8, NULL, NULL, NULL, 'monitor:ossConig:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-16 22:12:36', '1', '2023-05-23 13:43:49', 0);
-INSERT INTO "public"."sys_menu" VALUES ('6971d165938715753fef8a07c112ba98', '42708c34ab41a691ef032ab1f4cf5db0', '任务新增', 2, NULL, NULL, NULL, 'monitor:job:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 14:33:51', '1', '2023-05-01 14:33:51', 0);
-INSERT INTO "public"."sys_menu" VALUES ('6b70f47f76199b8cd35aae0cda15d449', '3', '功能测试', 3, 'functest', NULL, 'tool/functest/index', 'tool:functest:main', 'example', '0', '0', '2', '1', '0', NULL, '1', '2023-05-19 22:46:14', '1', '2023-05-23 13:52:30', 0);
-INSERT INTO "public"."sys_menu" VALUES ('74456b2c60b6e0b5edd5559a8e0cc108', '106', '刷新参数缓存', 6, NULL, NULL, NULL, 'system:config:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-14 23:08:43', '1', '2023-04-14 23:08:43', 0);
-INSERT INTO "public"."sys_menu" VALUES ('7a5af154f7d305797b56b9488207b04a', '118', '配置管理', 9, NULL, NULL, NULL, 'monitor:ossConig:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-16 22:13:25', '1', '2023-05-23 13:43:53', 0);
-INSERT INTO "public"."sys_menu" VALUES ('7aea821f10adc345dc4a003170bb7f16', 'd5d81e35c103ed1dac93a70b97819877', '限制删除', 4, NULL, NULL, NULL, 'monitor:apiLimit:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:07:59', '1', '2023-05-23 11:07:59', 0);
-INSERT INTO "public"."sys_menu" VALUES ('85d0cbd4e4441e09f5df53214acddad9', '42708c34ab41a691ef032ab1f4cf5db0', '立即执行一次', 7, NULL, NULL, NULL, 'monitor:job:run', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 16:45:55', '1', '2023-05-01 16:45:55', 0);
-INSERT INTO "public"."sys_menu" VALUES ('8833e71489eb0dfeb36d0769573408bd', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志导出', 9, NULL, NULL, NULL, 'monitor:jobLog:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:49:17', '1', '2023-05-01 20:49:17', 0);
-INSERT INTO "public"."sys_menu" VALUES ('928015b29ffdad7c6621f3b92ba85c6c', '63854784d5ac52bfd2ac578a48f0a46f', '缓存监控', 3, 'cache', NULL, 'monitor/cache/index', 'monitor:cache:list', 'redis', '0', '0', '2', '1', '0', NULL, '1', '2023-04-28 23:15:24', '1', '2023-05-23 11:13:43', 0);
-INSERT INTO "public"."sys_menu" VALUES ('937f0292079a4b62d9a26ebd5e8d57ed', '6b70f47f76199b8cd35aae0cda15d449', '发送短信', 2, NULL, NULL, NULL, 'tool:functest:sendSms', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-19 22:48:02', '1', '2023-05-23 13:52:19', 0);
-INSERT INTO "public"."sys_menu" VALUES ('9901', '105', '刷新字典缓存', 6, '#', NULL, NULL, 'system:dict:refreshCache', '#', '0', '0', '3', '1', '0', NULL, NULL, NULL, NULL, NULL, 0);
-INSERT INTO "public"."sys_menu" VALUES ('adec0c7b9d6b37672dcb6b1315f8f4eb', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志查询', 10, NULL, NULL, NULL, 'monitor:jobLog:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:49:33', '1', '2023-05-01 20:49:33', 0);
-INSERT INTO "public"."sys_menu" VALUES ('b87a985b4ef717afe650f2df9cdbe087', '118', '配置删除', 7, NULL, NULL, NULL, 'monitor:ossConig:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-04-16 22:12:05', '1', '2023-05-23 13:43:45', 0);
-INSERT INTO "public"."sys_menu" VALUES ('c0a98c5b6e56602800968efcacfa4e47', '6b70f47f76199b8cd35aae0cda15d449', '发送邮件', 1, NULL, NULL, NULL, 'tool:functest:sendEmail', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-19 22:47:47', '1', '2023-05-23 13:52:13', 0);
-INSERT INTO "public"."sys_menu" VALUES ('c6e5f363977c052a6a6d6098b0736c8e', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志删除', 11, NULL, NULL, NULL, 'monitor:jobLog:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:50:09', '1', '2023-05-01 20:50:09', 0);
-INSERT INTO "public"."sys_menu" VALUES ('d5d81e35c103ed1dac93a70b97819877', '2', '接口限制', 4, 'apiLimit', NULL, 'monitor/apiLimit/index', 'monitor:apiLimit:list', 'lock', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:05:19', '1', '2023-05-23 11:13:01', 0);
-INSERT INTO "public"."sys_menu" VALUES ('ea70f3a842730a50686acc46fb981800', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志列表', 8, NULL, NULL, NULL, 'monitor:jobLog:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-01 20:48:52', '1', '2023-05-01 20:48:52', 0);
-INSERT INTO "public"."sys_menu" VALUES ('f37ba75d3347c084b50727ff35a386fa', 'd5d81e35c103ed1dac93a70b97819877', '限制状态修改', 5, NULL, NULL, NULL, 'monitor:apiLimit:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:08:24', '1', '2023-05-23 11:08:24', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1002', '100', '用户新增', 2, NULL, NULL, NULL, 'system:user:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1006', '100', '用户导入', 6, NULL, NULL, NULL, 'system:user:import', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('101', '1', '角色管理', 2, 'role', NULL, 'system/role/index', 'system:role:list', 'peoples', '0', '0', '2', '1', '0', '角色管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1014', '102', '菜单新增', 2, NULL, NULL, NULL, 'system:menu:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1017', '103', '部门查询', 1, NULL, NULL, NULL, 'system:dept:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('102', '1', '菜单管理', 3, 'menu', NULL, 'system/menu/index', 'system:menu:list', 'tree-table', '0', '0', '2', '1', '0', '菜单管理菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1025', '104', '岗位导出', 5, NULL, NULL, NULL, 'system:position:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1510', '1506', '测试树表删除', 4, '#', NULL, NULL, 'test:dataTree:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1600', '118', '文件查询', 1, '#', NULL, NULL, 'monitor:file:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1601', '118', '文件上传', 2, '#', NULL, NULL, 'monitor:file:upload', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1603', '118', '文件删除', 4, '#', NULL, NULL, 'monitor:file:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1604', '118', '配置添加', 5, '#', NULL, NULL, 'monitor:ossConig:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1605', '118', '配置编辑', 6, '#', NULL, NULL, 'monitor:ossConig:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1f7c8a04250067db11e6fcae4298234e', 'd5d81e35c103ed1dac93a70b97819877', '限制修改', 3, NULL, NULL, NULL, 'monitor:apiLimit:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('2', '0', '系统运维', 2, 'monitor', NULL, NULL, NULL, 'monitor', '0', '0', '1', '1', '0', '系统监控目录', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('268571f3b6e74a1fc5bde8df2594ed81', '42708c34ab41a691ef032ab1f4cf5db0', '任务查询', 1, NULL, NULL, NULL, 'monitor:job:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('2add827d98c3b366ce0aa160d8a281ee', 'd5d81e35c103ed1dac93a70b97819877', '限制查询', 1, NULL, NULL, NULL, 'monitor:apiLimit:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('2b6cc0d2b8a0907d2832f9557089a682', 'd5d81e35c103ed1dac93a70b97819877', '限制新增', 2, NULL, NULL, NULL, 'monitor:apiLimit:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('2d562fa236077b42b5142eb869db6b18', '63854784d5ac52bfd2ac578a48f0a46f', '服务监控', 2, 'server', NULL, 'monitor/server/index', 'monitor:server:list', 'server', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('3', '0', '系统工具', 3, 'tool', NULL, NULL, NULL, 'tool', '0', '0', '1', '1', '0', '系统工具目录', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('36c032b1a5af71ad776641f68cbbeb60', '42708c34ab41a691ef032ab1f4cf5db0', '任务状态修改', 5, NULL, NULL, NULL, 'monitor:job:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('39cfe621da13b55952f2af58edc3e53a', '6b70f47f76199b8cd35aae0cda15d449', '发送钉钉', 3, NULL, NULL, NULL, 'tool:functest:sendDingTalk', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('42708c34ab41a691ef032ab1f4cf5db0', '2', '定时任务', 3, 'job', NULL, 'monitor/job/index', 'monitor:job:list', 'job', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('5', '0', '测试菜单', 5, 'demo', NULL, NULL, NULL, 'star', '0', '0', '1', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('500', '108', '操作日志', 1, 'logOper', NULL, 'monitor/logOper/index', 'monitor:logOper:list', 'form', '0', '0', '2', '1', '0', '操作日志菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('501', '108', '登录日志', 2, 'logLogin', NULL, 'monitor/logLogin/index', 'monitor:logLogin:list', 'logininfor', '0', '0', '2', '1', '0', '登录日志菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('63854784d5ac52bfd2ac578a48f0a46f', '2', '系统监控', 2, 'monitor', NULL, NULL, NULL, 'time-range', '0', '0', '1', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('69519bae5ffa67623e8bfb1c8fabdd00', '118', '配置查询', 8, NULL, NULL, NULL, 'monitor:ossConig:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('6b70f47f76199b8cd35aae0cda15d449', '3', '功能测试', 3, 'functest', NULL, 'tool/functest/index', 'tool:functest:main', 'example', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('74456b2c60b6e0b5edd5559a8e0cc108', '106', '刷新参数缓存', 6, NULL, NULL, NULL, 'system:config:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('7a5af154f7d305797b56b9488207b04a', '118', '配置管理', 9, NULL, NULL, NULL, 'monitor:ossConig:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('7aea821f10adc345dc4a003170bb7f16', 'd5d81e35c103ed1dac93a70b97819877', '限制删除', 4, NULL, NULL, NULL, 'monitor:apiLimit:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('85d0cbd4e4441e09f5df53214acddad9', '42708c34ab41a691ef032ab1f4cf5db0', '立即执行一次', 7, NULL, NULL, NULL, 'monitor:job:run', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('8833e71489eb0dfeb36d0769573408bd', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志导出', 9, NULL, NULL, NULL, 'monitor:jobLog:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('928015b29ffdad7c6621f3b92ba85c6c', '63854784d5ac52bfd2ac578a48f0a46f', '缓存监控', 3, 'cache', NULL, 'monitor/cache/index', 'monitor:cache:list', 'redis', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('937f0292079a4b62d9a26ebd5e8d57ed', '6b70f47f76199b8cd35aae0cda15d449', '发送短信', 2, NULL, NULL, NULL, 'tool:functest:sendSms', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('9901', '105', '刷新字典缓存', 6, '#', NULL, NULL, 'system:dict:refreshCache', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('adec0c7b9d6b37672dcb6b1315f8f4eb', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志查询', 10, NULL, NULL, NULL, 'monitor:jobLog:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('b87a985b4ef717afe650f2df9cdbe087', '118', '配置删除', 7, NULL, NULL, NULL, 'monitor:ossConig:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('c0a98c5b6e56602800968efcacfa4e47', '6b70f47f76199b8cd35aae0cda15d449', '发送邮件', 1, NULL, NULL, NULL, 'tool:functest:sendEmail', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('c6e5f363977c052a6a6d6098b0736c8e', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志删除', 11, NULL, NULL, NULL, 'monitor:jobLog:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('d5d81e35c103ed1dac93a70b97819877', '2', '接口限制', 4, 'apiLimit', NULL, 'monitor/apiLimit/index', 'monitor:apiLimit:list', 'lock', '0', '0', '2', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('ea70f3a842730a50686acc46fb981800', '42708c34ab41a691ef032ab1f4cf5db0', '定时任务日志列表', 8, NULL, NULL, NULL, 'monitor:jobLog:list', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('f37ba75d3347c084b50727ff35a386fa', 'd5d81e35c103ed1dac93a70b97819877', '限制状态修改', 5, NULL, NULL, NULL, 'monitor:apiLimit:changeStatus', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1029', '105', '字典删除', 4, '#', NULL, NULL, 'system:dict:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1033', '106', '参数修改', 3, '#', NULL, NULL, 'system:config:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1036', '107', '公告查询', 1, '#', NULL, NULL, 'monitor:notice:query', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1042', '500', '操作日志导出', 4, '#', NULL, NULL, 'monitor:logOper:export', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('106', '1', '参数设置', 7, 'config', NULL, 'system/config/index', 'system:config:list', 'edit', '0', '0', '2', '1', '0', '参数设置菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('13cbe1c8683a41dae7bccb289fd5dfd9', '42708c34ab41a691ef032ab1f4cf5db0', '任务修改', 3, NULL, NULL, NULL, 'monitor:job:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1506', '5', '测试树表', 1, 'dataTree', NULL, 'test/dataTree/index', 'test:dataTree:list', '#', '0', '0', '2', '1', '0', '测试树表菜单', '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1509', '1506', '测试树表修改', 3, '#', NULL, NULL, 'test:dataTree:edit', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1602', '118', '文件下载', 3, '#', NULL, NULL, 'monitor:file:download', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('1698eeba543e9f12542edba21ae2d16f', '42708c34ab41a691ef032ab1f4cf5db0', '任务删除', 4, NULL, NULL, NULL, 'monitor:job:remove', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
+INSERT INTO "public"."sys_menu" VALUES ('6971d165938715753fef8a07c112ba98', '42708c34ab41a691ef032ab1f4cf5db0', '任务新增', 2, NULL, NULL, NULL, 'monitor:job:add', '#', '0', '0', '3', '1', '0', NULL, '1', '2023-05-23 11:09:22', '1', '2023-05-23 11:09:22', 0);
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -1423,6 +1262,68 @@ INSERT INTO "public"."sys_role_user" VALUES ('e12edec621a0f93ce2a9643d7e79b99e',
 INSERT INTO "public"."sys_role_user" VALUES ('fed886b635dfcdb135ff7ca51b908861', '2', '2');
 
 -- ----------------------------
+-- Table structure for sys_social
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."sys_social";
+CREATE TABLE "public"."sys_social" (
+  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "remark" varchar(255) COLLATE "pg_catalog"."default",
+  "create_id" varchar(32) COLLATE "pg_catalog"."default",
+  "create_time" timestamp(6),
+  "update_id" varchar(32) COLLATE "pg_catalog"."default",
+  "update_time" timestamp(6),
+  "is_delete" int4,
+  "uuid" varchar(255) COLLATE "pg_catalog"."default",
+  "source" varchar(255) COLLATE "pg_catalog"."default",
+  "access_token" varchar(255) COLLATE "pg_catalog"."default",
+  "expire_in" int4,
+  "refresh_token" varchar(255) COLLATE "pg_catalog"."default",
+  "open_id" varchar(255) COLLATE "pg_catalog"."default",
+  "uid" varchar(255) COLLATE "pg_catalog"."default",
+  "access_code" varchar(255) COLLATE "pg_catalog"."default",
+  "union_id" varchar(255) COLLATE "pg_catalog"."default",
+  "scope" varchar(255) COLLATE "pg_catalog"."default",
+  "token_type" varchar(255) COLLATE "pg_catalog"."default",
+  "id_token" varchar(255) COLLATE "pg_catalog"."default",
+  "mac_algorithm" varchar(255) COLLATE "pg_catalog"."default",
+  "mac_key" varchar(255) COLLATE "pg_catalog"."default",
+  "code" varchar(255) COLLATE "pg_catalog"."default",
+  "oauth_token" varchar(255) COLLATE "pg_catalog"."default",
+  "oauth_token_secret" varchar(255) COLLATE "pg_catalog"."default",
+  "user_id" varchar(32) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."sys_social"."remark" IS '备注';
+COMMENT ON COLUMN "public"."sys_social"."create_id" IS '创建人';
+COMMENT ON COLUMN "public"."sys_social"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."sys_social"."update_id" IS '修改人';
+COMMENT ON COLUMN "public"."sys_social"."update_time" IS '修改时间';
+COMMENT ON COLUMN "public"."sys_social"."is_delete" IS '是否删除，0=正常，1=删除';
+COMMENT ON COLUMN "public"."sys_social"."uuid" IS '第三方系统的唯一ID';
+COMMENT ON COLUMN "public"."sys_social"."source" IS '第三方用户来源';
+COMMENT ON COLUMN "public"."sys_social"."access_token" IS '用户的授权令牌';
+COMMENT ON COLUMN "public"."sys_social"."expire_in" IS '第三方用户的授权令牌的有效期';
+COMMENT ON COLUMN "public"."sys_social"."refresh_token" IS '刷新令牌';
+COMMENT ON COLUMN "public"."sys_social"."open_id" IS '第三方用户的 open id';
+COMMENT ON COLUMN "public"."sys_social"."uid" IS '第三方用户的 ID';
+COMMENT ON COLUMN "public"."sys_social"."access_code" IS '个别平台的授权信息';
+COMMENT ON COLUMN "public"."sys_social"."union_id" IS '第三方用户的 union id';
+COMMENT ON COLUMN "public"."sys_social"."scope" IS '第三方用户授予的权限';
+COMMENT ON COLUMN "public"."sys_social"."token_type" IS '个别平台的授权信息';
+COMMENT ON COLUMN "public"."sys_social"."id_token" IS 'id token';
+COMMENT ON COLUMN "public"."sys_social"."mac_algorithm" IS '小米平台用户的附带属性';
+COMMENT ON COLUMN "public"."sys_social"."mac_key" IS '小米平台用户的附带属性';
+COMMENT ON COLUMN "public"."sys_social"."code" IS '用户的授权code';
+COMMENT ON COLUMN "public"."sys_social"."oauth_token" IS 'Twitter平台用户的附带属性';
+COMMENT ON COLUMN "public"."sys_social"."oauth_token_secret" IS 'Twitter平台用户的附带属性';
+COMMENT ON COLUMN "public"."sys_social"."user_id" IS '关联用户ID';
+COMMENT ON TABLE "public"."sys_social" IS '三方Auth绑定表（暂未启用）';
+
+-- ----------------------------
+-- Records of sys_social
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_user";
@@ -1591,8 +1492,6 @@ COMMENT ON TABLE "public"."test_data_tree" IS '测试树表数据';
 -- ----------------------------
 -- Records of test_data_tree
 -- ----------------------------
-INSERT INTO "public"."test_data_tree" VALUES ('12', '2', '我51', '按时在', '0', '0', '官方', '2', '2023-02-22 17:25:21', '2', '2023-02-22 17:25:21', 1);
-INSERT INTO "public"."test_data_tree" VALUES ('50fac88b36e64da3d8bd94ae11f85bc6', '2', '测试', '阿萨德', '0', '0', NULL, '1', '2023-04-26 22:02:34', '1', '2023-04-26 22:02:34', 1);
 INSERT INTO "public"."test_data_tree" VALUES ('2', '0', '我4-', '按时-', '1', '1', '更换-', '2', '2023-01-30 17:25:18', '1', '2023-07-04 11:02:19.654186', 0);
 INSERT INTO "public"."test_data_tree" VALUES ('b53120f9af52dcdc229d42d8cb04623f', '2', '阿萨德', '阿萨德', '0', '1', NULL, '1', '2023-04-26 22:24:47', '1', '2023-07-04 11:02:19.686078', 0);
 INSERT INTO "public"."test_data_tree" VALUES ('11', '1', '我3', '3', '0', '1', '导入1', '1', '2023-02-26 17:25:16', '1', '2023-07-04 11:02:42.578488', 0);
@@ -1614,6 +1513,11 @@ ALTER TABLE "public"."sys_config" ADD CONSTRAINT "sys_config_pkey" PRIMARY KEY (
 -- Primary Key structure for table sys_dept
 -- ----------------------------
 ALTER TABLE "public"."sys_dept" ADD CONSTRAINT "sys_dept_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table sys_dept_parent
+-- ----------------------------
+ALTER TABLE "public"."sys_dept_parent" ADD CONSTRAINT "sys_dept_parent_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table sys_dict
@@ -1696,6 +1600,11 @@ ALTER TABLE "public"."sys_role_menu" ADD CONSTRAINT "sys_role_menu_pkey" PRIMARY
 ALTER TABLE "public"."sys_role_user" ADD CONSTRAINT "sys_role_user_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
+-- Primary Key structure for table sys_social
+-- ----------------------------
+ALTER TABLE "public"."sys_social" ADD CONSTRAINT "sys_social_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
 -- Primary Key structure for table sys_user
 -- ----------------------------
 ALTER TABLE "public"."sys_user" ADD CONSTRAINT "sys_user_pkey" PRIMARY KEY ("id");
@@ -1716,22 +1625,3 @@ ALTER TABLE "public"."test_data" ADD CONSTRAINT "test_data_pkey" PRIMARY KEY ("i
 ALTER TABLE "public"."test_data_tree" ADD CONSTRAINT "test_data_tree_pkey" PRIMARY KEY ("id");
 
 
--- ----------------------------
--- Table structure for dual
--- ----------------------------
-DROP TABLE IF EXISTS "public"."dual";
-CREATE TABLE "public"."dual" (
-    "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL
-)
-;
-COMMENT ON TABLE "public"."dual" IS 'DUAL兼容';
-
--- ----------------------------
--- Records of dual
--- ----------------------------
-INSERT INTO "public"."dual" VALUES ('1');
-
--- ----------------------------
--- Primary Key structure for table dual
--- ----------------------------
-ALTER TABLE "public"."dual" ADD CONSTRAINT "test_data_copy1_pkey" PRIMARY KEY ("id");
