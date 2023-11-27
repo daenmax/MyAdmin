@@ -136,7 +136,12 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        RedisUtil.setValue(RedisConstant.OSS + vo.getId(), getInfo(vo.getId()));
+        SysOssConfig sysOssConfig = getInfo(vo.getId());
+        RedisUtil.setValue(RedisConstant.OSS + vo.getId(), sysOssConfig);
+        if (sysOssConfig.getInUse().equals(SystemConstant.IN_USE_YES)) {
+            //正在使用的
+            RedisUtil.setValue(RedisConstant.OSS_USE, sysOssConfig);
+        }
     }
 
     /**
