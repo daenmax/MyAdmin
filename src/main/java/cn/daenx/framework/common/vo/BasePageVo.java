@@ -68,7 +68,7 @@ public class BasePageVo {
         } else {
             if (defaultOrderBy) {
                 //默认排序字段
-                page.addOrder(new OrderItem(DEFAULT_ORDER_BY_COLUMN, DEFAULT_ORDER_BY_ASC));
+                page.addOrder(new OrderItem().setColumn(DEFAULT_ORDER_BY_COLUMN).setAsc(DEFAULT_ORDER_BY_ASC));
             }
         }
         return page;

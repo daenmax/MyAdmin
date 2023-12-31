@@ -18,15 +18,15 @@
         <java.version>17</java.version>
         <spring.boot.version>3.1.5</spring.boot.version>
         <druid.version>1.2.20</druid.version>
-        <fastjson2.version>2.0.42</fastjson2.version>
-        <mybatis.plus.version>3.5.4.1</mybatis.plus.version>
+        <fastjson2.version>2.0.44</fastjson2.version>
+        <mybatis.plus.version>3.5.5</mybatis.plus.version>
         <mybatis.dynamic.datasource.version>4.2.0</mybatis.dynamic.datasource.version>
         <springdoc.webmvc-ui.version>2.2.0</springdoc.webmvc-ui.version>
         <sa-token.version>1.37.0</sa-token.version>
-        <hutool.version>5.8.22</hutool.version>
-        <easyexcel.version>3.3.2</easyexcel.version>
-        <aws-s3.version>1.12.587</aws-s3.version>
-        <oshi.core.version>6.4.7</oshi.core.version>
+        <hutool.version>5.8.24</hutool.version>
+        <easyexcel.version>3.3.3</easyexcel.version>
+        <aws-s3.version>1.12.629</aws-s3.version>
+        <oshi.core.version>6.4.10</oshi.core.version>
         <tencentcloud.sms.version>3.1.893</tencentcloud.sms.version>
         <aliyun.dysmsapi.version>2.0.24</aliyun.dysmsapi.version>
         <bouncycastle.version>1.76</bouncycastle.version>
