@@ -4,8 +4,11 @@ import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.excel.DefaultExcelListener;
 import cn.daenx.framework.excel.ExcelListener;
 import cn.daenx.framework.excel.ExcelResult;
+import cn.daenx.framework.excel.ReadRetVo;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.metadata.WriteSheet;
@@ -17,7 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * EasyExcel导入导出工具类
@@ -26,8 +31,9 @@ import java.util.List;
  */
 @Slf4j
 public class ExcelUtil {
+
     /**
-     * 同步导入(适用于小数据量)
+     * 单sheet导入：同步导入(适用于小数据量)
      *
      * @param is 输入流
      * @return 转换后集合
@@ -38,7 +44,11 @@ public class ExcelUtil {
 
 
     /**
-     * 使用校验监听器 异步导入 同步返回
+     * 单sheet导入：使用校验监听器 异步导入 同步返回
+     * <p>
+     * 使用案例：
+     * ExcelResult<TestDataImportVo> excelResult = ExcelUtil.importExcel(file.getInputStream(), TestDataImportVo.class, true);
+     * List<TestDataImportVo> dataList = excelResult.getList();
      *
      * @param is         输入流
      * @param clazz      对象类型
@@ -52,7 +62,7 @@ public class ExcelUtil {
     }
 
     /**
-     * 使用自定义监听器 异步导入 自定义返回
+     * 单sheet导入：使用自定义监听器 异步导入 自定义返回
      *
      * @param is       输入流
      * @param clazz    对象类型
@@ -65,7 +75,71 @@ public class ExcelUtil {
     }
 
     /**
-     * 导出XLSX（只有一个sheet）
+     * 多sheet导入：使用校验监听器 异步导入 同步返回
+     * <p>
+     * 使用案例：
+     * ExcelReader reader = ExcelUtil.createImport(file.getInputStream());
+     * ReadRetVo<TestSheetAVo> sheetA = ExcelUtil.readSheet("班级信息", TestSheetAVo.class, true);
+     * ReadRetVo<TestSheetBVo> sheetB = ExcelUtil.readSheet("学生信息", TestSheetBVo.class, true);
+     * ExcelUtil.finishRead(reader, sheetA, sheetB);
+     * <p>
+     * ExcelResult<TestSheetAVo> sheetAResult = ExcelUtil.transResult(sheetA);
+     * ExcelResult<TestSheetBVo> sheetBResult = ExcelUtil.transResult(sheetB);
+     * <p>
+     * List<TestSheetAVo> sheetAList = sheetAResult.getList();
+     * List<TestSheetBVo> sheetBList = sheetBResult.getList();
+     */
+    public static ExcelReader createImport(InputStream is) {
+        return EasyExcel.read(is).build();
+    }
+
+    /**
+     * 读取一个sheet
+     */
+    public static <T> ReadRetVo<T> readSheet(String sheetName, Class<T> clazz, boolean isValidate) {
+        DefaultExcelListener<T> listener = new DefaultExcelListener<>(isValidate);
+        ReadSheet sheet = EasyExcel.readSheet(sheetName).head(clazz).registerReadListener(listener).build();
+        ReadRetVo retVo = new ReadRetVo();
+        retVo.setSheet(sheet);
+        retVo.setListener(listener);
+        return retVo;
+    }
+
+    /**
+     * 结束读取sheet
+     *
+     * @param reader     调用createImport()返回的
+     * @param readRetVos 调用readSheet()返回的
+     */
+    public static void finishRead(ExcelReader reader, ReadRetVo... readRetVos) {
+        List<ReadRetVo> retVos = Arrays.asList(readRetVos);
+        List<ReadSheet> sheets = retVos.stream().map(ReadRetVo::getSheet).collect(Collectors.toList());
+        reader.read(sheets);
+        return;
+    }
+
+    /**
+     * 转换数据并读取
+     *
+     * @param retVo 调用readSheet()返回的
+     * @param <T>
+     * @return
+     */
+    public static <T> ExcelResult<T> transResult(ReadRetVo<T> retVo) {
+        DefaultExcelListener<T> listener = retVo.getListener();
+        return listener.getExcelResult();
+    }
+
+
+    //*****导出*****
+
+
+    /**
+     * 单sheet导出：XLSX
+     * <p>
+     * 使用案例：
+     * List<TestDataPageDto> list = ...;//此处省略数组如何来的
+     * ExcelUtil.exportXlsx(response, "测试数据", "测试数据", list, TestDataPageDto.class);
      *
      * @param response
      * @param fileName    导出的文件名，不需要加.xlsx
@@ -93,11 +167,14 @@ public class ExcelUtil {
     }
 
     /**
-     * 创建xlsx导出开始（适用于多个sheet）
+     * 多sheet导出：创建导出开始
+     * <p>
      * 使用案例：
-     * ExcelWriter writer = ExcelUtil.createExport(response, "测试文件");
-     * ExcelUtil.writeSheet(writer, "合同列表", list, ContractPageDto.class);
-     * ExcelUtil.writeSheet(writer, "流水列表", listBills, BusinessBillsPageDto.class);
+     * ExcelWriter writer = ExcelUtil.createExport(response, "多sheet表测试");
+     * List<TestSheetAVo> sheetAList = ...;//此处省略数组如何来的
+     * ExcelUtil.writeSheet(writer, "班级信息", sheetAList, TestSheetAVo.class);
+     * List<TestSheetBVo> sheetBList = ...;//此处省略数组如何来的
+     * ExcelUtil.writeSheet(writer, "学生信息", sheetBList, TestSheetBVo.class);
      * ExcelUtil.finishWrite(writer);
      *
      * @param response
