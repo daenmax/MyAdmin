@@ -1,10 +1,7 @@
 package cn.daenx.framework.excel.utils;
 
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.excel.DefaultExcelListener;
-import cn.daenx.framework.excel.ExcelListener;
-import cn.daenx.framework.excel.ExcelResult;
-import cn.daenx.framework.excel.ReadRetVo;
+import cn.daenx.framework.excel.*;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -31,6 +28,11 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class ExcelUtil {
+    /**
+     * 自定义表头样式
+     */
+    public static CustomCellWriteStrategy customCellWriteStrategy = new CustomCellWriteStrategy();
+
 
     /**
      * 单sheet导入：同步导入(适用于小数据量)
@@ -161,7 +163,8 @@ public class ExcelUtil {
         } catch (IOException e) {
             throw new MyException("导出XLS时发生错误");
         }
-        ExcelWriterBuilder write = EasyExcel.write(outputStream, entityClass);
+        ExcelWriterBuilder write = EasyExcel.write(outputStream, entityClass)
+                .registerWriteHandler(CustomCellWriteStrategy.getHorizontalCellStyleStrategy());
         ExcelWriterSheetBuilder sheet = write.sheet(sheetName);
         sheet.doWrite(list);
     }
@@ -194,7 +197,9 @@ public class ExcelUtil {
         } catch (IOException e) {
             throw new MyException("导出XLS发送错误");
         }
-        ExcelWriter excelWriter = EasyExcel.write(outputStream).build();
+        ExcelWriter excelWriter = EasyExcel.write(outputStream)
+                .registerWriteHandler(CustomCellWriteStrategy.getHorizontalCellStyleStrategy())
+                .build();
         return excelWriter;
     }
 
