@@ -288,12 +288,19 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         if (checkCodeExist(vo.getCode(), vo.getId())) {
             throw new MyException("部门编号已存在");
         }
-        //校验父ID
-        SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
-        if (sysDeptParent == null) {
-            throw new MyException("父级错误");
-        }
         LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
+        //校验父ID
+        if (!"0".equals(vo.getParentId())) {
+            SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
+            if (sysDeptParent == null) {
+                throw new MyException("父级错误");
+            }
+            //修改level
+            wrapper.set(SysDept::getDeptLevel, sysDeptParent.getDeptLevel() + 1);
+        } else {
+            //修改level
+            wrapper.set(SysDept::getDeptLevel, 0);
+        }
         wrapper.eq(SysDept::getId, vo.getId());
         wrapper.set(SysDept::getParentId, vo.getParentId());
         wrapper.set(SysDept::getName, vo.getName());
@@ -303,8 +310,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         wrapper.set(SysDept::getSort, vo.getSort());
         wrapper.set(SysDept::getStatus, vo.getStatus());
         wrapper.set(SysDept::getRemark, vo.getRemark());
-        //修改level
-        wrapper.set(SysDept::getDeptLevel, sysDeptParent.getDeptLevel() + 1);
         int update = sysDeptMapper.update(new SysDept(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
