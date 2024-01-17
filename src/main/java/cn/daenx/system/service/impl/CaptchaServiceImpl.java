@@ -37,10 +37,10 @@ public class CaptchaServiceImpl implements CaptchaService {
         HashMap<String, Object> map = new HashMap<>();
         SysCaptchaConfigVo sysCaptchaConfigVo = sysConfigService.getSysCaptchaConfigVo();
         if (sysCaptchaConfigVo == null) {
-            map.put("captchaLock", "false");
+            map.put("captchaLock", false);
             return map;
         }
-        map.put("captchaLock", sysCaptchaConfigVo.getConfig().getLock());
+        map.put("captchaLock", Boolean.valueOf(sysCaptchaConfigVo.getConfig().getLock()));
         if ("false".equals(sysCaptchaConfigVo.getConfig().getLock())) {
             return map;
         }
@@ -57,7 +57,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             map.put("slider", captchaSlider);
             return map;
         }
-        map.put("captchaLock", "false");
+        map.put("captchaLock", false);
         return map;
     }
 
