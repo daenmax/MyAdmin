@@ -38,6 +38,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -366,6 +367,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      * @param vo
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void register(SysRegisterVo vo) {
         captchaService.validatedCaptcha(vo);
         //判空
@@ -387,17 +389,17 @@ public class SysLoginServiceImpl implements SysLoginService {
             throw new MyException("系统当前无法注册[0x2]");
         }
         if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getDeptCode())) {
-            throw new MyException("系统当前无法注册[0x2]");
+            throw new MyException("系统当前无法注册[0x3]");
         }
         if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getRoleCodes())) {
-            throw new MyException("系统当前无法注册[0x3]");
+            throw new MyException("系统当前无法注册[0x4]");
         }
         if (sysRegisterDefaultInfoVo.getRoleCodes().length == 0) {
-            throw new MyException("系统当前无法注册[0x3]");
+            throw new MyException("系统当前无法注册[0x5]");
         }
         SysDept sysDeptByCode = sysDeptService.getSysDeptByCode(sysRegisterDefaultInfoVo.getDeptCode());
         if (!sysDeptByCode.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
-            throw new MyException("系统当前无法注册[0x4]");
+            throw new MyException("系统当前无法注册[0x6]");
         }
         //查询账号是否已存在
         SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
