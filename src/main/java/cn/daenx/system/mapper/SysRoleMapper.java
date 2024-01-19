@@ -21,4 +21,13 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     int deleteBatchIds(@Param(Constants.COLL) Collection<?> idList);
 
     List<SysRole> getSysRoleListByUserId(@Param("userId") String userId);
+
+    /**
+     * 判断是否有是超级管理员的角色
+     *
+     * @param roleCode
+     * @param roleIds
+     * @return
+     */
+    boolean isHasAdmin(@Param("roleCode") String roleCode, @Param("roleIds") List<String> roleIds);
 }

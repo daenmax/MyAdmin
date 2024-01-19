@@ -97,4 +97,13 @@ public interface SysRoleService extends IService<SysRole> {
      * @param vo
      */
     void changeStatus(ComStatusUpdVo vo);
+
+    /**
+     * 判断是否有是超级管理员的角色
+     *
+     * @param roleCode
+     * @param roleIds
+     * @return
+     */
+    boolean isHasAdmin(String roleCode, List<String> roleIds);
 }

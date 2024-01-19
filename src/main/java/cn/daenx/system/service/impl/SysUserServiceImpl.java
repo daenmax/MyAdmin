@@ -461,6 +461,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
             throw new MyException("禁止操作超级管理员");
         }
+        if (sysRoleService.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getRoleIds())) {
+            throw new MyException("禁止修改为超级管理员");
+        }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, vo.getId());
@@ -529,6 +532,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             if (checkUserByApiKey(vo.getApiKey())) {
                 throw new MyException("apiKey已存在");
             }
+        }
+        if (sysRoleService.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getRoleIds())) {
+            throw new MyException("禁止新增为超级管理员");
         }
         SysUser userByUsername = getUserByUsername(vo.getUsername());
         if (ObjectUtil.isNotEmpty(userByUsername)) {

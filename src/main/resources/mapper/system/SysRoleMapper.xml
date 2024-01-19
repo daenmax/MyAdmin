@@ -36,4 +36,19 @@
       AND sr.is_delete = 0
       AND sr.status = '0'
     </select>
+
+
+  <select id="isHasAdmin" resultType="boolean">
+    SELECT EXISTS
+      (
+    SELECT sr.id
+    FROM sys_role sr
+    WHERE sr.is_delete = 0
+      AND sr.`code` = #{roleCode}
+      AND sr.id IN
+    <foreach item="item" index="index" collection="roleIds"
+             open="(" separator="," close=")">
+      #{item,jdbcType=VARCHAR}
+    </foreach>)
+  </select>
 </mapper>

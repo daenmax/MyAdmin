@@ -117,7 +117,7 @@
                    (
                        SELECT *
                        FROM sys_role_user sru
-                       WHERE sru.role_id = (SELECT sr.id FROM sys_role sr WHERE sr.`code` = #{roleCode})
+                       WHERE sru.role_id = (SELECT sr.id FROM sys_role sr WHERE sr.is_delete = 0 AND sr.`code` = #{roleCode})
                          AND sru.user_id = #{userId})
     </select>
 
@@ -126,7 +126,7 @@
             (
         SELECT *
         FROM sys_role_user sru
-        WHERE sru.role_id = (SELECT sr.id FROM sys_role sr WHERE sr.`code` = 'admin')
+        WHERE sru.role_id = (SELECT sr.id FROM sys_role sr WHERE sr.is_delete = 0 AND sr.`code` = #{roleCode})
           AND sru.user_id IN
         <foreach item="item" index="index" collection="userIds"
                  open="(" separator="," close=")">

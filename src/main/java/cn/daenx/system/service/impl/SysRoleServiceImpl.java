@@ -318,4 +318,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         //下线相关用户
         LoginUtil.logoutByRoleId(vo.getId());
     }
+
+    /**
+     * 判断是否有是超级管理员的角色
+     *
+     * @param roleCode
+     * @param roleIds
+     * @return
+     */
+    @Override
+    public boolean isHasAdmin(String roleCode, List<String> roleIds) {
+        return sysRoleMapper.isHasAdmin(roleCode, roleIds);
+    }
 }
