@@ -27,7 +27,10 @@ public class SystemConstant {
      * 用户状态：注销
      */
     public static final String USER_STATUS_OFF = "2";
-    public static final String IS_ADMIN_ID = "1";
+    /**
+     * 超级管理员角色code
+     */
+    public static final String ROLE_ADMIN = "admin";
 
 
     /**

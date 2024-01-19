@@ -8,6 +8,7 @@ import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.system.domain.po.SysRoleUser;
 import cn.daenx.system.domain.vo.*;
 import cn.daenx.system.mapper.SysRoleMapper;
+import cn.daenx.system.mapper.SysUserMapper;
 import cn.daenx.system.service.SysRoleDeptService;
 import cn.daenx.system.service.SysRoleMenuService;
 import cn.daenx.system.service.SysRoleService;
@@ -37,6 +38,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRoleDeptService sysRoleDeptService;
     @Resource
     private SysRoleUserService sysRoleUserService;
+    @Resource
+    private SysUserMapper sysUserMapper;
 
 
     @Override
@@ -134,7 +137,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public void editInfo(SysRoleUpdVo vo) {
-        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+        SysRole sysRole = sysRoleMapper.selectById(vo.getId());
+        if (SystemConstant.ROLE_ADMIN.equals(sysRole.getCode())) {
             throw new MyException("禁止操作超级管理员角色");
         }
         if (checkRoleExist(vo.getCode(), vo.getId())) {
@@ -205,7 +209,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void deleteByIds(List<String> ids) {
         for (String id : ids) {
-            if (SystemConstant.IS_ADMIN_ID.equals(id)) {
+            SysRole sysRole = sysRoleMapper.selectById(id);
+            if (SystemConstant.ROLE_ADMIN.equals(sysRole.getCode())) {
                 throw new MyException("禁止操作超级管理员角色");
             }
             if (getPositionUserCount(id) > 0) {
@@ -233,7 +238,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public void dataScope(SysRoleDataScopeUpdVo vo) {
-        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+        SysRole sysRole = sysRoleMapper.selectById(vo.getId());
+        if (SystemConstant.ROLE_ADMIN.equals(sysRole.getCode())) {
             throw new MyException("禁止操作超级管理员角色");
         }
         LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
@@ -258,13 +264,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void cancelAuthUser(SysRoleUpdAuthUserVo vo) {
         String loginUserId = LoginUtil.getLoginUserId();
-        for (String userId : vo.getUserIds()) {
-            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
-                throw new MyException("禁止操作管理员");
-            }
-            if (loginUserId.equals(userId)) {
-                throw new MyException("禁止操作自己");
-            }
+        if(vo.getUserIds().contains(loginUserId)){
+            throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+            throw new MyException("禁止操作超级管理员");
         }
         for (String userId : vo.getUserIds()) {
             sysRoleUserService.delUserRole(userId, vo.getRoleId());
@@ -280,13 +284,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void saveAuthUser(SysRoleUpdAuthUserVo vo) {
         String loginUserId = LoginUtil.getLoginUserId();
-        for (String userId : vo.getUserIds()) {
-            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
-                throw new MyException("禁止操作管理员");
-            }
-            if (loginUserId.equals(userId)) {
-                throw new MyException("禁止操作自己");
-            }
+        if(vo.getUserIds().contains(loginUserId)){
+            throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+            throw new MyException("禁止操作超级管理员");
         }
         for (String userId : vo.getUserIds()) {
             sysRoleUserService.addUserRole(userId, vo.getRoleId());
@@ -301,7 +303,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public void changeStatus(ComStatusUpdVo vo) {
-        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
+        SysRole sysRole = sysRoleMapper.selectById(vo.getId());
+        if (SystemConstant.ROLE_ADMIN.equals(sysRole.getCode())) {
             throw new MyException("禁止操作超级管理员角色");
         }
         LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();

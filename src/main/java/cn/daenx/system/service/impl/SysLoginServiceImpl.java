@@ -319,6 +319,12 @@ public class SysLoginServiceImpl implements SysLoginService {
         List<SysRole> roleList = sysRoleService.getSysRoleListByUserId(sysUser.getId());
         List<SysRoleVo> roleVoList = MyUtil.getListOfType(roleList, SysRoleVo.class);
         loginUserVo.setRoles(roleVoList);
+        loginUserVo.setIsAdmin(false);
+        for (SysRoleVo role : loginUserVo.getRoles()) {
+            if (SystemConstant.ROLE_ADMIN.equals(role.getCode())) {
+                loginUserVo.setIsAdmin(true);
+            }
+        }
         if (loginUserVo.getRoles().size() < 1) {
             //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
             throw new MyException("用户无可用角色");
@@ -442,8 +448,8 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public List<RouterVo> getRouters() {
-        String userId = LoginUtil.getLoginUserId();
-        List<SysMenu> menuList = sysMenuService.getMenuTreeByUserId(userId);
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        List<SysMenu> menuList = sysMenuService.getMenuTreeByUserId(loginUser.getId(), loginUser.getIsAdmin());
         return sysMenuService.buildMenus(menuList);
     }
 

@@ -62,7 +62,7 @@ public interface SysMenuService extends IService<SysMenu> {
 
     Set<String> getMenuPermissionByUser(SysLoginUserVo loginUserVo);
 
-    List<SysMenu> getMenuTreeByUserId(String userId);
+    List<SysMenu> getMenuTreeByUserId(String userId, Boolean isAdmin);
 
     /**
      * 构建前端路由所需要的菜单

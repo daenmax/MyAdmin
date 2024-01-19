@@ -454,12 +454,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void editInfo(SysUserUpdVo vo) {
-        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
-            throw new MyException("禁止操作管理员");
-        }
-        String userId = LoginUtil.getLoginUserId();
-        if (userId.equals(vo.getId())) {
+        String loginUserId = LoginUtil.getLoginUserId();
+        if (loginUserId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+            throw new MyException("禁止操作超级管理员");
         }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
@@ -578,12 +578,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void changeStatus(ComStatusUpdVo vo) {
-        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
-            throw new MyException("禁止操作管理员");
-        }
-        String userId = LoginUtil.getLoginUserId();
-        if (userId.equals(vo.getId())) {
+        String loginUserId = LoginUtil.getLoginUserId();
+        if (loginUserId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+            throw new MyException("禁止操作超级管理员");
         }
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, vo.getId());
@@ -601,12 +601,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void resetPwd(SysUserResetPwdVo vo) {
-        if (SystemConstant.IS_ADMIN_ID.equals(vo.getId())) {
-            throw new MyException("禁止操作管理员");
-        }
-        String userId = LoginUtil.getLoginUserId();
-        if (userId.equals(vo.getId())) {
+        String loginUserId = LoginUtil.getLoginUserId();
+        if (loginUserId.equals(vo.getId())) {
             throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+            throw new MyException("禁止操作超级管理员");
         }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
         String newPwd = SaSecureUtil.sha256(vo.getPassword());
@@ -628,12 +628,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void deleteByIds(List<String> ids) {
-        String userId = LoginUtil.getLoginUserId();
-        if (ids.contains(userId)) {
+        String loginUserId = LoginUtil.getLoginUserId();
+        if (ids.contains(loginUserId)) {
             throw new MyException("不能删除自己");
         }
-        if (ids.contains(SystemConstant.IS_ADMIN_ID)) {
-            throw new MyException("禁止操作管理员");
+        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, ids)) {
+            throw new MyException("禁止操作超级管理员");
         }
         //获取有权限操作的用户
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
@@ -688,12 +688,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void saveAuthRole(SysUserUpdAuthRoleVo vo) {
-        if (SystemConstant.IS_ADMIN_ID.equals(vo.getUserId())) {
-            throw new MyException("禁止操作管理员");
-        }
-        String userId = LoginUtil.getLoginUserId();
-        if (userId.equals(vo.getUserId())) {
+        String loginUserId = LoginUtil.getLoginUserId();
+        if (loginUserId.equals(vo.getUserId())) {
             throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getUserId())) {
+            throw new MyException("禁止操作超级管理员");
         }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getUserId());
         //修改关联数据
@@ -821,10 +821,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public String avatar(MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadImage(file, SystemConstant.FILE_FROM_AVATAR);
-
-        String userId = LoginUtil.getLoginUserId();
+        String loginUserId = LoginUtil.getLoginUserId();
         LambdaUpdateWrapper<SysUserDetail> updateWrapperDetail = new LambdaUpdateWrapper<>();
-        updateWrapperDetail.eq(SysUserDetail::getUserId, userId);
+        updateWrapperDetail.eq(SysUserDetail::getUserId, loginUserId);
         updateWrapperDetail.set(SysUserDetail::getAvatar, uploadResult.getSysFileId());
         int rowsDetail = sysUserDetailMapper.update(new SysUserDetail(), updateWrapperDetail);
         if (rowsDetail < 1) {
@@ -883,9 +882,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
         return Result.ok(map);
     }
-
-
-
 
     /**
      * 获取手机验证码

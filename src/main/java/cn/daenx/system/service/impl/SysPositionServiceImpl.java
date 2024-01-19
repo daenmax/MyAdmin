@@ -5,6 +5,7 @@ import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.system.mapper.SysPositionUserMapper;
 import cn.daenx.system.domain.po.SysPositionUser;
+import cn.daenx.system.mapper.SysUserMapper;
 import cn.daenx.system.service.SysPositionUserService;
 import cn.daenx.system.domain.vo.SysPositionAddVo;
 import cn.daenx.system.domain.vo.SysPositionPageVo;
@@ -33,6 +34,8 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     private SysPositionUserMapper sysPositionUserMapper;
     @Resource
     private SysPositionUserService sysPositionUserService;
+    @Resource
+    private SysUserMapper sysUserMapper;
 
 
     @Override
@@ -220,13 +223,11 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     @Override
     public void cancelAuthUser(SysPositionUpdAuthUserVo vo) {
         String loginUserId = LoginUtil.getLoginUserId();
-        for (String userId : vo.getUserIds()) {
-            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
-                throw new MyException("禁止操作管理员");
-            }
-            if (loginUserId.equals(userId)) {
-                throw new MyException("禁止操作自己");
-            }
+        if(vo.getUserIds().contains(loginUserId)){
+            throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+            throw new MyException("禁止操作超级管理员");
         }
         for (String userId : vo.getUserIds()) {
             sysPositionUserService.delUserPosition(userId, vo.getPositionId());
@@ -242,13 +243,11 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
     @Override
     public void saveAuthUser(SysPositionUpdAuthUserVo vo) {
         String loginUserId = LoginUtil.getLoginUserId();
-        for (String userId : vo.getUserIds()) {
-            if (SystemConstant.IS_ADMIN_ID.equals(userId)) {
-                throw new MyException("禁止操作管理员");
-            }
-            if (loginUserId.equals(userId)) {
-                throw new MyException("禁止操作自己");
-            }
+        if(vo.getUserIds().contains(loginUserId)){
+            throw new MyException("禁止操作自己");
+        }
+        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+            throw new MyException("禁止操作超级管理员");
         }
         for (String userId : vo.getUserIds()) {
             sysPositionUserService.addUserPosition(userId, vo.getPositionId());

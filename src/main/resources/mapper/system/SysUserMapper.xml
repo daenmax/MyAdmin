@@ -111,4 +111,27 @@
         </include>
         ${ew.customSqlSegment}
     </select>
+
+    <select id="isAdmin" resultType="boolean">
+        SELECT EXISTS
+                   (
+                       SELECT *
+                       FROM sys_role_user sru
+                       WHERE sru.role_id = (SELECT sr.id FROM sys_role sr WHERE sr.`code` = #{roleCode})
+                         AND sru.user_id = #{userId})
+    </select>
+
+    <select id="isHasAdmin" resultType="boolean">
+        SELECT EXISTS
+            (
+        SELECT *
+        FROM sys_role_user sru
+        WHERE sru.role_id = (SELECT sr.id FROM sys_role sr WHERE sr.`code` = 'admin')
+          AND sru.user_id IN
+        <foreach item="item" index="index" collection="userIds"
+                 open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+        )
+    </select>
 </mapper>

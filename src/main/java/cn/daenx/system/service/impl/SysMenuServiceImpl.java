@@ -52,10 +52,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
      */
     @Override
     public List<SysMenu> getList(SysMenuPageVo vo) {
-        String userId = LoginUtil.getLoginUserId();
-        Boolean isAdmin = LoginUtil.isAdmin();
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         List<SysMenu> menus = null;
-        if (isAdmin) {
+        if (loginUser.getIsAdmin()) {
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.like(ObjectUtil.isNotEmpty(vo.getMenuName()), SysMenu::getMenuName, vo.getMenuName());
             queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getVisible()), SysMenu::getVisible, vo.getVisible());
@@ -65,7 +64,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             menus = sysMenuMapper.selectList(queryWrapper);
         } else {
             QueryWrapper<SysMenu> wrapper1 = new QueryWrapper<>();
-            wrapper1.eq("sru.user_id", userId);
+            wrapper1.eq("sru.user_id", loginUser.getId());
             wrapper1.like(ObjectUtil.isNotEmpty(vo.getMenuName()), "sm.menu_name", vo.getMenuName());
             wrapper1.eq(ObjectUtil.isNotEmpty(vo.getVisible()), "sm.visible", vo.getVisible());
             wrapper1.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sm.status", vo.getStatus());
@@ -230,7 +229,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     public Set<String> getMenuPermissionByUser(SysLoginUserVo loginUserVo) {
         Set<String> perms = new HashSet<String>();
         // 管理员拥有所有权限
-        if (loginUserVo.isAdmin()) {
+        if (loginUserVo.getIsAdmin()) {
             perms.add("*:*:*");
         } else {
             if (!loginUserVo.getRoles().isEmpty() && loginUserVo.getRoles().size() > 1) {
@@ -270,9 +269,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public List<SysMenu> getMenuTreeByUserId(String userId) {
+    public List<SysMenu> getMenuTreeByUserId(String userId, Boolean isAdmin) {
         List<SysMenu> menus = null;
-        if (LoginUtil.isAdmin(userId)) {
+        if (isAdmin) {
             LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<SysMenu>()
                     .in(SysMenu::getMenuType, SystemConstant.MENU_TYPE_DIR, SystemConstant.MENU_TYPE_MENU)
                     .eq(SysMenu::getStatus, CommonConstant.STATUS_NORMAL)

@@ -106,7 +106,4 @@ public class SysUser extends BaseEntity implements Serializable {
     @TableField(value = "user_type")
     private String userType;
 
-    public boolean isAdmin() {
-        return SystemConstant.IS_ADMIN_ID.equals(this.id);
-    }
 }

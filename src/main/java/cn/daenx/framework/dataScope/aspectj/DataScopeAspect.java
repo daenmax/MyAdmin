@@ -88,12 +88,12 @@ public class DataScopeAspect implements DataPermissionHandler {
         if (dataScopeParam == null) {
             return where;
         }
-        //判断是否是管理员，如果是的话，直接放行，不修改SQL
+        //判断是否是超级管理员，如果是的话，直接放行，不修改SQL
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         if (loginUser == null) {
             return where;
         }
-        if (loginUser.isAdmin()) {
+        if (loginUser.getIsAdmin()) {
             return where;
         }
         //生成权限SQL

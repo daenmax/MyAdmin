@@ -80,7 +80,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDept::getCreateTime, startTime, endTime);
         wrapper.orderByAsc(SysDept::getSort);
-        if (!loginUser.isAdmin() && !roleMap.containsKey(SystemConstant.DATA_SCOPE_ALL)) {
+        if (!loginUser.getIsAdmin() && !roleMap.containsKey(SystemConstant.DATA_SCOPE_ALL)) {
             //不是管理员，也没有全部数据权限
             String deptId = loginUser.getDeptId();
             Set<String> deptSet = new HashSet<>();

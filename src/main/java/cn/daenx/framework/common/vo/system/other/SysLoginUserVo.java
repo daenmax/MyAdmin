@@ -62,9 +62,10 @@ public class SysLoginUserVo implements Serializable {
      */
     private List<SysPositionVo> positions;
 
-    public boolean isAdmin() {
-        return SystemConstant.IS_ADMIN_ID.equals(this.id);
-    }
+    /**
+     * 是否是超级管理员
+     */
+    private Boolean isAdmin;
 
 
 }
