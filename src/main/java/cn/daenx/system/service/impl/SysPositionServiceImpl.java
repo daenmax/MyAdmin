@@ -2,6 +2,7 @@ package cn.daenx.system.service.impl;
 
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.system.mapper.SysPositionUserMapper;
 import cn.daenx.system.domain.po.SysPositionUser;
@@ -222,11 +223,11 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
      */
     @Override
     public void cancelAuthUser(SysPositionUpdAuthUserVo vo) {
-        String loginUserId = LoginUtil.getLoginUserId();
-        if(vo.getUserIds().contains(loginUserId)){
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        if(vo.getUserIds().contains(loginUser.getId())){
             throw new MyException("禁止操作自己");
         }
-        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
             throw new MyException("禁止操作超级管理员");
         }
         for (String userId : vo.getUserIds()) {
@@ -242,11 +243,11 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
      */
     @Override
     public void saveAuthUser(SysPositionUpdAuthUserVo vo) {
-        String loginUserId = LoginUtil.getLoginUserId();
-        if(vo.getUserIds().contains(loginUserId)){
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        if(vo.getUserIds().contains(loginUser.getId())){
             throw new MyException("禁止操作自己");
         }
-        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
             throw new MyException("禁止操作超级管理员");
         }
         for (String userId : vo.getUserIds()) {

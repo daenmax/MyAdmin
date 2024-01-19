@@ -319,15 +319,15 @@ public class SysLoginServiceImpl implements SysLoginService {
         List<SysRole> roleList = sysRoleService.getSysRoleListByUserId(sysUser.getId());
         List<SysRoleVo> roleVoList = MyUtil.getListOfType(roleList, SysRoleVo.class);
         loginUserVo.setRoles(roleVoList);
+        if (loginUserVo.getRoles().size() < 1) {
+            //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
+            throw new MyException("无角色，请联系管理员");
+        }
         loginUserVo.setIsAdmin(false);
         for (SysRoleVo role : loginUserVo.getRoles()) {
             if (SystemConstant.ROLE_ADMIN.equals(role.getCode())) {
                 loginUserVo.setIsAdmin(true);
             }
-        }
-        if (loginUserVo.getRoles().size() < 1) {
-            //没有角色？肯定不行，最少一个才行，这种情况一般不会存在
-            throw new MyException("用户无可用角色");
         }
         Boolean isRoleOk = false;
         for (SysRoleVo role : loginUserVo.getRoles()) {
@@ -338,7 +338,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         }
         if (!isRoleOk) {
             //用户绑定的角色全部被禁用了
-            throw new MyException("用户角色全部不可用");
+            throw new MyException("无可用角色，请联系管理员");
         }
         List<SysPosition> positionList = sysPositionService.getSysPositionListByUserId(sysUser.getId());
         List<SysPositionVo> positionVoList = MyUtil.getListOfType(positionList, SysPositionVo.class);

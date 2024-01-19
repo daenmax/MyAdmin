@@ -454,11 +454,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void editInfo(SysUserUpdVo vo) {
-        String loginUserId = LoginUtil.getLoginUserId();
-        if (loginUserId.equals(vo.getId())) {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        if (loginUser.getId().equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
-        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
             throw new MyException("禁止操作超级管理员");
         }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
@@ -578,11 +578,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void changeStatus(ComStatusUpdVo vo) {
-        String loginUserId = LoginUtil.getLoginUserId();
-        if (loginUserId.equals(vo.getId())) {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        if (loginUser.getId().equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
-        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
             throw new MyException("禁止操作超级管理员");
         }
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
@@ -601,11 +601,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void resetPwd(SysUserResetPwdVo vo) {
-        String loginUserId = LoginUtil.getLoginUserId();
-        if (loginUserId.equals(vo.getId())) {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        if (loginUser.getId().equals(vo.getId())) {
             throw new MyException("禁止操作自己");
         }
-        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
             throw new MyException("禁止操作超级管理员");
         }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
@@ -628,11 +628,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void deleteByIds(List<String> ids) {
-        String loginUserId = LoginUtil.getLoginUserId();
-        if (ids.contains(loginUserId)) {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        if (ids.contains(loginUser.getId())) {
             throw new MyException("不能删除自己");
         }
-        if (sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, ids)) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, ids)) {
             throw new MyException("禁止操作超级管理员");
         }
         //获取有权限操作的用户
@@ -688,11 +688,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public void saveAuthRole(SysUserUpdAuthRoleVo vo) {
-        String loginUserId = LoginUtil.getLoginUserId();
-        if (loginUserId.equals(vo.getUserId())) {
+        SysLoginUserVo loginUser = LoginUtil.getLoginUser();
+        if (loginUser.getId().equals(vo.getUserId())) {
             throw new MyException("禁止操作自己");
         }
-        if (sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getUserId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getUserId())) {
             throw new MyException("禁止操作超级管理员");
         }
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getUserId());
