@@ -15,7 +15,7 @@ logging:
 #mybatis plus 设置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
-  type-aliases-package: cn.daenx.myadmin.*.po
+  type-aliases-package: cn.daenx.*.domain.po
   global-config:
     # 关闭MP3.0自带的banner
     banner: false
