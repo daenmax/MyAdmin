@@ -67,14 +67,14 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
         String updateTime = "updateTime";
         if (metaObject.hasGetter(updateTime)) {
             //如果有这个字段
-            this.strictInsertFill(metaObject, updateTime, LocalDateTime.class, LocalDateTime.now());
+            this.strictUpdateFill(metaObject, updateTime, LocalDateTime.class, LocalDateTime.now());
         }
         String updateId = "updateId";
         if (metaObject.hasGetter(updateId)) {
             //如果有这个字段
             if (userId != null) {
                 //用户登录才set
-                this.strictInsertFill(metaObject, updateId, String.class, userId);
+                this.strictUpdateFill(metaObject, updateId, String.class, userId);
             }
         }
     }

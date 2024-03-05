@@ -34,7 +34,7 @@ public class TestData extends BaseEntity implements Serializable {
 
     @TableField(value = "content")
     //字段脱敏
-    @Masked(type = MaskedType.NAME)
+//    @Masked(type = MaskedType.NAME)
     private String content;
 
     /**
