@@ -37,7 +37,7 @@ public class OssUtil {
     /**
      * 获取指定的OSS配置实例
      */
-    public static OssClient getOssClientByOssConfigId(String ossConfigId) {
+    public static synchronized OssClient getOssClientByOssConfigId(String ossConfigId) {
         Object object = RedisUtil.getValue(RedisConstant.OSS + ossConfigId);
         if (ObjectUtil.isEmpty(object)) {
             throw new MyException("未找到OSS配置信息，请联系管理员");
@@ -49,7 +49,7 @@ public class OssUtil {
     /**
      * 获取指定的OSS配置实例
      */
-    public static OssClient getOssClientByOssProperties(OssProperties properties) {
+    public static synchronized OssClient getOssClientByOssProperties(OssProperties properties) {
         return handle(properties);
     }
 
