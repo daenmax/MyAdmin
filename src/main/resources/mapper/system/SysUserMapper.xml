@@ -25,7 +25,6 @@
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         id,
-        dept_id,
         username,
         `password`,
         `status`,
