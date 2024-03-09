@@ -26,8 +26,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @TableName(value = "test_data")
 public class TestData extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     @TableField(value = "title")
     private String title;

@@ -1,15 +1,8 @@
 package cn.daenx.system.domain.po;
 
 import cn.daenx.framework.common.vo.TreeEntity;
-import com.baomidou.mybatisplus.annotation.*;
-
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,8 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "sys_menu")
 public class SysMenu extends TreeEntity<SysMenu> {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 菜单名称
@@ -104,60 +95,4 @@ public class SysMenu extends TreeEntity<SysMenu> {
      */
     @TableField(value = "remark")
     private String remark;
-
-    /**
-     * 创建人ID
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private String createId;
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createTime;
-
-    /**
-     * 修改人ID
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String updateId;
-
-    /**
-     * 修改时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime updateTime;
-
-    /**
-     * 是否删除，0=正常，1=删除
-     */
-    @TableLogic(value = "0", delval = "1")
-    @TableField(value = "is_delete")
-    private Integer isDelete;
-
-
-    /**
-     * 创建人名字
-     */
-    @TableField(exist = false)
-    private String createName;
-
-    /**
-     * 修改人名字
-     */
-    @TableField(exist = false)
-    private String updateName;
-
-    /**
-     * 创建人部门
-     */
-    @TableField(exist = false)
-    private String createDept;
 }

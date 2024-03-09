@@ -23,8 +23,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "sys_dept")
 public class SysDept extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 父级部门ID，顶级为0

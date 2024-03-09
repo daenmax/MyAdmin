@@ -1,6 +1,5 @@
 package cn.daenx.framework.common.vo.system.other;
 
-import cn.daenx.framework.common.constant.SystemConstant;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,9 +20,9 @@ public class SysLoginUserVo implements Serializable {
     private String username;
 
     /**
-     * 部门ID
+     * 部门ID列表
      */
-    private String deptId;
+    private List<String> deptIds;
     private String userType;
 
     /**

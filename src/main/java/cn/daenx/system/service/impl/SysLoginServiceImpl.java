@@ -66,6 +66,8 @@ public class SysLoginServiceImpl implements SysLoginService {
     private SysConfigService sysConfigService;
     @Resource
     private CaptchaService captchaService;
+    @Resource
+    private SysUserDeptService sysUserDeptService;
 
     @Value("${spring.application.name}")
     private String applicationName;
@@ -307,10 +309,11 @@ public class SysLoginServiceImpl implements SysLoginService {
         } else {
             throw new MyException("错误的loginType");
         }
+        List<String> deptIds = sysUserDeptService.getDeptIdsByUserId(sysUser.getId());
         RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
         SysLoginUserVo loginUserVo = new SysLoginUserVo();
         loginUserVo.setId(sysUser.getId());
-        loginUserVo.setDeptId(sysUser.getDeptId());
+        loginUserVo.setDeptIds(deptIds);
         loginUserVo.setUsername(sysUser.getUsername());
         loginUserVo.setUserType(sysUser.getUserType());
         loginUserVo.setEmail(sysUser.getEmail());
@@ -394,7 +397,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getUserType())) {
             throw new MyException("系统当前无法注册[0x2]");
         }
-        if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getDeptCode())) {
+        if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getDeptCodes())) {
             throw new MyException("系统当前无法注册[0x3]");
         }
         if (ObjectUtil.isEmpty(sysRegisterDefaultInfoVo.getRoleCodes())) {
@@ -403,10 +406,6 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (sysRegisterDefaultInfoVo.getRoleCodes().length == 0) {
             throw new MyException("系统当前无法注册[0x5]");
         }
-        SysDept sysDeptByCode = sysDeptService.getSysDeptByCode(sysRegisterDefaultInfoVo.getDeptCode());
-        if (!sysDeptByCode.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
-            throw new MyException("系统当前无法注册[0x6]");
-        }
         //查询账号是否已存在
         SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
         if (ObjectUtil.isNotEmpty(sysUser)) {
@@ -414,12 +413,11 @@ public class SysLoginServiceImpl implements SysLoginService {
         }
         String sha256 = SaSecureUtil.sha256(vo.getPassword());
         sysUser = new SysUser();
-        sysUser.setDeptId(sysDeptByCode.getId());
         sysUser.setUsername(vo.getUsername());
         sysUser.setPassword(sha256);
         sysUser.setStatus(SystemConstant.USER_STATUS_NORMAL);
         sysUser.setUserType(sysRegisterDefaultInfoVo.getUserType());
-        sysUserService.registerUser(sysUser, sysRegisterDefaultInfoVo.getRoleCodes(), sysRegisterDefaultInfoVo.getPositionCodes());
+        sysUserService.registerUser(sysUser, sysRegisterDefaultInfoVo.getDeptCodes(), sysRegisterDefaultInfoVo.getRoleCodes(), sysRegisterDefaultInfoVo.getPositionCodes());
     }
 
     /**

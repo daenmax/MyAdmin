@@ -2,24 +2,25 @@ package cn.daenx.system.service.impl;
 
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.TreeBuildUtils;
+import cn.daenx.framework.common.utils.TreeUtil;
 import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.common.vo.system.other.SysRoleVo;
+import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.system.domain.po.SysDept;
-import cn.daenx.system.domain.po.SysRole;
 import cn.daenx.system.domain.po.SysRoleDept;
-import cn.daenx.system.domain.po.SysUser;
+import cn.daenx.system.domain.po.SysUserDept;
 import cn.daenx.system.domain.vo.SysDeptAddVo;
 import cn.daenx.system.domain.vo.SysDeptPageVo;
+import cn.daenx.system.domain.vo.SysDeptTree;
 import cn.daenx.system.domain.vo.SysDeptUpdVo;
+import cn.daenx.system.mapper.SysDeptMapper;
 import cn.daenx.system.mapper.SysRoleDeptMapper;
 import cn.daenx.system.mapper.SysRoleMapper;
-import cn.daenx.system.mapper.SysUserMapper;
-
-
+import cn.daenx.system.mapper.SysUserDeptMapper;
 import cn.daenx.system.service.SysDeptParentService;
+import cn.daenx.system.service.SysDeptService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
@@ -27,11 +28,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.system.mapper.SysDeptMapper;
-import cn.daenx.system.service.SysDeptService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,7 +45,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Resource
     private SysRoleDeptMapper sysRoleDeptMapper;
     @Resource
-    private SysUserMapper sysUserMapper;
+    private SysUserDeptMapper sysUserDeptMapper;
     @Resource
     private SysDeptParentService sysDeptParentService;
 
@@ -79,18 +78,18 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         String startTime = vo.getStartTime();
         String endTime = vo.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDept::getCreateTime, startTime, endTime);
-        wrapper.orderByAsc(SysDept::getSort);
+        wrapper.orderByAsc(SysDept::getDeptLevel, SysDept::getSort);
         if (!loginUser.getIsAdmin() && !roleMap.containsKey(SystemConstant.DATA_SCOPE_ALL)) {
             //不是管理员，也没有全部数据权限
-            String deptId = loginUser.getDeptId();
+            List<String> ids = loginUser.getDeptIds();
             Set<String> deptSet = new HashSet<>();
-            deptSet.add(deptId);
-            if (roleMap.containsKey(SystemConstant.DATA_SCOPE_DEPT_DOWN)) {
+            deptSet.addAll(ids);
+            if (roleMap.containsKey(SystemConstant.DATA_SCOPE_DEPT)) {
                 //数据权限，1=本部门数据
             }
             if (roleMap.containsKey(SystemConstant.DATA_SCOPE_DEPT_DOWN)) {
                 //数据权限，2=本部门及以下数据
-                List<SysDept> deptList = getListByParentId(deptId, true);
+                List<SysDept> deptList = getListByParentIds(ids, true);
                 List<String> deptIds = MyUtil.joinToList(deptList, SysDept::getId);
                 deptSet.addAll(deptIds);
             }
@@ -136,7 +135,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @return
      */
     @Override
-    public List<SysDept> getList(SysDeptPageVo vo) {
+    public List<SysDept> getAllNoLeaderUser(SysDeptPageVo vo) {
         LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
         List<SysDept> sysDeptList = sysDeptMapper.selectList(wrapper);
         return sysDeptList;
@@ -152,6 +151,26 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         List<SysDept> all = getAll(vo);
         List<Tree<String>> trees = buildDeptTreeSelect(all);
         return trees;
+    }
+
+    /**
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<SysDeptTree> deptTreeNew(SysDeptPageVo vo) {
+        List<SysDept> all = getAll(vo);
+        List<SysDeptTree> list = new ArrayList<>();
+        for (SysDept sysDept : all) {
+            SysDeptTree temp = new SysDeptTree();
+            temp.setId(sysDept.getId());
+            temp.setParentId(sysDept.getParentId());
+            temp.setLabel(sysDept.getName());
+            temp.setWeight(sysDept.getSort());
+            list.add(temp);
+        }
+        List<SysDeptTree> sysDepts = TreeUtil.buildTree(list);
+        return sysDepts;
     }
 
     /**
@@ -185,6 +204,20 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
         return retList;
     }
 
+    /**
+     * 通过父ID获取子成员
+     *
+     * @param parentIds
+     * @param keepSelf  是否包含自己
+     * @return
+     */
+    @Override
+    public List<SysDept> getListByParentIds(List<String> parentIds, Boolean keepSelf) {
+        List<SysDept> list = sysDeptMapper.selectList(new LambdaQueryWrapper<>());
+        List<SysDept> retList = handleListByParentIds(list, parentIds, keepSelf);
+        return retList;
+    }
+
     private List<SysDept> handleListByParentId(List<SysDept> list, String id, Boolean keepSelf) {
         List<SysDept> retList = new ArrayList<>();
         if (keepSelf) {
@@ -192,6 +225,26 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             retList.addAll(self);
         }
         List<SysDept> collect = list.stream().filter(item -> id.equals(item.getParentId())).collect(Collectors.toList());
+        if (collect.size() > 0) {
+            retList.addAll(collect);
+        }
+        while (collect.size() > 0) {
+            List<String> idList = MyUtil.joinToList(collect, SysDept::getId);
+            collect = list.stream().filter(item -> idList.contains(item.getParentId())).collect(Collectors.toList());
+            if (collect.size() > 0) {
+                retList.addAll(collect);
+            }
+        }
+        return retList;
+    }
+
+    private List<SysDept> handleListByParentIds(List<SysDept> list, List<String> ids, Boolean keepSelf) {
+        List<SysDept> retList = new ArrayList<>();
+        if (keepSelf) {
+            List<SysDept> self = list.stream().filter(item -> ids.contains(item.getId())).collect(Collectors.toList());
+            retList.addAll(self);
+        }
+        List<SysDept> collect = list.stream().filter(item -> ids.contains(item.getParentId())).collect(Collectors.toList());
         if (collect.size() > 0) {
             retList.addAll(collect);
         }
@@ -213,8 +266,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      */
     @Override
     public List<String> selectDeptListByRoleId(String roleId) {
-        SysRole sysRole = sysRoleMapper.selectById(roleId);
-        List<SysDept> deptListByRoleId = sysDeptMapper.getDeptListByRoleId(sysRole.getId(), sysRole.getDeptCheckStrictly());
+        List<SysDept> deptListByRoleId = sysDeptMapper.getDeptListByRoleId(roleId);
         List<String> strings = MyUtil.joinToList(deptListByRoleId, SysDept::getId);
         return strings;
     }
@@ -239,9 +291,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     private Boolean checkHasUser(String id) {
-        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUser::getDeptId, id);
-        return sysUserMapper.exists(wrapper);
+        LambdaQueryWrapper<SysUserDept> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUserDept::getDeptId, id);
+        return sysUserDeptMapper.exists(wrapper);
     }
 
     /**

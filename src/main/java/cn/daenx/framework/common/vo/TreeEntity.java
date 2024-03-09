@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +35,6 @@ public class TreeEntity<T> extends BaseEntity {
      * 子部门
      */
     @TableField(exist = false)
-    private List<T> children = new ArrayList<>();
+    private List<T> children;
 
 }

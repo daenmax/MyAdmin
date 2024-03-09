@@ -28,8 +28,6 @@ import lombok.NoArgsConstructor;
 //导出时忽略没有@ExcelProperty的字段
 @ExcelIgnoreUnannotated
 public class SysConfig extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 参数名称

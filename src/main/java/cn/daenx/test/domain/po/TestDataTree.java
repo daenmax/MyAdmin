@@ -22,8 +22,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "test_data_tree")
 public class TestDataTree extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 父级ID，顶级为0

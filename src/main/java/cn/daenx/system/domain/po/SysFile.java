@@ -21,8 +21,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "sys_file")
 public class SysFile extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 原始文件名称

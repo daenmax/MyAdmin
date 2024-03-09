@@ -35,9 +35,6 @@
     WHERE
       sd.is_delete = 0
       AND srd.role_id = #{roleId}
-      <if test="deptCheckStrictly">
-        AND sd.id NOT IN ( SELECT sd2.parent_id FROM sys_dept sd2 INNER JOIN sys_role_dept srd ON sd2.id = srd.dept_id AND srd.role_id = #{roleId} )
-      </if>
     ORDER BY
       sd.parent_id,
       sd.sort
@@ -60,12 +57,10 @@
            sud.user_sign,
            sud.avatar,
            sud.money,
-           sd.name    AS deptName,
            su1.username AS createName,
            su2.username AS updateName
     FROM sys_user su
            LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
-           LEFT JOIN sys_dept sd ON sd.id = su.dept_id
            LEFT JOIN sys_user su1 ON su1.id = su.create_id
            LEFT JOIN sys_user su2 ON su2.id = su.update_id
     WHERE su.id = #{leaderUserId}

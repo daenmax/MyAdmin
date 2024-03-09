@@ -453,7 +453,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             router.setQuery(menu.getQueryParam());
             router.setMeta(new RouterVo.MetaVo(menu.getMenuName(), menu.getIcon(), "1".equals(menu.getIsCache()), menu.getPath()));
             List<SysMenu> cMenus = menu.getChildren();
-            if (!cMenus.isEmpty() && SystemConstant.MENU_TYPE_DIR.equals(menu.getMenuType())) {
+            if (cMenus != null && !cMenus.isEmpty() && SystemConstant.MENU_TYPE_DIR.equals(menu.getMenuType())) {
                 router.setAlwaysShow(true);
                 router.setRedirect("noRedirect");
                 router.setChildren(buildMenus(cMenus));

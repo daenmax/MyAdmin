@@ -1,6 +1,7 @@
 package cn.daenx.framework.dataScope.aspectj;
 
 import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.vo.system.other.SysRoleVo;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.vo.DataScopeParam;
@@ -120,7 +121,8 @@ public class DataScopeAspect implements DataPermissionHandler {
         String field = dataScopeParam.getField();
         List<SysRoleVo> roleList = loginUser.getRoles();
         String userId = loginUser.getId();
-        String deptId = loginUser.getDeptId();
+        List<String> deptIdList = loginUser.getDeptIds();
+        String deptIds = "'" + MyUtil.join(deptIdList, String::trim, "','") + "'";
         StringBuilder sql = new StringBuilder();
         String prex = alias + "." + field;
         Boolean init = false;
@@ -138,28 +140,27 @@ public class DataScopeAspect implements DataPermissionHandler {
                 //解决方案就是，再套一层娃，相当于先把where查询结果放到了临时表x1里
                 if (SystemConstant.DATA_SCOPE_SELF.equals(dataScope)) {
                     //本人数据
-                    sql.append(" = ")
-                            .append("'").append(userId).append("'");
+                    sql.append(" = ").append("'").append(userId).append("'");
                 } else if (SystemConstant.DATA_SCOPE_DEPT.equals(dataScope)) {
                     //本部门数据
-                    sql.append(" in ").append("(select x1.id from ")
-                            .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id ='")
-                            .append(deptId).append("')").append(" x1)");
+                    sql.append(" in ").append("(select x1.user_id from ")
+                            .append("(select sys_user_dept.user_id from sys_user_dept  where sys_user_dept.dept_id in(")
+                            .append(deptIds).append("))").append(" x1)");
                 } else if (SystemConstant.DATA_SCOPE_DEPT_DOWN.equals(dataScope)) {
                     //本部门及以下数据
-                    sql.append(" in ").append("(select x1.id from ")
-                            .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id in ");
-                    sql.append("(SELECT sdp.dept_id  FROM sys_dept_parent sdp  WHERE sdp.parent_id = '").append(deptId).append("')");
+                    sql.append(" in ").append("(select x1.user_id from ")
+                            .append("(select sys_user_dept.user_id from sys_user_dept  where sys_user_dept.dept_id in ");
+                    sql.append("(SELECT sdp.dept_id  FROM sys_dept_parent sdp  WHERE sdp.parent_id in (").append(deptIds).append("))");
                     sql.append(")").append(" x1)");
                 } else if (SystemConstant.DATA_SCOPE_ALL.equals(dataScope)) {
                     //全部数据
                     return new StringBuilder().toString();
                 } else if (SystemConstant.DATA_SCOPE_CUSTOM.equals(dataScope)) {
                     //自定义权限
-                    sql.append("='").append(userId).append("'").append(" or " + prex).append(" in ").append("(select x1.id from ")
-                            .append("(select sys_user.id from sys_user join sys_dept on sys_user.dept_id = sys_dept.id where sys_dept.id in")
+                    sql.append(" in ").append("(select x1.user_id from ")
+                            .append("(select sys_user_dept.user_id from sys_user_dept  where sys_user_dept.dept_id in")
                             .append("( select sys_role_dept.dept_id from sys_role_dept where sys_role_dept.role_id='").append(sysRole.getId())
-                            .append("'))").append(" x1)");
+                            .append("'))").append(" x1 UNION ALL SELECT '").append(userId).append("')");
                 }
                 init = true;
             }

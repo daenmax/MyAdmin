@@ -37,7 +37,4 @@ public class BaseDto {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateTime;
-
-    @ExcelProperty(value = "创建人部门")
-    private String createDept;
 }

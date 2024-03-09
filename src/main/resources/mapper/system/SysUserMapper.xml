@@ -5,7 +5,6 @@
         <!--@mbg.generated-->
         <!--@Table sys_user-->
         <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="dept_id" jdbcType="VARCHAR" property="deptId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
@@ -54,12 +53,10 @@
                sud.user_sign,
                sf.file_url                  AS avatar,
                sud.money,
-               sd.name                    AS deptName,
                su1.username                 AS createName,
                su2.username                 AS updateName
         FROM sys_user su
                  LEFT JOIN sys_user_detail sud ON sud.user_id = su.id
-                 LEFT JOIN sys_dept sd ON sd.id = su.dept_id
                  LEFT JOIN sys_user su1 ON su1.id = su.create_id
                  LEFT JOIN sys_user su2 ON su2.id = su.update_id
                  LEFT JOIN sys_file sf ON sf.id = sud.avatar
@@ -74,6 +71,7 @@
         <result column="id" jdbcType="VARCHAR" property="id"/>
         <collection property="roles" column="id" select="queryUserRoles"></collection>
         <collection property="positions" column="id" select="queryUserPositions"></collection>
+        <collection property="depts" column="id" select="queryUserDepts"></collection>
     </resultMap>
     <select id="queryUserRoles" resultType="cn.daenx.system.domain.po.SysRole">
         SELECT sr.*
@@ -86,6 +84,12 @@
         FROM sys_position_user spu
                  LEFT JOIN sys_position sp ON spu.position_id = sp.id
         WHERE spu.user_id = #{id}
+    </select>
+    <select id="queryUserDepts" resultType="cn.daenx.system.domain.po.SysDept">
+        SELECT sd.*
+        FROM sys_user_dept sud
+        LEFT JOIN sys_dept sd ON sud.dept_id = sd.id
+        WHERE sud.user_id = #{id}
     </select>
 
     <select id="getPageWrapper" resultType="cn.daenx.system.domain.dto.SysUserPageDto">

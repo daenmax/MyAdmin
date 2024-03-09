@@ -24,12 +24,10 @@
   <select id="getPage" resultType="cn.daenx.test.domain.dto.TestDataPageDto">
       SELECT td.*,
              su1.username as createName,
-             su2.username as updateName,
-             sd.NAME      as createDept
+             su2.username as updateName
       FROM test_data td
                LEFT JOIN sys_user su1 on su1.id = td.create_id
                LEFT JOIN sys_user su2 on su2.id = td.update_id
-               LEFT JOIN sys_dept sd on sd.id = su1.dept_id
       <where>
           and td.is_delete = 0
           <if test="vo.title != null and vo.title != ''">
@@ -69,24 +67,20 @@
   <select id="getPageWrapper" resultType="cn.daenx.test.domain.dto.TestDataPageDto">
       SELECT td.*,
              su1.username as createName,
-             su2.username as updateName,
-             sd.NAME      as createDept
+             su2.username as updateName
       FROM test_data td
                LEFT JOIN sys_user su1 on su1.id = td.create_id
                LEFT JOIN sys_user su2 on su2.id = td.update_id
-               LEFT JOIN sys_dept sd on sd.id = su1.dept_id
       ${ew.customSqlSegment}
   </select>
 
   <select id="getAll" resultType="cn.daenx.test.domain.dto.TestDataPageDto">
       SELECT td.*,
              su1.username as createName,
-             su2.username as updateName,
-             sd.NAME      as createDept
+             su2.username as updateName
       FROM test_data td
                LEFT JOIN sys_user su1 on su1.id = td.create_id
                LEFT JOIN sys_user su2 on su2.id = td.update_id
-               LEFT JOIN sys_dept sd on sd.id = su1.dept_id
       ${ew.customSqlSegment}
   </select>
 </mapper>

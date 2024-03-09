@@ -27,8 +27,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @TableName(value = "sys_job_log")
 public class SysJobLog extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 关联定时任务ID

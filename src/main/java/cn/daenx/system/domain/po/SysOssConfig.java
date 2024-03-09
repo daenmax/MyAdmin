@@ -21,8 +21,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "sys_oss_config")
 public class SysOssConfig extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 配置名称

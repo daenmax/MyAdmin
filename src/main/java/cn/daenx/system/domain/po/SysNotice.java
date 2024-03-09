@@ -22,8 +22,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "sys_notice")
 public class SysNotice extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 标题

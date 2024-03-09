@@ -1,9 +1,7 @@
 package cn.daenx.framework.common.vo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -23,6 +21,8 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class BaseEntity<T extends Model<T>> extends Model<T> {
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
+    private String id;
 
     /**
      * 创建人ID
@@ -75,10 +75,4 @@ public class BaseEntity<T extends Model<T>> extends Model<T> {
      */
     @TableField(exist = false)
     private String updateName;
-
-    /**
-     * 创建人部门
-     */
-    @TableField(exist = false)
-    private String createDept;
 }

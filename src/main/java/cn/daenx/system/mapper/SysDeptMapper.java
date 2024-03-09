@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface SysDeptMapper extends BaseMapper<SysDept> {
 
-    List<SysDept> getDeptListByRoleId(@Param("roleId") String roleId, @Param("deptCheckStrictly") boolean deptCheckStrictly);
+    List<SysDept> getDeptListByRoleId(@Param("roleId") String roleId);
 
     List<SysDept> selectListX(@Param(Constants.WRAPPER) Wrapper<SysDept> queryWrapper);
 }

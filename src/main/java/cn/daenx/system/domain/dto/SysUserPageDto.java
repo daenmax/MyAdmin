@@ -3,6 +3,7 @@ package cn.daenx.system.domain.dto;
 import cn.daenx.framework.common.vo.BaseDto;
 import cn.daenx.framework.excel.DictConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
+import cn.daenx.system.domain.po.SysDept;
 import cn.daenx.system.domain.po.SysPosition;
 import cn.daenx.system.domain.po.SysRole;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
@@ -27,10 +28,6 @@ public class SysUserPageDto extends BaseDto {
     @ExcelProperty(value = "用户Uid")
     private String id;
 
-    /**
-     * 部门ID
-     */
-    private String deptId;
     @ExcelProperty(value = "部门名称")
     private String deptName;
 
@@ -163,6 +160,11 @@ public class SysUserPageDto extends BaseDto {
      * 用户岗位列表
      */
     private List<SysPosition> positions;
+
+    /**
+     * 用户部门列表
+     */
+    private List<SysDept> depts;
 
     /**
      * 是否是管理员

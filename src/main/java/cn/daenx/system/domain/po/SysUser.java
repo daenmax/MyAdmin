@@ -31,12 +31,6 @@ public class SysUser extends BaseEntity implements Serializable {
     private String id;
 
     /**
-     * 部门ID
-     */
-    @TableField(value = "dept_id")
-    private String deptId;
-
-    /**
      * 用户账号
      */
     @TableField(value = "username")

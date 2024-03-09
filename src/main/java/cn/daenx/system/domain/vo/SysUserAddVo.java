@@ -25,11 +25,6 @@ public class SysUserAddVo {
      */
     @NotBlank(message = "密码不能为空")
     private String password;
-    /**
-     * 部门ID
-     */
-    @NotBlank(message = "部门不能为空")
-    private String deptId;
 
     /**
      * 账号状态，0=正常，1=停用
@@ -130,5 +125,7 @@ public class SysUserAddVo {
     //----------------------- 关联数据 开始
     @Size(min = 1, message = "最少选择一个角色")
     private List<String> roleIds;
+    @Size(min = 1, message = "最少选择一个部门")
+    private List<String> deptIds;
     private List<String> positionIds;
 }

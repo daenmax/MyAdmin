@@ -3,24 +3,24 @@
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_api_limit";
 CREATE TABLE "public"."sys_api_limit" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "api_name" varchar(255) COLLATE "pg_catalog"."default",
-  "api_uri" varchar(255) COLLATE "pg_catalog"."default",
-  "single_frequency" int4,
-  "single_time" int4,
-  "single_time_unit" varchar(2) COLLATE "pg_catalog"."default",
-  "whole_frequency" int4,
-  "whole_time" int4,
-  "whole_time_unit" varchar(2) COLLATE "pg_catalog"."default",
-  "limit_type" varchar(2) COLLATE "pg_catalog"."default",
-  "ret_msg" text COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                          "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "api_name" varchar(255) COLLATE "pg_catalog"."default",
+                                          "api_uri" varchar(255) COLLATE "pg_catalog"."default",
+                                          "single_frequency" int4,
+                                          "single_time" int4,
+                                          "single_time_unit" varchar(2) COLLATE "pg_catalog"."default",
+                                          "whole_frequency" int4,
+                                          "whole_time" int4,
+                                          "whole_time_unit" varchar(2) COLLATE "pg_catalog"."default",
+                                          "limit_type" varchar(2) COLLATE "pg_catalog"."default",
+                                          "ret_msg" text COLLATE "pg_catalog"."default",
+                                          "status" varchar(2) COLLATE "pg_catalog"."default",
+                                          "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                          "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "create_time" timestamp(6),
+                                          "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "update_time" timestamp(6),
+                                          "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_api_limit"."api_name" IS '接口名称';
@@ -54,18 +54,18 @@ INSERT INTO "public"."sys_api_limit" VALUES ('ab6ac1ae29d57e70879e8af885f6f668',
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_config";
 CREATE TABLE "public"."sys_config" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "key_va" varchar(255) COLLATE "pg_catalog"."default",
-  "value" text COLLATE "pg_catalog"."default",
-  "type" varchar(2) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                       "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "name" varchar(255) COLLATE "pg_catalog"."default",
+                                       "key_va" varchar(255) COLLATE "pg_catalog"."default",
+                                       "value" text COLLATE "pg_catalog"."default",
+                                       "type" varchar(2) COLLATE "pg_catalog"."default",
+                                       "status" varchar(2) COLLATE "pg_catalog"."default",
+                                       "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                       "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                       "create_time" timestamp(6),
+                                       "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                       "update_time" timestamp(6),
+                                       "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_config"."name" IS '参数名称';
@@ -127,12 +127,12 @@ fileType=[]，支持的文件类型数组，不包含小数点
 isShowTip=是否显示提示', '1', '2023-04-17 22:24:15', '1', '2023-05-14 09:34:24', 0);
 INSERT INTO "public"."sys_config" VALUES ('101fbed52418ce72ffe30143c66fdd06', '系统注册默认信息', 'sys.register.default.info', '{
     "userType": "2",
-    "deptCode": "XMY-JN-3",
+    "deptCodes": ["XMY-JN-3"],
     "positionCodes": ["user"],
     "roleCodes": ["user"]
 }', '1', '0', '此参数必存在，不存在的话，系统将禁止注册
 userType，用户类型，必填，参考字典内
-deptCode，部门编号，必填
+deptCodes，部门编号，必填，可多个
 positionCodes，岗位编码，非必填，可多个
 roleCodes，角色编码，必填，可多个', '1', '2023-04-25 21:00:26', '1', '2023-04-25 21:07:58', 0);
 INSERT INTO "public"."sys_config" VALUES ('1a91bf36a72d9dcb253a941a94fa28fa', '文件上传限制策略', 'sys.upload.file', '{
@@ -274,21 +274,21 @@ INSERT INTO "public"."sys_config" VALUES ('64c70f1e91cbcd3cfc390e3966aeef6b', '�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_dept";
 CREATE TABLE "public"."sys_dept" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "parent_id" varchar(32) COLLATE "pg_catalog"."default",
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "code" varchar(255) COLLATE "pg_catalog"."default",
-  "summary" text COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "leader_user_id" varchar(32) COLLATE "pg_catalog"."default",
-  "dept_level" int4,
-  "sort" int4,
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                     "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                     "parent_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "name" varchar(255) COLLATE "pg_catalog"."default",
+                                     "code" varchar(255) COLLATE "pg_catalog"."default",
+                                     "summary" text COLLATE "pg_catalog"."default",
+                                     "status" varchar(2) COLLATE "pg_catalog"."default",
+                                     "leader_user_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "dept_level" int4,
+                                     "sort" int4,
+                                     "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                     "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "create_time" timestamp(6),
+                                     "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "update_time" timestamp(6),
+                                     "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_dept"."parent_id" IS '父级部门ID，顶级为0';
@@ -326,9 +326,9 @@ INSERT INTO "public"."sys_dept" VALUES ('109', '102', '财务部门', 'XMY-BJ-2'
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_dept_parent";
 CREATE TABLE "public"."sys_dept_parent" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "dept_id" varchar(32) COLLATE "pg_catalog"."default",
-  "parent_id" varchar(32) COLLATE "pg_catalog"."default"
+                                            "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "dept_id" varchar(32) COLLATE "pg_catalog"."default",
+                                            "parent_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."sys_dept_parent"."dept_id" IS '部门ID';
@@ -380,16 +380,16 @@ INSERT INTO "public"."sys_dept_parent" VALUES ('fae666e9d536d28b28dcf84674e34aaf
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_dict";
 CREATE TABLE "public"."sys_dict" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "code" varchar(255) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                     "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                     "name" varchar(255) COLLATE "pg_catalog"."default",
+                                     "code" varchar(255) COLLATE "pg_catalog"."default",
+                                     "status" varchar(2) COLLATE "pg_catalog"."default",
+                                     "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                     "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "create_time" timestamp(6),
+                                     "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "update_time" timestamp(6),
+                                     "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_dict"."name" IS '字典名称';
@@ -431,20 +431,20 @@ INSERT INTO "public"."sys_dict" VALUES ('ddff67e6d459cf953f1ac23c413f76d3', '任
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_dict_detail";
 CREATE TABLE "public"."sys_dict_detail" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "dict_code" varchar(255) COLLATE "pg_catalog"."default",
-  "label" varchar(255) COLLATE "pg_catalog"."default",
-  "value" varchar(255) COLLATE "pg_catalog"."default",
-  "sort" int4,
-  "css_class" varchar(255) COLLATE "pg_catalog"."default",
-  "list_class" varchar(255) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                            "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "dict_code" varchar(255) COLLATE "pg_catalog"."default",
+                                            "label" varchar(255) COLLATE "pg_catalog"."default",
+                                            "value" varchar(255) COLLATE "pg_catalog"."default",
+                                            "sort" int4,
+                                            "css_class" varchar(255) COLLATE "pg_catalog"."default",
+                                            "list_class" varchar(255) COLLATE "pg_catalog"."default",
+                                            "status" varchar(2) COLLATE "pg_catalog"."default",
+                                            "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                            "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                            "create_time" timestamp(6),
+                                            "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                            "update_time" timestamp(6),
+                                            "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_dict_detail"."dict_code" IS '字典编码';
@@ -535,22 +535,22 @@ INSERT INTO "public"."sys_dict_detail" VALUES ('87f33838c66f34a94d7c19c384e4758c
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_file";
 CREATE TABLE "public"."sys_file" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "original_name" varchar(255) COLLATE "pg_catalog"."default",
-  "file_name" varchar(255) COLLATE "pg_catalog"."default",
-  "file_suffix" varchar(255) COLLATE "pg_catalog"."default",
-  "file_url" varchar(500) COLLATE "pg_catalog"."default",
-  "file_size" int4,
-  "file_md5" varchar(255) COLLATE "pg_catalog"."default",
-  "file_type" varchar(255) COLLATE "pg_catalog"."default",
-  "oss_id" varchar(32) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                     "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                     "original_name" varchar(255) COLLATE "pg_catalog"."default",
+                                     "file_name" varchar(255) COLLATE "pg_catalog"."default",
+                                     "file_suffix" varchar(255) COLLATE "pg_catalog"."default",
+                                     "file_url" varchar(500) COLLATE "pg_catalog"."default",
+                                     "file_size" int4,
+                                     "file_md5" varchar(255) COLLATE "pg_catalog"."default",
+                                     "file_type" varchar(255) COLLATE "pg_catalog"."default",
+                                     "oss_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "status" varchar(2) COLLATE "pg_catalog"."default",
+                                     "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                     "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "create_time" timestamp(6),
+                                     "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "update_time" timestamp(6),
+                                     "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_file"."original_name" IS '原始文件名称';
@@ -579,22 +579,22 @@ COMMENT ON TABLE "public"."sys_file" IS 'OSS文件表';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_job";
 CREATE TABLE "public"."sys_job" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_name" varchar(255) COLLATE "pg_catalog"."default",
-  "job_group" varchar(255) COLLATE "pg_catalog"."default",
-  "invoke_target" varchar(1024) COLLATE "pg_catalog"."default",
-  "cron_expression" varchar(255) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "misfire_policy" varchar(2) COLLATE "pg_catalog"."default",
-  "concurrent" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "notify_channel" varchar(2) COLLATE "pg_catalog"."default",
-  "notify_objs" varchar(1024) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                    "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                    "job_name" varchar(255) COLLATE "pg_catalog"."default",
+                                    "job_group" varchar(255) COLLATE "pg_catalog"."default",
+                                    "invoke_target" varchar(1024) COLLATE "pg_catalog"."default",
+                                    "cron_expression" varchar(255) COLLATE "pg_catalog"."default",
+                                    "status" varchar(2) COLLATE "pg_catalog"."default",
+                                    "misfire_policy" varchar(2) COLLATE "pg_catalog"."default",
+                                    "concurrent" varchar(2) COLLATE "pg_catalog"."default",
+                                    "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                    "notify_channel" varchar(2) COLLATE "pg_catalog"."default",
+                                    "notify_objs" varchar(1024) COLLATE "pg_catalog"."default",
+                                    "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                    "create_time" timestamp(6),
+                                    "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                    "update_time" timestamp(6),
+                                    "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_job"."job_name" IS '任务名称';
@@ -629,20 +629,20 @@ INSERT INTO "public"."sys_job" VALUES ('b28738a16605721937a74cd3a1089fb8', '测�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_job_log";
 CREATE TABLE "public"."sys_job_log" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "job_id" varchar(255) COLLATE "pg_catalog"."default",
-  "job_message" text COLLATE "pg_catalog"."default",
-  "exception_info" text COLLATE "pg_catalog"."default",
-  "start_time" timestamp(6),
-  "end_time" timestamp(6),
-  "execute_time" int4,
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                        "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                        "job_id" varchar(255) COLLATE "pg_catalog"."default",
+                                        "job_message" text COLLATE "pg_catalog"."default",
+                                        "exception_info" text COLLATE "pg_catalog"."default",
+                                        "start_time" timestamp(6),
+                                        "end_time" timestamp(6),
+                                        "execute_time" int4,
+                                        "status" varchar(2) COLLATE "pg_catalog"."default",
+                                        "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                        "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                        "create_time" timestamp(6),
+                                        "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                        "update_time" timestamp(6),
+                                        "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_job_log"."job_id" IS '关联定时任务ID';
@@ -669,19 +669,19 @@ COMMENT ON TABLE "public"."sys_job_log" IS '定时任务调度日志表';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_log_login";
 CREATE TABLE "public"."sys_log_login" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "username" varchar(255) COLLATE "pg_catalog"."default",
-  "ip" varchar(255) COLLATE "pg_catalog"."default",
-  "location" varchar(255) COLLATE "pg_catalog"."default",
-  "browser" varchar(255) COLLATE "pg_catalog"."default",
-  "os" varchar(255) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                          "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "username" varchar(255) COLLATE "pg_catalog"."default",
+                                          "ip" varchar(255) COLLATE "pg_catalog"."default",
+                                          "location" varchar(255) COLLATE "pg_catalog"."default",
+                                          "browser" varchar(255) COLLATE "pg_catalog"."default",
+                                          "os" varchar(255) COLLATE "pg_catalog"."default",
+                                          "status" varchar(2) COLLATE "pg_catalog"."default",
+                                          "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                          "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "create_time" timestamp(6),
+                                          "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "update_time" timestamp(6),
+                                          "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_log_login"."username" IS '用户账号';
@@ -707,27 +707,27 @@ COMMENT ON TABLE "public"."sys_log_login" IS '登录日志表';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_log_oper";
 CREATE TABLE "public"."sys_log_oper" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "type" varchar(2) COLLATE "pg_catalog"."default",
-  "method" varchar(255) COLLATE "pg_catalog"."default",
-  "request_type" varchar(32) COLLATE "pg_catalog"."default",
-  "request_url" varchar(255) COLLATE "pg_catalog"."default",
-  "request_ip" varchar(255) COLLATE "pg_catalog"."default",
-  "request_location" varchar(255) COLLATE "pg_catalog"."default",
-  "request_params" text COLLATE "pg_catalog"."default",
-  "request_time" timestamp(6),
-  "response_result" text COLLATE "pg_catalog"."default",
-  "response_time" timestamp(6),
-  "error_msg" text COLLATE "pg_catalog"."default",
-  "execute_time" int4,
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                         "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                         "name" varchar(255) COLLATE "pg_catalog"."default",
+                                         "type" varchar(2) COLLATE "pg_catalog"."default",
+                                         "method" varchar(255) COLLATE "pg_catalog"."default",
+                                         "request_type" varchar(32) COLLATE "pg_catalog"."default",
+                                         "request_url" varchar(255) COLLATE "pg_catalog"."default",
+                                         "request_ip" varchar(255) COLLATE "pg_catalog"."default",
+                                         "request_location" varchar(255) COLLATE "pg_catalog"."default",
+                                         "request_params" text COLLATE "pg_catalog"."default",
+                                         "request_time" timestamp(6),
+                                         "response_result" text COLLATE "pg_catalog"."default",
+                                         "response_time" timestamp(6),
+                                         "error_msg" text COLLATE "pg_catalog"."default",
+                                         "execute_time" int4,
+                                         "status" varchar(2) COLLATE "pg_catalog"."default",
+                                         "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                         "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                         "create_time" timestamp(6),
+                                         "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                         "update_time" timestamp(6),
+                                         "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_log_oper"."name" IS '操作名称';
@@ -761,26 +761,26 @@ COMMENT ON TABLE "public"."sys_log_oper" IS '操作日志表';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_menu";
 CREATE TABLE "public"."sys_menu" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "parent_id" varchar(32) COLLATE "pg_catalog"."default",
-  "menu_name" varchar(255) COLLATE "pg_catalog"."default",
-  "order_num" int4,
-  "path" varchar(500) COLLATE "pg_catalog"."default",
-  "query_param" varchar(500) COLLATE "pg_catalog"."default",
-  "component" varchar(500) COLLATE "pg_catalog"."default",
-  "perms" varchar(255) COLLATE "pg_catalog"."default",
-  "icon" varchar(255) COLLATE "pg_catalog"."default",
-  "visible" varchar(2) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "menu_type" varchar(2) COLLATE "pg_catalog"."default",
-  "is_frame" varchar(2) COLLATE "pg_catalog"."default",
-  "is_cache" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                     "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                     "parent_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "menu_name" varchar(255) COLLATE "pg_catalog"."default",
+                                     "order_num" int4,
+                                     "path" varchar(500) COLLATE "pg_catalog"."default",
+                                     "query_param" varchar(500) COLLATE "pg_catalog"."default",
+                                     "component" varchar(500) COLLATE "pg_catalog"."default",
+                                     "perms" varchar(255) COLLATE "pg_catalog"."default",
+                                     "icon" varchar(255) COLLATE "pg_catalog"."default",
+                                     "visible" varchar(2) COLLATE "pg_catalog"."default",
+                                     "status" varchar(2) COLLATE "pg_catalog"."default",
+                                     "menu_type" varchar(2) COLLATE "pg_catalog"."default",
+                                     "is_frame" varchar(2) COLLATE "pg_catalog"."default",
+                                     "is_cache" varchar(2) COLLATE "pg_catalog"."default",
+                                     "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                     "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "create_time" timestamp(6),
+                                     "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "update_time" timestamp(6),
+                                     "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_menu"."parent_id" IS '父级部门ID，顶级为0';
@@ -924,17 +924,17 @@ INSERT INTO "public"."sys_menu" VALUES ('6971d165938715753fef8a07c112ba98', '427
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_notice";
 CREATE TABLE "public"."sys_notice" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "title" varchar(255) COLLATE "pg_catalog"."default",
-  "content" text COLLATE "pg_catalog"."default",
-  "type" varchar(2) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                       "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "title" varchar(255) COLLATE "pg_catalog"."default",
+                                       "content" text COLLATE "pg_catalog"."default",
+                                       "type" varchar(2) COLLATE "pg_catalog"."default",
+                                       "status" varchar(2) COLLATE "pg_catalog"."default",
+                                       "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                       "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                       "create_time" timestamp(6),
+                                       "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                       "update_time" timestamp(6),
+                                       "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_notice"."title" IS '标题';
@@ -960,25 +960,25 @@ INSERT INTO "public"."sys_notice" VALUES ('5f98161ae8c06f99fbdcbb267908da58', '�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_oss_config";
 CREATE TABLE "public"."sys_oss_config" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "access_key" varchar(255) COLLATE "pg_catalog"."default",
-  "secret_key" varchar(255) COLLATE "pg_catalog"."default",
-  "bucket_name" varchar(255) COLLATE "pg_catalog"."default",
-  "prefix" varchar(255) COLLATE "pg_catalog"."default",
-  "endpoint" varchar(255) COLLATE "pg_catalog"."default",
-  "domain" varchar(255) COLLATE "pg_catalog"."default",
-  "is_https" char(2) COLLATE "pg_catalog"."default",
-  "region" varchar(255) COLLATE "pg_catalog"."default",
-  "access_policy" char(2) COLLATE "pg_catalog"."default",
-  "in_use" varchar(2) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                           "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                           "name" varchar(255) COLLATE "pg_catalog"."default",
+                                           "access_key" varchar(255) COLLATE "pg_catalog"."default",
+                                           "secret_key" varchar(255) COLLATE "pg_catalog"."default",
+                                           "bucket_name" varchar(255) COLLATE "pg_catalog"."default",
+                                           "prefix" varchar(255) COLLATE "pg_catalog"."default",
+                                           "endpoint" varchar(255) COLLATE "pg_catalog"."default",
+                                           "domain" varchar(255) COLLATE "pg_catalog"."default",
+                                           "is_https" char(2) COLLATE "pg_catalog"."default",
+                                           "region" varchar(255) COLLATE "pg_catalog"."default",
+                                           "access_policy" char(2) COLLATE "pg_catalog"."default",
+                                           "in_use" varchar(2) COLLATE "pg_catalog"."default",
+                                           "status" varchar(2) COLLATE "pg_catalog"."default",
+                                           "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                           "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                           "create_time" timestamp(6),
+                                           "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                           "update_time" timestamp(6),
+                                           "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_oss_config"."name" IS '配置名称，例如：minio、阿里云、腾讯云、七牛云、京东云、华为云';
@@ -1013,18 +1013,18 @@ INSERT INTO "public"."sys_oss_config" VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr'
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_position";
 CREATE TABLE "public"."sys_position" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "code" varchar(255) COLLATE "pg_catalog"."default",
-  "summary" text COLLATE "pg_catalog"."default",
-  "sort" int4,
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                         "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                         "name" varchar(255) COLLATE "pg_catalog"."default",
+                                         "code" varchar(255) COLLATE "pg_catalog"."default",
+                                         "summary" text COLLATE "pg_catalog"."default",
+                                         "sort" int4,
+                                         "status" varchar(2) COLLATE "pg_catalog"."default",
+                                         "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                         "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                         "create_time" timestamp(6),
+                                         "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                         "update_time" timestamp(6),
+                                         "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_position"."name" IS '岗位名称';
@@ -1053,9 +1053,9 @@ INSERT INTO "public"."sys_position" VALUES ('4', '普通员工', 'user', NULL, 4
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_position_user";
 CREATE TABLE "public"."sys_position_user" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "position_id" varchar(32) COLLATE "pg_catalog"."default",
-  "user_id" varchar(32) COLLATE "pg_catalog"."default"
+                                              "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                              "position_id" varchar(32) COLLATE "pg_catalog"."default",
+                                              "user_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."sys_position_user"."position_id" IS '岗位ID';
@@ -1078,20 +1078,20 @@ INSERT INTO "public"."sys_position_user" VALUES ('f0f6c52d96ddb3348c09119bf8bab8
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_role";
 CREATE TABLE "public"."sys_role" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "name" varchar(255) COLLATE "pg_catalog"."default",
-  "code" varchar(255) COLLATE "pg_catalog"."default",
-  "sort" int4,
-  "data_scope" varchar(2) COLLATE "pg_catalog"."default",
-  "menu_check_strictly" int4,
-  "dept_check_strictly" int4,
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                     "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                     "name" varchar(255) COLLATE "pg_catalog"."default",
+                                     "code" varchar(255) COLLATE "pg_catalog"."default",
+                                     "sort" int4,
+                                     "data_scope" varchar(2) COLLATE "pg_catalog"."default",
+                                     "menu_check_strictly" int4,
+                                     "dept_check_strictly" int4,
+                                     "status" varchar(2) COLLATE "pg_catalog"."default",
+                                     "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                     "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "create_time" timestamp(6),
+                                     "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "update_time" timestamp(6),
+                                     "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_role"."name" IS '角色名称';
@@ -1120,9 +1120,9 @@ INSERT INTO "public"."sys_role" VALUES ('2', '普通用户', 'user', 2, '2', 1, 
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_role_dept";
 CREATE TABLE "public"."sys_role_dept" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "role_id" varchar(32) COLLATE "pg_catalog"."default",
-  "dept_id" varchar(32) COLLATE "pg_catalog"."default"
+                                          "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "role_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "dept_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."sys_role_dept"."role_id" IS '角色ID';
@@ -1138,9 +1138,9 @@ COMMENT ON TABLE "public"."sys_role_dept" IS '角色部门关联表';
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_role_menu";
 CREATE TABLE "public"."sys_role_menu" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "role_id" varchar(32) COLLATE "pg_catalog"."default",
-  "menu_id" varchar(32) COLLATE "pg_catalog"."default"
+                                          "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "role_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "menu_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."sys_role_menu"."role_id" IS '角色ID';
@@ -1243,9 +1243,9 @@ INSERT INTO "public"."sys_role_menu" VALUES ('f4515d9717e0085d6cbcd68a73062bfb',
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_role_user";
 CREATE TABLE "public"."sys_role_user" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "role_id" varchar(32) COLLATE "pg_catalog"."default",
-  "user_id" varchar(32) COLLATE "pg_catalog"."default"
+                                          "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "role_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "user_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."sys_role_user"."role_id" IS '角色ID';
@@ -1263,35 +1263,54 @@ INSERT INTO "public"."sys_role_user" VALUES ('e12edec621a0f93ce2a9643d7e79b99e',
 INSERT INTO "public"."sys_role_user" VALUES ('fed886b635dfcdb135ff7ca51b908861', '2', '2');
 
 -- ----------------------------
+-- Table structure for sys_user_dept
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."sys_user_dept";
+CREATE TABLE "public"."sys_user_dept" (
+                                          "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                          "user_id" varchar(32) COLLATE "pg_catalog"."default",
+                                          "dept_id" varchar(32) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."sys_user_dept"."user_id" IS '用户ID';
+COMMENT ON COLUMN "public"."sys_user_dept"."dept_id" IS '部门ID';
+COMMENT ON TABLE "public"."sys_user_dept" IS '角色用户关联表';
+
+-- ----------------------------
+-- Records of sys_user_dept
+-- ----------------------------
+INSERT INTO "public"."sys_user_dept" VALUES ('174eceae15692e5091c28f3d6a3a1f54', '1', '100');
+
+-- ----------------------------
 -- Table structure for sys_social
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_social";
 CREATE TABLE "public"."sys_social" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4,
-  "uuid" varchar(255) COLLATE "pg_catalog"."default",
-  "source" varchar(255) COLLATE "pg_catalog"."default",
-  "access_token" varchar(255) COLLATE "pg_catalog"."default",
-  "expire_in" int4,
-  "refresh_token" varchar(255) COLLATE "pg_catalog"."default",
-  "open_id" varchar(255) COLLATE "pg_catalog"."default",
-  "uid" varchar(255) COLLATE "pg_catalog"."default",
-  "access_code" varchar(255) COLLATE "pg_catalog"."default",
-  "union_id" varchar(255) COLLATE "pg_catalog"."default",
-  "scope" varchar(255) COLLATE "pg_catalog"."default",
-  "token_type" varchar(255) COLLATE "pg_catalog"."default",
-  "id_token" varchar(255) COLLATE "pg_catalog"."default",
-  "mac_algorithm" varchar(255) COLLATE "pg_catalog"."default",
-  "mac_key" varchar(255) COLLATE "pg_catalog"."default",
-  "code" varchar(255) COLLATE "pg_catalog"."default",
-  "oauth_token" varchar(255) COLLATE "pg_catalog"."default",
-  "oauth_token_secret" varchar(255) COLLATE "pg_catalog"."default",
-  "user_id" varchar(32) COLLATE "pg_catalog"."default"
+                                       "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                       "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                       "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                       "create_time" timestamp(6),
+                                       "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                       "update_time" timestamp(6),
+                                       "is_delete" int4,
+                                       "uuid" varchar(255) COLLATE "pg_catalog"."default",
+                                       "source" varchar(255) COLLATE "pg_catalog"."default",
+                                       "access_token" varchar(255) COLLATE "pg_catalog"."default",
+                                       "expire_in" int4,
+                                       "refresh_token" varchar(255) COLLATE "pg_catalog"."default",
+                                       "open_id" varchar(255) COLLATE "pg_catalog"."default",
+                                       "uid" varchar(255) COLLATE "pg_catalog"."default",
+                                       "access_code" varchar(255) COLLATE "pg_catalog"."default",
+                                       "union_id" varchar(255) COLLATE "pg_catalog"."default",
+                                       "scope" varchar(255) COLLATE "pg_catalog"."default",
+                                       "token_type" varchar(255) COLLATE "pg_catalog"."default",
+                                       "id_token" varchar(255) COLLATE "pg_catalog"."default",
+                                       "mac_algorithm" varchar(255) COLLATE "pg_catalog"."default",
+                                       "mac_key" varchar(255) COLLATE "pg_catalog"."default",
+                                       "code" varchar(255) COLLATE "pg_catalog"."default",
+                                       "oauth_token" varchar(255) COLLATE "pg_catalog"."default",
+                                       "oauth_token_secret" varchar(255) COLLATE "pg_catalog"."default",
+                                       "user_id" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."sys_social"."remark" IS '备注';
@@ -1329,27 +1348,25 @@ COMMENT ON TABLE "public"."sys_social" IS '三方Auth绑定表（暂未启用）
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_user";
 CREATE TABLE "public"."sys_user" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "dept_id" varchar(32) COLLATE "pg_catalog"."default",
-  "username" varchar(255) COLLATE "pg_catalog"."default",
-  "password" varchar(255) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "phone" varchar(255) COLLATE "pg_catalog"."default",
-  "email" varchar(255) COLLATE "pg_catalog"."default",
-  "open_id" varchar(255) COLLATE "pg_catalog"."default",
-  "api_key" varchar(255) COLLATE "pg_catalog"."default",
-  "ban_to_time" timestamp(6),
-  "expire_to_time" timestamp(6),
-  "user_type" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                     "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                     "username" varchar(255) COLLATE "pg_catalog"."default",
+                                     "password" varchar(255) COLLATE "pg_catalog"."default",
+                                     "status" varchar(2) COLLATE "pg_catalog"."default",
+                                     "phone" varchar(255) COLLATE "pg_catalog"."default",
+                                     "email" varchar(255) COLLATE "pg_catalog"."default",
+                                     "open_id" varchar(255) COLLATE "pg_catalog"."default",
+                                     "api_key" varchar(255) COLLATE "pg_catalog"."default",
+                                     "ban_to_time" timestamp(6),
+                                     "expire_to_time" timestamp(6),
+                                     "user_type" varchar(2) COLLATE "pg_catalog"."default",
+                                     "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                     "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "create_time" timestamp(6),
+                                     "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                     "update_time" timestamp(6),
+                                     "is_delete" int4
 )
 ;
-COMMENT ON COLUMN "public"."sys_user"."dept_id" IS '部门ID';
 COMMENT ON COLUMN "public"."sys_user"."username" IS '用户账号';
 COMMENT ON COLUMN "public"."sys_user"."password" IS '用户密码';
 COMMENT ON COLUMN "public"."sys_user"."status" IS '账号状态，0=正常，1=停用';
@@ -1371,33 +1388,28 @@ COMMENT ON TABLE "public"."sys_user" IS '用户表';
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO "public"."sys_user" VALUES ('1', '100', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755555555', '1330166565@qq.com', NULL, NULL, NULL, NULL, '1', '宇宙第一帅的人', '1', '2023-03-01 13:42:39', '1', '2023-05-14 16:31:39', 0);
-INSERT INTO "public"."sys_user" VALUES ('1640613543627415553', '101', 'liumm', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-03-28 15:15:25', '1', '2023-04-14 10:05:02', 0);
-INSERT INTO "public"."sys_user" VALUES ('1643141570206871554', '100', 'abcdefg', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-04-04 14:40:53', '1', '2023-04-13 23:02:42', 0);
-INSERT INTO "public"."sys_user" VALUES ('1650855280223846402', '105', 'test01', '678e82d907d3e6e71f81d5cf3ddacc3671dc618c38a1b7a9f9393a83d025b296', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, '2023-04-25 21:32:25', NULL, '2023-04-25 21:32:25', 0);
-INSERT INTO "public"."sys_user" VALUES ('1657562040456413185', '105', 'admin22', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, '2023-05-14 09:42:41', NULL, '2023-05-14 09:42:41', 0);
-INSERT INTO "public"."sys_user" VALUES ('2', '102', 'test', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755533444', '555@163.com', '1', '2', '2023-05-10 11:01:47', NULL, '2', '4', '1', '2023-03-01 14:09:35', '1', '2023-03-01 14:09:35', 0);
+INSERT INTO "public"."sys_user" VALUES ('1', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755555555', '1330166565@qq.com', NULL, NULL, NULL, NULL, '1', '宇宙第一帅的人', '1', '2023-03-01 13:42:39', '1', '2023-05-14 16:31:39', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_detail
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."sys_user_detail";
 CREATE TABLE "public"."sys_user_detail" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "user_id" varchar(32) COLLATE "pg_catalog"."default",
-  "nick_name" varchar(255) COLLATE "pg_catalog"."default",
-  "real_name" varchar(255) COLLATE "pg_catalog"."default",
-  "age" varchar(255) COLLATE "pg_catalog"."default",
-  "sex" varchar(255) COLLATE "pg_catalog"."default",
-  "profile" text COLLATE "pg_catalog"."default",
-  "user_sign" varchar(255) COLLATE "pg_catalog"."default",
-  "avatar" varchar(255) COLLATE "pg_catalog"."default",
-  "money" int4,
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                            "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "user_id" varchar(32) COLLATE "pg_catalog"."default",
+                                            "nick_name" varchar(255) COLLATE "pg_catalog"."default",
+                                            "real_name" varchar(255) COLLATE "pg_catalog"."default",
+                                            "age" varchar(255) COLLATE "pg_catalog"."default",
+                                            "sex" varchar(255) COLLATE "pg_catalog"."default",
+                                            "profile" text COLLATE "pg_catalog"."default",
+                                            "user_sign" varchar(255) COLLATE "pg_catalog"."default",
+                                            "avatar" varchar(255) COLLATE "pg_catalog"."default",
+                                            "money" int4,
+                                            "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                            "create_time" timestamp(6),
+                                            "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                            "update_time" timestamp(6),
+                                            "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."sys_user_detail"."user_id" IS '关联用户ID';
@@ -1421,28 +1433,23 @@ COMMENT ON TABLE "public"."sys_user_detail" IS '用户信息表';
 -- ----------------------------
 INSERT INTO "public"."sys_user_detail" VALUES ('21366e78e6a156e9cf45061da65d06e5', '1', '我是管理员', 'Daen', '18', '1', '每一次离开都是为了更好的相遇
 你好世界', '不一样的烟花', '625bcbc99e7524b543c81ffaed6dd2ab', 350, NULL, '2023-03-01 13:42:39', '1', '2023-06-26 15:49:37', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('7550e77dfbabea70ec44aaebda2f90ed', '2', '测试用户', '宝贝', '18', '0', 'ε=(´ο｀*)))唉', '生气气1', '', 0, NULL, '2023-03-01 14:09:35', '2', '2023-04-16 19:49:01', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('886c73e7e8f458649f3048f672f042e6', '1650855280223846402', NULL, NULL, '0', '2', NULL, NULL, NULL, 0, NULL, '2023-04-25 21:32:25', NULL, '2023-04-25 21:32:25', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('945acc4f5450533dd672260cfa1d66c9', '1640613543627415553', '刘萌萌', '刘二萌', '18', '0', NULL, NULL, NULL, 85560, '1', '2023-03-28 15:15:25', '1', '2023-04-14 10:05:03', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('ac5182e7b0e1c9ce11e7381e19b4733d', '1657562040456413185', NULL, NULL, '0', '2', NULL, NULL, NULL, 0, NULL, '2023-05-14 09:42:41', NULL, '2023-05-14 09:42:41', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('f6d09bb65ad0ac3d6239214d7e456f8e', '1643141570206871554', '阿萨德', NULL, '0', '0', '2', NULL, NULL, 0, '1', '2023-04-04 14:40:53', '1', '2023-04-13 23:02:42', 0);
 
 -- ----------------------------
 -- Table structure for test_data
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."test_data";
 CREATE TABLE "public"."test_data" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "title" varchar(255) COLLATE "pg_catalog"."default",
-  "content" varchar(255) COLLATE "pg_catalog"."default",
-  "type" varchar(2) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                      "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                      "title" varchar(255) COLLATE "pg_catalog"."default",
+                                      "content" varchar(255) COLLATE "pg_catalog"."default",
+                                      "type" varchar(2) COLLATE "pg_catalog"."default",
+                                      "status" varchar(2) COLLATE "pg_catalog"."default",
+                                      "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                      "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                      "create_time" timestamp(6),
+                                      "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                      "update_time" timestamp(6),
+                                      "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."test_data"."type" IS '类型，0=民生，1=科技';
@@ -1465,18 +1472,18 @@ INSERT INTO "public"."test_data" VALUES ('8f05e1af476e3537e796c966ff4b7b53', '�
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."test_data_tree";
 CREATE TABLE "public"."test_data_tree" (
-  "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "parent_id" varchar(32) COLLATE "pg_catalog"."default",
-  "title" varchar(255) COLLATE "pg_catalog"."default",
-  "content" varchar(255) COLLATE "pg_catalog"."default",
-  "type" varchar(2) COLLATE "pg_catalog"."default",
-  "status" varchar(2) COLLATE "pg_catalog"."default",
-  "remark" varchar(255) COLLATE "pg_catalog"."default",
-  "create_id" varchar(32) COLLATE "pg_catalog"."default",
-  "create_time" timestamp(6),
-  "update_id" varchar(32) COLLATE "pg_catalog"."default",
-  "update_time" timestamp(6),
-  "is_delete" int4
+                                           "id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+                                           "parent_id" varchar(32) COLLATE "pg_catalog"."default",
+                                           "title" varchar(255) COLLATE "pg_catalog"."default",
+                                           "content" varchar(255) COLLATE "pg_catalog"."default",
+                                           "type" varchar(2) COLLATE "pg_catalog"."default",
+                                           "status" varchar(2) COLLATE "pg_catalog"."default",
+                                           "remark" varchar(255) COLLATE "pg_catalog"."default",
+                                           "create_id" varchar(32) COLLATE "pg_catalog"."default",
+                                           "create_time" timestamp(6),
+                                           "update_id" varchar(32) COLLATE "pg_catalog"."default",
+                                           "update_time" timestamp(6),
+                                           "is_delete" int4
 )
 ;
 COMMENT ON COLUMN "public"."test_data_tree"."parent_id" IS '父级ID，顶级为0';

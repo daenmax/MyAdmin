@@ -84,7 +84,8 @@ public class SysUserController {
     @SaCheckPermission("system:user:list")
     @GetMapping("/deptTree")
     public Result deptTree() {
-        List<Tree<String>> trees = sysDeptService.deptTree(new SysDeptPageVo());
+//        List<Tree<String>> trees = sysDeptService.deptTree(new SysDeptPageVo());
+        List<SysDeptTree> trees = sysDeptService.deptTreeNew(new SysDeptPageVo());
         return Result.ok(trees);
     }
 

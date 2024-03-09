@@ -100,11 +100,12 @@ public interface SysUserService extends IService<SysUser> {
      * 注册用户
      *
      * @param sysUser
+     * @param deptCodes     部门编码
      * @param roleCodes     角色编码
      * @param positionCodes 岗位编码
      * @return
      */
-    Boolean registerUser(SysUser sysUser, String[] roleCodes, String[] positionCodes);
+    Boolean registerUser(SysUser sysUser, String[] deptCodes, String[] roleCodes, String[] positionCodes);
 
     /**
      * 个人信息

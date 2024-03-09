@@ -48,7 +48,7 @@ public class SysDeptController {
     @SaCheckPermission("system:dept:list")
     @GetMapping(value = "/list/exclude/{id}")
     public Result excludeChild(@PathVariable(value = "id", required = false) String id) {
-        List<SysDept> list = sysDeptService.getList(new SysDeptPageVo());
+        List<SysDept> list = sysDeptService.getAllNoLeaderUser(new SysDeptPageVo());
         List<SysDept> collect = list.stream().filter(item -> item.getId().equals(id)).collect(Collectors.toList());
         sysDeptService.removeList(list, collect);
         return Result.ok(list);

@@ -28,8 +28,6 @@ import lombok.NoArgsConstructor;
 //导出时忽略没有@ExcelProperty的字段
 @ExcelIgnoreUnannotated
 public class SysDict extends BaseEntity implements Serializable {
-    @TableId(value = "id", type = IdType.ASSIGN_UUID)
-    private String id;
 
     /**
      * 字典名称

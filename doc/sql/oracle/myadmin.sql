@@ -4,26 +4,26 @@
 -- ----------------------------
 DROP TABLE "SYS_API_LIMIT";
 CREATE TABLE "SYS_API_LIMIT" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "API_NAME" NVARCHAR2(255),
-  "API_URI" NVARCHAR2(255),
-  "SINGLE_FREQUENCY" NUMBER(11,0),
-  "SINGLE_TIME" NUMBER(11,0),
-  "SINGLE_TIME_UNIT" NVARCHAR2(2),
-  "WHOLE_FREQUENCY" NUMBER(11,0),
-  "WHOLE_TIME" NUMBER(11,0),
-  "WHOLE_TIME_UNIT" NVARCHAR2(2),
-  "LIMIT_TYPE" NVARCHAR2(2),
-  "RET_MSG" NCLOB,
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                 "ID" NVARCHAR2(32) NOT NULL,
+                                 "API_NAME" NVARCHAR2(255),
+                                 "API_URI" NVARCHAR2(255),
+                                 "SINGLE_FREQUENCY" NUMBER(11,0),
+                                 "SINGLE_TIME" NUMBER(11,0),
+                                 "SINGLE_TIME_UNIT" NVARCHAR2(2),
+                                 "WHOLE_FREQUENCY" NUMBER(11,0),
+                                 "WHOLE_TIME" NUMBER(11,0),
+                                 "WHOLE_TIME_UNIT" NVARCHAR2(2),
+                                 "LIMIT_TYPE" NVARCHAR2(2),
+                                 "RET_MSG" NCLOB,
+                                 "STATUS" NVARCHAR2(2),
+                                 "REMARK" NVARCHAR2(255),
+                                 "CREATE_ID" NVARCHAR2(32),
+                                 "CREATE_TIME" DATE,
+                                 "UPDATE_ID" NVARCHAR2(32),
+                                 "UPDATE_TIME" DATE,
+                                 "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -69,20 +69,20 @@ INSERT INTO "SYS_API_LIMIT" VALUES ('ab6ac1ae29d57e70879e8af885f6f668', '测试�
 -- ----------------------------
 DROP TABLE "SYS_CONFIG";
 CREATE TABLE "SYS_CONFIG" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "NAME" NVARCHAR2(255),
-  "KEY_VA" NVARCHAR2(255),
-  "VALUE" NCLOB,
-  "TYPE" NVARCHAR2(2),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                              "ID" NVARCHAR2(32) NOT NULL,
+                              "NAME" NVARCHAR2(255),
+                              "KEY_VA" NVARCHAR2(255),
+                              "VALUE" NCLOB,
+                              "TYPE" NVARCHAR2(2),
+                              "STATUS" NVARCHAR2(2),
+                              "REMARK" NVARCHAR2(255),
+                              "CREATE_ID" NVARCHAR2(32),
+                              "CREATE_TIME" DATE,
+                              "UPDATE_ID" NVARCHAR2(32),
+                              "UPDATE_TIME" DATE,
+                              "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -221,12 +221,12 @@ fileType=[]，支持的文件类型数组，不包含小数点
 isShowTip=是否显示提示', '1', TO_DATE('2023-04-17 22:24:15', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-05-14 09:34:24', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 INSERT INTO "SYS_CONFIG" VALUES ('101fbed52418ce72ffe30143c66fdd06', '系统注册默认信息', 'sys.register.default.info', '{
     "userType": "2",
-    "deptCode": "XMY-JN-3",
+    "deptCodes": ["XMY-JN-3"],
     "positionCodes": ["user"],
     "roleCodes": ["user"]
 }', '1', '0', '此参数必存在，不存在的话，系统将禁止注册
 userType，用户类型，必填，参考字典内
-deptCode，部门编号，必填
+deptCodes，部门编号，必填，可多个
 positionCodes，岗位编码，非必填，可多个
 roleCodes，角色编码，必填，可多个', '1', TO_DATE('2023-04-25 21:00:26', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-25 21:07:58', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 INSERT INTO "SYS_CONFIG" VALUES ('1a91bf36a72d9dcb253a941a94fa28fa', '文件上传限制策略', 'sys.upload.file', '{
@@ -303,23 +303,23 @@ INSERT INTO "SYS_CONFIG" VALUES ('65600f7210f507b143421c4ed33a9b07', '文件列�
 -- ----------------------------
 DROP TABLE "SYS_DEPT";
 CREATE TABLE "SYS_DEPT" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "PARENT_ID" NVARCHAR2(32),
-  "NAME" NVARCHAR2(255),
-  "CODE" NVARCHAR2(255),
-  "SUMMARY" NCLOB,
-  "STATUS" NVARCHAR2(2),
-  "LEADER_USER_ID" NVARCHAR2(32),
-  "DEPT_LEVEL" NUMBER(11,0),
-  "SORT" NUMBER(11,0),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                            "ID" NVARCHAR2(32) NOT NULL,
+                            "PARENT_ID" NVARCHAR2(32),
+                            "NAME" NVARCHAR2(255),
+                            "CODE" NVARCHAR2(255),
+                            "SUMMARY" NCLOB,
+                            "STATUS" NVARCHAR2(2),
+                            "LEADER_USER_ID" NVARCHAR2(32),
+                            "DEPT_LEVEL" NUMBER(11,0),
+                            "SORT" NUMBER(11,0),
+                            "REMARK" NVARCHAR2(255),
+                            "CREATE_ID" NVARCHAR2(32),
+                            "CREATE_TIME" DATE,
+                            "UPDATE_ID" NVARCHAR2(32),
+                            "UPDATE_TIME" DATE,
+                            "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -369,11 +369,11 @@ INSERT INTO "SYS_DEPT" VALUES ('109', '102', '财务部门', 'XMY-BJ-2', NULL, '
 -- ----------------------------
 DROP TABLE "SYS_DEPT_PARENT";
 CREATE TABLE "SYS_DEPT_PARENT" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "DEPT_ID" NVARCHAR2(32),
-  "PARENT_ID" NVARCHAR2(32)
+                                   "ID" NVARCHAR2(32) NOT NULL,
+                                   "DEPT_ID" NVARCHAR2(32),
+                                   "PARENT_ID" NVARCHAR2(32)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -437,18 +437,18 @@ INSERT INTO "SYS_DEPT_PARENT" VALUES ('fae666e9d536d28b28dcf84674e34aaf', '108',
 -- ----------------------------
 DROP TABLE "SYS_DICT";
 CREATE TABLE "SYS_DICT" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "NAME" NVARCHAR2(255),
-  "CODE" NVARCHAR2(255),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                            "ID" NVARCHAR2(32) NOT NULL,
+                            "NAME" NVARCHAR2(255),
+                            "CODE" NVARCHAR2(255),
+                            "STATUS" NVARCHAR2(2),
+                            "REMARK" NVARCHAR2(255),
+                            "CREATE_ID" NVARCHAR2(32),
+                            "CREATE_TIME" DATE,
+                            "UPDATE_ID" NVARCHAR2(32),
+                            "UPDATE_TIME" DATE,
+                            "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -502,22 +502,22 @@ INSERT INTO "SYS_DICT" VALUES ('ddff67e6d459cf953f1ac23c413f76d3', '任务状态
 -- ----------------------------
 DROP TABLE "SYS_DICT_DETAIL";
 CREATE TABLE "SYS_DICT_DETAIL" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "DICT_CODE" NVARCHAR2(255),
-  "LABEL" NVARCHAR2(255),
-  "VALUE" NVARCHAR2(255),
-  "SORT" NUMBER(11,0),
-  "CSS_CLASS" NVARCHAR2(255),
-  "LIST_CLASS" NVARCHAR2(255),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                   "ID" NVARCHAR2(32) NOT NULL,
+                                   "DICT_CODE" NVARCHAR2(255),
+                                   "LABEL" NVARCHAR2(255),
+                                   "VALUE" NVARCHAR2(255),
+                                   "SORT" NUMBER(11,0),
+                                   "CSS_CLASS" NVARCHAR2(255),
+                                   "LIST_CLASS" NVARCHAR2(255),
+                                   "STATUS" NVARCHAR2(2),
+                                   "REMARK" NVARCHAR2(255),
+                                   "CREATE_ID" NVARCHAR2(32),
+                                   "CREATE_TIME" DATE,
+                                   "UPDATE_ID" NVARCHAR2(32),
+                                   "UPDATE_TIME" DATE,
+                                   "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -620,24 +620,24 @@ INSERT INTO "SYS_DICT_DETAIL" VALUES ('c84287c50997d6ec0ddf19bd68f84e87', 'sys_o
 -- ----------------------------
 DROP TABLE "SYS_FILE";
 CREATE TABLE "SYS_FILE" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "ORIGINAL_NAME" NVARCHAR2(255),
-  "FILE_NAME" NVARCHAR2(255),
-  "FILE_SUFFIX" NVARCHAR2(255),
-  "FILE_URL" NVARCHAR2(500),
-  "FILE_SIZE" NUMBER(11,0),
-  "FILE_MD5" NVARCHAR2(255),
-  "FILE_TYPE" NVARCHAR2(255),
-  "OSS_ID" NVARCHAR2(32),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                            "ID" NVARCHAR2(32) NOT NULL,
+                            "ORIGINAL_NAME" NVARCHAR2(255),
+                            "FILE_NAME" NVARCHAR2(255),
+                            "FILE_SUFFIX" NVARCHAR2(255),
+                            "FILE_URL" NVARCHAR2(500),
+                            "FILE_SIZE" NUMBER(11,0),
+                            "FILE_MD5" NVARCHAR2(255),
+                            "FILE_TYPE" NVARCHAR2(255),
+                            "OSS_ID" NVARCHAR2(32),
+                            "STATUS" NVARCHAR2(2),
+                            "REMARK" NVARCHAR2(255),
+                            "CREATE_ID" NVARCHAR2(32),
+                            "CREATE_TIME" DATE,
+                            "UPDATE_ID" NVARCHAR2(32),
+                            "UPDATE_TIME" DATE,
+                            "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -678,24 +678,24 @@ COMMENT ON TABLE "SYS_FILE" IS 'OSS文件表';
 -- ----------------------------
 DROP TABLE "SYS_JOB";
 CREATE TABLE "SYS_JOB" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "JOB_NAME" NVARCHAR2(255),
-  "JOB_GROUP" NVARCHAR2(255),
-  "INVOKE_TARGET" NCLOB,
-  "CRON_EXPRESSION" NVARCHAR2(255),
-  "STATUS" NVARCHAR2(2),
-  "MISFIRE_POLICY" NVARCHAR2(2),
-  "CONCURRENT" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "NOTIFY_CHANNEL" NVARCHAR2(2),
-  "NOTIFY_OBJS" NCLOB,
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                           "ID" NVARCHAR2(32) NOT NULL,
+                           "JOB_NAME" NVARCHAR2(255),
+                           "JOB_GROUP" NVARCHAR2(255),
+                           "INVOKE_TARGET" NCLOB,
+                           "CRON_EXPRESSION" NVARCHAR2(255),
+                           "STATUS" NVARCHAR2(2),
+                           "MISFIRE_POLICY" NVARCHAR2(2),
+                           "CONCURRENT" NVARCHAR2(2),
+                           "REMARK" NVARCHAR2(255),
+                           "NOTIFY_CHANNEL" NVARCHAR2(2),
+                           "NOTIFY_OBJS" NCLOB,
+                           "CREATE_ID" NVARCHAR2(32),
+                           "CREATE_TIME" DATE,
+                           "UPDATE_ID" NVARCHAR2(32),
+                           "UPDATE_TIME" DATE,
+                           "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -742,22 +742,22 @@ INSERT INTO "SYS_JOB" VALUES ('b28738a16605721937a74cd3a1089fb8', '测试（一�
 -- ----------------------------
 DROP TABLE "SYS_JOB_LOG";
 CREATE TABLE "SYS_JOB_LOG" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "JOB_ID" NVARCHAR2(255),
-  "JOB_MESSAGE" NCLOB,
-  "EXCEPTION_INFO" NCLOB,
-  "START_TIME" DATE,
-  "END_TIME" DATE,
-  "EXECUTE_TIME" NUMBER(11,0),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                               "ID" NVARCHAR2(32) NOT NULL,
+                               "JOB_ID" NVARCHAR2(255),
+                               "JOB_MESSAGE" NCLOB,
+                               "EXCEPTION_INFO" NCLOB,
+                               "START_TIME" DATE,
+                               "END_TIME" DATE,
+                               "EXECUTE_TIME" NUMBER(11,0),
+                               "STATUS" NVARCHAR2(2),
+                               "REMARK" NVARCHAR2(255),
+                               "CREATE_ID" NVARCHAR2(32),
+                               "CREATE_TIME" DATE,
+                               "UPDATE_ID" NVARCHAR2(32),
+                               "UPDATE_TIME" DATE,
+                               "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -796,21 +796,21 @@ COMMENT ON TABLE "SYS_JOB_LOG" IS '定时任务调度日志表';
 -- ----------------------------
 DROP TABLE "SYS_LOG_LOGIN";
 CREATE TABLE "SYS_LOG_LOGIN" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "USERNAME" NVARCHAR2(255),
-  "IP" NVARCHAR2(255),
-  "LOCATION" NVARCHAR2(255),
-  "BROWSER" NVARCHAR2(255),
-  "OS" NVARCHAR2(255),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                 "ID" NVARCHAR2(32) NOT NULL,
+                                 "USERNAME" NVARCHAR2(255),
+                                 "IP" NVARCHAR2(255),
+                                 "LOCATION" NVARCHAR2(255),
+                                 "BROWSER" NVARCHAR2(255),
+                                 "OS" NVARCHAR2(255),
+                                 "STATUS" NVARCHAR2(2),
+                                 "REMARK" NVARCHAR2(255),
+                                 "CREATE_ID" NVARCHAR2(32),
+                                 "CREATE_TIME" DATE,
+                                 "UPDATE_ID" NVARCHAR2(32),
+                                 "UPDATE_TIME" DATE,
+                                 "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -848,29 +848,29 @@ COMMENT ON TABLE "SYS_LOG_LOGIN" IS '登录日志表';
 -- ----------------------------
 DROP TABLE "SYS_LOG_OPER";
 CREATE TABLE "SYS_LOG_OPER" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "NAME" NVARCHAR2(255),
-  "TYPE" NVARCHAR2(2),
-  "METHOD" NVARCHAR2(255),
-  "REQUEST_TYPE" NVARCHAR2(32),
-  "REQUEST_URL" NVARCHAR2(255),
-  "REQUEST_IP" NVARCHAR2(255),
-  "REQUEST_LOCATION" NVARCHAR2(255),
-  "REQUEST_PARAMS" NCLOB,
-  "REQUEST_TIME" DATE,
-  "RESPONSE_RESULT" NCLOB,
-  "RESPONSE_TIME" DATE,
-  "ERROR_MSG" NCLOB,
-  "EXECUTE_TIME" NUMBER(11,0),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                "ID" NVARCHAR2(32) NOT NULL,
+                                "NAME" NVARCHAR2(255),
+                                "TYPE" NVARCHAR2(2),
+                                "METHOD" NVARCHAR2(255),
+                                "REQUEST_TYPE" NVARCHAR2(32),
+                                "REQUEST_URL" NVARCHAR2(255),
+                                "REQUEST_IP" NVARCHAR2(255),
+                                "REQUEST_LOCATION" NVARCHAR2(255),
+                                "REQUEST_PARAMS" NCLOB,
+                                "REQUEST_TIME" DATE,
+                                "RESPONSE_RESULT" NCLOB,
+                                "RESPONSE_TIME" DATE,
+                                "ERROR_MSG" NCLOB,
+                                "EXECUTE_TIME" NUMBER(11,0),
+                                "STATUS" NVARCHAR2(2),
+                                "REMARK" NVARCHAR2(255),
+                                "CREATE_ID" NVARCHAR2(32),
+                                "CREATE_TIME" DATE,
+                                "UPDATE_ID" NVARCHAR2(32),
+                                "UPDATE_TIME" DATE,
+                                "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -916,28 +916,28 @@ COMMENT ON TABLE "SYS_LOG_OPER" IS '操作日志表';
 -- ----------------------------
 DROP TABLE "SYS_MENU";
 CREATE TABLE "SYS_MENU" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "PARENT_ID" NVARCHAR2(32),
-  "MENU_NAME" NVARCHAR2(255),
-  "ORDER_NUM" NUMBER(11,0),
-  "PATH" NVARCHAR2(500),
-  "QUERY_PARAM" NVARCHAR2(500),
-  "COMPONENT" NVARCHAR2(500),
-  "PERMS" NVARCHAR2(255),
-  "ICON" NVARCHAR2(255),
-  "VISIBLE" NVARCHAR2(2),
-  "STATUS" NVARCHAR2(2),
-  "MENU_TYPE" NVARCHAR2(2),
-  "IS_FRAME" NVARCHAR2(2),
-  "IS_CACHE" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                            "ID" NVARCHAR2(32) NOT NULL,
+                            "PARENT_ID" NVARCHAR2(32),
+                            "MENU_NAME" NVARCHAR2(255),
+                            "ORDER_NUM" NUMBER(11,0),
+                            "PATH" NVARCHAR2(500),
+                            "QUERY_PARAM" NVARCHAR2(500),
+                            "COMPONENT" NVARCHAR2(500),
+                            "PERMS" NVARCHAR2(255),
+                            "ICON" NVARCHAR2(255),
+                            "VISIBLE" NVARCHAR2(2),
+                            "STATUS" NVARCHAR2(2),
+                            "MENU_TYPE" NVARCHAR2(2),
+                            "IS_FRAME" NVARCHAR2(2),
+                            "IS_CACHE" NVARCHAR2(2),
+                            "REMARK" NVARCHAR2(255),
+                            "CREATE_ID" NVARCHAR2(32),
+                            "CREATE_TIME" DATE,
+                            "UPDATE_ID" NVARCHAR2(32),
+                            "UPDATE_TIME" DATE,
+                            "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1093,19 +1093,19 @@ INSERT INTO "SYS_MENU" VALUES ('1500', '5', '测试单表', '1', 'data', NULL, '
 -- ----------------------------
 DROP TABLE "SYS_NOTICE";
 CREATE TABLE "SYS_NOTICE" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "TITLE" NVARCHAR2(255),
-  "CONTENT" NCLOB,
-  "TYPE" NVARCHAR2(2),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                              "ID" NVARCHAR2(32) NOT NULL,
+                              "TITLE" NVARCHAR2(255),
+                              "CONTENT" NCLOB,
+                              "TYPE" NVARCHAR2(2),
+                              "STATUS" NVARCHAR2(2),
+                              "REMARK" NVARCHAR2(255),
+                              "CREATE_ID" NVARCHAR2(32),
+                              "CREATE_TIME" DATE,
+                              "UPDATE_ID" NVARCHAR2(32),
+                              "UPDATE_TIME" DATE,
+                              "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1142,27 +1142,27 @@ INSERT INTO "SYS_NOTICE" VALUES ('5f98161ae8c06f99fbdcbb267908da58', '快讯！�
 -- ----------------------------
 DROP TABLE "SYS_OSS_CONFIG";
 CREATE TABLE "SYS_OSS_CONFIG" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "NAME" NVARCHAR2(255),
-  "ACCESS_KEY" NVARCHAR2(255),
-  "SECRET_KEY" NVARCHAR2(255),
-  "BUCKET_NAME" NVARCHAR2(255),
-  "PREFIX" NVARCHAR2(255),
-  "ENDPOINT" NVARCHAR2(255),
-  "DOMAIN" NVARCHAR2(255),
-  "IS_HTTPS" NCHAR(2),
-  "REGION" NVARCHAR2(255),
-  "ACCESS_POLICY" NCHAR(2),
-  "IN_USE" NVARCHAR2(2),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                  "ID" NVARCHAR2(32) NOT NULL,
+                                  "NAME" NVARCHAR2(255),
+                                  "ACCESS_KEY" NVARCHAR2(255),
+                                  "SECRET_KEY" NVARCHAR2(255),
+                                  "BUCKET_NAME" NVARCHAR2(255),
+                                  "PREFIX" NVARCHAR2(255),
+                                  "ENDPOINT" NVARCHAR2(255),
+                                  "DOMAIN" NVARCHAR2(255),
+                                  "IS_HTTPS" NCHAR(2),
+                                  "REGION" NVARCHAR2(255),
+                                  "ACCESS_POLICY" NCHAR(2),
+                                  "IN_USE" NVARCHAR2(2),
+                                  "STATUS" NVARCHAR2(2),
+                                  "REMARK" NVARCHAR2(255),
+                                  "CREATE_ID" NVARCHAR2(32),
+                                  "CREATE_TIME" DATE,
+                                  "UPDATE_ID" NVARCHAR2(32),
+                                  "UPDATE_TIME" DATE,
+                                  "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1209,20 +1209,20 @@ INSERT INTO "SYS_OSS_CONFIG" VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr', '腾讯
 -- ----------------------------
 DROP TABLE "SYS_POSITION";
 CREATE TABLE "SYS_POSITION" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "NAME" NVARCHAR2(255),
-  "CODE" NVARCHAR2(255),
-  "SUMMARY" NCLOB,
-  "SORT" NUMBER(11,0),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                "ID" NVARCHAR2(32) NOT NULL,
+                                "NAME" NVARCHAR2(255),
+                                "CODE" NVARCHAR2(255),
+                                "SUMMARY" NCLOB,
+                                "SORT" NUMBER(11,0),
+                                "STATUS" NVARCHAR2(2),
+                                "REMARK" NVARCHAR2(255),
+                                "CREATE_ID" NVARCHAR2(32),
+                                "CREATE_TIME" DATE,
+                                "UPDATE_ID" NVARCHAR2(32),
+                                "UPDATE_TIME" DATE,
+                                "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1263,11 +1263,11 @@ INSERT INTO "SYS_POSITION" VALUES ('4', '普通员工', 'user', NULL, '4', '0', 
 -- ----------------------------
 DROP TABLE "SYS_POSITION_USER";
 CREATE TABLE "SYS_POSITION_USER" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "POSITION_ID" NVARCHAR2(32),
-  "USER_ID" NVARCHAR2(32)
+                                     "ID" NVARCHAR2(32) NOT NULL,
+                                     "POSITION_ID" NVARCHAR2(32),
+                                     "USER_ID" NVARCHAR2(32)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1302,22 +1302,22 @@ INSERT INTO "SYS_POSITION_USER" VALUES ('f0f6c52d96ddb3348c09119bf8bab858', '4',
 -- ----------------------------
 DROP TABLE "SYS_ROLE";
 CREATE TABLE "SYS_ROLE" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "NAME" NVARCHAR2(255),
-  "CODE" NVARCHAR2(255),
-  "SORT" NUMBER(11,0),
-  "DATA_SCOPE" NVARCHAR2(2),
-  "MENU_CHECK_STRICTLY" NUMBER(11,0),
-  "DEPT_CHECK_STRICTLY" NUMBER(11,0),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                            "ID" NVARCHAR2(32) NOT NULL,
+                            "NAME" NVARCHAR2(255),
+                            "CODE" NVARCHAR2(255),
+                            "SORT" NUMBER(11,0),
+                            "DATA_SCOPE" NVARCHAR2(2),
+                            "MENU_CHECK_STRICTLY" NUMBER(11,0),
+                            "DEPT_CHECK_STRICTLY" NUMBER(11,0),
+                            "STATUS" NVARCHAR2(2),
+                            "REMARK" NVARCHAR2(255),
+                            "CREATE_ID" NVARCHAR2(32),
+                            "CREATE_TIME" DATE,
+                            "UPDATE_ID" NVARCHAR2(32),
+                            "UPDATE_TIME" DATE,
+                            "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1358,11 +1358,11 @@ INSERT INTO "SYS_ROLE" VALUES ('2', '普通用户', 'user', '2', '2', '1', '1', 
 -- ----------------------------
 DROP TABLE "SYS_ROLE_DEPT";
 CREATE TABLE "SYS_ROLE_DEPT" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "ROLE_ID" NVARCHAR2(32),
-  "DEPT_ID" NVARCHAR2(32)
+                                 "ID" NVARCHAR2(32) NOT NULL,
+                                 "ROLE_ID" NVARCHAR2(32),
+                                 "DEPT_ID" NVARCHAR2(32)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1386,11 +1386,11 @@ COMMENT ON TABLE "SYS_ROLE_DEPT" IS '角色部门关联表';
 -- ----------------------------
 DROP TABLE "SYS_ROLE_MENU";
 CREATE TABLE "SYS_ROLE_MENU" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "ROLE_ID" NVARCHAR2(32),
-  "MENU_ID" NVARCHAR2(32)
+                                 "ID" NVARCHAR2(32) NOT NULL,
+                                 "ROLE_ID" NVARCHAR2(32),
+                                 "MENU_ID" NVARCHAR2(32)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1505,11 +1505,11 @@ INSERT INTO "SYS_ROLE_MENU" VALUES ('f169475beb8e05e90618bb89fb939f4f', '2', '10
 -- ----------------------------
 DROP TABLE "SYS_ROLE_USER";
 CREATE TABLE "SYS_ROLE_USER" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "ROLE_ID" NVARCHAR2(32),
-  "USER_ID" NVARCHAR2(32)
+                                 "ID" NVARCHAR2(32) NOT NULL,
+                                 "ROLE_ID" NVARCHAR2(32),
+                                 "USER_ID" NVARCHAR2(32)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1539,37 +1539,70 @@ INSERT INTO "SYS_ROLE_USER" VALUES ('e12edec621a0f93ce2a9643d7e79b99e', '2', '16
 INSERT INTO "SYS_ROLE_USER" VALUES ('fed886b635dfcdb135ff7ca51b908861', '2', '2');
 
 -- ----------------------------
+-- Table structure for SYS_USER_DEPT
+-- ----------------------------
+DROP TABLE "SYS_USER_DEPT";
+CREATE TABLE "SYS_USER_DEPT" (
+                                 "ID" NVARCHAR2(32) NOT NULL,
+                                 "USER_ID" NVARCHAR2(32),
+                                 "DEPT_ID" NVARCHAR2(32)
+)
+    LOGGING
+NOCOMPRESS
+PCTFREE 10
+INITRANS 1
+STORAGE (
+  INITIAL 65536
+  NEXT 1048576
+  MINEXTENTS 1
+  MAXEXTENTS 2147483645
+  BUFFER_POOL DEFAULT
+)
+PARALLEL 1
+NOCACHE
+DISABLE ROW MOVEMENT
+;
+COMMENT ON COLUMN "SYS_USER_DEPT"."USER_ID" IS '用户ID';
+COMMENT ON COLUMN "SYS_USER_DEPT"."DEPT_ID" IS '部门ID';
+COMMENT ON TABLE "SYS_USER_DEPT" IS '用户部门关联表';
+
+-- ----------------------------
+-- Records of SYS_USER_DEPT
+-- ----------------------------
+INSERT INTO "SYS_USER_DEPT" VALUES ('174eceae15692e5091c28f3d6a3a1f54', '1', '100');
+
+-- ----------------------------
 -- Table structure for SYS_SOCIAL
 -- ----------------------------
 DROP TABLE "SYS_SOCIAL";
 CREATE TABLE "SYS_SOCIAL" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0),
-  "UUID" NVARCHAR2(255),
-  "SOURCE" NVARCHAR2(255),
-  "ACCESS_TOKEN" NVARCHAR2(255),
-  "EXPIRE_IN" NUMBER(11,0),
-  "REFRESH_TOKEN" NVARCHAR2(255),
-  "OPEN_ID" NVARCHAR2(255),
-  "UID" NVARCHAR2(255),
-  "ACCESS_CODE" NVARCHAR2(255),
-  "UNION_ID" NVARCHAR2(255),
-  "SCOPE" NVARCHAR2(255),
-  "TOKEN_TYPE" NVARCHAR2(255),
-  "ID_TOKEN" NVARCHAR2(255),
-  "MAC_ALGORITHM" NVARCHAR2(255),
-  "MAC_KEY" NVARCHAR2(255),
-  "CODE" NVARCHAR2(255),
-  "OAUTH_TOKEN" NVARCHAR2(255),
-  "OAUTH_TOKEN_SECRET" NVARCHAR2(255),
-  "USER_ID" NVARCHAR2(32)
+                              "ID" NVARCHAR2(32) NOT NULL,
+                              "REMARK" NVARCHAR2(255),
+                              "CREATE_ID" NVARCHAR2(32),
+                              "CREATE_TIME" DATE,
+                              "UPDATE_ID" NVARCHAR2(32),
+                              "UPDATE_TIME" DATE,
+                              "IS_DELETE" NUMBER(11,0),
+                              "UUID" NVARCHAR2(255),
+                              "SOURCE" NVARCHAR2(255),
+                              "ACCESS_TOKEN" NVARCHAR2(255),
+                              "EXPIRE_IN" NUMBER(11,0),
+                              "REFRESH_TOKEN" NVARCHAR2(255),
+                              "OPEN_ID" NVARCHAR2(255),
+                              "UID" NVARCHAR2(255),
+                              "ACCESS_CODE" NVARCHAR2(255),
+                              "UNION_ID" NVARCHAR2(255),
+                              "SCOPE" NVARCHAR2(255),
+                              "TOKEN_TYPE" NVARCHAR2(255),
+                              "ID_TOKEN" NVARCHAR2(255),
+                              "MAC_ALGORITHM" NVARCHAR2(255),
+                              "MAC_KEY" NVARCHAR2(255),
+                              "CODE" NVARCHAR2(255),
+                              "OAUTH_TOKEN" NVARCHAR2(255),
+                              "OAUTH_TOKEN_SECRET" NVARCHAR2(255),
+                              "USER_ID" NVARCHAR2(32)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1619,26 +1652,25 @@ COMMENT ON TABLE "SYS_SOCIAL" IS '三方Auth绑定表（暂未启用）';
 -- ----------------------------
 DROP TABLE "SYS_USER";
 CREATE TABLE "SYS_USER" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "DEPT_ID" NVARCHAR2(32),
-  "USERNAME" NVARCHAR2(255),
-  "PASSWORD" NVARCHAR2(255),
-  "STATUS" NVARCHAR2(2),
-  "PHONE" NVARCHAR2(255),
-  "EMAIL" NVARCHAR2(255),
-  "OPEN_ID" NVARCHAR2(255),
-  "API_KEY" NVARCHAR2(255),
-  "BAN_TO_TIME" DATE,
-  "EXPIRE_TO_TIME" DATE,
-  "USER_TYPE" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                            "ID" NVARCHAR2(32) NOT NULL,
+                            "USERNAME" NVARCHAR2(255),
+                            "PASSWORD" NVARCHAR2(255),
+                            "STATUS" NVARCHAR2(2),
+                            "PHONE" NVARCHAR2(255),
+                            "EMAIL" NVARCHAR2(255),
+                            "OPEN_ID" NVARCHAR2(255),
+                            "API_KEY" NVARCHAR2(255),
+                            "BAN_TO_TIME" DATE,
+                            "EXPIRE_TO_TIME" DATE,
+                            "USER_TYPE" NVARCHAR2(2),
+                            "REMARK" NVARCHAR2(255),
+                            "CREATE_ID" NVARCHAR2(32),
+                            "CREATE_TIME" DATE,
+                            "UPDATE_ID" NVARCHAR2(32),
+                            "UPDATE_TIME" DATE,
+                            "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1653,7 +1685,6 @@ PARALLEL 1
 NOCACHE
 DISABLE ROW MOVEMENT
 ;
-COMMENT ON COLUMN "SYS_USER"."DEPT_ID" IS '部门ID';
 COMMENT ON COLUMN "SYS_USER"."USERNAME" IS '用户账号';
 COMMENT ON COLUMN "SYS_USER"."PASSWORD" IS '用户密码';
 COMMENT ON COLUMN "SYS_USER"."STATUS" IS '账号状态，0=正常，1=停用';
@@ -1675,35 +1706,30 @@ COMMENT ON TABLE "SYS_USER" IS '用户表';
 -- ----------------------------
 -- Records of SYS_USER
 -- ----------------------------
-INSERT INTO "SYS_USER" VALUES ('1', '100', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18731055555', '1330166565@qq.com', NULL, NULL, NULL, NULL, '1', '宇宙第一帅的人', '1', TO_DATE('2023-03-01 13:42:39', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-05-14 16:31:39', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER" VALUES ('1640613543627415553', '101', 'liumm', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', TO_DATE('2023-03-28 15:15:25', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-14 10:05:02', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER" VALUES ('1643141570206871554', '100', 'abcdefg', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', TO_DATE('2023-04-04 14:40:53', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-13 23:02:42', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER" VALUES ('1650855280223846402', '105', 'test01', '678e82d907d3e6e71f81d5cf3ddacc3671dc618c38a1b7a9f9393a83d025b296', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, TO_DATE('2023-04-25 21:32:25', 'SYYYY-MM-DD HH24:MI:SS'), NULL, TO_DATE('2023-04-25 21:32:25', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER" VALUES ('1657562040456413185', '105', 'admin22', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, TO_DATE('2023-05-14 09:42:41', 'SYYYY-MM-DD HH24:MI:SS'), NULL, TO_DATE('2023-05-14 09:42:41', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER" VALUES ('2', '102', 'test', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755533444', '555@163.com', '1', '2', TO_DATE('2023-05-10 11:01:47', 'SYYYY-MM-DD HH24:MI:SS'), NULL, '2', '4', '1', TO_DATE('2023-03-01 14:09:35', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-03-01 14:09:35', 'SYYYY-MM-DD HH24:MI:SS'), '0');
+INSERT INTO "SYS_USER" VALUES ('1', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18731055555', '1330166565@qq.com', NULL, NULL, NULL, NULL, '1', '宇宙第一帅的人', '1', TO_DATE('2023-03-01 13:42:39', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-05-14 16:31:39', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 
 -- ----------------------------
 -- Table structure for SYS_USER_DETAIL
 -- ----------------------------
 DROP TABLE "SYS_USER_DETAIL";
 CREATE TABLE "SYS_USER_DETAIL" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "USER_ID" NVARCHAR2(32),
-  "NICK_NAME" NVARCHAR2(255),
-  "REAL_NAME" NVARCHAR2(255),
-  "AGE" NVARCHAR2(255),
-  "SEX" NVARCHAR2(255),
-  "PROFILE" NCLOB,
-  "USER_SIGN" NVARCHAR2(255),
-  "AVATAR" NVARCHAR2(255),
-  "MONEY" NUMBER(11,0),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                   "ID" NVARCHAR2(32) NOT NULL,
+                                   "USER_ID" NVARCHAR2(32),
+                                   "NICK_NAME" NVARCHAR2(255),
+                                   "REAL_NAME" NVARCHAR2(255),
+                                   "AGE" NVARCHAR2(255),
+                                   "SEX" NVARCHAR2(255),
+                                   "PROFILE" NCLOB,
+                                   "USER_SIGN" NVARCHAR2(255),
+                                   "AVATAR" NVARCHAR2(255),
+                                   "MONEY" NUMBER(11,0),
+                                   "CREATE_ID" NVARCHAR2(32),
+                                   "CREATE_TIME" DATE,
+                                   "UPDATE_ID" NVARCHAR2(32),
+                                   "UPDATE_TIME" DATE,
+                                   "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1739,30 +1765,25 @@ COMMENT ON TABLE "SYS_USER_DETAIL" IS '用户信息表';
 -- ----------------------------
 INSERT INTO "SYS_USER_DETAIL" VALUES ('21366e78e6a156e9cf45061da65d06e5', '1', '我是管理员', 'Daen', '18', '1', '每一次离开都是为了更好的相遇
 你好世界', '不一样的烟花', '625bcbc99e7524b543c81ffaed6dd2ab', '350', NULL, TO_DATE('2023-03-01 13:42:39', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-06-26 15:49:37', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER_DETAIL" VALUES ('7550e77dfbabea70ec44aaebda2f90ed', '2', '测试用户', '宝贝', '18', '0', 'ε=(′ο｀*)))唉', '生气气1', NULL, '0', NULL, TO_DATE('2023-03-01 14:09:35', 'SYYYY-MM-DD HH24:MI:SS'), '2', TO_DATE('2023-04-16 19:49:01', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER_DETAIL" VALUES ('886c73e7e8f458649f3048f672f042e6', '1650855280223846402', NULL, NULL, '0', '2', NULL, NULL, NULL, '0', NULL, TO_DATE('2023-04-25 21:32:25', 'SYYYY-MM-DD HH24:MI:SS'), NULL, TO_DATE('2023-04-25 21:32:25', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER_DETAIL" VALUES ('945acc4f5450533dd672260cfa1d66c9', '1640613543627415553', '刘萌萌', '刘二萌', '18', '0', NULL, NULL, NULL, '85560', '1', TO_DATE('2023-03-28 15:15:25', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-14 10:05:03', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER_DETAIL" VALUES ('ac5182e7b0e1c9ce11e7381e19b4733d', '1657562040456413185', NULL, NULL, '0', '2', NULL, NULL, NULL, '0', NULL, TO_DATE('2023-05-14 09:42:41', 'SYYYY-MM-DD HH24:MI:SS'), NULL, TO_DATE('2023-05-14 09:42:41', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_USER_DETAIL" VALUES ('f6d09bb65ad0ac3d6239214d7e456f8e', '1643141570206871554', '阿萨德', NULL, '0', '0', '2', NULL, NULL, '0', '1', TO_DATE('2023-04-04 14:40:53', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-13 23:02:42', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 
 -- ----------------------------
 -- Table structure for TEST_DATA
 -- ----------------------------
 DROP TABLE "TEST_DATA";
 CREATE TABLE "TEST_DATA" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "TITLE" NVARCHAR2(255),
-  "CONTENT" NVARCHAR2(255),
-  "TYPE" NVARCHAR2(2),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                             "ID" NVARCHAR2(32) NOT NULL,
+                             "TITLE" NVARCHAR2(255),
+                             "CONTENT" NVARCHAR2(255),
+                             "TYPE" NVARCHAR2(2),
+                             "STATUS" NVARCHAR2(2),
+                             "REMARK" NVARCHAR2(255),
+                             "CREATE_ID" NVARCHAR2(32),
+                             "CREATE_TIME" DATE,
+                             "UPDATE_ID" NVARCHAR2(32),
+                             "UPDATE_TIME" DATE,
+                             "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1
@@ -1797,20 +1818,20 @@ INSERT INTO "TEST_DATA" VALUES ('8f05e1af476e3537e796c966ff4b7b53', '阿萨德',
 -- ----------------------------
 DROP TABLE "TEST_DATA_TREE";
 CREATE TABLE "TEST_DATA_TREE" (
-  "ID" NVARCHAR2(32) NOT NULL,
-  "PARENT_ID" NVARCHAR2(32),
-  "TITLE" NVARCHAR2(255),
-  "CONTENT" NVARCHAR2(255),
-  "TYPE" NVARCHAR2(2),
-  "STATUS" NVARCHAR2(2),
-  "REMARK" NVARCHAR2(255),
-  "CREATE_ID" NVARCHAR2(32),
-  "CREATE_TIME" DATE,
-  "UPDATE_ID" NVARCHAR2(32),
-  "UPDATE_TIME" DATE,
-  "IS_DELETE" NUMBER(11,0)
+                                  "ID" NVARCHAR2(32) NOT NULL,
+                                  "PARENT_ID" NVARCHAR2(32),
+                                  "TITLE" NVARCHAR2(255),
+                                  "CONTENT" NVARCHAR2(255),
+                                  "TYPE" NVARCHAR2(2),
+                                  "STATUS" NVARCHAR2(2),
+                                  "REMARK" NVARCHAR2(255),
+                                  "CREATE_ID" NVARCHAR2(32),
+                                  "CREATE_TIME" DATE,
+                                  "UPDATE_ID" NVARCHAR2(32),
+                                  "UPDATE_TIME" DATE,
+                                  "IS_DELETE" NUMBER(11,0)
 )
-LOGGING
+    LOGGING
 NOCOMPRESS
 PCTFREE 10
 INITRANS 1

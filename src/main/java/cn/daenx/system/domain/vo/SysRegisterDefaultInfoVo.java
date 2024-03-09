@@ -20,7 +20,7 @@ public class SysRegisterDefaultInfoVo implements Serializable {
     /**
      * 部门编号，必填
      */
-    private String deptCode;
+    private String[] deptCodes;
 
     /**
      * 岗位编码，非必填

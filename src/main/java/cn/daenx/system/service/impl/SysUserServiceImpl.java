@@ -56,6 +56,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private SysRoleUserService sysRoleUserService;
     @Resource
+    private SysUserDeptService sysUserDeptService;
+    @Resource
     private SysRoleService sysRoleService;
     @Resource
     private SysPositionService sysPositionService;
@@ -240,13 +242,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 注册用户
      *
      * @param sysUser
+     * @param deptCodes     部门编码
      * @param roleCodes     角色编码
      * @param positionCodes 岗位编码
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean registerUser(SysUser sysUser, String[] roleCodes, String[] positionCodes) {
+    public Boolean registerUser(SysUser sysUser, String[] deptCodes, String[] roleCodes, String[] positionCodes) {
         sysUserMapper.insert(sysUser);
         //创建用户、详细信息关联
         SysUserDetail sysUserDetail = new SysUserDetail();
@@ -263,6 +266,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysRole> sysRoleList = sysRoleService.list(wrapperRole);
         List<String> roleIds = MyUtil.joinToList(sysRoleList, SysRole::getId);
         sysRoleUserService.handleUserRole(sysUser.getId(), roleIds);
+
+        //创建用户、部门关联
+        LambdaQueryWrapper<SysDept> wrapperDept = new LambdaQueryWrapper<>();
+        wrapperDept.in(SysDept::getCode, Arrays.asList(roleCodes));
+        wrapperDept.eq(SysDept::getStatus, CommonConstant.STATUS_NORMAL);
+        List<SysDept> sysDeptList = sysDeptService.list(wrapperDept);
+        List<String> deptIds = MyUtil.joinToList(sysDeptList, SysDept::getId);
+        sysUserDeptService.handleUserDept(sysUser.getId(), deptIds);
 
         //创建用户、岗位关联
         if (ObjectUtil.isNotEmpty(positionCodes) && positionCodes.length > 0) {
@@ -387,7 +398,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (ObjectUtil.isNotEmpty(vo.getDeptId())) {
             List<SysDept> listByParentId = sysDeptService.getListByParentId(vo.getDeptId(), true);
             List<String> ids = MyUtil.joinToList(listByParentId, SysDept::getId);
-            wrapper.in(ObjectUtil.isNotEmpty(vo.getDeptId()), "su.dept_id", ids);
+            wrapper.inSql("su.id", "select sys_user_dept.user_id from sys_user_dept where sys_user_dept.dept_id in('" + MyUtil.join(ids, String::trim, "','") + "')");
         }
         wrapper.like(ObjectUtil.isNotEmpty(vo.getUsername()), "su.username", vo.getUsername());
         wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "su.status", vo.getStatus());
@@ -419,11 +430,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Map<String, Object> map = new HashMap<>();
         map.put("roles", sysRoleService.getAll(new SysRolePageVo()));
         map.put("positions", sysPositionService.getAll(new SysPositionPageVo()));
+//        map.put("depts", sysDeptService.getAllNoLeaderUser(new SysDeptPageVo()));
         if (ObjectUtil.isNotEmpty(id)) {
             SysUserPageDto sysUserByPermissions = getSysUserByPermissions(id);
             map.put("user", sysUserByPermissions);
             map.put("roleIds", MyUtil.joinToList(sysUserByPermissions.getRoles(), SysRole::getId));
             map.put("positionIds", MyUtil.joinToList(sysUserByPermissions.getPositions(), SysPosition::getId));
+            map.put("deptIds", MyUtil.joinToList(sysUserByPermissions.getDepts(), SysDept::getId));
         }
         return map;
     }
@@ -467,7 +480,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserPageDto sysUserByPermissions = getSysUserByPermissions(vo.getId());
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(SysUser::getId, vo.getId());
-        updateWrapper.set(SysUser::getDeptId, vo.getDeptId());
         updateWrapper.set(SysUser::getStatus, vo.getStatus());
         updateWrapper.set(SysUser::getPhone, vo.getPhone());
         updateWrapper.set(SysUser::getEmail, vo.getEmail());
@@ -498,6 +510,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //修改关联数据
         sysRoleUserService.handleUserRole(vo.getId(), vo.getRoleIds());
         sysPositionUserService.handleUserPosition(vo.getId(), vo.getPositionIds());
+        sysUserDeptService.handleUserDept(vo.getId(), vo.getDeptIds());
         //注销该账户的登录
         LoginUtil.logoutByUsername(sysUserByPermissions.getUsername());
     }
@@ -541,7 +554,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("用户账号已存在");
         }
         SysUser sysUser = new SysUser();
-        sysUser.setDeptId(vo.getDeptId());
         sysUser.setUsername(vo.getUsername());
         String newPwd = SaSecureUtil.sha256(vo.getPassword());
         sysUser.setPassword(newPwd);
@@ -575,6 +587,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //新增关联数据
         sysRoleUserService.handleUserRole(sysUser.getId(), vo.getRoleIds());
         sysPositionUserService.handleUserPosition(sysUser.getId(), vo.getPositionIds());
+        sysUserDeptService.handleUserDept(sysUser.getId(), vo.getDeptIds());
     }
 
     /**
