@@ -32,9 +32,5 @@ mybatis-plus:
   configuration:
     # 使用驼峰原模原样对应
     map-underscore-to-camel-case: true
-    # 开启sql打印，在开发或测试的时候可以用
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    # 关闭ql打印
-#    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
     # 返回类型为Map,显示null对应的字段
     call-setters-on-nulls: true

@@ -142,6 +142,14 @@ spring:
           # 连接池中的最小空闲连接
           min-idle: 0
 
+#mybatis plus 设置
+mybatis-plus:
+  configuration:
+    # 开启sql打印，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 关闭ql打印
+    # log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
 # Sa-Token配置
 sa-token:
   # token名称 (同时也是cookie名称)
