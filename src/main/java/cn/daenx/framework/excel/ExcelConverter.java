@@ -1,10 +1,12 @@
 package cn.daenx.framework.excel;
 
 import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;
+import cn.daenx.framework.serializer.annotation.Masked;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.excel.converters.Converter;
@@ -47,10 +49,10 @@ public class ExcelConverter implements Converter<Object> {
      */
     @Override
     public Object convertToJavaData(ReadCellData<?> cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) throws Exception {
-        Dict annotation = contentProperty.getField().getAnnotation(Dict.class);
-        if (annotation != null) {
+        Dict dict = contentProperty.getField().getAnnotation(Dict.class);
+        if (dict != null) {
             String label = cellData.getStringValue();
-            String value = transDictToValue(annotation, label);
+            String value = transDictToValue(dict, label);
             if (StringUtils.isNotBlank(value)) {
                 return Convert.convert(contentProperty.getField().getType(), value);
             }
@@ -73,12 +75,16 @@ public class ExcelConverter implements Converter<Object> {
             return new WriteCellData<>("");
         }
         String valueStr = Convert.toStr(value);
-        Dict annotation = contentProperty.getField().getAnnotation(Dict.class);
-        if (annotation != null) {
-            String label = transDictToLabel(annotation, valueStr);
-            if (StringUtils.isNotBlank(label)) {
-                return new WriteCellData<>(label);
-            }
+        Dict dict = contentProperty.getField().getAnnotation(Dict.class);
+        if (dict != null) {
+            valueStr = transDictToLabel(dict, valueStr);
+        }
+        Masked masked = contentProperty.getField().getAnnotation(Masked.class);
+        if (masked != null) {
+            valueStr = MyUtil.masked(masked.type().getType(), valueStr);
+        }
+        if (StringUtils.isNotBlank(valueStr)) {
+            return new WriteCellData<>(valueStr);
         }
         return Converter.super.convertToExcelData(value, contentProperty, globalConfiguration);
     }
