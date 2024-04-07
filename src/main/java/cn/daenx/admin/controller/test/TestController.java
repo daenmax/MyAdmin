@@ -78,8 +78,8 @@ public class TestController {
      * 多sheet表-导出
      */
     @Log(name = "多sheet表-导出", type = LogOperType.OTHER, recordParams = true, recordResult = false)
-    @PostMapping("/importTemplate")
-    public void importTemplate(HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(HttpServletResponse response) {
         ExcelWriter writer = ExcelUtil.createExport(response, "多sheet表测试");
 
         List<TestSheetAVo> sheetAList = new ArrayList<>();
