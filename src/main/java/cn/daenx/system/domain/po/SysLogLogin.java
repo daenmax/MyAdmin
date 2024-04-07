@@ -1,7 +1,7 @@
 package cn.daenx.system.domain.po;
 
 import cn.daenx.framework.common.vo.BaseEntity;
-import cn.daenx.framework.excel.DictConverter;
+import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -66,7 +66,7 @@ public class SysLogLogin extends BaseEntity implements Serializable {
     /**
      * 登录结果，0=成功，1=失败
      */
-    @ExcelProperty(value = "登录结果", converter = DictConverter.class)
+    @ExcelProperty(value = "登录结果", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_common_status", custom = {})
     @TableField(value = "status")
     private String status;

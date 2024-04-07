@@ -1,7 +1,7 @@
 package cn.daenx.system.domain.dto;
 
 import cn.daenx.framework.common.vo.BaseDto;
-import cn.daenx.framework.excel.DictConverter;
+import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -77,7 +77,7 @@ public class SysJobLogPageDto extends BaseDto {
     /**
      * 执行结果，0=成功，1=失败
      */
-    @ExcelProperty(value = "执行结果", converter = DictConverter.class)
+    @ExcelProperty(value = "执行结果", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_common_status", custom = {})
     private String status;
 

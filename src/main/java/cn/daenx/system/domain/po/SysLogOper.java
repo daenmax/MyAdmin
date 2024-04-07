@@ -1,7 +1,7 @@
 package cn.daenx.system.domain.po;
 
 import cn.daenx.framework.common.vo.BaseEntity;
-import cn.daenx.framework.excel.DictConverter;
+import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -47,7 +47,7 @@ public class SysLogOper extends BaseEntity implements Serializable {
     /**
      * 操作类型，0=其他，1=新增，2=删除，3=修改，4=查询，5=导入，6=导出，7=上传，8=下载
      */
-    @ExcelProperty(value = "操作类型", converter = DictConverter.class)
+    @ExcelProperty(value = "操作类型", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_oper_type", custom = {})
     @TableField(value = "type")
     private String type;
@@ -138,7 +138,7 @@ public class SysLogOper extends BaseEntity implements Serializable {
     /**
      * 请求结果，0=成功，1=失败
      */
-    @ExcelProperty(value = "请求结果", converter = DictConverter.class)
+    @ExcelProperty(value = "请求结果", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_common_status", custom = {})
     @TableField(value = "status")
     private String status;

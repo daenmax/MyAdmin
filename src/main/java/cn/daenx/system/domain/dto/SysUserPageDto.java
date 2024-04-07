@@ -1,7 +1,7 @@
 package cn.daenx.system.domain.dto;
 
 import cn.daenx.framework.common.vo.BaseDto;
-import cn.daenx.framework.excel.DictConverter;
+import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.system.domain.po.SysDept;
 import cn.daenx.system.domain.po.SysPosition;
@@ -40,7 +40,7 @@ public class SysUserPageDto extends BaseDto {
     /**
      * 账号状态，0=正常，1=停用
      */
-    @ExcelProperty(value = "账号状态", converter = DictConverter.class)
+    @ExcelProperty(value = "账号状态", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_normal_disable", custom = {})
     private String status;
 
@@ -95,7 +95,7 @@ public class SysUserPageDto extends BaseDto {
     /**
      * 用户类型，具体看字典
      */
-    @ExcelProperty(value = "用户类型", converter = DictConverter.class)
+    @ExcelProperty(value = "用户类型", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_user_type", custom = {})
     private String userType;
     private String userTypeName;
@@ -122,7 +122,7 @@ public class SysUserPageDto extends BaseDto {
     /**
      * 性别，0=女，1=男，2=未知
      */
-    @ExcelProperty(value = "性别", converter = DictConverter.class)
+    @ExcelProperty(value = "性别", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_user_sex", custom = {})
     private String sex;
 

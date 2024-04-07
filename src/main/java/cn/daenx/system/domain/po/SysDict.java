@@ -1,13 +1,11 @@
 package cn.daenx.system.domain.po;
 
 import cn.daenx.framework.common.vo.BaseEntity;
-import cn.daenx.framework.excel.DictConverter;
+import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -46,7 +44,7 @@ public class SysDict extends BaseEntity implements Serializable {
     /**
      * 字典状态，0=正常，1=禁用
      */
-    @ExcelProperty(value = "字典状态", converter = DictConverter.class)
+    @ExcelProperty(value = "字典状态", converter = ExcelConverter.class)
 //    @Dict(custom = {@DictDetail(value = "0", label = "正常"), @DictDetail(value = "1", label = "禁用")})
     @Dict(dictCode = "sys_normal_disable", custom = {})
     @TableField(value = "status")

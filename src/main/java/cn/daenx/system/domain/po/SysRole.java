@@ -1,7 +1,7 @@
 package cn.daenx.system.domain.po;
 
 import cn.daenx.framework.common.vo.BaseEntity;
-import cn.daenx.framework.excel.DictConverter;
+import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.serializer.annotation.Dict;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -57,7 +57,7 @@ public class SysRole extends BaseEntity implements Serializable {
      * 数据权限，0=本人数据，1=本部门数据，2=本部门及以下数据，3=全部数据，4=自定义权限
      */
     @TableField(value = "data_scope")
-    @ExcelProperty(value = "数据权限", converter = DictConverter.class)
+    @ExcelProperty(value = "数据权限", converter = ExcelConverter.class)
     @Dict(dictCode = "data_scope", custom = {})
     private String dataScope;
 
@@ -77,7 +77,7 @@ public class SysRole extends BaseEntity implements Serializable {
      * 角色状态，0=正常，1=禁用
      */
     @TableField(value = "status")
-    @ExcelProperty(value = "角色状态", converter = DictConverter.class)
+    @ExcelProperty(value = "角色状态", converter = ExcelConverter.class)
     @Dict(dictCode = "sys_normal_disable", custom = {})
     private String status;
 

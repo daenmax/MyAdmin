@@ -20,10 +20,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 /**
- * easyexcel导出导入字典转换
+ * easyexcel导出导入字典和脱敏转换
  */
 @Slf4j
-public class DictConverter implements Converter<Object> {
+public class ExcelConverter implements Converter<Object> {
 
 
     @Override
