@@ -28,9 +28,6 @@ public class SysUserPageDto extends BaseDto {
     @ExcelProperty(value = "用户Uid")
     private String id;
 
-    @ExcelProperty(value = "部门名称")
-    private String deptName;
-
     /**
      * 用户账号
      */
