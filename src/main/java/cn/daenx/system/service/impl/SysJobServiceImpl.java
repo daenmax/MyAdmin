@@ -166,7 +166,7 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
         sysJob.setJobGroup(vo.getJobGroup());
         sysJob.setInvokeTarget(vo.getInvokeTarget());
         sysJob.setCronExpression(vo.getCronExpression());
-        sysJob.setStatus(ScheduleConstants.Status.PAUSE.getValue());
+        sysJob.setStatus(vo.getStatus());
         sysJob.setMisfirePolicy(vo.getMisfirePolicy());
         sysJob.setConcurrent(vo.getConcurrent());
         sysJob.setRemark(vo.getRemark());
