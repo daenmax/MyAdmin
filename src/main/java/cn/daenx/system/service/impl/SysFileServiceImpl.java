@@ -142,6 +142,9 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         String originalName = file.getOriginalFilename();
         //后缀，例如：.jpg
         String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
+        if(ObjectUtil.isEmpty(suffix)){
+            throw new MyException("错误的文件类型");
+        }
         SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadFileSuffixs();
         if (sysUploadConfigVo == null) {
             throw new MyException("当前系统不允许上传文件");
@@ -169,6 +172,9 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         String originalName = file.getOriginalFilename();
         //后缀，例如：.jpg
         String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
+        if(ObjectUtil.isEmpty(suffix)){
+            throw new MyException("错误的文件类型");
+        }
         SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadImageSuffixs();
         if (sysUploadConfigVo == null) {
             throw new MyException("当前系统不允许上传图片");
