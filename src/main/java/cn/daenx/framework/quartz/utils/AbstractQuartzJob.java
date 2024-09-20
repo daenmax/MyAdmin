@@ -1,10 +1,10 @@
 package cn.daenx.framework.quartz.utils;
 
 
-import cn.daenx.common.constant.CommonConstant;
-import cn.daenx.common.utils.ExceptionUtil;
-import cn.daenx.common.vo.system.other.SysJobLogVo;
-import cn.daenx.common.vo.system.other.SysJobVo;
+import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.utils.ExceptionUtil;
+import cn.daenx.framework.common.vo.system.other.SysJobLogVo;
+import cn.daenx.framework.common.vo.system.other.SysJobVo;
 import cn.daenx.framework.quartz.constant.QuartzConstant;
 import cn.daenx.framework.quartz.constant.ScheduleConstants;
 import cn.hutool.extra.spring.SpringUtil;

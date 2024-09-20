@@ -1,7 +1,7 @@
 package cn.daenx.system.service;
 
-import cn.daenx.common.vo.RouterVo;
-import cn.daenx.common.vo.system.other.SysLoginUserVo;
+import cn.daenx.framework.common.vo.RouterVo;
+import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.daenx.system.domain.po.SysMenu;
 import cn.daenx.system.domain.vo.SysMenuAddVo;
 import cn.daenx.system.domain.vo.SysMenuPageVo;

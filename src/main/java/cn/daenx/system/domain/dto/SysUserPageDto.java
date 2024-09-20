@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.dto;
 
-import cn.daenx.common.vo.BaseDto;
+import cn.daenx.framework.common.vo.BaseDto;
 import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.dictMasked.annotation.Dict;
 import cn.daenx.system.domain.po.SysDept;

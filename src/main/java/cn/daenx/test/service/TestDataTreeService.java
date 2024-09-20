@@ -1,7 +1,7 @@
 package cn.daenx.test.service;
 
 
-import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.framework.common.vo.ComStatusUpdVo;
 import cn.daenx.test.domain.po.TestDataTree;
 import cn.daenx.test.domain.vo.TestDataTreeAddVo;
 import cn.daenx.test.domain.vo.TestDataTreePageVo;

@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.vo;
 
-import cn.daenx.common.vo.TreeEntity;
+import cn.daenx.framework.common.vo.TreeEntity;
 import lombok.Data;
 
 /**

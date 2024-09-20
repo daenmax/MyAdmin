@@ -1,9 +1,9 @@
 package cn.daenx.framework.dictMasked;
 
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.utils.RedisUtil;
-import cn.daenx.common.vo.system.other.SysDictDetailVo;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.dictMasked.annotation.Dict;
 import cn.daenx.framework.dictMasked.annotation.DictDetail;
 import cn.daenx.framework.dictMasked.annotation.Masked;

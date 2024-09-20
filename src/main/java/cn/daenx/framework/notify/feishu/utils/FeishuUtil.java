@@ -1,11 +1,11 @@
 package cn.daenx.framework.notify.feishu.utils;
 
-import cn.daenx.common.constant.CommonConstant;
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.RedisUtil;
-import cn.daenx.common.vo.system.config.SysConfigVo;
-import cn.daenx.common.vo.system.config.SysFeishuConfigVo;
+import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.common.vo.system.config.SysConfigVo;
+import cn.daenx.framework.common.vo.system.config.SysFeishuConfigVo;
 import cn.daenx.framework.notify.feishu.service.FeishuService;
 import cn.daenx.framework.notify.feishu.vo.FeishuSendResult;
 import cn.hutool.core.collection.CollUtil;

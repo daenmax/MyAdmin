@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.system.domain.vo.ServerInfoVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.NumberUtil;

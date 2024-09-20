@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.po;
 
-import cn.daenx.common.vo.BaseEntity;
+import cn.daenx.framework.common.vo.BaseEntity;
 import cn.daenx.framework.excel.ExcelConverter;
 import cn.daenx.framework.dictMasked.annotation.Dict;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;

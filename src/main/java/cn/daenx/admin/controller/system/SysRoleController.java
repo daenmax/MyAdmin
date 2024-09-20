@@ -1,8 +1,8 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.vo.ComStatusUpdVo;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.po.SysRole;

@@ -1,16 +1,16 @@
 package cn.daenx.framework.notify.email.utils;
 
-import cn.daenx.common.constant.CommonConstant;
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.constant.SystemConstant;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.utils.RedisUtil;
-import cn.daenx.common.utils.ServletUtils;
-import cn.daenx.common.vo.CheckSendVo;
-import cn.daenx.common.vo.system.config.SysConfigVo;
-import cn.daenx.common.vo.system.config.SysEmailConfigVo;
-import cn.daenx.common.vo.system.config.SysSendLimitConfigVo;
+import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.common.utils.ServletUtils;
+import cn.daenx.framework.common.vo.CheckSendVo;
+import cn.daenx.framework.common.vo.system.config.SysConfigVo;
+import cn.daenx.framework.common.vo.system.config.SysEmailConfigVo;
+import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
 import cn.daenx.framework.notify.email.service.EmailService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.WeightRandom;

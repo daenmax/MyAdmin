@@ -1,9 +1,9 @@
 package cn.daenx.admin.controller.system;
 
 import cn.daenx.system.service.SysApiLimitService;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.vo.ComStatusUpdVo;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.system.domain.po.SysApiLimit;
 import cn.daenx.system.domain.vo.SysApiLimitAddVo;
 import cn.daenx.system.domain.vo.SysApiLimitPageVo;

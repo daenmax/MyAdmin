@@ -1,8 +1,8 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.common.constant.SystemConstant;
+import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.dataScope.annotation.DataScope;
-import cn.daenx.common.exception.MyException;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.system.domain.dto.SysNoticePageDto;
 import cn.daenx.system.domain.vo.SysNoticeAddVo;
 import cn.daenx.system.domain.vo.SysNoticePageVo;

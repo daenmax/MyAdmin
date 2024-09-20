@@ -1,7 +1,7 @@
 package cn.daenx.framework.crossXssFilter.filter;
 
-import cn.daenx.common.constant.enums.HttpMethod;
-import cn.daenx.common.utils.MyUtil;
+import cn.daenx.framework.common.constant.enums.HttpMethod;
+import cn.daenx.framework.common.utils.MyUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

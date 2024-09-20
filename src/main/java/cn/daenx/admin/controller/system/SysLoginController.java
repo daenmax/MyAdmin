@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.common.vo.Result;
-import cn.daenx.common.vo.RouterVo;
+import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.vo.RouterVo;
 import cn.daenx.system.domain.vo.SysLoginVo;
 import cn.daenx.system.domain.vo.SysRegisterVo;
 import cn.daenx.system.service.SysLoginService;

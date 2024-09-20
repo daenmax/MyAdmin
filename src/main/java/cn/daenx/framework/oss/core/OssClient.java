@@ -1,7 +1,7 @@
 package cn.daenx.framework.oss.core;
 
-import cn.daenx.common.constant.CommonConstant;
-import cn.daenx.common.exception.MyException;
+import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.oss.enums.AccessPolicyType;
 import cn.daenx.framework.oss.enums.PolicyType;
 import cn.daenx.framework.oss.vo.OssProperties;

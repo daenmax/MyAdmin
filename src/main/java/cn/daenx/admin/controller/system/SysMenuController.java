@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.system.domain.po.SysMenu;
 import cn.daenx.system.domain.vo.SysMenuAddVo;
 import cn.daenx.system.domain.vo.SysMenuPageVo;

@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.po;
 
-import cn.daenx.common.vo.BaseEntity;
+import cn.daenx.framework.common.vo.BaseEntity;
 import cn.daenx.system.domain.dto.LeaderUserDto;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

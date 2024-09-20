@@ -1,12 +1,12 @@
 package cn.daenx.admin.controller.test;
 
 import cn.daenx.framework.logSave.annotation.Log;
-import cn.daenx.common.constant.enums.LogOperType;
+import cn.daenx.framework.common.constant.enums.LogOperType;
 import cn.daenx.framework.excel.ExcelResult;
-import cn.daenx.common.exception.MyException;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.common.vo.ComStatusUpdVo;
-import cn.daenx.common.vo.Result;
+import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.framework.common.vo.Result;
 import cn.daenx.test.domain.dto.TestDataPageDto;
 import cn.daenx.test.domain.po.TestData;
 import cn.daenx.test.domain.vo.TestDataAddVo;

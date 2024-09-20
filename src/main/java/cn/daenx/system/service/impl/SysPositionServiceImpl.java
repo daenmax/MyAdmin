@@ -1,8 +1,8 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.common.constant.SystemConstant;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.vo.system.other.SysLoginUserVo;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.system.mapper.SysPositionUserMapper;
 import cn.daenx.system.domain.po.SysPositionUser;

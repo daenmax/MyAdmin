@@ -1,10 +1,10 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.common.constant.CommonConstant;
-import cn.daenx.common.constant.RedisConstant;
-import cn.daenx.common.exception.MyException;
-import cn.daenx.common.utils.MyUtil;
-import cn.daenx.common.utils.RedisUtil;
+import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.system.mapper.SysDictDetailMapper;
 import cn.daenx.system.domain.po.SysDictDetail;
 import cn.daenx.system.domain.vo.SysDictAddVo;
