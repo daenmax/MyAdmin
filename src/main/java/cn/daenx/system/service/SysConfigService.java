@@ -1,6 +1,6 @@
 package cn.daenx.system.service;
 
-import cn.daenx.framework.common.vo.system.config.*;
+import cn.daenx.common.vo.system.config.*;
 import cn.daenx.system.domain.vo.SysLoginFailInfoVo;
 import cn.daenx.system.domain.vo.SysRegisterDefaultInfoVo;
 import cn.daenx.system.domain.po.SysConfig;

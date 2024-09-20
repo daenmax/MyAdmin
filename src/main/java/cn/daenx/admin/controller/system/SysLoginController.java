@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.framework.common.vo.RouterVo;
+import cn.daenx.common.vo.Result;
+import cn.daenx.common.vo.RouterVo;
 import cn.daenx.system.domain.vo.SysLoginVo;
 import cn.daenx.system.domain.vo.SysRegisterVo;
 import cn.daenx.system.service.SysLoginService;
@@ -20,6 +20,18 @@ import java.util.Map;
 public class SysLoginController {
     @Resource
     private SysLoginService sysLoginService;
+
+    /**
+     * 获取人机验证码
+     *
+     * @return
+     */
+    @SaIgnore
+    @GetMapping("/captcha")
+    public Result captcha() {
+        HashMap<String, Object> map = sysLoginService.createCaptcha();
+        return Result.ok(map);
+    }
 
     /**
      * 获取邮箱验证码

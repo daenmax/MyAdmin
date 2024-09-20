@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.po.SysDict;
 import cn.daenx.system.domain.vo.SysDictAddVo;
@@ -30,9 +30,9 @@ public class SysDictController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:dict:list")
-    @GetMapping(value = "/list")
-    public Result list(SysDictPageVo vo) {
+    @SaCheckPermission("system:dict:page")
+    @GetMapping(value = "/page")
+    public Result page(SysDictPageVo vo) {
         IPage<SysDict> page = sysDictService.getPage(vo);
         return Result.ok(page);
     }

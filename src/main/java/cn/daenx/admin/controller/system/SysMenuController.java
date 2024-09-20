@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.system.domain.po.SysMenu;
 import cn.daenx.system.domain.vo.SysMenuAddVo;
 import cn.daenx.system.domain.vo.SysMenuPageVo;
@@ -30,9 +30,9 @@ public class SysMenuController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:menu:list")
-    @GetMapping(value = "/list")
-    public Result list(SysMenuPageVo vo) {
+    @SaCheckPermission("system:menu:page")
+    @GetMapping(value = "/page")
+    public Result page(SysMenuPageVo vo) {
         List<SysMenu> list = sysMenuService.getList(vo);
         return Result.ok(list);
     }

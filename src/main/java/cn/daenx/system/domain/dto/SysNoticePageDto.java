@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.dto;
 
-import cn.daenx.framework.common.vo.BaseDto;
+import cn.daenx.common.vo.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

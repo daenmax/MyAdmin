@@ -1,21 +1,21 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.framework.common.constant.CommonConstant;
-import cn.daenx.framework.common.constant.RedisConstant;
-import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
-import cn.daenx.framework.common.vo.system.config.SysSmsTemplateConfigVo;
-import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
+import cn.daenx.common.constant.CommonConstant;
+import cn.daenx.common.constant.RedisConstant;
+import cn.daenx.common.constant.SystemConstant;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.system.config.SysSendLimitConfigVo;
+import cn.daenx.common.vo.system.config.SysSmsTemplateConfigVo;
+import cn.daenx.common.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.oss.vo.UploadResult;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
-import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.common.utils.MyUtil;
+import cn.daenx.common.utils.RedisUtil;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
-import cn.daenx.framework.common.vo.CheckSendVo;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.vo.CheckSendVo;
+import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.po.*;
@@ -70,8 +70,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private SysFileService sysFileService;
-    @Resource
-    private CaptchaService captchaService;
     @Resource
     private SysConfigService sysConfigService;
 
@@ -859,7 +857,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Result getEmailValidCode(SysUserUpdBindVo vo) {
-        captchaService.validatedCaptcha(vo);
         if (ObjectUtil.isEmpty(vo.getEmail())) {
             throw new MyException("请填写邮箱");
         }
@@ -910,7 +907,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public Result getPhoneValidCode(SysUserUpdBindVo vo) {
-        captchaService.validatedCaptcha(vo);
         if (ObjectUtil.isEmpty(vo.getPhone())) {
             throw new MyException("请填写手机号");
         }

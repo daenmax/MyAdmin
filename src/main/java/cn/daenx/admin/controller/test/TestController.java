@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.test;
 
-import cn.daenx.framework.common.constant.enums.LogOperType;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.constant.enums.LogOperType;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.ExcelResult;
 import cn.daenx.framework.excel.ReadRetVo;
 import cn.daenx.framework.excel.utils.ExcelUtil;

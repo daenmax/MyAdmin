@@ -1,7 +1,7 @@
 package cn.daenx.framework.logSave.annotation;
 
 
-import cn.daenx.framework.common.constant.enums.LogOperType;
+import cn.daenx.common.constant.enums.LogOperType;
 
 import java.lang.annotation.*;
 

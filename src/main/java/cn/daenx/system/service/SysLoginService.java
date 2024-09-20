@@ -1,15 +1,31 @@
 package cn.daenx.system.service;
 
 
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.framework.common.vo.RouterVo;
+import cn.daenx.common.vo.Result;
+import cn.daenx.common.vo.RouterVo;
 import cn.daenx.system.domain.vo.SysLoginVo;
 import cn.daenx.system.domain.vo.SysRegisterVo;
+import cn.daenx.system.domain.vo.SysSubmitCaptchaVo;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface SysLoginService {
+    /**
+     * 创建验证码
+     * 受系统参数配置影响
+     *
+     * @return
+     */
+    HashMap<String, Object> createCaptcha();
+
+    /**
+     * 校验验证码
+     *
+     * @param vo
+     */
+    void validatedCaptcha(SysSubmitCaptchaVo vo);
 
     /**
      * PC登录

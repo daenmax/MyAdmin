@@ -1,16 +1,16 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.vo.*;
 import cn.daenx.system.service.SysDeptService;
+import cn.daenx.system.service.SysLoginService;
 import cn.daenx.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,6 +29,8 @@ public class SysUserController {
     private SysUserService sysUserService;
     @Resource
     private SysDeptService sysDeptService;
+    @Resource
+    private SysLoginService sysLoginService;
 
     /**
      * 个人信息
@@ -95,9 +97,9 @@ public class SysUserController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:user:list")
-    @GetMapping(value = "/list")
-    public Result list(SysUserPageVo vo) {
+    @SaCheckPermission("system:user:page")
+    @GetMapping(value = "/page")
+    public Result page(SysUserPageVo vo) {
         IPage<SysUserPageDto> page = sysUserService.getPage(vo);
         return Result.ok(page);
     }
@@ -229,6 +231,7 @@ public class SysUserController {
      */
     @PostMapping("/getEmailValidCode")
     public Result getEmailValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
+        sysLoginService.validatedCaptcha(vo);
         return sysUserService.getEmailValidCode(vo);
     }
 
@@ -239,6 +242,7 @@ public class SysUserController {
      */
     @PostMapping("/getPhoneValidCode")
     public Result getPhoneValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
+        sysLoginService.validatedCaptcha(vo);
         return sysUserService.getPhoneValidCode(vo);
     }
 

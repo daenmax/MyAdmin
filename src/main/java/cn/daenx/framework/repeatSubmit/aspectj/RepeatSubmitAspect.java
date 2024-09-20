@@ -1,10 +1,10 @@
 package cn.daenx.framework.repeatSubmit.aspectj;
 
-import cn.daenx.framework.common.constant.RedisConstant;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.utils.RedisUtil;
-import cn.daenx.framework.common.utils.ServletUtils;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.constant.RedisConstant;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.utils.RedisUtil;
+import cn.daenx.common.utils.ServletUtils;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.repeatSubmit.annotation.RepeatSubmit;
 import cn.dev33.satoken.SaManager;
 import cn.hutool.core.util.ObjectUtil;

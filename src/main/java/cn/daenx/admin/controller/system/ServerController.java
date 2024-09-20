@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.utils.MyUtil;
+import cn.daenx.common.vo.Result;
 import cn.daenx.system.domain.vo.ServerInfoVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.NumberUtil;
@@ -50,14 +50,14 @@ public class ServerController {
         long[] prevTicks = processor.getSystemCpuLoadTicks();
         Util.sleep(1000);
         long[] ticks = processor.getSystemCpuLoadTicks();
-        long nice = ticks[CentralProcessor.TickType.NICE.getIndex()] - prevTicks[CentralProcessor.TickType.NICE.getIndex()];
-        long irq = ticks[TickType.IRQ.getIndex()] - prevTicks[TickType.IRQ.getIndex()];
-        long softIrq = ticks[TickType.SOFTIRQ.getIndex()] - prevTicks[TickType.SOFTIRQ.getIndex()];
-        long steal = ticks[TickType.STEAL.getIndex()] - prevTicks[TickType.STEAL.getIndex()];
-        long cSys = ticks[TickType.SYSTEM.getIndex()] - prevTicks[TickType.SYSTEM.getIndex()];
-        long user = ticks[TickType.USER.getIndex()] - prevTicks[TickType.USER.getIndex()];
-        long ioWait = ticks[TickType.IOWAIT.getIndex()] - prevTicks[TickType.IOWAIT.getIndex()];
-        long idle = ticks[TickType.IDLE.getIndex()] - prevTicks[TickType.IDLE.getIndex()];
+        long nice = ticks[CentralProcessor.TickType.NICE.ordinal()] - prevTicks[CentralProcessor.TickType.NICE.ordinal()];
+        long irq = ticks[TickType.IRQ.ordinal()] - prevTicks[TickType.IRQ.ordinal()];
+        long softIrq = ticks[TickType.SOFTIRQ.ordinal()] - prevTicks[TickType.SOFTIRQ.ordinal()];
+        long steal = ticks[TickType.STEAL.ordinal()] - prevTicks[TickType.STEAL.ordinal()];
+        long cSys = ticks[TickType.SYSTEM.ordinal()] - prevTicks[TickType.SYSTEM.ordinal()];
+        long user = ticks[TickType.USER.ordinal()] - prevTicks[TickType.USER.ordinal()];
+        long ioWait = ticks[TickType.IOWAIT.ordinal()] - prevTicks[TickType.IOWAIT.ordinal()];
+        long idle = ticks[TickType.IDLE.ordinal()] - prevTicks[TickType.IDLE.ordinal()];
         long totalCpu = user + nice + cSys + idle + ioWait + irq + softIrq + steal;
         ServerInfoVo.ServerInfoCpu serverInfoCpu = new ServerInfoVo.ServerInfoCpu();
         serverInfoCpu.setCpuNum(processor.getLogicalProcessorCount());

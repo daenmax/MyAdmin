@@ -1,7 +1,7 @@
 package cn.daenx.test.service;
 
 
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.ComStatusUpdVo;
 import cn.daenx.test.domain.dto.TestDataPageDto;
 import cn.daenx.test.domain.po.TestData;
 import cn.daenx.test.domain.vo.TestDataAddVo;

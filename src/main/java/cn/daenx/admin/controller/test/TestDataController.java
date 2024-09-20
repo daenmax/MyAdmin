@@ -1,12 +1,12 @@
 package cn.daenx.admin.controller.test;
 
 import cn.daenx.framework.logSave.annotation.Log;
-import cn.daenx.framework.common.constant.enums.LogOperType;
+import cn.daenx.common.constant.enums.LogOperType;
 import cn.daenx.framework.excel.ExcelResult;
-import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.common.exception.MyException;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.test.domain.dto.TestDataPageDto;
 import cn.daenx.test.domain.po.TestData;
 import cn.daenx.test.domain.vo.TestDataAddVo;
@@ -40,9 +40,9 @@ public class TestDataController {
      * @return
      */
     @Log(name = "测试数据-分页列表_MP分页插件", type = LogOperType.QUERY, recordParams = true, recordResult = true)
-    @SaCheckPermission("test:data:list")
-    @GetMapping("/list1")
-    public Result list1(TestDataPageVo vo) {
+    @SaCheckPermission("test:data:page")
+    @GetMapping("/page1")
+    public Result page1(TestDataPageVo vo) {
         IPage<TestData> page = testDataService.getPage1(vo);
         return Result.ok(page);
     }
@@ -54,9 +54,9 @@ public class TestDataController {
      * @return
      */
     @Log(name = "测试数据-分页列表_自己写的SQL", type = LogOperType.QUERY, recordParams = true, recordResult = true)
-    @SaCheckPermission("test:data:list")
-    @GetMapping("/list2")
-    public Result list2(TestDataPageVo vo) {
+    @SaCheckPermission("test:data:page")
+    @GetMapping("/page2")
+    public Result page2(TestDataPageVo vo) {
         IPage<TestDataPageDto> page = testDataService.getPage2(vo);
         return Result.ok(page);
     }
@@ -68,9 +68,9 @@ public class TestDataController {
      * @return
      */
     @Log(name = "测试数据-分页列表_MP自定义SQL", type = LogOperType.QUERY, recordParams = true, recordResult = true)
-    @SaCheckPermission("test:data:list")
-    @GetMapping("/list3")
-    public Result list3(TestDataPageVo vo) {
+    @SaCheckPermission("test:data:page")
+    @GetMapping("/page3")
+    public Result page3(TestDataPageVo vo) {
         IPage<TestDataPageDto> page = testDataService.getPage3(vo);
         return Result.ok(page);
     }

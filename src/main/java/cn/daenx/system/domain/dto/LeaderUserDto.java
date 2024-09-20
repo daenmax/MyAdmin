@@ -1,6 +1,6 @@
 package cn.daenx.system.domain.dto;
 
-import cn.daenx.framework.common.vo.BaseDto;
+import cn.daenx.common.vo.BaseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

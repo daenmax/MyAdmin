@@ -1,6 +1,6 @@
 package cn.daenx.system.service;
 
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.ComStatusUpdVo;
 import cn.daenx.system.domain.po.SysJob;
 import cn.daenx.system.domain.vo.SysJobAddVo;
 import cn.daenx.system.domain.vo.SysJobPageVo;

@@ -1,6 +1,6 @@
 package cn.daenx.framework.notify.wecom.service.impl;
 
-import cn.daenx.framework.common.vo.system.config.SysWecomConfigVo;
+import cn.daenx.common.vo.system.config.SysWecomConfigVo;
 import cn.daenx.framework.notify.wecom.service.WecomService;
 import cn.daenx.framework.notify.wecom.vo.WecomSendResult;
 import cn.hutool.core.util.ObjectUtil;

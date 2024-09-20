@@ -1,6 +1,6 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.vo.Result;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;

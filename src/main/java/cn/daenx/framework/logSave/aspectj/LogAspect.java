@@ -1,11 +1,11 @@
 package cn.daenx.framework.logSave.aspectj;
 
 
-import cn.daenx.framework.common.constant.CommonConstant;
-import cn.daenx.framework.common.constant.enums.LogOperType;
-import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.ServletUtils;
-import cn.daenx.framework.common.vo.system.other.SysLogOperVo;
+import cn.daenx.common.constant.CommonConstant;
+import cn.daenx.common.constant.enums.LogOperType;
+import cn.daenx.common.utils.MyUtil;
+import cn.daenx.common.utils.ServletUtils;
+import cn.daenx.common.vo.system.other.SysLogOperVo;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.hutool.extra.spring.SpringUtil;

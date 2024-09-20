@@ -1,9 +1,9 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.constant.enums.LogOperType;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.constant.SystemConstant;
+import cn.daenx.common.constant.enums.LogOperType;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.oss.vo.UploadResult;
 import cn.daenx.system.domain.dto.SysFilePageDto;
@@ -35,9 +35,9 @@ public class SysFileController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("monitor:file:list")
-    @GetMapping(value = "/list")
-    public Result list(SysFilePageVo vo) {
+    @SaCheckPermission("monitor:file:page")
+    @GetMapping(value = "/page")
+    public Result page(SysFilePageVo vo) {
         IPage<SysFilePageDto> page = sysFileService.getPage(vo);
         return Result.ok(page);
     }

@@ -1,36 +1,38 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.framework.common.constant.CommonConstant;
-import cn.daenx.framework.common.constant.RedisConstant;
-import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.constant.enums.DeviceType;
-import cn.daenx.framework.common.constant.enums.LoginType;
-import cn.daenx.framework.common.utils.*;
-import cn.daenx.framework.common.vo.RouterVo;
-import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
-import cn.daenx.framework.common.vo.system.config.SysSmsTemplateConfigVo;
-import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
-import cn.daenx.framework.common.vo.system.other.SysPositionVo;
-import cn.daenx.framework.common.vo.system.other.SysRoleVo;
+import cn.daenx.common.constant.CommonConstant;
+import cn.daenx.common.constant.RedisConstant;
+import cn.daenx.common.constant.SystemConstant;
+import cn.daenx.common.constant.enums.DeviceType;
+import cn.daenx.common.constant.enums.LoginType;
+import cn.daenx.common.utils.*;
+import cn.daenx.common.vo.RouterVo;
+import cn.daenx.common.vo.system.config.SysCaptchaConfigVo;
+import cn.daenx.common.vo.system.config.SysSendLimitConfigVo;
+import cn.daenx.common.vo.system.config.SysSmsTemplateConfigVo;
+import cn.daenx.common.vo.system.other.SysLoginUserVo;
+import cn.daenx.common.vo.system.other.SysPositionVo;
+import cn.daenx.common.vo.system.other.SysRoleVo;
 import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.satoken.utils.LoginUtil;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.CheckSendVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.CheckSendVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.po.*;
-import cn.daenx.system.domain.vo.SysLoginFailInfoVo;
-import cn.daenx.system.domain.vo.SysLoginVo;
-import cn.daenx.system.domain.vo.SysRegisterDefaultInfoVo;
-import cn.daenx.system.domain.vo.SysRegisterVo;
+import cn.daenx.system.domain.vo.*;
 import cn.daenx.system.service.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.captcha.*;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -40,6 +42,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -54,23 +57,169 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Resource
     private SysRoleService sysRoleService;
     @Resource
-    private SysDeptService sysDeptService;
-    @Resource
     private SysMenuService sysMenuService;
     @Resource
     private SysLogLoginService sysLogLoginService;
     @Resource
     private SysPositionService sysPositionService;
-
     @Resource
     private SysConfigService sysConfigService;
-    @Resource
-    private CaptchaService captchaService;
     @Resource
     private SysUserDeptService sysUserDeptService;
 
     @Value("${spring.application.name}")
     private String applicationName;
+
+    /**
+     * 创建验证码
+     * 受系统参数配置影响
+     *
+     * @return
+     */
+    @Override
+    public HashMap<String, Object> createCaptcha() {
+        HashMap<String, Object> map = new HashMap<>();
+        SysCaptchaConfigVo sysCaptchaConfigVo = sysConfigService.getSysCaptchaConfigVo();
+        if (sysCaptchaConfigVo == null) {
+            map.put("captchaLock", false);
+            return map;
+        }
+        map.put("captchaLock", Boolean.valueOf(sysCaptchaConfigVo.getConfig().getLock()));
+        if ("false".equals(sysCaptchaConfigVo.getConfig().getLock())) {
+            return map;
+        }
+        map.put("captchaType", sysCaptchaConfigVo.getConfig().getType());
+        //0=图片验证码，1=腾讯验证码
+        if (sysCaptchaConfigVo.getConfig().getType() == 0) {
+            //0=图片验证码
+            HashMap<String, Object> captchaImgToBase64 = createCaptchaImgToBase64(sysCaptchaConfigVo);
+            map.put("image", captchaImgToBase64);
+            return map;
+        } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
+            //1=腾讯验证码
+            HashMap<String, Object> captchaSlider = createCaptchaSlider(sysCaptchaConfigVo);
+            map.put("slider", captchaSlider);
+            return map;
+        }
+        map.put("captchaLock", false);
+        return map;
+    }
+
+    /**
+     * 创建图片验证码
+     *
+     * @param sysCaptchaConfigVo
+     * @return
+     */
+    private HashMap<String, Object> createCaptchaImgToBase64(SysCaptchaConfigVo sysCaptchaConfigVo) {
+        HashMap<String, Object> map = new HashMap<>();
+        String base64 = "";
+        String code = "";
+        Integer captchaImgType = sysCaptchaConfigVo.getImage().getType();
+        if (captchaImgType == 1) {
+            //线段干扰的验证码
+            LineCaptcha captcha = CaptchaUtil.createLineCaptcha(sysCaptchaConfigVo.getImage().getWidth(), sysCaptchaConfigVo.getImage().getHeight(), sysCaptchaConfigVo.getImage().getCodeCount(), sysCaptchaConfigVo.getImage().getOlCount());
+            captcha.createCode();
+            code = captcha.getCode();
+            base64 = captcha.getImageBase64();
+        } else if (captchaImgType == 2) {
+            //圆圈干扰验证码
+            CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(sysCaptchaConfigVo.getImage().getWidth(), sysCaptchaConfigVo.getImage().getHeight(), sysCaptchaConfigVo.getImage().getCodeCount(), sysCaptchaConfigVo.getImage().getOlCount());
+            captcha.createCode();
+            code = captcha.getCode();
+            base64 = captcha.getImageBase64();
+        } else if (captchaImgType == 3) {
+            //扭曲干扰验证码
+            ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(sysCaptchaConfigVo.getImage().getWidth(), sysCaptchaConfigVo.getImage().getHeight(), sysCaptchaConfigVo.getImage().getCodeCount(), sysCaptchaConfigVo.getImage().getOlCount());
+            captcha.createCode();
+            code = captcha.getCode();
+            base64 = captcha.getImageBase64();
+        } else if (captchaImgType == 4) {
+            //GIF
+            GifCaptcha captcha = CaptchaUtil.createGifCaptcha(sysCaptchaConfigVo.getImage().getWidth(), sysCaptchaConfigVo.getImage().getHeight(), sysCaptchaConfigVo.getImage().getCodeCount());
+            captcha.createCode();
+            code = captcha.getCode();
+            base64 = captcha.getImageBase64();
+        } else if (captchaImgType == 5) {
+            //加减运算
+            CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(sysCaptchaConfigVo.getImage().getWidth(), sysCaptchaConfigVo.getImage().getHeight());
+            int a = RandomUtil.randomInt(10, 20);
+            int b = RandomUtil.randomInt(1, 10);
+            int res;
+            String type;
+            if (RandomUtil.randomBoolean()) {
+                res = a + b;
+                type = "+";
+            } else {
+                res = a - b;
+                type = "-";
+            }
+            code = String.valueOf(res);
+            Image image = captcha.createImage(a + " " + type + " " + b + " =");
+            base64 = ImgUtil.toBase64(image, ImgUtil.IMAGE_TYPE_PNG);
+        }
+        String uuid = IdUtil.randomUUID();
+        RedisUtil.setValue(RedisConstant.CAPTCHA_IMG + uuid, code, 300L, TimeUnit.SECONDS);
+        map.put("uuid", uuid);
+        map.put("img", base64);
+        return map;
+    }
+
+    /**
+     * 创建腾讯验证码
+     *
+     * @param sysCaptchaConfigVo
+     * @return
+     */
+    private HashMap<String, Object> createCaptchaSlider(SysCaptchaConfigVo sysCaptchaConfigVo) {
+        HashMap<String, Object> map = new HashMap<>();
+        String uuid = IdUtil.randomUUID();
+        RedisUtil.setValue(RedisConstant.CAPTCHA_SLIDER + uuid, "1", 300L, TimeUnit.SECONDS);
+        map.put("uuid", uuid);
+        return map;
+    }
+
+    /**
+     * 校验验证码
+     *
+     * @param vo
+     */
+    @Override
+    public void validatedCaptcha(SysSubmitCaptchaVo vo) {
+        SysCaptchaConfigVo sysCaptchaConfigVo = sysConfigService.getSysCaptchaConfigVo();
+        if (!"true".equals(sysCaptchaConfigVo.getConfig().getLock())) {
+            return;
+        }
+        if (sysCaptchaConfigVo.getConfig().getType() == 0) {
+            //图片验证码
+            if (ObjectUtil.isEmpty(vo.getCode()) || ObjectUtil.isEmpty(vo.getUuid())) {
+                throw new MyException("验证码相关参数不能为空");
+            }
+            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+            if (ObjectUtil.isEmpty(codeReal)) {
+                throw new MyException("验证码已过期，请刷新验证码");
+            }
+            if (!codeReal.equals(vo.getCode())) {
+                RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+                throw new MyException("验证码错误");
+            }
+            RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+        } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
+            //腾讯验证码
+            if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket()) || ObjectUtil.isEmpty(vo.getUuid())) {
+                throw new MyException("验证码相关参数不能为空");
+            }
+            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
+            if (ObjectUtil.isEmpty(codeReal)) {
+                throw new MyException("验证参数已过期，请重新验证");
+            }
+            String md5 = SecureUtil.md5(vo.getRandStr() + vo.getTicket());
+            if (!MyUtil.checkTencentCaptchaSlider(vo.getRandStr(), vo.getTicket())) {
+                throw new MyException("验证失败，请重试");
+            }
+            RedisUtil.del(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
+        }
+    }
 
     /**
      * 获取邮箱验证码
@@ -80,7 +229,7 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public Result getEmailValidCode(SysLoginVo vo) {
-        captchaService.validatedCaptcha(vo);
+        validatedCaptcha(vo);
         if (ObjectUtil.isEmpty(vo.getEmail())) {
             throw new MyException("请填写邮箱");
         }
@@ -132,9 +281,9 @@ public class SysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public Result getPhoneValidCode(SysLoginVo vo) {
-        captchaService.validatedCaptcha(vo);
+        validatedCaptcha(vo);
         if (ObjectUtil.isEmpty(vo.getPhone())) {
-            throw new MyException("请填写邮箱");
+            throw new MyException("请填写手机号");
         }
         SysUser sysUser = sysUserService.getUserByPhone(vo.getPhone());
         if (ObjectUtil.isEmpty(sysUser)) {
@@ -198,7 +347,7 @@ public class SysLoginServiceImpl implements SysLoginService {
         if (vo.getLoginType().equals(LoginType.USERNAME.getCode())) {
             //账号密码登录
             //校验验证码
-            captchaService.validatedCaptcha(vo);
+            validatedCaptcha(vo);
             remark = remark + "/" + LoginType.USERNAME.getDesc();
             if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
                 throw new MyException("账号和密码不能为空");
@@ -378,7 +527,7 @@ public class SysLoginServiceImpl implements SysLoginService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(SysRegisterVo vo) {
-        captchaService.validatedCaptcha(vo);
+        validatedCaptcha(vo);
         //判空
         if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
             throw new MyException("账号和密码不能为空");

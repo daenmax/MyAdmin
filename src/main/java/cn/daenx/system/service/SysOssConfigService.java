@@ -1,6 +1,6 @@
 package cn.daenx.system.service;
 
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.ComStatusUpdVo;
 import cn.daenx.system.domain.po.SysOssConfig;
 import cn.daenx.system.domain.vo.SysOssConfigAddVo;
 import cn.daenx.system.domain.vo.SysOssConfigPageVo;

@@ -1,8 +1,8 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.po.SysRole;
@@ -41,9 +41,9 @@ public class SysRoleController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:role:list")
-    @GetMapping(value = "/list")
-    public Result list(SysRolePageVo vo) {
+    @SaCheckPermission("system:role:page")
+    @GetMapping(value = "/page")
+    public Result page(SysRolePageVo vo) {
         IPage<SysRole> page = sysRoleService.getPage(vo);
         return Result.ok(page);
     }
@@ -146,9 +146,9 @@ public class SysRoleController {
     /**
      * 查询已分配该角色的用户列表
      */
-    @SaCheckPermission("system:role:list")
-    @GetMapping("/authUser/allocatedList")
-    public Result allocatedList(SysUserPageVo vo, String roleId) {
+    @SaCheckPermission("system:role:page")
+    @GetMapping("/authUser/allocatedPage")
+    public Result allocatedPage(SysUserPageVo vo, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }
@@ -159,9 +159,9 @@ public class SysRoleController {
     /**
      * 查询未分配该角色的用户列表
      */
-    @SaCheckPermission("system:role:list")
-    @GetMapping("/authUser/unallocatedList")
-    public Result unallocatedList(SysUserPageVo vo, String roleId) {
+    @SaCheckPermission("system:role:page")
+    @GetMapping("/authUser/unallocatedPage")
+    public Result unallocatedPage(SysUserPageVo vo, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }

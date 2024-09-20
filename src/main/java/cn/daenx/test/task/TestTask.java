@@ -1,6 +1,6 @@
 package cn.daenx.test.task;
 
-import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.common.exception.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

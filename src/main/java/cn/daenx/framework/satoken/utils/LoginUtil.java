@@ -1,9 +1,8 @@
 package cn.daenx.framework.satoken.utils;
 
-import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.constant.enums.DeviceType;
-import cn.daenx.framework.common.utils.RedisUtil;
-import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
+import cn.daenx.common.constant.enums.DeviceType;
+import cn.daenx.common.utils.RedisUtil;
+import cn.daenx.common.vo.system.other.SysLoginUserVo;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;

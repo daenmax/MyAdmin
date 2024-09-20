@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.dto.SysJobLogPageDto;
 import cn.daenx.system.domain.vo.SysJobLogPageVo;
@@ -28,9 +28,9 @@ public class SysJobLogController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("monitor:jobLog:list")
-    @GetMapping(value = "/list")
-    public Result list(SysJobLogPageVo vo) {
+    @SaCheckPermission("monitor:jobLog:page")
+    @GetMapping(value = "/page")
+    public Result page(SysJobLogPageVo vo) {
         IPage<SysJobLogPageDto> page = sysJobLogService.getPage(vo);
         return Result.ok(page);
     }

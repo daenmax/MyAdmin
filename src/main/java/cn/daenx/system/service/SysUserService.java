@@ -1,7 +1,7 @@
 package cn.daenx.system.service;
 
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.po.SysUser;
 import cn.daenx.system.domain.vo.*;

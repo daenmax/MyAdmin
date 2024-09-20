@@ -1,18 +1,18 @@
 package cn.daenx.system.service.impl;
 
-import cn.daenx.framework.common.constant.CommonConstant;
-import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.vo.system.config.SysUploadConfigVo;
+import cn.daenx.common.constant.CommonConstant;
+import cn.daenx.common.constant.SystemConstant;
+import cn.daenx.common.vo.system.config.SysUploadConfigVo;
 import cn.daenx.framework.dataScope.annotation.DataScope;
-import cn.daenx.framework.common.constant.RedisConstant;
-import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.common.constant.RedisConstant;
+import cn.daenx.common.exception.MyException;
 import cn.daenx.framework.oss.core.OssClient;
 import cn.daenx.framework.oss.enums.AccessPolicyType;
 import cn.daenx.framework.oss.utils.OssUtil;
 import cn.daenx.framework.oss.vo.OssProperties;
 import cn.daenx.framework.oss.vo.UploadResult;
-import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.common.utils.MyUtil;
+import cn.daenx.common.utils.RedisUtil;
 import cn.daenx.system.domain.dto.SysFilePageDto;
 import cn.daenx.system.service.SysConfigService;
 import cn.daenx.system.domain.vo.SysFilePageVo;

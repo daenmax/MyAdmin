@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.po.SysConfig;
 import cn.daenx.system.domain.vo.SysConfigAddVo;
@@ -31,9 +31,9 @@ public class SysConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:config:list")
-    @GetMapping(value = "/list")
-    public Result list(SysConfigPageVo vo) {
+    @SaCheckPermission("system:config:page")
+    @GetMapping(value = "/page")
+    public Result page(SysConfigPageVo vo) {
         IPage<SysConfig> page = sysConfigService.getPage(vo);
         return Result.ok(page);
     }

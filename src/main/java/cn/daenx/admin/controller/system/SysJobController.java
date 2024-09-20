@@ -1,9 +1,9 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComIdVo;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.ComIdVo;
+import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.system.domain.po.SysJob;
 import cn.daenx.system.domain.vo.SysJobAddVo;
 import cn.daenx.system.domain.vo.SysJobPageVo;
@@ -31,9 +31,9 @@ public class SysJobController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("monitor:job:list")
-    @GetMapping(value = "/list")
-    public Result list(SysJobPageVo vo) {
+    @SaCheckPermission("monitor:job:page")
+    @GetMapping(value = "/page")
+    public Result page(SysJobPageVo vo) {
         IPage<SysJob> page = sysJobService.getPage(vo);
         return Result.ok(page);
     }

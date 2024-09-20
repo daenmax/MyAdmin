@@ -1,6 +1,6 @@
 package cn.daenx.framework.notify.email.service;
 
-import cn.daenx.framework.common.vo.system.config.SysEmailConfigVo;
+import cn.daenx.common.vo.system.config.SysEmailConfigVo;
 
 import java.io.File;
 import java.util.List;

@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.po.SysLogLogin;
 import cn.daenx.system.domain.vo.SysLogLoginPageVo;
@@ -28,9 +28,9 @@ public class SysLogLoginController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("monitor:logLogin:list")
-    @GetMapping(value = "/list")
-    public Result list(SysLogLoginPageVo vo) {
+    @SaCheckPermission("monitor:logLogin:page")
+    @GetMapping(value = "/page")
+    public Result page(SysLogLoginPageVo vo) {
         IPage<SysLogLogin> page = sysLogLoginService.getPage(vo);
         return Result.ok(page);
     }

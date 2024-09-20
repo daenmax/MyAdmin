@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.po.SysLogOper;
 import cn.daenx.system.domain.vo.SysLogOperPageVo;
@@ -28,9 +28,9 @@ public class SysLogOperController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("monitor:logOper:list")
-    @GetMapping(value = "/list")
-    public Result list(SysLogOperPageVo vo) {
+    @SaCheckPermission("monitor:logOper:page")
+    @GetMapping(value = "/page")
+    public Result page(SysLogOperPageVo vo) {
         IPage<SysLogOper> page = sysLogOperService.getPage(vo);
         return Result.ok(page);
     }

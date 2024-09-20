@@ -1,6 +1,6 @@
 package cn.daenx.framework.quartz.utils;
 
-import cn.daenx.framework.common.vo.system.other.SysJobVo;
+import cn.daenx.common.vo.system.other.SysJobVo;
 import cn.daenx.framework.quartz.constant.QuartzConstant;
 import cn.daenx.framework.quartz.constant.ScheduleConstants;
 import cn.daenx.framework.quartz.exception.TaskException;

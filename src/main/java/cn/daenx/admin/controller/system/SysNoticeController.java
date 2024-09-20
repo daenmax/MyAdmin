@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.system.domain.dto.SysNoticePageDto;
 import cn.daenx.system.domain.po.SysNotice;
 import cn.daenx.system.domain.vo.SysNoticeAddVo;
@@ -29,9 +29,9 @@ public class SysNoticeController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("monitor:notice:list")
-    @GetMapping("/list")
-    public Result list(SysNoticePageVo vo) {
+    @SaCheckPermission("monitor:notice:page")
+    @GetMapping("/page")
+    public Result page(SysNoticePageVo vo) {
         IPage<SysNoticePageDto> page = sysNoticeService.getPage(vo);
         return Result.ok(page);
     }

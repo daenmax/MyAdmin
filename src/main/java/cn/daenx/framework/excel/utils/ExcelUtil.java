@@ -1,6 +1,6 @@
 package cn.daenx.framework.excel.utils;
 
-import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.common.exception.MyException;
 import cn.daenx.framework.excel.*;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;

@@ -1,8 +1,8 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.ComStatusUpdVo;
+import cn.daenx.common.vo.Result;
 import cn.daenx.system.domain.po.SysOssConfig;
 import cn.daenx.system.domain.vo.SysOssConfigAddVo;
 import cn.daenx.system.domain.vo.SysOssConfigPageVo;
@@ -30,9 +30,9 @@ public class SysOssConfigController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("monitor:ossConfig:list")
-    @GetMapping(value = "/list")
-    public Result list(SysOssConfigPageVo vo) {
+    @SaCheckPermission("monitor:ossConfig:page")
+    @GetMapping(value = "/page")
+    public Result page(SysOssConfigPageVo vo) {
         IPage<SysOssConfig> page = sysOssConfigService.getPage(vo);
         return Result.ok(page);
     }

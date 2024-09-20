@@ -1,9 +1,7 @@
 package cn.daenx.system.domain.po;
 
-import cn.daenx.framework.common.vo.BaseEntity;
-import com.baomidou.mybatisplus.annotation.IdType;
+import cn.daenx.common.vo.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;

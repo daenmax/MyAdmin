@@ -1,7 +1,7 @@
 package cn.daenx.admin.controller.system;
 
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.common.exception.MyException;
+import cn.daenx.common.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.po.SysPosition;
@@ -35,9 +35,9 @@ public class SysPositionController {
      * @param vo
      * @return
      */
-    @SaCheckPermission("system:position:list")
-    @GetMapping(value = "/list")
-    public Result list(SysPositionPageVo vo) {
+    @SaCheckPermission("system:position:page")
+    @GetMapping(value = "/page")
+    public Result page(SysPositionPageVo vo) {
         IPage<SysPosition> page = sysPositionService.getPage(vo);
         return Result.ok(page);
     }
@@ -113,9 +113,9 @@ public class SysPositionController {
     /**
      * 查询已分配该岗位的用户列表
      */
-    @SaCheckPermission("system:position:list")
-    @GetMapping("/authUser/allocatedList")
-    public Result allocatedList(SysUserPageVo vo, String positionId) {
+    @SaCheckPermission("system:position:page")
+    @GetMapping("/authUser/allocatedPage")
+    public Result allocatedPage(SysUserPageVo vo, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
@@ -126,9 +126,9 @@ public class SysPositionController {
     /**
      * 查询未分配该岗位的用户列表
      */
-    @SaCheckPermission("system:position:list")
-    @GetMapping("/authUser/unallocatedList")
-    public Result unallocatedList(SysUserPageVo vo, String positionId) {
+    @SaCheckPermission("system:position:page")
+    @GetMapping("/authUser/unallocatedPage")
+    public Result unallocatedPage(SysUserPageVo vo, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
