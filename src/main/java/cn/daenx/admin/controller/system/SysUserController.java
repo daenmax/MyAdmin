@@ -7,7 +7,7 @@ import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.vo.*;
 import cn.daenx.system.service.SysDeptService;
-import cn.daenx.system.service.SysLoginService;
+import cn.daenx.system.service.LoginService;
 import cn.daenx.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
@@ -30,7 +30,7 @@ public class SysUserController {
     @Resource
     private SysDeptService sysDeptService;
     @Resource
-    private SysLoginService sysLoginService;
+    private LoginService loginService;
 
     /**
      * 个人信息
@@ -231,7 +231,7 @@ public class SysUserController {
      */
     @PostMapping("/getEmailValidCode")
     public Result getEmailValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
-        sysLoginService.validatedCaptcha(vo);
+        loginService.validatedCaptcha(vo);
         return sysUserService.getEmailValidCode(vo);
     }
 
@@ -242,7 +242,7 @@ public class SysUserController {
      */
     @PostMapping("/getPhoneValidCode")
     public Result getPhoneValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
-        sysLoginService.validatedCaptcha(vo);
+        loginService.validatedCaptcha(vo);
         return sysUserService.getPhoneValidCode(vo);
     }
 
