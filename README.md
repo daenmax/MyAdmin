@@ -8,7 +8,7 @@
 <img src='https://img.shields.io/github/stars/daenmax/myadmin.svg?style=social&label=Stars' alt='star'>
 </a>
 <a href="https://gitee.com/classicChickenWings/ape-frame">
-<img src="https://img.shields.io/badge/version-v1.1.0-brightgreen.svg">
+<img src="https://img.shields.io/badge/version-v1.2.0-brightgreen.svg">
 </a>
 </p>
 
