@@ -19,8 +19,6 @@ public class Sm4Util {
      */
     public static void main(String[] args) {
         String key = genkey();
-//        String key = "40e9cb4a0b7b778c881ca3e48416a5bc";
-//        System.out.println(key.substring(0, 16));
         System.out.println(key);
         String enc = encrypt("你好啊", key, true);
         System.out.println(enc);
