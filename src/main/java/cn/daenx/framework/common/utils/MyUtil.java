@@ -121,40 +121,6 @@ public class MyUtil {
     }
 
     /**
-     * SM4加密
-     *
-     * @param data 明文
-     * @param key  任意长度，任意字符串，因为取的是MD5
-     * @return
-     */
-    public static String sm4Encrypt(String data, String key) {
-        try {
-            SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
-            String encryptHex = sm4.encryptHex(data);
-            return encryptHex;
-        } catch (Exception e) {
-            return data;
-        }
-    }
-
-    /**
-     * SM4解密
-     *
-     * @param data 密文
-     * @param key  任意长度，任意字符串，因为取的是MD5
-     * @return
-     */
-    public static String sm4Decrypt(String data, String key) {
-        try {
-            SymmetricCrypto sm4 = new SymmetricCrypto("SM4", Hex.decode(MD5.create().digestHex(key)));
-            String decryptStr = sm4.decryptStr(data, CharsetUtil.CHARSET_UTF_8);
-            return decryptStr;
-        } catch (Exception e) {
-            return data;
-        }
-    }
-
-    /**
      * 检查腾讯验证码是否有效
      *
      * @param randStr
