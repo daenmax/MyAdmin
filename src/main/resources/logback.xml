@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="log.path" value="./log"/>
-    <property name="console.log.pattern"
-              value="%yellow([%d{yyyy-MM-dd HH:mm:ss:SSS}]) %green([%thread]) %highlight([ %-5level ]) → %boldMagenta([%logger{36}]%n) %msg%n"/>
+    <property name="console.log.pattern" value="%yellow([%d{yyyy-MM-dd HH:mm:ss:SSS}]) %green([%thread]) %highlight([ %-5level ]) → %boldMagenta([%logger{36}]%n) %msg%n"/>
     <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
 
     <!-- IDE控制台 输出 -->
@@ -16,12 +15,9 @@
     <!-- 控制台 日志写出 -->
     <appender name="file_console" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/console.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 按时间归档的同时，也按文件大小来归档 -->
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
+            <maxFileSize>100MB</maxFileSize>
             <!-- 归档日志文件名格式 -->
             <fileNamePattern>${log.path}/logs/%d{yyyy-MM-dd}/console.%i.log.zip</fileNamePattern>
             <!-- 归档日志文件保留时间/天 -->
@@ -43,12 +39,9 @@
     <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/info.log</file>
         <!-- 按时间归档的同时，也按文件大小来归档 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 按时间回滚的同时，按文件大小来回滚 -->
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
+            <maxFileSize>100MB</maxFileSize>
             <!-- 归档日志文件名格式 -->
             <fileNamePattern>${log.path}/logs/%d{yyyy-MM-dd}/info.%i.log.zip</fileNamePattern>
             <!-- 归档日志文件保留时间/天 -->
@@ -73,12 +66,9 @@
     <appender name="file_warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/warn.log</file>
         <!-- 按时间归档的同时，也按文件大小来归档 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 按时间回滚的同时，按文件大小来回滚 -->
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
+            <maxFileSize>100MB</maxFileSize>
             <!-- 归档日志文件名格式 -->
             <fileNamePattern>${log.path}/logs/%d{yyyy-MM-dd}/warn.%i.log.zip</fileNamePattern>
             <!-- 归档日志文件保留时间/天 -->
@@ -103,12 +93,9 @@
     <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/error.log</file>
         <!-- 按时间归档的同时，也按文件大小来归档 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 按时间回滚的同时，按文件大小来回滚 -->
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件归档大小，当日志文件大小达到时，将进行归档 -->
+            <maxFileSize>100MB</maxFileSize>
             <!-- 归档日志文件名格式 -->
             <fileNamePattern>${log.path}/logs/%d{yyyy-MM-dd}/error.%i.log.zip</fileNamePattern>
             <!-- 归档日志文件保留时间/天 -->

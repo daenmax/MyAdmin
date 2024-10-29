@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.3.5</version>
         <relativePath/>
     </parent>
     <groupId>cn.daenx</groupId>
@@ -15,22 +15,22 @@
     <description>MyAdmin</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>17</java.version>
-        <spring.boot.version>3.1.5</spring.boot.version>
-        <druid.version>1.2.20</druid.version>
-        <fastjson2.version>2.0.44</fastjson2.version>
-        <mybatis.plus.version>3.5.5</mybatis.plus.version>
-        <mybatis.dynamic.datasource.version>4.2.0</mybatis.dynamic.datasource.version>
-        <springdoc.webmvc-ui.version>2.2.0</springdoc.webmvc-ui.version>
-        <sa-token.version>1.37.0</sa-token.version>
-        <hutool.version>5.8.24</hutool.version>
-        <easyexcel.version>3.3.3</easyexcel.version>
-        <aws-s3.version>1.12.629</aws-s3.version>
-        <oshi.core.version>6.4.10</oshi.core.version>
-        <tencentcloud.sms.version>3.1.893</tencentcloud.sms.version>
-        <aliyun.dysmsapi.version>2.0.24</aliyun.dysmsapi.version>
+        <java.version>21</java.version>
+        <spring.boot.version>3.3.5</spring.boot.version>
+        <druid.version>1.2.23</druid.version>
+        <fastjson2.version>2.0.53</fastjson2.version>
+        <mybatis.plus.version>3.5.9</mybatis.plus.version>
+        <mybatis.dynamic.datasource.version>4.3.1</mybatis.dynamic.datasource.version>
+        <springdoc.webmvc-ui.version>2.6.0</springdoc.webmvc-ui.version>
+        <sa-token.version>1.39.0</sa-token.version>
+        <hutool.version>5.8.32</hutool.version>
+        <easyexcel.version>4.0.3</easyexcel.version>
+        <aws-s3.version>1.12.777</aws-s3.version>
+        <oshi.core.version>6.6.5</oshi.core.version>
+        <tencentcloud.sms.version>3.1.1129</tencentcloud.sms.version>
+        <aliyun.dysmsapi.version>3.1.0</aliyun.dysmsapi.version>
         <bouncycastle.version>1.78.1</bouncycastle.version>
-        <orai18n.version>23.3.0.23.09</orai18n.version>
+        <orai18n.version>23.5.0.24.07</orai18n.version>
     </properties>
     <profiles>
         <profile>
@@ -151,6 +151,12 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>${mybatis.plus.version}</version>
+        </dependency>
+        <!-- mybatis-plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
             <version>${mybatis.plus.version}</version>
         </dependency>
         <!-- mybatis-plus 多数据源 -->
