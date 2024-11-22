@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
 @Configuration
 @Slf4j
@@ -29,6 +30,14 @@ public class SaTokenInterceptorConfig implements WebMvcConfigurer {
         SaInterceptor saInterceptor = new SaInterceptor(new SaParamFunction<Object>() {
             @Override
             public void run(Object o) {
+                //放行前端静态资源目录
+                if (o instanceof ParameterizableViewController) {
+                    ParameterizableViewController controller = (ParameterizableViewController) o;
+                    String viewName = controller.getViewName();
+                    if ("forward:index.html".equals(viewName)) {
+                        return;
+                    }
+                }
                 //检查所有的路径
                 SaRouter.match("/**").check(new SaParamFunction<SaRouterStaff>() {
                     //以下是检查代码

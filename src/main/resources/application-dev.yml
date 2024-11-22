@@ -185,3 +185,8 @@ check-login:
     - /swagger-ui/**
     - /api-docs
     - /api-docs/**
+    # 前端静态资源
+#    - /index.html
+#    - /favicon.ico
+#    - /static/**
+#    - /error
