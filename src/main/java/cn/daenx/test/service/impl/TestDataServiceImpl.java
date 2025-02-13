@@ -60,6 +60,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     }
 
     /**
+     * 分页列表
      * 测试数据分页列表_MP分页插件
      *
      * @param vo
@@ -67,13 +68,14 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      */
     @DataScope(alias = "test_data")
     @Override
-    public IPage<TestData> getPage1(TestDataPageVo vo) {
+    public IPage<TestData> getPage(TestDataPageVo vo) {
         LambdaQueryWrapper<TestData> wrapper = getWrapper(vo);
         Page<TestData> testDataPage = testDataMapper.selectPage(vo.getPage(true), wrapper);
         return testDataPage;
     }
 
     /**
+     * 分页列表2
      * 测试数据分页列表_自己写的SQL
      *
      * @param vo
@@ -87,6 +89,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     }
 
     /**
+     * 分页列表3
      * 测试数据分页列表_MP自定义SQL
      *
      * @param vo
@@ -97,20 +100,6 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
         QueryWrapper<TestData> wrapperQuery = getWrapperQuery(vo);
         IPage<TestDataPageDto> iPage = testDataMapper.getPageWrapper(vo.getPage(true), wrapperQuery);
         return iPage;
-    }
-
-
-    /**
-     * 获取所有列表，用于导出
-     *
-     * @param vo
-     * @return
-     */
-    @Override
-    public List<TestDataPageDto> getAll(TestDataPageVo vo) {
-        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(vo);
-        List<TestDataPageDto> list = testDataMapper.getAll(wrapperQuery);
-        return list;
     }
 
 
@@ -181,13 +170,26 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     }
 
     /**
-     * 导入数据
+     * 导出
+     *
+     * @param vo
+     * @return
+     */
+    @Override
+    public List<TestDataPageDto> exportData(TestDataPageVo vo) {
+        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(vo);
+        List<TestDataPageDto> list = testDataMapper.getAll(wrapperQuery);
+        return list;
+    }
+
+    /**
+     * 导入
      *
      * @param dataList
      * @return
      */
     @Override
-    public Integer importInfo(List<TestDataImportVo> dataList) {
+    public Integer importData(List<TestDataImportVo> dataList) {
         List<TestData> newList = new ArrayList<>();
         for (TestDataImportVo testDataVo : dataList) {
             TestData testData = new TestData();
@@ -208,7 +210,7 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     }
 
     /**
-     * 测试数据-修改状态
+     * 修改状态
      *
      * @param vo
      */

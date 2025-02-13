@@ -16,14 +16,16 @@ import java.util.List;
 public interface TestDataService extends IService<TestData> {
 
     /**
+     * 分页列表
      * 测试数据分页列表_MP分页插件
      *
      * @param vo
      * @return
      */
-    IPage<TestData> getPage1(TestDataPageVo vo);
+    IPage<TestData> getPage(TestDataPageVo vo);
 
     /**
+     * 分页列表2
      * 测试数据分页列表_自己写的SQL
      *
      * @param vo
@@ -32,6 +34,7 @@ public interface TestDataService extends IService<TestData> {
     IPage<TestDataPageDto> getPage2(TestDataPageVo vo);
 
     /**
+     * 分页列表3
      * 测试数据分页列表_MP自定义SQL
      *
      * @param vo
@@ -69,23 +72,23 @@ public interface TestDataService extends IService<TestData> {
     void deleteByIds(List<String> ids);
 
     /**
-     * 获取所有列表，用于导出
+     * 导出
      *
      * @param vo
      * @return
      */
-    List<TestDataPageDto> getAll(TestDataPageVo vo);
+    List<TestDataPageDto> exportData(TestDataPageVo vo);
 
     /**
-     * 导入数据
+     * 导入
      *
      * @param dataList
      * @return
      */
-    Integer importInfo(List<TestDataImportVo> dataList);
+    Integer importData(List<TestDataImportVo> dataList);
 
     /**
-     * 测试数据-修改状态
+     * 修改状态
      *
      * @param vo
      */

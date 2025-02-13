@@ -42,8 +42,8 @@ public class SysJobLogController {
      * @param response
      */
     @SaCheckPermission("monitor:jobLog:export")
-    @PostMapping("/export")
-    public void export(SysJobLogPageVo vo, HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(SysJobLogPageVo vo, HttpServletResponse response) {
         List<SysJobLogPageDto> list = sysJobLogService.getAll(vo);
         ExcelUtil.exportXlsx(response, "定时任务执行日志", "定时任务执行日志", list, SysJobLogPageDto.class);
     }

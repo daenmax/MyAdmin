@@ -59,9 +59,9 @@ public class SysUserController {
      * 导出
      */
     @SaCheckPermission("system:user:export")
-    @PostMapping("/export")
-    public void export(SysUserPageVo vo, HttpServletResponse response) {
-        List<SysUserPageDto> list = sysUserService.getAll(vo);
+    @PostMapping("/exportData")
+    public void exportData(SysUserPageVo vo, HttpServletResponse response) {
+        List<SysUserPageDto> list = sysUserService.exportData(vo);
         ExcelUtil.exportXlsx(response, "用户", "系统用户", list, SysUserPageDto.class);
     }
 

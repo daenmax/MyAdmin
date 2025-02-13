@@ -52,8 +52,8 @@ public class SysRoleController {
      * 导出
      */
     @SaCheckPermission("system:role:export")
-    @PostMapping("/export")
-    public void export(SysRolePageVo vo, HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(SysRolePageVo vo, HttpServletResponse response) {
         List<SysRole> list = sysRoleService.getAll(vo);
         ExcelUtil.exportXlsx(response, "角色", "角色数据", list, SysRole.class);
     }

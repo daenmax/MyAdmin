@@ -39,8 +39,8 @@ public class SysLogLoginController {
      * 导出
      */
     @SaCheckPermission("monitor:logLogin:export")
-    @PostMapping("/export")
-    public void export(SysLogLoginPageVo vo, HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(SysLogLoginPageVo vo, HttpServletResponse response) {
         List<SysLogLogin> list = sysLogLoginService.getAll(vo);
         ExcelUtil.exportXlsx(response, "登录日志", "登录日志", list, SysLogLogin.class);
     }

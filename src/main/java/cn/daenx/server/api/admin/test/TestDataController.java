@@ -34,6 +34,7 @@ public class TestDataController {
     private TestDataService testDataService;
 
     /**
+     * 分页列表
      * 测试数据-分页列表_MP分页插件
      *
      * @param vo
@@ -41,13 +42,14 @@ public class TestDataController {
      */
     @Log(name = "测试数据-分页列表_MP分页插件", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:page")
-    @GetMapping("/page1")
-    public Result page1(TestDataPageVo vo) {
-        IPage<TestData> page = testDataService.getPage1(vo);
+    @GetMapping("/page")
+    public Result page(TestDataPageVo vo) {
+        IPage<TestData> page = testDataService.getPage(vo);
         return Result.ok(page);
     }
 
     /**
+     * 分页列表2
      * 测试数据-分页列表_自己写的SQL
      *
      * @param vo
@@ -62,6 +64,7 @@ public class TestDataController {
     }
 
     /**
+     * 分页列表3
      * 测试数据-分页列表_MP自定义SQL
      *
      * @param vo
@@ -76,7 +79,7 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据-新增
+     * 新增
      *
      * @param vo
      * @return
@@ -90,7 +93,7 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据-查询
+     * 查询
      *
      * @param id
      * @return
@@ -104,7 +107,7 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据-修改
+     * 修改
      *
      * @param vo
      * @return
@@ -118,7 +121,7 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据-删除
+     * 删除
      *
      * @param ids
      * @return
@@ -135,18 +138,18 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据-导出
+     * 导出
      */
     @Log(name = "测试数据-导出", type = LogOperType.EXPORT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:export")
-    @PostMapping("/export")
-    public void export(TestDataPageVo vo, HttpServletResponse response) {
-        List<TestDataPageDto> list = testDataService.getAll(vo);
+    @PostMapping("/exportData")
+    public void exportData(TestDataPageVo vo, HttpServletResponse response) {
+        List<TestDataPageDto> list = testDataService.exportData(vo);
         ExcelUtil.exportXlsx(response, "测试数据", "测试数据", list, TestDataPageDto.class);
     }
 
     /**
-     * 测试数据-导入
+     * 导入
      */
     @Log(name = "测试数据-导入", type = LogOperType.IMPORT, recordParams = false, recordResult = true)
     @SaCheckPermission("test:data:import")
@@ -154,12 +157,12 @@ public class TestDataController {
     public Result importData(@RequestPart("file") MultipartFile file) throws IOException {
         ExcelResult<TestDataImportVo> excelResult = ExcelUtil.importExcel(file.getInputStream(), TestDataImportVo.class, true);
         List<TestDataImportVo> dataList = excelResult.getList();
-        Integer num = testDataService.importInfo(dataList);
+        Integer num = testDataService.importData(dataList);
         return Result.ok("成功导入" + num + "条");
     }
 
     /**
-     * 测试数据-下载导入模板
+     * 下载导入模板
      */
     @Log(name = "测试数据-下载导入模板", type = LogOperType.OTHER, recordParams = true, recordResult = false)
     @PostMapping("/importTemplate")
@@ -168,7 +171,7 @@ public class TestDataController {
     }
 
     /**
-     * 测试数据-修改状态
+     * 修改状态
      *
      * @param vo
      * @return

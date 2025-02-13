@@ -44,8 +44,8 @@ public class SysMenuController {
      * @return
      */
     @SaCheckPermission("system:menu:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysMenu sysMenu = sysMenuService.getInfo(id);
         return Result.ok(sysMenu);
     }

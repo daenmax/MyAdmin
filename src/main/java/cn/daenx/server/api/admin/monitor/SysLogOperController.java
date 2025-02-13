@@ -39,8 +39,8 @@ public class SysLogOperController {
      * 导出
      */
     @SaCheckPermission("monitor:logOper:export")
-    @PostMapping("/export")
-    public void export(SysLogOperPageVo vo, HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(SysLogOperPageVo vo, HttpServletResponse response) {
         List<SysLogOper> list = sysLogOperService.getAll(vo);
         ExcelUtil.exportXlsx(response, "操作日志", "操作日志", list, SysLogOper.class);
     }

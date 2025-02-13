@@ -42,8 +42,8 @@ public class SysConfigController {
      * 导出
      */
     @SaCheckPermission("system:config:export")
-    @PostMapping("/export")
-    public void export(SysConfigPageVo vo, HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(SysConfigPageVo vo, HttpServletResponse response) {
         List<SysConfig> list = sysConfigService.getAll(vo);
         ExcelUtil.exportXlsx(response, "系统参数", "系统参数", list, SysConfig.class);
     }

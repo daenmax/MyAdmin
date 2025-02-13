@@ -46,8 +46,8 @@ public class SysPositionController {
      * 导出
      */
     @SaCheckPermission("system:position:export")
-    @PostMapping("/export")
-    public void export(SysPositionPageVo vo, HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(SysPositionPageVo vo, HttpServletResponse response) {
         List<SysPosition> list = sysPositionService.getAll(vo);
         ExcelUtil.exportXlsx(response, "岗位", "岗位", list, SysPosition.class);
     }

@@ -376,13 +376,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     * 获取所有列表，用于导出
+     * 导出
      *
      * @param vo
      * @return
      */
     @Override
-    public List<SysUserPageDto> getAll(SysUserPageVo vo) {
+    public List<SysUserPageDto> exportData(SysUserPageVo vo) {
         QueryWrapper<SysUser> wrapper = getWrapper(vo);
         List<SysUserPageDto> list = sysUserMapper.getAll(wrapper);
         for (SysUserPageDto record : list) {

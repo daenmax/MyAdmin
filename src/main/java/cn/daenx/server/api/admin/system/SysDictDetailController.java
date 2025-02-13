@@ -41,8 +41,8 @@ public class SysDictDetailController {
      * 导出
      */
     @SaCheckPermission("system:dict:export")
-    @PostMapping("/export")
-    public void export(SysDictDetailPageVo vo, HttpServletResponse response) {
+    @PostMapping("/exportData")
+    public void exportData(SysDictDetailPageVo vo, HttpServletResponse response) {
         List<SysDictDetail> list = sysDictDetailService.getAll(vo);
         ExcelUtil.exportXlsx(response, "字典明细", vo.getDictCode() + "字典明细", list, SysDictDetail.class);
     }

@@ -137,12 +137,12 @@ public interface SysUserService extends IService<SysUser> {
     IPage<SysUserPageDto> getPage(SysUserPageVo vo);
 
     /**
-     * 获取所有列表，用于导出
+     * 导出
      *
      * @param vo
      * @return
      */
-    List<SysUserPageDto> getAll(SysUserPageVo vo);
+    List<SysUserPageDto> exportData(SysUserPageVo vo);
 
     /**
      * 查询
