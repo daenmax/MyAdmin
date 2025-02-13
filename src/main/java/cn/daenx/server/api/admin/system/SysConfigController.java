@@ -56,8 +56,8 @@ public class SysConfigController {
      * @return
      */
     @SaCheckPermission("system:config:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysConfig sysConfig = sysConfigService.getInfo(id);
         return Result.ok(sysConfig);
     }
@@ -94,9 +94,9 @@ public class SysConfigController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:config:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("system:config:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

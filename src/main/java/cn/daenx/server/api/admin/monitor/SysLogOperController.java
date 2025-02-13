@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.Result;
@@ -52,9 +52,9 @@ public class SysLogOperController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("monitor:logOper:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("monitor:logOper:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -68,7 +68,7 @@ public class SysLogOperController {
      *
      * @return
      */
-    @SaCheckPermission("monitor:logOper:remove")
+    @SaCheckPermission("monitor:logOper:del")
     @PostMapping("/clean")
     public Result clean() {
         sysLogOperService.clean();

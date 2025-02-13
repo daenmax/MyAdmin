@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.ComStatusUpdVo;
@@ -56,8 +56,8 @@ public class SysOssConfigController {
      * @return
      */
     @SaCheckPermission("monitor:ossConfig:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysOssConfig sysOssConfig = sysOssConfigService.getInfo(id);
         return Result.ok(sysOssConfig);
     }
@@ -94,9 +94,9 @@ public class SysOssConfigController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("monitor:ossConfig:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("monitor:ossConfig:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

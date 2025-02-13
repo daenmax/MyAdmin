@@ -97,8 +97,8 @@ public class TestDataController {
      */
     @Log(name = "测试数据-查询", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         TestData testData = testDataService.getInfo(id);
         return Result.ok(testData);
     }
@@ -124,8 +124,8 @@ public class TestDataController {
      * @return
      */
     @Log(name = "测试数据-删除", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
-    @SaCheckPermission("test:data:remove")
-    @PostMapping("/remove")
+    @SaCheckPermission("test:data:del")
+    @PostMapping("/del")
     public Result remove(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

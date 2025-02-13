@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.vo.Result;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -20,10 +20,10 @@ public class CacheController {
     private RedisTemplate redisTemplate;
 
     /**
-     * 获取缓存监控列表
+     * 查询缓存详细信息
      */
     @SaCheckPermission("monitor:cache:list")
-    @GetMapping()
+    @GetMapping("/getInfo")
     public Result getInfo() throws Exception {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info());
         Properties commandStats = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info("commandstats"));

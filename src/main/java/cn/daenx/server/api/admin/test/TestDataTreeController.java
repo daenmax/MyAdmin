@@ -60,8 +60,8 @@ public class TestDataTreeController {
      */
     @Log(name = "测试树表数据-查询", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         TestDataTree testDataTree = testDataTreeService.getInfo(id);
         return Result.ok(testDataTree);
     }
@@ -87,9 +87,9 @@ public class TestDataTreeController {
      * @return
      */
     @Log(name = "测试树表数据-删除", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
-    @SaCheckPermission("test:dataTree:remove")
-    @PostMapping("/remove/{id}")
-    public Result remove(@PathVariable("id") String id) {
+    @SaCheckPermission("test:dataTree:del")
+    @PostMapping("/del")
+    public Result del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");
         }

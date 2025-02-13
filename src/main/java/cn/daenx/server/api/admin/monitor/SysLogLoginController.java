@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.Result;
@@ -52,9 +52,9 @@ public class SysLogLoginController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("monitor:logLogin:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("monitor:logLogin:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -68,7 +68,7 @@ public class SysLogLoginController {
      *
      * @return
      */
-    @SaCheckPermission("monitor:logLogin:remove")
+    @SaCheckPermission("monitor:logLogin:del")
     @PostMapping("/clean")
     public Result clean() {
         sysLogLoginService.clean();

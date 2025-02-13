@@ -68,8 +68,8 @@ public class SysDictController {
      * @return
      */
     @SaCheckPermission("system:dict:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysDict sysDict = sysDictService.getInfo(id);
         return Result.ok(sysDict);
     }
@@ -93,9 +93,9 @@ public class SysDictController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:dict:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("system:dict:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.vo.Result;
@@ -28,12 +28,12 @@ import java.util.Properties;
 public class ServerController {
 
     /**
-     * 服务监控
+     * 查询服务监控详细信息
      *
      * @return
      */
     @SaCheckPermission("monitor:server:list")
-    @GetMapping("")
+    @GetMapping("/getInfo")
     public Result server() {
         oshi.SystemInfo si = new oshi.SystemInfo();
         HardwareAbstractionLayer hal = si.getHardware();

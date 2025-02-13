@@ -7,7 +7,6 @@ import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.system.domain.dto.SysUserPageDto;
 import cn.daenx.system.domain.vo.*;
 import cn.daenx.system.service.SysDeptService;
-import cn.daenx.system.service.LoginService;
 import cn.daenx.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
@@ -16,9 +15,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +26,6 @@ public class SysUserController {
     private SysUserService sysUserService;
     @Resource
     private SysDeptService sysDeptService;
-    @Resource
-    private LoginService loginService;
 
 
 
@@ -77,8 +72,8 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:query")
-    @GetMapping(value = {"/", "/{id}"})
-    public Result query(@PathVariable(value = "id", required = false) String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         Map<String, Object> map = sysUserService.getInfo(id);
         return Result.ok(map);
     }
@@ -143,9 +138,9 @@ public class SysUserController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:user:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("system:user:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

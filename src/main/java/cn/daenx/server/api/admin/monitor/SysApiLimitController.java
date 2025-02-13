@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.system.service.SysApiLimitService;
 import cn.daenx.framework.common.exception.MyException;
@@ -44,8 +44,8 @@ public class SysApiLimitController {
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysApiLimit SysApiLimit = SysApiLimitService.getInfo(id);
         return Result.ok(SysApiLimit);
     }
@@ -95,9 +95,9 @@ public class SysApiLimitController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("monitor:apiLimit:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("monitor:apiLimit:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

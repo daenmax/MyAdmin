@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.Result;
@@ -55,8 +55,8 @@ public class SysJobLogController {
      * @return
      */
     @SaCheckPermission("monitor:jobLog:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysJobLogPageDto sysJobLogPageDto = sysJobLogService.getInfo(id);
         return Result.ok(sysJobLogPageDto);
     }
@@ -67,9 +67,9 @@ public class SysJobLogController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("monitor:jobLog:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("monitor:jobLog:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -82,7 +82,7 @@ public class SysJobLogController {
      *
      * @return
      */
-    @SaCheckPermission("monitor:jobLog:remove")
+    @SaCheckPermission("monitor:jobLog:del")
     @PostMapping("/clean")
     public Result clean() {
         sysJobLogService.clean();

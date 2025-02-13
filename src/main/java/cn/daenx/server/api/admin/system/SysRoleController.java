@@ -65,8 +65,8 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysRole sysRole = sysRoleService.getInfo(id);
         return Result.ok(sysRole);
     }
@@ -103,9 +103,9 @@ public class SysRoleController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:role:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("system:role:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -147,7 +147,7 @@ public class SysRoleController {
      * 查询已分配该角色的用户列表
      */
     @SaCheckPermission("system:role:page")
-    @GetMapping("/authUser/allocatedPage")
+    @GetMapping("/allocatedAuthUserPage")
     public Result allocatedPage(SysUserPageVo vo, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
@@ -160,8 +160,8 @@ public class SysRoleController {
      * 查询未分配该角色的用户列表
      */
     @SaCheckPermission("system:role:page")
-    @GetMapping("/authUser/unallocatedPage")
-    public Result unallocatedPage(SysUserPageVo vo, String roleId) {
+    @GetMapping("/unallocatedAuthUserPage")
+    public Result unallocatedAuthUserPage(SysUserPageVo vo, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }
@@ -175,7 +175,7 @@ public class SysRoleController {
      * @param vo
      */
     @SaCheckPermission("system:role:edit")
-    @PostMapping("/authUser/cancel")
+    @PostMapping("/cancelAuthUser")
     public Result cancelAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
         sysRoleService.cancelAuthUser(vo);
         return Result.ok();
@@ -187,7 +187,7 @@ public class SysRoleController {
      * @param vo
      */
     @SaCheckPermission("system:role:edit")
-    @PostMapping("/authUser/save")
+    @PostMapping("/saveAuthUser")
     public Result saveAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
         sysRoleService.saveAuthUser(vo);
         return Result.ok();

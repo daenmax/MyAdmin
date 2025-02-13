@@ -61,8 +61,8 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:dept:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysDept sysDept = sysDeptService.getInfo(id);
         return Result.ok(sysDept);
     }
@@ -99,9 +99,9 @@ public class SysDeptController {
      * @param id
      * @return
      */
-    @SaCheckPermission("system:dept:remove")
-    @PostMapping("/remove/{id}")
-    public Result remove(@PathVariable("id") String id) {
+    @SaCheckPermission("system:dept:del")
+    @PostMapping("/del")
+    public Result del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");
         }
@@ -117,7 +117,7 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:user:list")
-    @GetMapping(value = "/userList")
+    @GetMapping(value = "/getUserList")
     public Result getUserList(String id, String keyword) {
         List<SysUserPageDto> userList = sysUserService.getUserList(id, keyword, keyword, keyword, keyword, keyword);
         return Result.ok(userList);

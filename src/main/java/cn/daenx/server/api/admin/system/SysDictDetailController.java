@@ -25,17 +25,6 @@ public class SysDictDetailController {
     private SysDictDetailService sysDictDetailService;
 
     /**
-     * 根据字典编码查询字典详细信息
-     *
-     * @param dictCode 字典编码
-     */
-    @GetMapping(value = "/type/{dictCode}")
-    public Result dictType(@PathVariable String dictCode) {
-        List<SysDictDetail> data = sysDictDetailService.getDictDetailByCodeFromRedis(dictCode);
-        return Result.ok(data);
-    }
-
-    /**
      * 分页列表
      *
      * @param vo
@@ -79,8 +68,8 @@ public class SysDictDetailController {
      * @return
      */
     @SaCheckPermission("system:dict:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysDictDetail sysDictDetail = sysDictDetailService.getInfo(id);
         return Result.ok(sysDictDetail);
     }
@@ -104,9 +93,9 @@ public class SysDictDetailController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:dict:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("system:dict:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

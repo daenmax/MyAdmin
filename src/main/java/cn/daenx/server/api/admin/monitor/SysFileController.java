@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.constant.enums.LogOperType;
@@ -61,9 +61,9 @@ public class SysFileController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("monitor:file:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("monitor:file:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

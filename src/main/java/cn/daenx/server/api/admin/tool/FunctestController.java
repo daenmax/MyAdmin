@@ -1,4 +1,4 @@
-package cn.daenx.server.api.admin.system;
+package cn.daenx.server.api.admin.tool;
 
 import cn.daenx.framework.notify.dingTalk.utils.DingTalkUtil;
 import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;

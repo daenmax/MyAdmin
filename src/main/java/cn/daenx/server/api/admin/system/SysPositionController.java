@@ -60,8 +60,8 @@ public class SysPositionController {
      * @return
      */
     @SaCheckPermission("system:position:query")
-    @GetMapping(value = "/{id}")
-    public Result query(@PathVariable String id) {
+    @GetMapping(value = "/query")
+    public Result query(@RequestParam(name = "id", required = true) String id) {
         SysPosition sysPosition = sysPositionService.getInfo(id);
         return Result.ok(sysPosition);
     }
@@ -98,9 +98,9 @@ public class SysPositionController {
      * @param ids
      * @return
      */
-    @SaCheckPermission("system:position:remove")
-    @PostMapping("/remove")
-    public Result remove(@RequestBody List<String> ids) {
+    @SaCheckPermission("system:position:del")
+    @PostMapping("/del")
+    public Result del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -114,8 +114,8 @@ public class SysPositionController {
      * 查询已分配该岗位的用户列表
      */
     @SaCheckPermission("system:position:page")
-    @GetMapping("/authUser/allocatedPage")
-    public Result allocatedPage(SysUserPageVo vo, String positionId) {
+    @GetMapping("/allocatedAuthUserPage")
+    public Result allocatedAuthUserPage(SysUserPageVo vo, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
@@ -127,8 +127,8 @@ public class SysPositionController {
      * 查询未分配该岗位的用户列表
      */
     @SaCheckPermission("system:position:page")
-    @GetMapping("/authUser/unallocatedPage")
-    public Result unallocatedPage(SysUserPageVo vo, String positionId) {
+    @GetMapping("/unallocatedAuthUserPage")
+    public Result unallocatedAuthUserPage(SysUserPageVo vo, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
@@ -142,7 +142,7 @@ public class SysPositionController {
      * @param vo
      */
     @SaCheckPermission("system:position:edit")
-    @PostMapping("/authUser/cancel")
+    @PostMapping("/cancelAuthUser")
     public Result cancelAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
         sysPositionService.cancelAuthUser(vo);
         return Result.ok();
@@ -154,7 +154,7 @@ public class SysPositionController {
      * @param vo
      */
     @SaCheckPermission("system:position:edit")
-    @PostMapping("/authUser/save")
+    @PostMapping("/saveAuthUser")
     public Result saveAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
         sysPositionService.saveAuthUser(vo);
         return Result.ok();

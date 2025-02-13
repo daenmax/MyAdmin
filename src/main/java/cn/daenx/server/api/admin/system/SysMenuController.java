@@ -82,9 +82,9 @@ public class SysMenuController {
      * @param id
      * @return
      */
-    @SaCheckPermission("system:menu:remove")
-    @PostMapping("/remove/{id}")
-    public Result remove(@PathVariable("id") String id) {
+    @SaCheckPermission("system:menu:del")
+    @PostMapping("/del")
+    public Result del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");
         }
