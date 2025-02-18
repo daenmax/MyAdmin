@@ -7,7 +7,7 @@ import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.vo.system.config.*;
-import cn.daenx.system.domain.vo.SysLoginFailInfoVo;
+import cn.daenx.framework.common.vo.system.config.SysLoginFailInfoConfigVo;
 import cn.daenx.system.domain.vo.SysRegisterDefaultInfoVo;
 import cn.daenx.system.domain.vo.SysConfigAddVo;
 import cn.daenx.system.domain.vo.SysConfigPageVo;
@@ -287,7 +287,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      * @return
      */
     @Override
-    public SysLoginFailInfoVo getSysLoginFailInfoVo() {
+    public SysLoginFailInfoConfigVo getSysLoginFailInfoVo() {
         Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.login.fail.info");
         if (ObjectUtil.isEmpty(object)) {
             return null;
@@ -296,8 +296,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         if (!sysConfig.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             return null;
         }
-        SysLoginFailInfoVo sysLoginFailInfoVo = JSONObject.parseObject(sysConfig.getValue(), SysLoginFailInfoVo.class);
-        return sysLoginFailInfoVo;
+        SysLoginFailInfoConfigVo sysLoginFailInfoConfigVo = JSONObject.parseObject(sysConfig.getValue(), SysLoginFailInfoConfigVo.class);
+        return sysLoginFailInfoConfigVo;
     }
 
     /**

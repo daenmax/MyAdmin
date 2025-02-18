@@ -1,4 +1,4 @@
-package cn.daenx.system.domain.vo;
+package cn.daenx.framework.common.vo.system.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Data
 @AllArgsConstructor
-public class SysLoginFailInfoVo implements Serializable {
+public class SysLoginFailInfoConfigVo implements Serializable {
 
     /**
      * 错误次数将锁定，必填

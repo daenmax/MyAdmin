@@ -8,6 +8,7 @@ import cn.daenx.framework.common.constant.enums.LoginType;
 import cn.daenx.framework.common.utils.*;
 import cn.daenx.framework.common.vo.RouterVo;
 import cn.daenx.framework.common.vo.system.config.SysCaptchaConfigVo;
+import cn.daenx.framework.common.vo.system.config.SysLoginFailInfoConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysSendLimitConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysSmsTemplateConfigVo;
 import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
@@ -372,29 +373,29 @@ public class LoginServiceImpl implements LoginService {
             sysUserService.validatedUser(sysUser);
             String sha256 = SaSecureUtil.sha256(vo.getPassword());
             if (!sha256.equals(sysUser.getPassword())) {
-                SysLoginFailInfoVo sysLoginFailInfoVo = sysConfigService.getSysLoginFailInfoVo();
+                SysLoginFailInfoConfigVo sysLoginFailInfoConfigVo = sysConfigService.getSysLoginFailInfoVo();
                 String msg = "密码错误";
-                if (sysLoginFailInfoVo != null) {
+                if (sysLoginFailInfoConfigVo != null) {
                     Integer failCount = 0;
                     Object value = RedisUtil.getValue(RedisConstant.LOGIN_FAIL + sysUser.getId());
                     if (value != null) {
                         failCount = (Integer) value;
                     }
                     failCount = failCount + 1;
-                    if (failCount < sysLoginFailInfoVo.getFailCount()) {
+                    if (failCount < sysLoginFailInfoConfigVo.getFailCount()) {
                         //记录登录错误+1
                         RedisUtil.setValue(RedisConstant.LOGIN_FAIL + sysUser.getId(), failCount);
-                        msg = "密码错误，您还可以尝试" + (sysLoginFailInfoVo.getFailCount() - failCount) + "次";
+                        msg = "密码错误，您还可以尝试" + (sysLoginFailInfoConfigVo.getFailCount() - failCount) + "次";
                     } else {
                         //封禁
-                        LocalDateTime banToTime = LocalDateTime.now().plusSeconds(sysLoginFailInfoVo.getBanSecond());
+                        LocalDateTime banToTime = LocalDateTime.now().plusSeconds(sysLoginFailInfoConfigVo.getBanSecond());
                         LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
                         wrapper.eq(SysUser::getId, sysUser.getId());
                         wrapper.set(SysUser::getBanToTime, banToTime);
                         sysUserService.update(wrapper);
                         RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
                         String banToTimeStr = LocalDateTimeUtil.format(banToTime, CommonConstant.DATE_TIME_FORMAT);
-                        msg = "密码连续输入错误" + sysLoginFailInfoVo.getFailCount() + "次，账号被锁定，请于" + banToTimeStr + "后再试";
+                        msg = "密码连续输入错误" + sysLoginFailInfoConfigVo.getFailCount() + "次，账号被锁定，请于" + banToTimeStr + "后再试";
                     }
                 }
                 //记录登录日志
