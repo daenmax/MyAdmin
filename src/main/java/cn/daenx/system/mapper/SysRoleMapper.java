@@ -18,7 +18,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 
     @Override
     @DataScope(alias = "sys_role")
-    int deleteBatchIds(@Param(Constants.COLL) Collection<?> idList);
+    int deleteByIds(@Param(Constants.COLL) Collection<?> idList);
 
     List<SysRole> getSysRoleListByUserId(@Param("userId") String userId);
 

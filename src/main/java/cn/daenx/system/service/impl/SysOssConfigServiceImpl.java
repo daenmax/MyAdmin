@@ -179,7 +179,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
      */
     @Override
     public void deleteByIds(List<String> ids) {
-        int i = sysOssConfigMapper.deleteBatchIds(ids);
+        int i = sysOssConfigMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

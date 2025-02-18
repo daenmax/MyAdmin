@@ -105,7 +105,7 @@ public class SysLogLoginServiceImpl extends ServiceImpl<SysLogLoginMapper, SysLo
     @DataScope(alias = "sys_log_login")
     @Override
     public void deleteByIds(List<String> ids) {
-        int i = sysLogLoginMapper.deleteBatchIds(ids);
+        int i = sysLogLoginMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

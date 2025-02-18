@@ -195,7 +195,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     @Override
     public void deleteByIds(List<String> ids) {
         //删除明细
-        sysDictDetailMapper.deleteBatchIds(ids);
+        sysDictDetailMapper.deleteByIds(ids);
         //刷新redis缓存
         sysDictService.refreshCache();
     }

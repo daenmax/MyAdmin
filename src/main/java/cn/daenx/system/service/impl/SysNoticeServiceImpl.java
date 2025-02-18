@@ -113,7 +113,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     @DataScope(alias = "sys_notice")
     @Override
     public void deleteByIds(List<String> ids) {
-        int i = sysNoticeMapper.deleteBatchIds(ids);
+        int i = sysNoticeMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

@@ -103,7 +103,7 @@ public class SysLogOperServiceImpl extends ServiceImpl<SysLogOperMapper, SysLogO
     @DataScope(alias = "sys_log_oper")
     @Override
     public void deleteByIds(List<String> ids) {
-        int i = sysLogOperMapper.deleteBatchIds(ids);
+        int i = sysLogOperMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

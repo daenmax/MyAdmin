@@ -219,7 +219,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 throw new MyException("角色[" + info.getName() + "]已经被分配给用户，请先处理分配关系");
             }
         }
-        int i = sysRoleMapper.deleteBatchIds(ids);
+        int i = sysRoleMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }
