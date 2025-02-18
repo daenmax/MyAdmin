@@ -195,7 +195,7 @@ public class SysPositionServiceImpl extends ServiceImpl<SysPositionMapper, SysPo
                 throw new MyException("岗位[" + info.getName() + "]已经被分配给用户，请先处理分配关系");
             }
         }
-        int i = sysPositionMapper.deleteBatchIds(ids);
+        int i = sysPositionMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

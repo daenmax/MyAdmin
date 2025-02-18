@@ -663,7 +663,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             List<String> realList = MyUtil.joinToList(sysUsers, SysUser::getId);
             //删除主表
-            sysUserMapper.deleteBatchIds(realList);
+            sysUserMapper.deleteByIds(realList);
             //删除详细表
             LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
             wrapper.in(SysUserDetail::getUserId, realList);

@@ -100,7 +100,7 @@ public class SysJobLogServiceImpl extends ServiceImpl<SysJobLogMapper, SysJobLog
 
     @Override
     public void deleteByIds(List<String> ids) {
-        int i = sysJobLogMapper.deleteBatchIds(ids);
+        int i = sysJobLogMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

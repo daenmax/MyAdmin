@@ -175,7 +175,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             //刷新邮箱配置队列
             updateSysEmailInfo(sysConfig.getKeyVa(), 3);
         }
-        int i = sysConfigMapper.deleteBatchIds(ids);
+        int i = sysConfigMapper.deleteByIds(ids);
         if (i < 1) {
             throw new MyException("删除失败");
         }

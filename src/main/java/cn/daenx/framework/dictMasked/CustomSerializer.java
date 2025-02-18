@@ -7,6 +7,7 @@ import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.dictMasked.annotation.Dict;
 import cn.daenx.framework.dictMasked.annotation.DictDetail;
 import cn.daenx.framework.dictMasked.annotation.Masked;
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Configuration;
@@ -33,15 +34,17 @@ public class CustomSerializer extends SerializerAbstract {
         if (StringUtils.isNotBlank(dict.dictCode())) {
             Object object = RedisUtil.getValue(RedisConstant.DICT + dict.dictCode());
             List<SysDictDetailVo> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetailVo.class);
-            for (SysDictDetailVo sysDictDetail : list) {
-                if (sysDictDetail.getValue().equals(fieldValue)) {
-                    map.put("cssClass", sysDictDetail.getCssClass());
-                    map.put("listClass", sysDictDetail.getListClass());
-                    map.put("label", sysDictDetail.getLabel());
-                    map.put("value", sysDictDetail.getValue());
-                    map.put("status", sysDictDetail.getStatus());
-                    map.put("remark", sysDictDetail.getRemark());
-                    return map;
+            if(CollUtil.isEmpty(list)){
+                for (SysDictDetailVo sysDictDetail : list) {
+                    if (sysDictDetail.getValue().equals(fieldValue)) {
+                        map.put("cssClass", sysDictDetail.getCssClass());
+                        map.put("listClass", sysDictDetail.getListClass());
+                        map.put("label", sysDictDetail.getLabel());
+                        map.put("value", sysDictDetail.getValue());
+                        map.put("status", sysDictDetail.getStatus());
+                        map.put("remark", sysDictDetail.getRemark());
+                        return map;
+                    }
                 }
             }
         } else {

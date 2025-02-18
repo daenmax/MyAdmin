@@ -7,6 +7,7 @@ import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.dictMasked.annotation.Dict;
 import cn.daenx.framework.dictMasked.annotation.DictDetail;
 import cn.daenx.framework.dictMasked.annotation.Masked;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.excel.converters.Converter;
@@ -101,9 +102,11 @@ public class ExcelConverter implements Converter<Object> {
             //根据系统字典翻译
             Object object = RedisUtil.getValue(RedisConstant.DICT + annotation.dictCode());
             List<SysDictDetailVo> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetailVo.class);
-            for (SysDictDetailVo sysDictDetail : list) {
-                if (sysDictDetail.getValue().equals(value)) {
-                    return sysDictDetail.getLabel();
+            if (CollUtil.isEmpty(list)) {
+                for (SysDictDetailVo sysDictDetail : list) {
+                    if (sysDictDetail.getValue().equals(value)) {
+                        return sysDictDetail.getLabel();
+                    }
                 }
             }
         } else {
@@ -130,9 +133,11 @@ public class ExcelConverter implements Converter<Object> {
             //根据系统字典翻译
             Object object = RedisUtil.getValue(RedisConstant.DICT + annotation.dictCode());
             List<SysDictDetailVo> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetailVo.class);
-            for (SysDictDetailVo sysDictDetail : list) {
-                if (sysDictDetail.getLabel().equals(label)) {
-                    return sysDictDetail.getValue();
+            if (CollUtil.isEmpty(list)) {
+                for (SysDictDetailVo sysDictDetail : list) {
+                    if (sysDictDetail.getLabel().equals(label)) {
+                        return sysDictDetail.getValue();
+                    }
                 }
             }
         } else {
