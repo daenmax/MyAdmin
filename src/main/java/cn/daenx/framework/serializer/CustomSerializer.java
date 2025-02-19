@@ -1,12 +1,12 @@
-package cn.daenx.framework.dictMasked;
+package cn.daenx.framework.serializer;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.RedisUtil;
 import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
-import cn.daenx.framework.dictMasked.annotation.Dict;
-import cn.daenx.framework.dictMasked.annotation.DictDetail;
-import cn.daenx.framework.dictMasked.annotation.Masked;
+import cn.daenx.framework.serializer.annotation.Dict;
+import cn.daenx.framework.serializer.annotation.DictDetail;
+import cn.daenx.framework.serializer.annotation.Masked;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import org.apache.commons.lang3.StringUtils;

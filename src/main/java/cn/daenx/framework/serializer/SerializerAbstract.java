@@ -1,8 +1,8 @@
-package cn.daenx.framework.dictMasked;
+package cn.daenx.framework.serializer;
 
 
-import cn.daenx.framework.dictMasked.annotation.Dict;
-import cn.daenx.framework.dictMasked.annotation.Masked;
+import cn.daenx.framework.serializer.annotation.Dict;
+import cn.daenx.framework.serializer.annotation.Masked;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;

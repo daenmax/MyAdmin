@@ -1,6 +1,6 @@
-package cn.daenx.framework.dictMasked.annotation;
+package cn.daenx.framework.serializer.annotation;
 
-import cn.daenx.framework.dictMasked.enums.MaskedType;
+import cn.daenx.framework.serializer.enums.MaskedType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

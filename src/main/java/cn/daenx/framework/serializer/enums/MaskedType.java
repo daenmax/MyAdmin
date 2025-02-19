@@ -1,4 +1,4 @@
-package cn.daenx.framework.dictMasked.enums;
+package cn.daenx.framework.serializer.enums;
 
 public enum MaskedType {
     NAME(0),

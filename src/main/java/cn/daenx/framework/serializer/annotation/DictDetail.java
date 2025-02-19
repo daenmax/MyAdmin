@@ -1,4 +1,4 @@
-package cn.daenx.framework.dictMasked.annotation;
+package cn.daenx.framework.serializer.annotation;
 
 
 import java.lang.annotation.*;

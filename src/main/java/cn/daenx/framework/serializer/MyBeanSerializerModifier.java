@@ -1,7 +1,7 @@
-package cn.daenx.framework.dictMasked;
+package cn.daenx.framework.serializer;
 
-import cn.daenx.framework.dictMasked.annotation.Dict;
-import cn.daenx.framework.dictMasked.annotation.Masked;
+import cn.daenx.framework.serializer.annotation.Dict;
+import cn.daenx.framework.serializer.annotation.Masked;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;

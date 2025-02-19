@@ -1,8 +1,8 @@
 package cn.daenx.test.domain.vo;
 
 import cn.daenx.framework.excel.ExcelConverter;
-import cn.daenx.framework.dictMasked.annotation.Dict;
-import cn.daenx.framework.dictMasked.annotation.DictDetail;
+import cn.daenx.framework.serializer.annotation.Dict;
+import cn.daenx.framework.serializer.annotation.DictDetail;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
