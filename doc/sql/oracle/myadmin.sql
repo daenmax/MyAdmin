@@ -1131,10 +1131,6 @@ COMMENT ON COLUMN "SYS_NOTICE"."UPDATE_TIME" IS '修改时间';
 COMMENT ON COLUMN "SYS_NOTICE"."IS_DELETE" IS '是否删除，0=正常，1=删除';
 COMMENT ON TABLE "SYS_NOTICE" IS '通知公告表';
 
--- ----------------------------
--- Records of SYS_NOTICE
--- ----------------------------
-INSERT INTO "SYS_NOTICE" VALUES ('5f98161ae8c06f99fbdcbb267908da58', '快讯！外媒：美国“星舰”发射时发生爆炸', '<p>【环球网快讯】据英国《每日电讯报》刚刚消息，由美国太空探索技术公司（SpaceX）研发的最新一代运载火箭系统“星舰”当时时间20日再次发射，但在发射三分钟后，“超重型推进器”部分似乎未能分离，在高空发生爆炸。</p><p><br></p><p>SpaceX官网介绍称，“星舰”火箭系统第一级助推器被称为“超重型推进器”，第二级被称为“星舰”飞船。其中“超重型推进器”高达70米，直径9米，配置33台“猛禽”发动机，使用液态甲烷/液氧推进剂，安装4个固定栅格翼，不配置着陆腿，SpaceX公司计划采用地面塔架“捕捉”的形式进行回收。</p>', '2', '1', NULL, '1', TO_DATE('2023-04-20 22:43:09', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-20 22:43:25', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 
 -- ----------------------------
 -- Table structure for SYS_OSS_CONFIG
