@@ -3,7 +3,7 @@ const htmlModules = require('./config/htmlModules.js');
 
 
 module.exports = {
-  
+
   theme: 'vdoing', // 使用依赖包主题
   // theme: require.resolve('../../vdoing'), // 使用本地主题 (先将vdoing主题文件下载到本地：https://github.com/xugaoyi/vuepress-theme-vdoing)
 
@@ -43,7 +43,6 @@ module.exports = {
 
       { text: '问答', link: '/pages/8de5a7/' },
       { text: '赞助', link: '/pages/672c57/' },
-      { text: 'Gitee', link: 'https://gitee.com/daenmax/myadmin' },
       { text: 'GitHub', link: 'https://github.com/daenmax/myadmin' },
     ],
     sidebarDepth: 2, // 侧边栏显示深度，默认1，最大2（显示到h3标题）
@@ -93,11 +92,6 @@ module.exports = {
           iconClass: 'icon-bokeyuan',
           title: 'Blog',
           link: 'https://www.cnblogs.com/daen'
-        },
-        {
-          iconClass: 'icon-gitee',
-          title: 'Gitee',
-          link: 'https://gitee.com/daenmax'
         },
         {
           iconClass: 'icon-github',
