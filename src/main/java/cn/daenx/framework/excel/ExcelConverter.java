@@ -84,10 +84,11 @@ public class ExcelConverter implements Converter<Object> {
         if (masked != null) {
             valueStr = MyUtil.masked(masked.type().getType(), valueStr);
         }
-        if (StringUtils.isNotBlank(valueStr)) {
-            return new WriteCellData<>(valueStr);
+        if (StringUtils.isBlank(valueStr)) {
+            //翻译或者脱敏失败，返回原始值
+            valueStr = Convert.toStr(value);
         }
-        return Converter.super.convertToExcelData(value, contentProperty, globalConfiguration);
+        return new WriteCellData<>(valueStr);
     }
 
     /**
@@ -102,7 +103,7 @@ public class ExcelConverter implements Converter<Object> {
             //根据系统字典翻译
             Object object = RedisUtil.getValue(RedisConstant.DICT + annotation.dictCode());
             List<SysDictDetailVo> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetailVo.class);
-            if (CollUtil.isEmpty(list)) {
+            if (CollUtil.isNotEmpty(list)) {
                 for (SysDictDetailVo sysDictDetail : list) {
                     if (sysDictDetail.getValue().equals(value)) {
                         return sysDictDetail.getLabel();

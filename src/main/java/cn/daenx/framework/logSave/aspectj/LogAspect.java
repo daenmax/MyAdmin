@@ -11,8 +11,8 @@ import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.ResponseFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -142,10 +142,11 @@ public class LogAspect {
                 Object[] args = point.getArgs();
                 List<Object> list = new ArrayList<>();
                 for (Object arg : args) {
-                    //屏蔽掉ResponseFacade，因为例如一下导出接口，下载接口，会报错，具体自行百度咯~
-                    if (!arg.getClass().equals(ResponseFacade.class)) {
-                        list.add(arg);
+                    //导出类接口，下载类接口 不处理响应内容
+                    if(arg instanceof HttpServletRequest || arg instanceof HttpServletResponse){
+                        continue;
                     }
+                    list.add(arg);
                 }
                 String params = JSONObject.toJSONString(list);
                 params = StringUtils.substring(params, 0, CommonConstant.SAVE_LOG_LENGTH);

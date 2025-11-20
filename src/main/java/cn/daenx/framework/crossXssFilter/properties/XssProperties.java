@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * xss过滤 配置属性
  */
@@ -18,13 +20,7 @@ public class XssProperties {
     private String enabled;
 
     /**
-     * 排除链接（多个用逗号分隔）
+     * 排除链接
      */
-    private String excludes;
-
-    /**
-     * 匹配链接
-     */
-    private String urlPatterns;
-
+    private List<String> excludes;
 }

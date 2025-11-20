@@ -89,7 +89,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
             if (sysFileDb.getOssId().equals(ossClient.getOssProperties().getId())) {
                 //当前OSS上已经上传过，直接返回，不再重复上传
                 return UploadResult.builder()
-                        .fileUrl(sysFileDb.getFileUrl())
+                        .fileUrl(transPrivateUrl(sysFileDb.getFileUrl(), sysFileDb.getFileName(), ossClient.getOssProperties().getId()))
                         .fileName(sysFileDb.getFileName())
                         .fileMd5(sysFileDb.getFileMd5())
                         .fileSuffix(sysFileDb.getFileSuffix())
@@ -118,6 +118,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         sysFile.setFileName(upload.getFileName());
         sysFile.setFileSuffix(upload.getFileSuffix());
         sysFile.setFileUrl(transPrivateUrl(upload.getFileUrl(), upload.getFileName(), ossClient.getOssProperties().getId()));
+        upload.setFileUrl(sysFile.getFileUrl());
         sysFile.setFileSize(upload.getFileSize());
         sysFile.setFileMd5(upload.getFileMd5());
         sysFile.setFileType(upload.getFileType());

@@ -21,10 +21,11 @@ springdoc:
 xss:
   # 过滤开关
   enabled: true
-  # 排除链接（多个用逗号分隔）
-  excludes: /system/notice
-  # 匹配链接
-  urlPatterns: /system/*,/monitor/*,/tool/*
+  # 排除链接
+  # * 表示一层路径内的任意字符串，不可跨层级
+  # ** 表示任意层路径;
+  excludes:
+    - /monitor/notice/*
 
 spring:
   servlet:
@@ -91,7 +92,7 @@ spring:
       datasource:
         # mysql数据源例子（如果用不到，就注释掉即可），db-mysql是自己取的名字，你想叫啥就叫啥
         db-mysql:
-          url: jdbc:mysql://192.168.1.74:3306/myadmin_test?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://127.0.0.1:3306/myadmin_test?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
           username: myadmin_test
           password: myadmin_test@2024
           # mysql5及以下需要使用com.mysql.jdbc.Driver

@@ -102,7 +102,7 @@ public class SysFileController {
      *
      * @param id 文件ID
      */
-//    @Log(name = "下载文件", type = LogOperType.DOWNLOAD, recordParams = true, recordResult = false)//TODO 有问题，等待修复
+    @Log(name = "下载文件", type = LogOperType.DOWNLOAD, recordParams = true, recordResult = false)
     @SaCheckPermission("monitor:file:download")
     @GetMapping("/download/{id}")
     public void download(@PathVariable String id, HttpServletResponse response) {
