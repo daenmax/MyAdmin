@@ -35,7 +35,6 @@ postList: none
 
 <br/>
 <p align="center">
-  <a href="https://gitee.com/daenmax/myadmin" target="_blank"><img src="https://gitee.com/daenmax/myadmin/badge/star.svg?theme=white" alt="Gitee stars" class="no-zoom"></a>
   <a href="https://github.com/daenmax/myadmin" target="_blank"><img src='https://img.shields.io/github/stars/daenmax/myadmin.svg?style=social&label=Stars' alt='GitHub stars' class="no-zoom"></a>
 </p>
 
@@ -104,7 +103,7 @@ postList: none
 
 ## ⚡ 反馈与交流
 
-在使用过程中有任何问题和想法，请给我提 [Issue](https://gitee.com/daenmax/myadmin/issues)。
+在使用过程中有任何问题和想法，请给我提 [Issue](https://github.com/daenmax/myadmin/issues)。
 你也可以在Issue查看别人提的问题和给出解决方案。
 
 或者加入我们的交流群：
