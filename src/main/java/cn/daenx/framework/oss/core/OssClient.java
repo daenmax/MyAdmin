@@ -2,49 +2,513 @@ package cn.daenx.framework.oss.core;
 
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.oss.constant.OssConstant;
 import cn.daenx.framework.oss.enums.AccessPolicyType;
-import cn.daenx.framework.oss.enums.PolicyType;
 import cn.daenx.framework.oss.vo.OssProperties;
 import cn.daenx.framework.oss.vo.UploadResult;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.HttpMethod;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.async.*;
+import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3Configuration;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.transfer.s3.S3TransferManager;
+import software.amazon.awssdk.transfer.s3.model.*;
+import software.amazon.awssdk.transfer.s3.progress.LoggingTransferListener;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
 import java.util.Date;
-import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
- * AWS S3接口协议，诸多云存储厂商都兼容此协议，例如：minio、阿里云、腾讯云、七牛云、京东云、华为云
+ * S3 存储协议 所有兼容S3协议的云厂商均支持
+ * 阿里云 腾讯云 七牛云 minio
+ *
+ * @author AprilWind
  */
+@Slf4j
 public class OssClient {
-    private final OssProperties properties;
-    private final AmazonS3 client;
+
+
     /**
-     * 云服务商
-     * aliyun   阿里云
-     * qcloud   腾讯云
-     * qiniu    七牛云
-     * jdcloud  京东云
-     * obs      华为云
+     * 配置属性
      */
-    private String[] CLOUD_SERVICE = new String[]{"aliyun", "qcloud", "qiniu", "jdcloud", "obs"};
+    private final OssProperties properties;
+
+    /**
+     * Amazon S3 异步客户端
+     */
+    private final S3AsyncClient client;
+
+    /**
+     * 用于管理 S3 数据传输的高级工具
+     */
+    private final S3TransferManager transferManager;
+
+    /**
+     * AWS S3 预签名 URL 的生成器
+     */
+    private final S3Presigner presigner;
+
+    /**
+     * 构造方法
+     *
+     * @param ossProperties Oss配置属性
+     */
+    public OssClient(OssProperties ossProperties) {
+        this.properties = ossProperties;
+        try {
+            // 创建 AWS 认证信息
+            StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(properties.getAccessKey(), properties.getSecretKey()));
+
+            // MinIO 使用 HTTPS 限制使用域名访问，站点填域名。需要启用路径样式访问
+            boolean isStyle = !StringUtils.containsAny(properties.getEndpoint(), OssConstant.CLOUD_SERVICE);
+
+            // 创建AWS基于 Netty 的 S3 客户端
+            this.client = S3AsyncClient.builder()
+                    .credentialsProvider(credentialsProvider)
+                    .endpointOverride(URI.create(getEndpoint()))
+                    .region(of())
+                    .forcePathStyle(isStyle)
+                    .httpClient(NettyNioAsyncHttpClient.builder()
+                            .connectionTimeout(Duration.ofSeconds(60)).build())
+                    .build();
+
+            //AWS基于 CRT 的 S3 AsyncClient 实例用作 S3 传输管理器的底层客户端
+            this.transferManager = S3TransferManager.builder().s3Client(this.client).build();
+
+            // 创建 S3 配置对象
+            S3Configuration config = S3Configuration.builder().chunkedEncodingEnabled(false)
+                    .pathStyleAccessEnabled(isStyle).build();
+
+            // 创建 预签名 URL 的生成器 实例，用于生成 S3 预签名 URL
+            this.presigner = S3Presigner.builder()
+                    .region(of())
+                    .credentialsProvider(credentialsProvider)
+                    .endpointOverride(URI.create(getDomain()))
+                    .serviceConfiguration(config)
+                    .build();
+
+        } catch (Exception e) {
+            if (e instanceof MyException) {
+                throw e;
+            }
+            throw new MyException("配置错误! 请检查系统配置:[" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * 上传文件到 Amazon S3，并返回上传结果
+     *
+     * @param filePath    本地文件路径
+     * @param path         在 Amazon S3 中的对象键
+     * @param md5Digest   本地文件的 MD5 哈希值（可选）
+     * @param contentType 文件内容类型
+     * @return UploadResult 包含上传后的文件信息
+     * @throws MyException 如果上传失败，抛出自定义异常
+     */
+    public UploadResult upload(Path filePath, String path, String md5Digest, String contentType) {
+        try {
+            String suffix;
+            Long fileSize;
+            // 构建上传请求对象
+            FileUpload fileUpload = transferManager.uploadFile(
+                    x -> x.putObjectRequest(
+                                    y -> y.bucket(properties.getBucketName())
+                                            .key(path)
+                                            .contentMD5(StringUtils.isNotEmpty(md5Digest) ? md5Digest : null)
+                                            .contentType(contentType)
+                                            // 用于设置对象的访问控制列表（ACL）。不同云厂商对ACL的支持和实现方式有所不同，
+                                            // 因此根据具体的云服务提供商，你可能需要进行不同的配置（自行开启，阿里云有acl权限配置，腾讯云没有acl权限配置）
+                                            //.acl(getAccessPolicy().getObjectCannedACL())
+                                            .build())
+                            .addTransferListener(LoggingTransferListener.create())
+                            .source(filePath).build());
+
+            // 等待上传完成并获取上传结果
+            CompletedFileUpload uploadResult = fileUpload.completionFuture().join();
+            String eTag = uploadResult.response().eTag().replace("\"", "");
+            suffix = StringUtils.substring(path, path.lastIndexOf("."), path.length());
+            fileSize = uploadResult.response().size();
+            // 提取上传结果中的 ETag，并构建一个自定义的 UploadResult 对象
+            return UploadResult.builder()
+                    .fileUrl(getUrl() + "/" + path)
+                    .fileName(path)
+                    .fileMd5(eTag)
+                    .fileSuffix(suffix)
+                    .fileSize(fileSize)
+                    .fileType(contentType)
+                    .build();
+        } catch (Exception e) {
+            // 捕获异常并抛出自定义异常
+            throw new MyException("上传文件失败，请检查配置信息:[" + e.getMessage() + "]");
+        } finally {
+            // 无论上传是否成功，最终都会删除临时文件
+            FileUtil.del(filePath);
+        }
+    }
+
+    /**
+     * 上传 InputStream 到 Amazon S3
+     *
+     * @param inputStream 要上传的输入流
+     * @param path         在 Amazon S3 中的对象键
+     * @param length      输入流的长度
+     * @param contentType 文件内容类型
+     * @return UploadResult 包含上传后的文件信息
+     * @throws MyException 如果上传失败，抛出自定义异常
+     */
+    public UploadResult upload(InputStream inputStream, String path, Long length, String contentType) {
+        // 如果输入流不是 ByteArrayInputStream，则将其读取为字节数组再创建 ByteArrayInputStream
+        if (!(inputStream instanceof ByteArrayInputStream)) {
+            inputStream = new ByteArrayInputStream(IoUtil.readBytes(inputStream));
+        }
+        try {
+            String suffix;
+            Long fileSize;
+            // 创建异步请求体（length如果为空会报错）
+            BlockingInputStreamAsyncRequestBody body = BlockingInputStreamAsyncRequestBody.builder()
+                    .contentLength(length)
+                    .subscribeTimeout(Duration.ofSeconds(120))
+                    .build();
+
+            // 使用 transferManager 进行上传
+            Upload upload = transferManager.upload(
+                    x -> x.requestBody(body).addTransferListener(LoggingTransferListener.create())
+                            .putObjectRequest(
+                                    y -> y.bucket(properties.getBucketName())
+                                            .key(path)
+                                            .contentType(contentType)
+                                            // 用于设置对象的访问控制列表（ACL）。不同云厂商对ACL的支持和实现方式有所不同，
+                                            // 因此根据具体的云服务提供商，你可能需要进行不同的配置（自行开启，阿里云有acl权限配置，腾讯云没有acl权限配置）
+                                            //.acl(getAccessPolicy().getObjectCannedACL())
+                                            .build())
+                            .build());
+
+            // 将输入流写入请求体
+            body.writeInputStream(inputStream);
+
+            // 等待文件上传操作完成
+            CompletedUpload uploadResult = upload.completionFuture().join();
+            String eTag = uploadResult.response().eTag().replace("\"", "");
+            suffix = StringUtils.substring(path, path.lastIndexOf("."), path.length());
+            fileSize = uploadResult.response().size();
+
+            // 提取上传结果中的 ETag，并构建一个自定义的 UploadResult 对象
+
+            return UploadResult.builder()
+                    .fileUrl(getUrl() + "/" + path)
+                    .fileName(path)
+                    .fileMd5(eTag)
+                    .fileSuffix(suffix)
+                    .fileSize(fileSize)
+                    .fileType(contentType)
+                    .build();
+        } catch (Exception e) {
+            throw new MyException("上传文件失败，请检查配置信息:[" + e.getMessage() + "]");
+        }
+    }
+
+
+    /**
+     * 下载文件从 Amazon S3 到临时目录
+     *
+     * @param path 文件在 Amazon S3 中的对象键
+     * @return 下载后的文件在本地的临时路径
+     * @throws MyException 如果下载失败，抛出自定义异常
+     */
+    public Path fileDownload(String path) {
+        // 构建临时文件
+        Path tempFilePath = FileUtil.createTempFile().toPath();
+        // 使用 S3TransferManager 下载文件
+        FileDownload downloadFile = transferManager.downloadFile(
+                x -> x.getObjectRequest(
+                                y -> y.bucket(properties.getBucketName())
+                                        .key(removeBaseUrl(path))
+                                        .build())
+                        .addTransferListener(LoggingTransferListener.create())
+                        .destination(tempFilePath)
+                        .build());
+        // 等待文件下载操作完成
+        downloadFile.completionFuture().join();
+        return tempFilePath;
+    }
+
+    /**
+     * 下载文件从 Amazon S3 到 输出流
+     *
+     * @param key 文件在 Amazon S3 中的对象键
+     * @param out 输出流
+     * @param consumer 自定义处理逻辑
+     * @throws MyException 如果下载失败，抛出自定义异常
+     */
+    public void download(String key, OutputStream out, Consumer<Long> consumer) {
+        try {
+            this.download(key, consumer).writeTo(out);
+        } catch (Exception e) {
+            throw new MyException("文件下载失败，错误信息:[" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * 下载文件从 Amazon S3 到 输出流
+     *
+     * @param key 文件在 Amazon S3 中的对象键
+     * @param contentLengthConsumer 文件大小消费者函数
+     * @return 写出订阅器
+     * @throws MyException 如果下载失败，抛出自定义异常
+     */
+    public WriteOutSubscriber<OutputStream> download(String key, Consumer<Long> contentLengthConsumer) {
+        try {
+            // 构建下载请求
+            DownloadRequest<ResponsePublisher<GetObjectResponse>> publisherDownloadRequest = DownloadRequest.builder()
+                    // 文件对象
+                    .getObjectRequest(y -> y.bucket(properties.getBucketName())
+                            .key(key)
+                            .build())
+                    .addTransferListener(LoggingTransferListener.create())
+                    // 使用发布订阅转换器
+                    .responseTransformer(AsyncResponseTransformer.toPublisher())
+                    .build();
+
+            // 使用 S3TransferManager 下载文件
+            Download<ResponsePublisher<GetObjectResponse>> publisherDownload = transferManager.download(publisherDownloadRequest);
+            // 获取下载发布订阅转换器
+            ResponsePublisher<GetObjectResponse> publisher = publisherDownload.completionFuture().join().result();
+            // 执行文件大小消费者函数
+            Optional.ofNullable(contentLengthConsumer)
+                    .ifPresent(lengthConsumer -> lengthConsumer.accept(publisher.response().contentLength()));
+
+            // 构建写出订阅器对象
+            return out -> {
+                // 创建可写入的字节通道
+                try(WritableByteChannel channel = Channels.newChannel(out)){
+                    // 订阅数据
+                    publisher.subscribe(byteBuffer -> {
+                        while (byteBuffer.hasRemaining()) {
+                            try {
+                                channel.write(byteBuffer);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }).join();
+                }
+            };
+        } catch (Exception e) {
+            throw new MyException("文件下载失败，错误信息:[" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * 删除云存储服务中指定路径下文件
+     *
+     * @param path 指定路径
+     */
+    public void delete(String path) {
+        try {
+            client.deleteObject(
+                    x -> x.bucket(properties.getBucketName())
+                            .key(removeBaseUrl(path))
+                            .build());
+        } catch (Exception e) {
+            throw new MyException("删除文件失败，请检查配置信息:[" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * 获取私有URL链接
+     *
+     * @param objectKey   对象KEY
+     * @param expiredTime 链接授权到期时间
+     */
+    public String getPrivateUrl(String objectKey, Duration expiredTime) {
+        // 使用 AWS S3 预签名 URL 的生成器 获取对象的预签名 URL
+        URL url = presigner.presignGetObject(
+                        x -> x.signatureDuration(expiredTime)
+                                .getObjectRequest(
+                                        y -> y.bucket(properties.getBucketName())
+                                                .key(objectKey)
+                                                .build())
+                                .build())
+                .url();
+        return url.toString();
+    }
+
+    /**
+     * 上传 byte[] 数据到 Amazon S3，使用指定的后缀构造对象键。
+     *
+     * @param data   要上传的 byte[] 数据
+     * @param suffix 对象键的后缀
+     * @return UploadResult 包含上传后的文件信息
+     * @throws MyException 如果上传失败，抛出自定义异常
+     */
+    public UploadResult uploadSuffix(byte[] data, String suffix, String contentType) {
+        return upload(new ByteArrayInputStream(data), getPath(properties.getPrefix(), suffix), Long.valueOf(data.length), contentType);
+    }
+
+    /**
+     * 上传 InputStream 到 Amazon S3，使用指定的后缀构造对象键。
+     *
+     * @param inputStream 要上传的输入流
+     * @param suffix      对象键的后缀
+     * @param length      输入流的长度
+     * @return UploadResult 包含上传后的文件信息
+     * @throws MyException 如果上传失败，抛出自定义异常
+     */
+    public UploadResult uploadSuffix(InputStream inputStream, String suffix, Long length, String contentType) {
+        return upload(inputStream, getPath(properties.getPrefix(), suffix), length, contentType);
+    }
+
+    /**
+     * 上传文件到 Amazon S3，使用指定的后缀构造对象键
+     *
+     * @param file   要上传的文件
+     * @param suffix 对象键的后缀
+     * @return UploadResult 包含上传后的文件信息
+     * @throws MyException 如果上传失败，抛出自定义异常
+     */
+    public UploadResult uploadSuffix(File file, String suffix) {
+        return upload(file.toPath(), getPath(properties.getPrefix(), suffix), null, FileUtil.getMimeType(suffix));
+    }
+
+    /**
+     * 获取文件输入流
+     *
+     * @param path 完整文件路径
+     * @return 输入流
+     */
+    public InputStream getObjectContent(String path) throws IOException {
+        // 下载文件到临时目录
+        Path tempFilePath = fileDownload(path);
+        // 创建输入流
+        InputStream inputStream = Files.newInputStream(tempFilePath);
+        // 删除临时文件
+        FileUtil.del(tempFilePath);
+        // 返回对象内容的输入流
+        return inputStream;
+    }
+
+    /**
+     * 获取 S3 客户端的终端点 URL
+     *
+     * @return 终端点 URL
+     */
+    public String getEndpoint() {
+        // 根据配置文件中的是否使用 HTTPS，设置协议头部
+        String header = getIsHttps();
+        // 拼接协议头部和终端点，得到完整的终端点 URL
+        return header + properties.getEndpoint();
+    }
+
+    /**
+     * 获取 S3 客户端的终端点 URL（自定义域名）
+     *
+     * @return 终端点 URL
+     */
+    public String getDomain() {
+        // 从配置中获取域名、终端点、是否使用 HTTPS 等信息
+        String domain = properties.getDomain();
+        String endpoint = properties.getEndpoint();
+        String header = getIsHttps();
+
+        // 如果是云服务商，直接返回域名或终端点
+        if (StringUtils.containsAny(endpoint, OssConstant.CLOUD_SERVICE)) {
+            return StringUtils.isNotEmpty(domain) ? header + domain : header + endpoint;
+        }
+
+        // 如果是 MinIO，处理域名并返回
+        if (StringUtils.isNotEmpty(domain)) {
+            return domain.startsWith(OssConstant.HTTPS) || domain.startsWith(OssConstant.HTTP) ? domain : header + domain;
+        }
+
+        // 返回终端点
+        return header + endpoint;
+    }
+
+    /**
+     * 根据传入的 region 参数返回相应的 AWS 区域
+     * 如果 region 参数非空，使用 Region.of 方法创建并返回对应的 AWS 区域对象
+     * 如果 region 参数为空，返回一个默认的 AWS 区域（例如，us-east-1），作为广泛支持的区域
+     *
+     * @return 对应的 AWS 区域对象，或者默认的广泛支持的区域（us-east-1）
+     */
+    public Region of() {
+        //AWS 区域字符串
+        String region = properties.getRegion();
+        // 如果 region 参数非空，使用 Region.of 方法创建对应的 AWS 区域对象，否则返回默认区域
+        return StringUtils.isNotEmpty(region) ? Region.of(region) : Region.US_EAST_1;
+    }
+
+    /**
+     * 获取云存储服务的URL
+     *
+     * @return 文件路径
+     */
+    public String getUrl() {
+        String domain = properties.getDomain();
+        String endpoint = properties.getEndpoint();
+        String header = getIsHttps();
+        // 云服务商直接返回
+        if (StringUtils.containsAny(endpoint, OssConstant.CLOUD_SERVICE)) {
+            return header + (StringUtils.isNotEmpty(domain) ? domain : properties.getBucketName() + "." + endpoint);
+        }
+        // MinIO 单独处理
+        if (StringUtils.isNotEmpty(domain)) {
+            // 如果 domain 以 "https://" 或 "http://" 开头
+            return (domain.startsWith(OssConstant.HTTPS) || domain.startsWith(OssConstant.HTTP)) ?
+                    domain + "/" + properties.getBucketName() : header + domain + "/" + properties.getBucketName();
+        }
+        return header + endpoint + "/" + properties.getBucketName();
+    }
+
+    /**
+     * 生成一个符合特定规则的、唯一的文件路径。通过使用日期、UUID、前缀和后缀等元素的组合，确保了文件路径的独一无二性
+     *
+     * @param prefix 前缀
+     * @param suffix 后缀
+     * @return 文件路径
+     */
+    public String getPath(String prefix, String suffix) {
+        // 生成uuid
+        String uuid = IdUtil.fastSimpleUUID();
+        Date now = new Date();
+        // 生成日期路径
+        String datePath = DateFormatUtils.format(now, "yyyy/MM/dd");
+        // 拼接路径
+        String path = StringUtils.isNotEmpty(prefix) ?
+                prefix + "/" + datePath + "/" + uuid : datePath + "/" + uuid;
+        return path + suffix;
+    }
+
+    /**
+     * 移除路径中的基础URL部分，得到相对路径
+     *
+     * @param path 完整的路径，包括基础URL和相对路径
+     * @return 去除基础URL后的相对路径
+     */
+    public String removeBaseUrl(String path) {
+        return path.replace(getUrl() + "/", "");
+    }
+
 
     /**
      * 获取当前OSS配置信息
@@ -56,189 +520,12 @@ public class OssClient {
     }
 
     /**
-     * 初始化
+     * 获取是否使用 HTTPS 的配置，并返回相应的协议头部。
      *
-     * @param ossProperties
+     * @return 协议头部，根据是否使用 HTTPS 返回 "https://" 或 "http://"
      */
-    public OssClient(OssProperties ossProperties) {
-        this.properties = ossProperties;
-        try {
-            AwsClientBuilder.EndpointConfiguration endpointConfig =
-                    new AwsClientBuilder.EndpointConfiguration(properties.getEndpoint(), properties.getRegion());
-            AWSCredentials credentials = new BasicAWSCredentials(properties.getAccessKey(), properties.getSecretKey());
-            AWSCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(credentials);
-            ClientConfiguration clientConfig = new ClientConfiguration();
-            clientConfig.setProtocol(CommonConstant.IS_HTTPS_YES.equals(properties.getIsHttps()) ? Protocol.HTTPS : Protocol.HTTP);
-            AmazonS3ClientBuilder build = AmazonS3Client.builder()
-                    .withEndpointConfiguration(endpointConfig)
-                    .withClientConfiguration(clientConfig)
-                    .withCredentials(credentialsProvider)
-                    .disableChunkedEncoding();
-            if (!StringUtils.containsAny(properties.getEndpoint(), CLOUD_SERVICE)) {
-                // 使用云OSS时，需要关闭，如果是minio则开启即可
-                build.enablePathStyleAccess();
-            }
-            this.client = build.build();
-            createBucket();
-        } catch (Exception e) {
-            if (e instanceof MyException) {
-                throw e;
-            }
-            throw new MyException("配置错误[" + e.getMessage() + "]");
-        }
-    }
-
-    /**
-     * 创建bucket
-     */
-    private void createBucket() {
-        try {
-            String bucketName = properties.getBucketName();
-            if (client.doesBucketExistV2(bucketName)) {
-                return;
-            }
-            CreateBucketRequest createBucketRequest = new CreateBucketRequest(bucketName);
-            AccessPolicyType accessPolicy = getAccessPolicy();
-            createBucketRequest.setCannedAcl(accessPolicy.getAcl());
-            client.createBucket(createBucketRequest);
-            client.setBucketPolicy(bucketName, getPolicy(bucketName, accessPolicy.getPolicyType()));
-        } catch (Exception e) {
-            throw new MyException("创建Bucket失败[" + e.getMessage() + "]");
-        }
-    }
-
-    /**
-     * 上传文件
-     *
-     * @param data        文件二进制
-     * @param path        完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
-     * @param contentType 文件类型，例如：image/jpeg
-     * @return
-     */
-    public UploadResult upload(byte[] data, String path, String contentType) {
-        return upload(new ByteArrayInputStream(data), path, contentType);
-    }
-
-    /**
-     * 上传文件
-     *
-     * @param inputStream 文件流
-     * @param path        完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
-     * @param contentType 文件类型，例如：image/jpeg
-     * @return
-     */
-    public UploadResult upload(InputStream inputStream, String path, String contentType) {
-        if (!(inputStream instanceof ByteArrayInputStream)) {
-            inputStream = new ByteArrayInputStream(IoUtil.readBytes(inputStream));
-        }
-        PutObjectResult putObjectResult;
-        String suffix;
-        Long fileSize;
-        try {
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(contentType);
-            metadata.setContentLength(inputStream.available());
-            PutObjectRequest putObjectRequest = new PutObjectRequest(properties.getBucketName(), path, inputStream, metadata);
-            // 设置上传对象的 Acl 为公共读
-            putObjectRequest.setCannedAcl(getAccessPolicy().getAcl());
-            putObjectResult = client.putObject(putObjectRequest);
-            suffix = StringUtils.substring(path, path.lastIndexOf("."), path.length());
-            fileSize = metadata.getContentLength();
-        } catch (Exception e) {
-            throw new MyException("上传文件失败[" + e.getMessage() + "]");
-        }
-        return UploadResult.builder()
-                .fileUrl(getUrl() + "/" + path)
-                .fileName(path)
-                .fileMd5(putObjectResult.getETag())
-                .fileSuffix(suffix)
-                .fileSize(fileSize)
-                .fileType(contentType)
-                .build();
-    }
-
-    /**
-     * 上传文件
-     *
-     * @param data        文件二进制
-     * @param suffix      后缀，例如：.jpg
-     * @param contentType 文件类型，例如：image/jpeg
-     * @return
-     */
-    public UploadResult uploadSuffix(byte[] data, String suffix, String contentType) {
-        return upload(data, getPath(properties.getPrefix(), suffix), contentType);
-    }
-
-    /**
-     * 上传文件
-     *
-     * @param inputStream 文件流
-     * @param suffix      后缀，例如：.jpg
-     * @param contentType 文件类型，例如：image/jpeg
-     * @return
-     */
-    public UploadResult uploadSuffix(InputStream inputStream, String suffix, String contentType) {
-        return upload(inputStream, getPath(properties.getPrefix(), suffix), contentType);
-    }
-
-    /**
-     * 删除文件
-     *
-     * @param path 完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
-     */
-    public void delete(String path) {
-//        path = path.replace(getUrl() + "/", "");
-        try {
-            client.deleteObject(properties.getBucketName(), path);
-        } catch (Exception e) {
-            throw new MyException("删除文件失败[" + e.getMessage() + "]");
-        }
-    }
-
-    /**
-     * 获取文件元数据
-     *
-     * @param path 完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
-     */
-    public ObjectMetadata getObjectMetadata(String path) {
-//        path = path.replace(getUrl() + "/", "");
-        S3Object object = client.getObject(properties.getBucketName(), path);
-        return object.getObjectMetadata();
-    }
-
-    /**
-     * 获取文件列表
-     */
-    public List<S3ObjectSummary> getObjectList() {
-        ObjectListing objectListing = client.listObjects(properties.getBucketName(), properties.getPrefix());
-        return new ArrayList<>(objectListing.getObjectSummaries());
-    }
-
-    /**
-     * 获取文件流
-     *
-     * @param path
-     * @return
-     */
-    public InputStream getObjectContent(String path) {
-        path = path.replace(getUrl() + "/", "");
-        S3Object object = client.getObject(properties.getBucketName(), path);
-        return object.getObjectContent();
-    }
-
-    /**
-     * 获取私有URL链接
-     *
-     * @param path   完整路径，例如：2023/04/16/27010e1b0bb6488c95619f5fc036dca3.jpg
-     * @param second 授权时间    单位秒
-     */
-    public String getPrivateUrl(String path, Integer second) {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                new GeneratePresignedUrlRequest(properties.getBucketName(), path)
-                        .withMethod(HttpMethod.GET)
-                        .withExpiration(new Date(System.currentTimeMillis() + 1000L * second));
-        URL url = client.generatePresignedUrl(generatePresignedUrlRequest);
-        return url.toString();
+    public String getIsHttps() {
+        return CommonConstant.IS_HTTPS_YES.equals(properties.getIsHttps()) ? OssConstant.HTTPS : OssConstant.HTTP;
     }
 
     /**
@@ -253,84 +540,8 @@ public class OssClient {
      *
      * @return 当前桶权限类型code
      */
-    private AccessPolicyType getAccessPolicy() {
+    public AccessPolicyType getAccessPolicy() {
         return AccessPolicyType.getByType(properties.getAccessPolicy());
     }
 
-    private static String getPolicy(String bucketName, PolicyType policyType) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{\n\"Statement\": [\n{\n\"Action\": [\n");
-        if (policyType == PolicyType.WRITE) {
-            builder.append("\"s3:GetBucketLocation\",\n\"s3:ListBucketMultipartUploads\"\n");
-        } else if (policyType == PolicyType.READ_WRITE) {
-            builder.append("\"s3:GetBucketLocation\",\n\"s3:ListBucket\",\n\"s3:ListBucketMultipartUploads\"\n");
-        } else {
-            builder.append("\"s3:GetBucketLocation\"\n");
-        }
-        builder.append("],\n\"Effect\": \"Allow\",\n\"Principal\": \"*\",\n\"Resource\": \"arn:aws:s3:::");
-        builder.append(bucketName);
-        builder.append("\"\n},\n");
-        if (policyType == PolicyType.READ) {
-            builder.append("{\n\"Action\": [\n\"s3:ListBucket\"\n],\n\"Effect\": \"Deny\",\n\"Principal\": \"*\",\n\"Resource\": \"arn:aws:s3:::");
-            builder.append(bucketName);
-            builder.append("\"\n},\n");
-        }
-        builder.append("{\n\"Action\": ");
-        switch (policyType) {
-            case WRITE:
-                builder.append("[\n\"s3:AbortMultipartUpload\",\n\"s3:DeleteObject\",\n\"s3:ListMultipartUploadParts\",\n\"s3:PutObject\"\n],\n");
-                break;
-            case READ_WRITE:
-                builder.append("[\n\"s3:AbortMultipartUpload\",\n\"s3:DeleteObject\",\n\"s3:GetObject\",\n\"s3:ListMultipartUploadParts\",\n\"s3:PutObject\"\n],\n");
-                break;
-            default:
-                builder.append("\"s3:GetObject\",\n");
-                break;
-        }
-        builder.append("\"Effect\": \"Allow\",\n\"Principal\": \"*\",\n\"Resource\": \"arn:aws:s3:::");
-        builder.append(bucketName);
-        builder.append("/*\"\n}\n],\n\"Version\": \"2012-10-17\"\n}\n");
-        return builder.toString();
-    }
-
-    /**
-     * 获取前置地址
-     *
-     * @return
-     */
-    private String getUrl() {
-        String domain = properties.getDomain();
-        String endpoint = properties.getEndpoint();
-        String header = (CommonConstant.IS_HTTPS_YES.equals(properties.getIsHttps()) ? Protocol.HTTPS : Protocol.HTTP) + "://";
-        // 云服务商直接返回
-        if (StringUtils.containsAny(endpoint, CLOUD_SERVICE)) {
-            if (StringUtils.isNotBlank(domain)) {
-                return header + domain;
-            }
-            return header + properties.getBucketName() + "." + endpoint;
-        }
-        // minio 单独处理
-        if (StringUtils.isNotBlank(domain)) {
-            return header + domain + "/" + properties.getBucketName();
-        }
-        return header + endpoint + "/" + properties.getBucketName();
-    }
-
-    /**
-     * 获取前置路径
-     *
-     * @param prefix
-     * @param suffix
-     * @return
-     */
-    private String getPath(String prefix, String suffix) {
-        // 生成uuid
-        String uuid = IdUtil.fastSimpleUUID();
-        // 文件路径
-        String path = DateFormatUtils.format(new Date(), "yyyy/MM/dd") + "/" + uuid;
-        if (StringUtils.isNotBlank(prefix)) {
-            path = prefix + "/" + path;
-        }
-        return path + suffix;
-    }
 }

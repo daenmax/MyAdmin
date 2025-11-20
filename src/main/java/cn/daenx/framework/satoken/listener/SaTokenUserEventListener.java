@@ -2,6 +2,7 @@ package cn.daenx.framework.satoken.listener;
 
 import cn.dev33.satoken.listener.SaTokenListener;
 import cn.dev33.satoken.stp.SaLoginModel;
+import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,11 +14,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class SaTokenUserEventListener implements SaTokenListener {
+
     /**
      * 每次登录时触发
      */
     @Override
-    public void doLogin(String loginType, Object loginId, String tokenValue, SaLoginModel loginModel) {
+    public void doLogin(String loginType, Object loginId, String tokenValue, SaLoginParameter saLoginParameter) {
         log.info("用户[{}]登录成功", loginId);
     }
 
@@ -97,7 +99,9 @@ public class SaTokenUserEventListener implements SaTokenListener {
      * 每次Token续期时触发
      */
     @Override
-    public void doRenewTimeout(String tokenValue, Object loginId, long timeout) {
+    public void doRenewTimeout(String loginType, Object loginId, String tokenValue, long timeout) {
 //        System.out.println("---------- 自定义侦听器实现 doRenewTimeout");
+
     }
+
 }

@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.system.domain.po.SysFile;
@@ -35,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -61,7 +63,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         if (ossProperties != null) {
             if (ossProperties.getAccessPolicy().equals(AccessPolicyType.PRIVATE.getType())) {
                 OssClient ossClient = OssUtil.getOssClientByOssProperties(ossProperties);
-                String privateUrl = ossClient.getPrivateUrl(path, 120);
+                String privateUrl = ossClient.getPrivateUrl(path, Duration.ofSeconds(120));
                 return privateUrl;
             }
         }
@@ -142,7 +144,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         String originalName = file.getOriginalFilename();
         //后缀，例如：.jpg
         String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
-        if(ObjectUtil.isEmpty(suffix)){
+        if (ObjectUtil.isEmpty(suffix)) {
             throw new MyException("错误的文件类型");
         }
         SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadFileSuffixs();
@@ -172,7 +174,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         String originalName = file.getOriginalFilename();
         //后缀，例如：.jpg
         String suffix = StringUtils.substring(originalName, originalName.lastIndexOf("."), originalName.length());
-        if(ObjectUtil.isEmpty(suffix)){
+        if (ObjectUtil.isEmpty(suffix)) {
             throw new MyException("错误的文件类型");
         }
         SysUploadConfigVo sysUploadConfigVo = sysConfigService.getSysUploadImageSuffixs();
@@ -276,12 +278,11 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         }
         MyUtil.setDownloadResponseHeaders(response, sysFile.getOriginalName());
         OssClient ossClient = OssUtil.getOssClientByOssConfigId(sysFile.getOssId());
-        try (InputStream inputStream = ossClient.getObjectContent(sysFile.getFileName())) {
-            int available = inputStream.available();
-            IoUtil.copy(inputStream, response.getOutputStream(), available);
-            response.setContentLength(available);
+        try {
+            ossClient.download(sysFile.getFileName(), response.getOutputStream(), response::setContentLengthLong);
         } catch (Exception e) {
             throw new MyException("下载文件失败[" + OssUtil.transErrMsg(e.getMessage()) + "]");
         }
+
     }
 }

@@ -330,20 +330,24 @@ public class MyUtil {
      * @param originalName 文件名
      */
     public static void setDownloadResponseHeaders(HttpServletResponse response, String originalName) {
-        String fileName = null;
-        try {
-            //对中文文件名进行编码
-            fileName = URLEncoder.encode(originalName, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-        fileName = fileName.replaceAll("\\+", "%20");
+        String percentEncodedFileName = percentEncode(originalName);
+        String contentDispositionValue = "attachment; filename=%s;filename*=utf-8''%s".formatted(percentEncodedFileName, percentEncodedFileName);
         response.addHeader("Access-Control-Expose-Headers", "Content-Disposition,download-filename");
-        response.setHeader("Content-disposition", "attachment; filename=\"" + fileName + "\";filename*=utf-8''" + fileName);
-        response.setHeader("download-filename", fileName);
+        response.setHeader("Content-disposition", contentDispositionValue);
+        response.setHeader("download-filename", percentEncodedFileName);
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE + "; charset=UTF-8");
     }
 
+    /**
+     * 百分号编码工具方法
+     *
+     * @param s 需要百分号编码的字符串
+     * @return 百分号编码后的字符串
+     */
+    public static String percentEncode(String s) {
+        String encode = URLEncoder.encode(s, StandardCharsets.UTF_8);
+        return encode.replaceAll("\\+", "%20");
+    }
     /**
      * 获取指定格式的时间
      *

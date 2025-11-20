@@ -12,6 +12,8 @@ springdoc:
     # API路由，一般用于导入到第三方API管理工具（例如ApiFox），受到上面开关影响
     path: /api-docs
   swagger-ui:
+    # 是否启用在线文档，生产环境一定要关闭
+    enabled: true
     # 持久化认证数据
     persistAuthorization: false
 
@@ -89,7 +91,7 @@ spring:
       datasource:
         # mysql数据源例子（如果用不到，就注释掉即可），db-mysql是自己取的名字，你想叫啥就叫啥
         db-mysql:
-          url: jdbc:mysql://rm-2ze631pi758b4666mbo.mysql.rds.aliyuncs.com/myadmin_test?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
+          url: jdbc:mysql://192.168.1.74:3306/myadmin_test?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
           username: myadmin_test
           password: myadmin_test@2024
           # mysql5及以下需要使用com.mysql.jdbc.Driver
