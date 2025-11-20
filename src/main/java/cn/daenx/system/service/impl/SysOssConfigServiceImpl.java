@@ -131,6 +131,8 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         wrapper.set(SysOssConfig::getRegion, vo.getRegion());
         wrapper.set(SysOssConfig::getAccessPolicy, vo.getAccessPolicy());
         wrapper.set(SysOssConfig::getStatus, vo.getStatus());
+        wrapper.set(SysOssConfig::getUrlValidAccessTime, vo.getUrlValidAccessTime());
+        wrapper.set(SysOssConfig::getUrlValidCacheTime, vo.getUrlValidCacheTime());
         wrapper.set(SysOssConfig::getRemark, vo.getRemark());
         int rows = sysOssConfigMapper.update(new SysOssConfig(), wrapper);
         if (rows < 1) {
@@ -163,6 +165,8 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         sysOssConfig.setRegion(vo.getRegion());
         sysOssConfig.setAccessPolicy(vo.getAccessPolicy());
         sysOssConfig.setStatus(vo.getStatus());
+        sysOssConfig.setUrlValidAccessTime(vo.getUrlValidAccessTime());
+        sysOssConfig.setUrlValidCacheTime(vo.getUrlValidCacheTime());
         sysOssConfig.setRemark(vo.getRemark());
         sysOssConfig.setInUse(SystemConstant.IN_USE_NO);
         int insert = sysOssConfigMapper.insert(sysOssConfig);

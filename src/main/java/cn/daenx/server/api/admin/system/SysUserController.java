@@ -73,7 +73,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result query(@RequestParam(name = "id", required = false) String id) {
         Map<String, Object> map = sysUserService.getInfo(id);
         return Result.ok(map);
     }

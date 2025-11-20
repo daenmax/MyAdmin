@@ -94,6 +94,18 @@ public class SysOssConfig extends BaseEntity implements Serializable {
     private String status;
 
     /**
+     * 链接访问有效期，当存储桶为private时有效，单位秒
+     */
+    @TableField(value = "url_valid_access_time")
+    private Integer urlValidAccessTime;
+
+    /**
+     * 链接缓存有效期，单位秒，0=不缓存
+     */
+    @TableField(value = "url_valid_cache_time")
+    private Integer urlValidCacheTime;
+
+    /**
      * 备注
      */
     @TableField(value = "remark")

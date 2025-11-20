@@ -1,5 +1,6 @@
 package cn.daenx.framework.oss.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -62,5 +63,15 @@ public class OssProperties {
      * 存储桶权限类型，0=private，1=public，2=custom
      */
     private String accessPolicy;
+
+    /**
+     * 链接访问有效期，当存储桶为private时有效，单位秒
+     */
+    private Integer urlValidAccessTime;
+
+    /**
+     * 链接缓存有效期，单位秒，0=不缓存
+     */
+    private Integer urlValidCacheTime;
 
 }

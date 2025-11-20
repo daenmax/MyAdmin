@@ -1,6 +1,7 @@
 package cn.daenx.system.domain.vo;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -68,6 +69,18 @@ public class SysOssConfigAddVo {
      */
     @NotBlank(message = "配置状态不能为空")
     private String status;
+
+    /**
+     * 链接访问有效期，当存储桶为private时有效，单位秒
+     */
+    @NotNull(message = "链接有效期不能为空")
+    private Integer urlValidAccessTime;
+
+    /**
+     * 链接缓存有效期，单位秒，0=不缓存
+     */
+    @NotNull(message = "链接有效期缓存不能为空")
+    private Integer urlValidCacheTime;
 
     /**
      * 备注

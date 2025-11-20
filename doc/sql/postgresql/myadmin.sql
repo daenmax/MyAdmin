@@ -491,6 +491,7 @@ INSERT INTO "public"."sys_dict_detail" VALUES ('6232d1a9d3cb4485b15bd20a03e807d0
 INSERT INTO "public"."sys_dict_detail" VALUES ('66824297a41647e72d8257d1b0dcaad7', 'sys_user_type', '运维', '2', 0, NULL, 'primary', '0', NULL, '1', '2023-03-23 11:04:58', '1', '2023-04-20 22:50:58', 0);
 INSERT INTO "public"."sys_dict_detail" VALUES ('6bf3a9656aa4697581a0be46ffc67736', 'sys_oss_scope', 'custom', '2', 2, NULL, 'primary', '0', NULL, '1', '2023-04-18 23:46:54', '1', '2023-04-20 22:52:38', 0);
 INSERT INTO "public"."sys_dict_detail" VALUES ('6f6212d3ee407955b6e1606d6bc692fa', 'sys_oss_type', '腾讯云', '腾讯云', 0, NULL, 'info', '0', NULL, '1', '2023-04-16 23:54:48', '1', '2023-04-20 22:52:49', 0);
+INSERT INTO "public"."sys_dict_detail" VALUES ('6f6212d3ee407955b6e1606d6bc692f1', 'sys_oss_type', '百度云', '百度云', 0, NULL, 'info', '0', NULL, '1', '2023-04-16 23:54:48', '1', '2023-04-20 22:52:49', 0);
 INSERT INTO "public"."sys_dict_detail" VALUES ('703f50ed1e45a4d8f43ca7644a3b5703', 'data_scope', '本部门数据', '1', 1, NULL, 'primary', '0', NULL, '1', '2023-03-29 10:38:44', '1', '2023-03-29 10:38:44', 0);
 INSERT INTO "public"."sys_dict_detail" VALUES ('707107e22b1e4021aad925c891652f0e', 'test_data_type', '民生', '0', 1, NULL, 'primary', '0', '民生', '1', '2023-03-15 16:36:49', '1', '2023-04-20 22:50:55', 0);
 INSERT INTO "public"."sys_dict_detail" VALUES ('74538cc5e03118a8f95bec4b9f60ac20', 'sys_oper_type', '查询', '4', 4, NULL, 'success', '0', NULL, '1', '2023-04-19 22:24:40', '1', '2023-04-19 22:24:40', 0);
@@ -967,6 +968,8 @@ CREATE TABLE "public"."sys_oss_config" (
                                            "region" varchar(255) COLLATE "pg_catalog"."default",
                                            "access_policy" char(2) COLLATE "pg_catalog"."default",
                                            "in_use" varchar(2) COLLATE "pg_catalog"."default",
+                                           "url_valid_access_time" int4,
+                                           "url_valid_cache_time" int4,
                                            "status" varchar(2) COLLATE "pg_catalog"."default",
                                            "remark" varchar(255) COLLATE "pg_catalog"."default",
                                            "create_id" varchar(32) COLLATE "pg_catalog"."default",
@@ -987,6 +990,8 @@ COMMENT ON COLUMN "public"."sys_oss_config"."is_https" IS '是否https，0=否�
 COMMENT ON COLUMN "public"."sys_oss_config"."region" IS '地域';
 COMMENT ON COLUMN "public"."sys_oss_config"."access_policy" IS '存储桶权限类型，0=private，1=public，2=custom';
 COMMENT ON COLUMN "public"."sys_oss_config"."in_use" IS '正在使用，0=否，1=是（在所有数据中，只有一条数据可是正在使用）';
+COMMENT ON COLUMN "public"."sys_oss_config"."url_valid_access_time" IS '链接访问有效期，当存储桶为private时有效，单位秒';
+COMMENT ON COLUMN "public"."sys_oss_config"."url_valid_cache_time" IS '链接缓存有效期，单位秒，0=不缓存';
 COMMENT ON COLUMN "public"."sys_oss_config"."status" IS '配置状态，0=正常，1=禁用';
 COMMENT ON COLUMN "public"."sys_oss_config"."remark" IS '备注';
 COMMENT ON COLUMN "public"."sys_oss_config"."create_id" IS '创建人';
@@ -999,9 +1004,9 @@ COMMENT ON TABLE "public"."sys_oss_config" IS 'OSS配置表';
 -- ----------------------------
 -- Records of sys_oss_config
 -- ----------------------------
-INSERT INTO "public"."sys_oss_config" VALUES ('02a4c0e40c271fd516ea3ea566ade22e', '七牛云', '1', '13m', 'my-dev-test', 'MyAdmin', 's3-cn-north-1.qiniucs.com', 'qiniu.daenx.cn', '1 ', 'cn-north-1', '1 ', '0', '0', NULL, '1', '2023-04-13 22:38:26', '1', '2023-04-19 22:12:21', 0);
-INSERT INTO "public"."sys_oss_config" VALUES ('3c59bfcc59b182930fe2d9c41246c50a', 'minio', '2', '2', 'test', 'MyAdmin', '127.0.0.1:9000', '', '0 ', '', '1 ', '1', '0', NULL, '1', '2023-04-16 17:03:47', '1', '2023-04-19 22:12:21', 0);
-INSERT INTO "public"."sys_oss_config" VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr', '腾讯云', '3', '3', 'daen-1251663445', 'MyAdmin', 'cos.ap-nanjing.myqcloud.com', '', '0 ', 'ap-nanjing', '1 ', '0', '0', NULL, '1', '2023-04-16 20:06:31', '1', '2023-04-19 22:12:21', 0);
+INSERT INTO "public"."sys_oss_config" VALUES ('02a4c0e40c271fd516ea3ea566ade22e', '七牛云', '1', '13m', 'my-dev-test', 'MyAdmin', 's3-cn-north-1.qiniucs.com', 'qiniu.daenx.cn', '1', 'cn-north-1', '1', '0', 120,100,'0', NULL, '1', '2023-04-13 22:38:26', '1', '2023-04-19 22:12:21', 0);
+INSERT INTO "public"."sys_oss_config" VALUES ('3c59bfcc59b182930fe2d9c41246c50a', 'minio', '2', '2', 'test', 'MyAdmin', '127.0.0.1:9000', '', '0', '', '1', '1', 120,100,'0', NULL, '1', '2023-04-16 17:03:47', '1', '2023-04-19 22:12:21', 0);
+INSERT INTO "public"."sys_oss_config" VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr', '腾讯云', '3', '3', 'daen-1251663445', 'MyAdmin', 'cos.ap-nanjing.myqcloud.com', '', '0', 'ap-nanjing', '1', '0', 120,100,'0', NULL, '1', '2023-04-16 20:06:31', '1', '2023-04-19 22:12:21', 0);
 
 -- ----------------------------
 -- Table structure for sys_position

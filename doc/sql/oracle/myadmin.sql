@@ -593,6 +593,7 @@ INSERT INTO "SYS_DICT_DETAIL" VALUES ('6232d1a9d3cb4485b15bd20a03e807d0', 'sys_n
 INSERT INTO "SYS_DICT_DETAIL" VALUES ('66824297a41647e72d8257d1b0dcaad7', 'sys_user_type', '运维', '2', '0', NULL, 'primary', '0', NULL, '1', TO_DATE('2023-03-23 11:04:58', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-20 22:50:58', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 INSERT INTO "SYS_DICT_DETAIL" VALUES ('6bf3a9656aa4697581a0be46ffc67736', 'sys_oss_scope', 'custom', '2', '2', NULL, 'primary', '0', NULL, '1', TO_DATE('2023-04-18 23:46:54', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-20 22:52:38', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 INSERT INTO "SYS_DICT_DETAIL" VALUES ('6f6212d3ee407955b6e1606d6bc692fa', 'sys_oss_type', '腾讯云', '腾讯云', '0', NULL, 'info', '0', NULL, '1', TO_DATE('2023-04-16 23:54:48', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-20 22:52:49', 'SYYYY-MM-DD HH24:MI:SS'), '0');
+INSERT INTO "SYS_DICT_DETAIL" VALUES ('6f6212d3ee407955b6e1606d6bc692f1', 'sys_oss_type', '百度云', '百度云', '0', NULL, 'info', '0', NULL, '1', TO_DATE('2023-04-16 23:54:48', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-20 22:52:49', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 INSERT INTO "SYS_DICT_DETAIL" VALUES ('703f50ed1e45a4d8f43ca7644a3b5703', 'data_scope', '本部门数据', '1', '1', NULL, 'primary', '0', NULL, '1', TO_DATE('2023-03-29 10:38:44', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-03-29 10:38:44', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 INSERT INTO "SYS_DICT_DETAIL" VALUES ('707107e22b1e4021aad925c891652f0e', 'test_data_type', '民生', '0', '1', NULL, 'primary', '0', '民生', '1', TO_DATE('2023-03-15 16:36:49', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-20 22:50:55', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 INSERT INTO "SYS_DICT_DETAIL" VALUES ('74538cc5e03118a8f95bec4b9f60ac20', 'sys_oper_type', '查询', '4', '4', NULL, 'success', '0', NULL, '1', TO_DATE('2023-04-19 22:24:40', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-19 22:24:40', 'SYYYY-MM-DD HH24:MI:SS'), '0');
@@ -1149,6 +1150,8 @@ CREATE TABLE "SYS_OSS_CONFIG" (
                                   "REGION" NVARCHAR2(255),
                                   "ACCESS_POLICY" NCHAR(2),
                                   "IN_USE" NVARCHAR2(2),
+                                  "URL_VALID_ACCESS_TIME" NUMBER(11,0),
+                                  "URL_VALID_CACHE_TIME" NUMBER(11,0),
                                   "STATUS" NVARCHAR2(2),
                                   "REMARK" NVARCHAR2(255),
                                   "CREATE_ID" NVARCHAR2(32),
@@ -1183,6 +1186,8 @@ COMMENT ON COLUMN "SYS_OSS_CONFIG"."IS_HTTPS" IS '是否https，0=否，1=是';
 COMMENT ON COLUMN "SYS_OSS_CONFIG"."REGION" IS '地域';
 COMMENT ON COLUMN "SYS_OSS_CONFIG"."ACCESS_POLICY" IS '存储桶权限类型，0=private，1=public，2=custom';
 COMMENT ON COLUMN "SYS_OSS_CONFIG"."IN_USE" IS '正在使用，0=否，1=是（在所有数据中，只有一条数据可是正在使用）';
+COMMENT ON COLUMN "SYS_OSS_CONFIG"."URL_VALID_ACCESS_TIME" IS '链接访问有效期，当存储桶为private时有效，单位秒';
+COMMENT ON COLUMN "SYS_OSS_CONFIG"."URL_VALID_CACHE_TIME" IS '链接缓存有效期，单位秒，0=不缓存';
 COMMENT ON COLUMN "SYS_OSS_CONFIG"."STATUS" IS '配置状态，0=正常，1=禁用';
 COMMENT ON COLUMN "SYS_OSS_CONFIG"."REMARK" IS '备注';
 COMMENT ON COLUMN "SYS_OSS_CONFIG"."CREATE_ID" IS '创建人';
@@ -1195,9 +1200,9 @@ COMMENT ON TABLE "SYS_OSS_CONFIG" IS 'OSS配置表';
 -- ----------------------------
 -- Records of SYS_OSS_CONFIG
 -- ----------------------------
-INSERT INTO "SYS_OSS_CONFIG" VALUES ('02a4c0e40c271fd516ea3ea566ade22e', '七牛云', '1', '13m', 'my-dev-test', 'MyAdmin', 's3-cn-north-1.qiniucs.com', 'qiniu.daenx.cn', '1 ', 'cn-north-1', '1 ', '0', '0', NULL, '1', TO_DATE('2023-04-13 22:38:26', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-19 22:12:21', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_OSS_CONFIG" VALUES ('3c59bfcc59b182930fe2d9c41246c50a', 'minio', '2', '2', 'test', 'MyAdmin', '127.0.0.1:9000', NULL, '0 ', NULL, '1 ', '1', '0', NULL, '1', TO_DATE('2023-04-16 17:03:47', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-19 22:12:21', 'SYYYY-MM-DD HH24:MI:SS'), '0');
-INSERT INTO "SYS_OSS_CONFIG" VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr', '腾讯云', '3', '3', 'daen-1251663445', 'MyAdmin', 'cos.ap-nanjing.myqcloud.com', NULL, '0 ', 'ap-nanjing', '1 ', '0', '0', NULL, '1', TO_DATE('2023-04-16 20:06:31', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-19 22:12:21', 'SYYYY-MM-DD HH24:MI:SS'), '0');
+INSERT INTO "SYS_OSS_CONFIG" VALUES ('02a4c0e40c271fd516ea3ea566ade22e', '七牛云', '1', '13m', 'my-dev-test', 'MyAdmin', 's3-cn-north-1.qiniucs.com', 'qiniu.daenx.cn', '1', 'cn-north-1', '1', '0', '120','100','0', NULL, '1', TO_DATE('2023-04-13 22:38:26', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-19 22:12:21', 'SYYYY-MM-DD HH24:MI:SS'), '0');
+INSERT INTO "SYS_OSS_CONFIG" VALUES ('3c59bfcc59b182930fe2d9c41246c50a', 'minio', '2', '2', 'test', 'MyAdmin', '127.0.0.1:9000', NULL, '0', NULL, '1', '1', '120','100','0', NULL, '1', TO_DATE('2023-04-16 17:03:47', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-19 22:12:21', 'SYYYY-MM-DD HH24:MI:SS'), '0');
+INSERT INTO "SYS_OSS_CONFIG" VALUES ('k8jowsd604opw17q6hs8gze05s2ybpqr', '腾讯云', '3', '3', 'daen-1251663445', 'MyAdmin', 'cos.ap-nanjing.myqcloud.com', NULL, '0', 'ap-nanjing', '1', '0','120','100', '0', NULL, '1', TO_DATE('2023-04-16 20:06:31', 'SYYYY-MM-DD HH24:MI:SS'), '1', TO_DATE('2023-04-19 22:12:21', 'SYYYY-MM-DD HH24:MI:SS'), '0');
 
 -- ----------------------------
 -- Table structure for SYS_POSITION

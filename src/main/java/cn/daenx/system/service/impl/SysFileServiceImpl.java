@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements SysFileService {
@@ -47,7 +48,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     private SysConfigService sysConfigService;
 
     /**
-     * 如果是私有存储，那么获取一个120秒有效的链接
+     * 如果是私有存储，那么获取一个临时有效的链接
      *
      * @param url
      * @param path
@@ -62,8 +63,13 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         OssProperties ossProperties = JSON.parseObject(JSON.toJSONString(object), OssProperties.class);
         if (ossProperties != null) {
             if (ossProperties.getAccessPolicy().equals(AccessPolicyType.PRIVATE.getType())) {
+                String cacheUrl = (String) RedisUtil.getValue(RedisConstant.OSS_CACHE + path);
+                if (StringUtils.isNotBlank(cacheUrl)) {
+                    return cacheUrl;
+                }
                 OssClient ossClient = OssUtil.getOssClientByOssProperties(ossProperties);
-                String privateUrl = ossClient.getPrivateUrl(path, Duration.ofSeconds(120));
+                String privateUrl = ossClient.getPrivateUrl(path, Duration.ofSeconds(ossProperties.getUrlValidAccessTime()));
+                RedisUtil.setValue(RedisConstant.OSS_CACHE + path, privateUrl, Long.valueOf(ossProperties.getUrlValidCacheTime()), TimeUnit.SECONDS);
                 return privateUrl;
             }
         }
@@ -222,7 +228,6 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         QueryWrapper<SysFile> wrapper = getWrapper(vo);
         IPage<SysFilePageDto> iPage = sysFileMapper.getPageWrapper(vo.getPage(true), wrapper);
         for (SysFilePageDto record : iPage.getRecords()) {
-            //如果是私有存储，那么获取一个120秒有效的链接
             record.setFileUrl(transPrivateUrl(record.getFileUrl(), record.getFileName(), record.getOssId()));
         }
         return iPage;
