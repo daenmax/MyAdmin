@@ -4,7 +4,9 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -152,7 +154,7 @@ public class RedisUtil {
      * @param key 后面要跟上*号
      * @return
      */
-    public static Collection<String> getList(String key) {
+    public static Set getList(String key) {
         Set keys = redisTemplate.keys(key);
         return keys;
     }
