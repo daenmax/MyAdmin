@@ -1,4 +1,4 @@
-package cn.daenx.framework.redis;
+package cn.daenx.framework.cache.redis.config;
 
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;

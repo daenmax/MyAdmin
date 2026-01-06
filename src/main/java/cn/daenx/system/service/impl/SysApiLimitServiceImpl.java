@@ -6,7 +6,7 @@ import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.vo.ComStatusUpdVo;
 import cn.daenx.system.domain.po.SysApiLimit;
 import cn.daenx.system.domain.vo.SysApiLimitAddVo;
@@ -262,9 +262,9 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
      */
     @Override
     public void refreshApiLimitCache() {
-        RedisUtil.delBatch(RedisConstant.API_LIMIT_SINGLE_KEY + "*");
-        RedisUtil.delBatch(RedisConstant.API_LIMIT_WHOLE_KEY + "*");
-        RedisUtil.delBatch(RedisConstant.API_LIMIT_CLOSE_KEY + "*");
+        CacheUtil.delBatch(RedisConstant.API_LIMIT_SINGLE_KEY + "*");
+        CacheUtil.delBatch(RedisConstant.API_LIMIT_WHOLE_KEY + "*");
+        CacheUtil.delBatch(RedisConstant.API_LIMIT_CLOSE_KEY + "*");
         LambdaQueryWrapper<SysApiLimit> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysApiLimit::getStatus, CommonConstant.STATUS_NORMAL);
         List<SysApiLimit> list = sysApiLimitMapper.selectList(wrapper);
@@ -274,6 +274,9 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
     }
 
     private void initApiLimit(SysApiLimit sysApiLimit) {
+        if (!"redis".equals(CacheUtil.getType())) {
+            return;
+        }
         if (sysApiLimit.getLimitType().equals(SystemConstant.API_LIMIT_CURRENT)) {
             //限流
             cleanCache(sysApiLimit);
@@ -284,7 +287,7 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
                 //转换成秒
                 Integer singleSecond = MyUtil.toSecond(sysApiLimit.getSingleTime(), sysApiLimit.getSingleTimeUnit());
                 String singleKey = RedisConstant.API_LIMIT_SINGLE_KEY + sysApiLimit.getApiUri();
-                BoundHashOperations<String, String, Object> hashOps = RedisUtil.getRedisTemplate().boundHashOps(singleKey);
+                BoundHashOperations<String, String, Object> hashOps = CacheUtil.getRedisTemplate().boundHashOps(singleKey);
                 hashOps.put("max", sysApiLimit.getSingleFrequency());
                 hashOps.put("outTime", singleSecond);
             }
@@ -292,7 +295,7 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
                 //转换成秒
                 Integer wholeSecond = MyUtil.toSecond(sysApiLimit.getWholeTime(), sysApiLimit.getWholeTimeUnit());
                 String wholeKey = RedisConstant.API_LIMIT_WHOLE_KEY + sysApiLimit.getApiUri();
-                BoundHashOperations<String, String, Object> hashOps = RedisUtil.getRedisTemplate().boundHashOps(wholeKey);
+                BoundHashOperations<String, String, Object> hashOps = CacheUtil.getRedisTemplate().boundHashOps(wholeKey);
                 hashOps.put("max", sysApiLimit.getWholeFrequency());
                 hashOps.put("outTime", wholeSecond);
             }
@@ -302,24 +305,27 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
             if (!CommonConstant.STATUS_NORMAL.equals(sysApiLimit.getStatus())) {
                 return;
             }
-            RedisUtil.setValue(RedisConstant.API_LIMIT_CLOSE_KEY + sysApiLimit.getApiUri(), sysApiLimit);
+            CacheUtil.setValue(RedisConstant.API_LIMIT_CLOSE_KEY + sysApiLimit.getApiUri(), sysApiLimit);
         }
     }
 
     private void cleanCache(SysApiLimit sysApiLimit) {
+        if (!"redis".equals(CacheUtil.getType())) {
+            return;
+        }
         if (sysApiLimit.getLimitType().equals(SystemConstant.API_LIMIT_CURRENT)) {
             //限流
             //单个用户配置
-            RedisUtil.del(RedisConstant.API_LIMIT_SINGLE_KEY + sysApiLimit.getApiUri());
+            CacheUtil.del(RedisConstant.API_LIMIT_SINGLE_KEY + sysApiLimit.getApiUri());
             //单个用户记录
-            RedisUtil.delBatch(RedisConstant.API_LIMIT_SINGLE_KEY + sysApiLimit.getApiUri() + ":*");
+            CacheUtil.delBatch(RedisConstant.API_LIMIT_SINGLE_KEY + sysApiLimit.getApiUri() + ":*");
             //全部用户配置
-            RedisUtil.del(RedisConstant.API_LIMIT_WHOLE_KEY + sysApiLimit.getApiUri());
+            CacheUtil.del(RedisConstant.API_LIMIT_WHOLE_KEY + sysApiLimit.getApiUri());
             //全部用户记录
-            RedisUtil.del(RedisConstant.API_LIMIT_WHOLE_LIMITER_KEY + sysApiLimit.getApiUri());
+            CacheUtil.del(RedisConstant.API_LIMIT_WHOLE_LIMITER_KEY + sysApiLimit.getApiUri());
         } else {
             //停用
-            RedisUtil.del(RedisConstant.API_LIMIT_CLOSE_KEY + sysApiLimit.getApiUri());
+            CacheUtil.del(RedisConstant.API_LIMIT_CLOSE_KEY + sysApiLimit.getApiUri());
         }
     }
 }

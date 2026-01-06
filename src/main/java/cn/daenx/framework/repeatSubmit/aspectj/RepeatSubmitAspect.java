@@ -2,7 +2,7 @@ package cn.daenx.framework.repeatSubmit.aspectj;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
 import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.repeatSubmit.annotation.RepeatSubmit;
@@ -57,9 +57,9 @@ public class RepeatSubmitAspect {
         String submitKey = SecureUtil.md5(token + ":" + nowParams);
         // 唯一标识 = 头 + 请求地址 + 唯一值
         String cacheRepeatKey = RedisConstant.REPEAT_SUBMIT_KEY + url + submitKey;
-        String key = (String) RedisUtil.getValue(cacheRepeatKey);
+        String key = (String) CacheUtil.getValue(cacheRepeatKey);
         if (key == null) {
-            RedisUtil.setValue(cacheRepeatKey, "", interval, TimeUnit.MILLISECONDS);
+            CacheUtil.setValue(cacheRepeatKey, "", interval, TimeUnit.MILLISECONDS);
             KEY_CACHE.set(cacheRepeatKey);
         } else {
             String message = repeatSubmit.message();
@@ -80,7 +80,7 @@ public class RepeatSubmitAspect {
                 if (r.getCode() == HttpStatus.HTTP_OK) {
                     return;
                 }
-                RedisUtil.del(KEY_CACHE.get());
+                CacheUtil.del(KEY_CACHE.get());
             } finally {
                 KEY_CACHE.remove();
             }
@@ -95,7 +95,7 @@ public class RepeatSubmitAspect {
      */
     @AfterThrowing(value = "@annotation(repeatSubmit)", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, RepeatSubmit repeatSubmit, Exception e) {
-        RedisUtil.del(KEY_CACHE.get());
+        CacheUtil.del(KEY_CACHE.get());
         KEY_CACHE.remove();
     }
 

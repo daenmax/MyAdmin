@@ -2,7 +2,7 @@ package cn.daenx.system.service.impl;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.system.service.SysDictService;
 import cn.daenx.system.domain.vo.SysDictDetailAddVo;
 import cn.daenx.system.domain.vo.SysDictDetailPageVo;
@@ -40,7 +40,7 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
      */
     @Override
     public List<SysDictDetail> getDictDetailByCodeFromRedis(String dictCode) {
-        Object object = RedisUtil.getValue(RedisConstant.DICT + dictCode);
+        Object object = CacheUtil.getValue(RedisConstant.DICT + dictCode);
         List<SysDictDetail> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetail.class);
         return list;
     }

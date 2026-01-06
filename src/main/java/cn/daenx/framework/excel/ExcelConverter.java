@@ -2,7 +2,7 @@ package cn.daenx.framework.excel;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;
@@ -101,7 +101,7 @@ public class ExcelConverter implements Converter<Object> {
     private String transDictToLabel(Dict annotation, String value) {
         if (StringUtils.isNotBlank(annotation.dictCode())) {
             //根据系统字典翻译
-            Object object = RedisUtil.getValue(RedisConstant.DICT + annotation.dictCode());
+            Object object = CacheUtil.getValue(RedisConstant.DICT + annotation.dictCode());
             List<SysDictDetailVo> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetailVo.class);
             if (CollUtil.isNotEmpty(list)) {
                 for (SysDictDetailVo sysDictDetail : list) {
@@ -132,7 +132,7 @@ public class ExcelConverter implements Converter<Object> {
     private String transDictToValue(Dict annotation, String label) {
         if (StringUtils.isNotBlank(annotation.dictCode())) {
             //根据系统字典翻译
-            Object object = RedisUtil.getValue(RedisConstant.DICT + annotation.dictCode());
+            Object object = CacheUtil.getValue(RedisConstant.DICT + annotation.dictCode());
             List<SysDictDetailVo> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetailVo.class);
             if (CollUtil.isEmpty(list)) {
                 for (SysDictDetailVo sysDictDetail : list) {

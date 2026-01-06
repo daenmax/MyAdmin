@@ -46,6 +46,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MyUtil {
 
+    public static String getLogPrex() {
+        return "🛡️ -> ";
+    }
+
     /**
      * List对象转换
      *

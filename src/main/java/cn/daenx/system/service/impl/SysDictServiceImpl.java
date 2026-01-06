@@ -4,7 +4,7 @@ import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.system.mapper.SysDictDetailMapper;
 import cn.daenx.system.domain.po.SysDictDetail;
 import cn.daenx.system.domain.vo.SysDictAddVo;
@@ -197,7 +197,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      */
     @Override
     public void refreshCache() {
-        RedisUtil.delBatch(RedisConstant.DICT + "*");
+        CacheUtil.delBatch(RedisConstant.DICT + "*");
         List<SysDict> sysDictList = getSysDictList();
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysDictDetail::getStatus, CommonConstant.STATUS_NORMAL);
@@ -205,7 +205,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         for (SysDict sysDict : sysDictList) {
             List<SysDictDetail> collect = sysDictDetailList.stream().filter(dictDetail -> sysDict.getCode().equals(dictDetail.getDictCode())).collect(Collectors.toList());
-            RedisUtil.setValue(RedisConstant.DICT + sysDict.getCode(), collect);
+            CacheUtil.setValue(RedisConstant.DICT + sysDict.getCode(), collect);
         }
     }
 }

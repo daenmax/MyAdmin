@@ -3,7 +3,7 @@ package cn.daenx.framework.notify.wecom.utils;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.vo.system.config.SysWecomConfigVo;
 import cn.daenx.framework.notify.wecom.service.WecomService;
@@ -113,7 +113,7 @@ public class WecomUtil {
      * @return
      */
     private static List<SysWecomConfigVo> getConfigVo(String botName) {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.wecom.config");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.wecom.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }

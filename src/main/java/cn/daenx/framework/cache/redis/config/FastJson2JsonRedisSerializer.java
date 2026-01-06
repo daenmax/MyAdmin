@@ -1,4 +1,4 @@
-package cn.daenx.framework.redis;
+package cn.daenx.framework.cache.redis.config;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;

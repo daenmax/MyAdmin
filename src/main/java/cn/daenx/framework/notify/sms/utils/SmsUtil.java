@@ -3,7 +3,7 @@ package cn.daenx.framework.notify.sms.utils;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
 import cn.daenx.framework.common.vo.CheckSendVo;
 import cn.daenx.framework.notify.sms.vo.SmsSendResult;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -144,7 +145,7 @@ public class SmsUtil {
      * @return
      */
     private static SysSmsConfigVo getSysSmsConfigVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.sms.config");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.sms.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -182,13 +183,13 @@ public class SmsUtil {
         Integer dayMax = sysSendLimitConfigVo.getSms().getDayMax();
         Integer needWait = sysSendLimitConfigVo.getSms().getNeedWait();
         //判断今天是否还可以发送
-        Collection<String> yyyyMMdd = RedisUtil.getList(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
+        List<Object> yyyyMMdd = CacheUtil.getList(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
         if (yyyyMMdd.size() >= dayMax) {
             Integer remainSecondsOneDay = MyUtil.getRemainSecondsOneDay(LocalDateTime.now());
             String str = MyUtil.timeDistance(Long.valueOf(String.valueOf(remainSecondsOneDay * 1000)));
             return new CheckSendVo(false, remainSecondsOneDay, "今日请求过多，请于" + str + "后再试");
         }
-        String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_PHONE + key);
+        String lastSendTimeStr = (String) CacheUtil.getValue(RedisConstant.SEND_PHONE + key);
         if (ObjectUtil.isEmpty(lastSendTimeStr)) {
             return new CheckSendVo(true, 0, "可以进行发送");
         }
@@ -227,10 +228,10 @@ public class SmsUtil {
         Integer dayMax = sysSendLimitConfigVo.getSms().getDayMax();
         Integer needWait = sysSendLimitConfigVo.getSms().getNeedWait();
         String dateStrByFormat = MyUtil.getDateStrByFormat("yyyy-MM-dd HH:mm:ss");
-        RedisUtil.setValue(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + ":" + IdUtil.fastSimpleUUID(), dateStrByFormat, 1L, TimeUnit.DAYS);
-        RedisUtil.setValue(RedisConstant.SEND_PHONE + key, dateStrByFormat);
+        CacheUtil.setValue(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + ":" + IdUtil.fastSimpleUUID(), dateStrByFormat, 1L, TimeUnit.DAYS);
+        CacheUtil.setValue(RedisConstant.SEND_PHONE + key, dateStrByFormat);
         //计算下次可以发的秒数
-        Collection<String> yyyyMMdd = RedisUtil.getList(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
+        List<Object> yyyyMMdd = CacheUtil.getList(RedisConstant.SEND_PHONE + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
         if (yyyyMMdd.size() >= dayMax) {
             Integer remainSecondsOneDay = MyUtil.getRemainSecondsOneDay(LocalDateTime.now());
             return remainSecondsOneDay;

@@ -1,7 +1,7 @@
 package cn.daenx.framework.satoken.utils;
 
 import cn.daenx.framework.common.constant.enums.DeviceType;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
@@ -47,7 +47,7 @@ public class LoginUtil {
      * @param username
      */
     public static void saveLoginCache(String userId, String username) {
-        RedisUtil.setValue("Authorization:cache:" + userId, username, timeOut, TimeUnit.SECONDS);
+        CacheUtil.setValue("Authorization:cache:" + userId, username, timeOut, TimeUnit.SECONDS);
     }
 
     /**
@@ -186,10 +186,10 @@ public class LoginUtil {
      * @param userId
      */
     public static void logoutByUserId(String userId) {
-        String username = (String) RedisUtil.getValue("Authorization:cache:" + userId);
+        String username = (String) CacheUtil.getValue("Authorization:cache:" + userId);
         if (StringUtils.isNotBlank(username)) {
             logoutByUsername(username);
-            RedisUtil.del("Authorization:cache:" + userId);
+            CacheUtil.del("Authorization:cache:" + userId);
         }
     }
 

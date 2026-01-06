@@ -1,5 +1,6 @@
 package cn.daenx.system.service.impl;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
@@ -160,7 +161,7 @@ public class LoginServiceImpl implements LoginService {
             base64 = ImgUtil.toBase64(image, ImgUtil.IMAGE_TYPE_PNG);
         }
         String uuid = IdUtil.randomUUID();
-        RedisUtil.setValue(RedisConstant.CAPTCHA_IMG + uuid, code, 300L, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.CAPTCHA_IMG + uuid, code, 300L, TimeUnit.SECONDS);
         map.put("uuid", uuid);
         map.put("img", base64);
         return map;
@@ -175,7 +176,7 @@ public class LoginServiceImpl implements LoginService {
     private HashMap<String, Object> createCaptchaSlider(SysCaptchaConfigVo sysCaptchaConfigVo) {
         HashMap<String, Object> map = new HashMap<>();
         String uuid = IdUtil.randomUUID();
-        RedisUtil.setValue(RedisConstant.CAPTCHA_SLIDER + uuid, "1", 300L, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.CAPTCHA_SLIDER + uuid, "1", 300L, TimeUnit.SECONDS);
         map.put("uuid", uuid);
         return map;
     }
@@ -196,21 +197,21 @@ public class LoginServiceImpl implements LoginService {
             if (ObjectUtil.isEmpty(vo.getCode()) || ObjectUtil.isEmpty(vo.getUuid())) {
                 throw new MyException("验证码相关参数不能为空");
             }
-            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+            String codeReal = (String) CacheUtil.getValue(RedisConstant.CAPTCHA_IMG + vo.getUuid());
             if (ObjectUtil.isEmpty(codeReal)) {
                 throw new MyException("验证码已过期，请刷新验证码");
             }
             if (!codeReal.equals(vo.getCode())) {
-                RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+                CacheUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
                 throw new MyException("验证码错误");
             }
-            RedisUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+            CacheUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
         } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
             //腾讯验证码
             if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket()) || ObjectUtil.isEmpty(vo.getUuid())) {
                 throw new MyException("验证码相关参数不能为空");
             }
-            String codeReal = (String) RedisUtil.getValue(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
+            String codeReal = (String) CacheUtil.getValue(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
             if (ObjectUtil.isEmpty(codeReal)) {
                 throw new MyException("验证参数已过期，请重新验证");
             }
@@ -218,7 +219,7 @@ public class LoginServiceImpl implements LoginService {
             if (!MyUtil.checkTencentCaptchaSlider(vo.getRandStr(), vo.getTicket())) {
                 throw new MyException("验证失败，请重试");
             }
-            RedisUtil.del(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
+            CacheUtil.del(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
         }
     }
 
@@ -247,7 +248,7 @@ public class LoginServiceImpl implements LoginService {
         }
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
-        String value = (String) RedisUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
+        String value = (String) CacheUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -264,13 +265,13 @@ public class LoginServiceImpl implements LoginService {
             throw new MyException("发送邮件失败，请联系管理员");
         }
         //有效期30分钟
-        RedisUtil.setValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = EmailUtil.saveSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
         //这里设置一层验证码UUID缓存，为后面点击登录增加一道障碍，避免出现不输入验证码就一直点登录，对面通过遍历造成撞库泄露风险
-        RedisUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
         return Result.ok(map);
     }
 
@@ -299,7 +300,7 @@ public class LoginServiceImpl implements LoginService {
         }
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
-        String value = (String) RedisUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+        String value = (String) CacheUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -322,13 +323,13 @@ public class LoginServiceImpl implements LoginService {
         if (!smsSendResult.isSuccess()) {
             throw new MyException("发送短信失败，请联系管理员");
         }
-        RedisUtil.setValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = SmsUtil.saveSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
         //这里设置一层验证码UUID缓存，为后面点击登录增加一道障碍，避免出现不输入验证码就一直点登录，对面通过遍历造成撞库泄露风险
-        RedisUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
         return Result.ok(map);
     }
 
@@ -377,14 +378,14 @@ public class LoginServiceImpl implements LoginService {
                 String msg = "密码错误";
                 if (sysLoginFailInfoConfigVo != null) {
                     Integer failCount = 0;
-                    Object value = RedisUtil.getValue(RedisConstant.LOGIN_FAIL + sysUser.getId());
+                    Object value = CacheUtil.getValue(RedisConstant.LOGIN_FAIL + sysUser.getId());
                     if (value != null) {
                         failCount = (Integer) value;
                     }
                     failCount = failCount + 1;
                     if (failCount < sysLoginFailInfoConfigVo.getFailCount()) {
                         //记录登录错误+1
-                        RedisUtil.setValue(RedisConstant.LOGIN_FAIL + sysUser.getId(), failCount);
+                        CacheUtil.setValue(RedisConstant.LOGIN_FAIL + sysUser.getId(), failCount);
                         msg = "密码错误，您还可以尝试" + (sysLoginFailInfoConfigVo.getFailCount() - failCount) + "次";
                     } else {
                         //封禁
@@ -393,7 +394,7 @@ public class LoginServiceImpl implements LoginService {
                         wrapper.eq(SysUser::getId, sysUser.getId());
                         wrapper.set(SysUser::getBanToTime, banToTime);
                         sysUserService.update(wrapper);
-                        RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
+                        CacheUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
                         String banToTimeStr = LocalDateTimeUtil.format(banToTime, CommonConstant.DATE_TIME_FORMAT);
                         msg = "密码连续输入错误" + sysLoginFailInfoConfigVo.getFailCount() + "次，账号被锁定，请于" + banToTimeStr + "后再试";
                     }
@@ -411,7 +412,7 @@ public class LoginServiceImpl implements LoginService {
             if (ObjectUtil.hasEmpty(vo.getValidCode())) {
                 throw new MyException("邮箱验证码不能为空");
             }
-            Object value = RedisUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
+            Object value = CacheUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
             if (ObjectUtil.isEmpty(value)) {
                 throw new MyException("请求不合法");
             }
@@ -421,14 +422,14 @@ public class LoginServiceImpl implements LoginService {
             }
             //校验账户状态
             sysUserService.validatedUser(sysUser);
-            String validCode = (String) RedisUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
+            String validCode = (String) CacheUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
             if (ObjectUtil.isEmpty(validCode)) {
                 throw new MyException("邮箱验证码错误或者已失效");
             }
             if (!vo.getValidCode().equals(validCode)) {
                 throw new MyException("邮箱验证码错误，请检查");
             }
-            RedisUtil.del(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getPhone());
+            CacheUtil.del(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getPhone());
         } else if (vo.getLoginType().equals(LoginType.PHONE.getCode())) {
             //短信验证码登录
             remark = remark + "/" + LoginType.PHONE.getDesc();
@@ -438,7 +439,7 @@ public class LoginServiceImpl implements LoginService {
             if (ObjectUtil.hasEmpty(vo.getValidCode())) {
                 throw new MyException("手机验证码不能为空");
             }
-            Object value = RedisUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
+            Object value = CacheUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
             if (ObjectUtil.isEmpty(value)) {
                 throw new MyException("请求不合法");
             }
@@ -448,19 +449,19 @@ public class LoginServiceImpl implements LoginService {
             }
             //校验账户状态
             sysUserService.validatedUser(sysUser);
-            String validCode = (String) RedisUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+            String validCode = (String) CacheUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
             if (ObjectUtil.isEmpty(validCode)) {
                 throw new MyException("短信验证码错误或者已失效");
             }
             if (!vo.getValidCode().equals(validCode)) {
                 throw new MyException("短信验证码错误，请检查");
             }
-            RedisUtil.del(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+            CacheUtil.del(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
         } else {
             throw new MyException("错误的loginType");
         }
         List<String> deptIds = sysUserDeptService.getDeptIdsByUserId(sysUser.getId());
-        RedisUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
+        CacheUtil.del(RedisConstant.LOGIN_FAIL + sysUser.getId());
         SysLoginUserVo loginUserVo = new SysLoginUserVo();
         loginUserVo.setId(sysUser.getId());
         loginUserVo.setDeptIds(deptIds);

@@ -11,7 +11,7 @@ import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.oss.vo.UploadResult;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.common.vo.CheckSendVo;
 import cn.daenx.framework.common.vo.ComStatusUpdVo;
@@ -875,7 +875,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (vo.getEmail().equals(loginUser.getEmail())) {
             throw new MyException("当前账户已经绑定了此邮箱");
         }
-        String value = (String) RedisUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        String value = (String) CacheUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -891,7 +891,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!aBoolean) {
             throw new MyException("发送邮件失败，请联系管理员");
         }
-        RedisUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = EmailUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
@@ -925,7 +925,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (vo.getPhone().equals(loginUser.getPhone())) {
             throw new MyException("当前账户已经绑定了此手机号");
         }
-        String value = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        String value = (String) CacheUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -948,7 +948,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!smsSendResult.isSuccess()) {
             throw new MyException("发送短信失败，请联系管理员");
         }
-        RedisUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = SmsUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
@@ -971,14 +971,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("请填写收到的邮箱验证码");
         }
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        String validCode = (String) CacheUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
         if (ObjectUtil.isEmpty(validCode)) {
             throw new MyException("邮箱验证码错误或者已失效");
         }
         if (!vo.getValidCode().equals(validCode)) {
             throw new MyException("邮箱验证码错误，请检查");
         }
-        RedisUtil.del(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        CacheUtil.del(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
         Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
         if (exist) {
             throw new MyException("该邮箱已经被其他账户绑定");
@@ -1014,14 +1014,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new MyException("请填写收到的短信验证码");
         }
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        String validCode = (String) RedisUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        String validCode = (String) CacheUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         if (ObjectUtil.isEmpty(validCode)) {
             throw new MyException("短信验证码错误或者已失效");
         }
         if (!vo.getValidCode().equals(validCode)) {
             throw new MyException("短信验证码错误，请检查");
         }
-        RedisUtil.del(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        CacheUtil.del(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
         Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
         if (exist) {
             throw new MyException("该手机号已经被其他账户绑定");

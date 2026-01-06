@@ -2,7 +2,7 @@ package cn.daenx.framework.apiLimit.interceptor;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
 import cn.daenx.framework.common.vo.system.other.SysApiLimitVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
@@ -36,12 +36,15 @@ public class ApiLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (!"redis".equals(CacheUtil.getType())) {
+            return true;
+        }
         String requestURI = request.getRequestURI();
         if (ObjectUtil.isNotEmpty(contextPath)) {
             requestURI = requestURI.replaceFirst(contextPath, "");
         }
         //查询接口是否停用
-        Object value = RedisUtil.getValue(RedisConstant.API_LIMIT_CLOSE_KEY + requestURI);
+        Object value = CacheUtil.getValue(RedisConstant.API_LIMIT_CLOSE_KEY + requestURI);
         if (ObjectUtil.isNotEmpty(value)) {
             SysApiLimitVo sysApiLimit = JSON.parseObject(JSON.toJSONString(value), SysApiLimitVo.class);
             throw new MyException(sysApiLimit.getRetMsg());
@@ -56,7 +59,7 @@ public class ApiLimitInterceptor implements HandlerInterceptor {
 
         String singLimitKey = RedisConstant.API_LIMIT_SINGLE_KEY + requestURI + ":" + userKey;
         String wholeLimitKey = RedisConstant.API_LIMIT_WHOLE_LIMITER_KEY + requestURI;
-        Long execute = RedisUtil.getRedisTemplate().execute(apiLimitScript, Arrays.asList(singKey, singLimitKey, wholeKey, wholeLimitKey));
+        Long execute = CacheUtil.getRedisTemplate().execute(apiLimitScript, Arrays.asList(singKey, singLimitKey, wholeKey, wholeLimitKey));
         if (execute == null) {
             return true;
         }

@@ -1,34 +1,34 @@
-package cn.daenx.framework.common.utils;
+package cn.daenx.framework.cache.utils;
 
-import jakarta.annotation.Resource;
+import cn.daenx.framework.cache.CacheService;
+import cn.hutool.extra.spring.SpringUtil;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Redis工具类
+ * 缓存工具类
  *
  * @author DaenMax
  */
-@Component
-public class RedisUtil {
+public class CacheUtil {
 
-    private static RedisTemplate redisTemplate;
+//    private static CacheService cacheService;
 
-    @Resource
-    public void setRedisTemplate(RedisTemplate redisTemplate) {
-        RedisUtil.redisTemplate = redisTemplate;
+    private static final CacheService cacheService = SpringUtil.getBean(CacheService.class);
+
+    /**
+     * getType
+     *
+     * @return 值
+     */
+    public static String getType() {
+        return cacheService.getType();
     }
 
-
-    public static RedisTemplate<String, Object> getRedisTemplate() {
-        return redisTemplate;
-    }
 
     /**
      * getValue
@@ -37,7 +37,7 @@ public class RedisUtil {
      * @return 值
      */
     public static Object getValue(String key) {
-        return key == null ? null : redisTemplate.opsForValue().get(key);
+        return key == null ? null : cacheService.getValue(key);
     }
 
 
@@ -51,17 +51,8 @@ public class RedisUtil {
      * @return
      */
     public static boolean setValue(String key, Object value, Long time, TimeUnit timeUnit) {
-        try {
-            if (time != null) {
-                redisTemplate.opsForValue().set(key, value, time, timeUnit);
-            } else {
-                redisTemplate.opsForValue().set(key, value);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        cacheService.setValue(key, value, time, timeUnit);
+        return true;
     }
 
     /**
@@ -73,13 +64,8 @@ public class RedisUtil {
      * @return
      */
     public static boolean setValue(String key, Object value) {
-        try {
-            redisTemplate.opsForValue().set(key, value);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        cacheService.setValue(key, value);
+        return true;
     }
 
     /**
@@ -90,7 +76,7 @@ public class RedisUtil {
      * @return 列表插入后当前数量总数
      */
     public static Long leftPush(String key, Object value) {
-        Long aLong = redisTemplate.opsForList().leftPush(key, value);
+        Long aLong = cacheService.leftPush(key, value);
         return aLong;
     }
 
@@ -101,7 +87,7 @@ public class RedisUtil {
      * @return
      */
     public static Object rightPop(String key) {
-        return key == null ? null : redisTemplate.opsForList().rightPop(key);
+        return key == null ? null : cacheService.rightPop(key);
     }
 
 
@@ -113,7 +99,7 @@ public class RedisUtil {
      * @return 列表插入后当前数量总数
      */
     public static <T> Long leftPushAll(String key, Collection<T> values) {
-        Long aLong = redisTemplate.opsForList().leftPushAll(key, values);
+        Long aLong = cacheService.leftPushAll(key, values);
         return aLong;
     }
 
@@ -125,7 +111,7 @@ public class RedisUtil {
      * @return
      */
     public static Object rightPopAndLeftPush(String key) {
-        return key == null ? null : redisTemplate.opsForList().rightPopAndLeftPush(key, key);
+        return cacheService.rightPopAndLeftPush(key);
     }
 
     /**
@@ -134,7 +120,7 @@ public class RedisUtil {
      * @param key
      */
     public static void del(String key) {
-        redisTemplate.delete(key);
+        cacheService.del(key);
     }
 
     /**
@@ -143,8 +129,7 @@ public class RedisUtil {
      * @param key 后面要跟上*号
      */
     public static void delBatch(String key) {
-        Set<String> keys = redisTemplate.keys(key);
-        redisTemplate.delete(keys);
+        cacheService.delBatch(key);
     }
 
 
@@ -154,8 +139,11 @@ public class RedisUtil {
      * @param key 后面要跟上*号
      * @return
      */
-    public static Set getList(String key) {
-        Set keys = redisTemplate.keys(key);
-        return keys;
+    public static List<Object> getList(String key) {
+        return cacheService.getList(key);
+    }
+
+    public static RedisTemplate<String, Object> getRedisTemplate() {
+        return cacheService.getRedisTemplate();
     }
 }

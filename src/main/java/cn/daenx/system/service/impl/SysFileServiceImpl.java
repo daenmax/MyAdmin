@@ -12,11 +12,10 @@ import cn.daenx.framework.oss.utils.OssUtil;
 import cn.daenx.framework.oss.vo.OssProperties;
 import cn.daenx.framework.oss.vo.UploadResult;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.system.domain.dto.SysFilePageDto;
 import cn.daenx.system.service.SysConfigService;
 import cn.daenx.system.domain.vo.SysFilePageVo;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -25,7 +24,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.daenx.system.domain.po.SysFile;
@@ -34,7 +32,6 @@ import cn.daenx.system.service.SysFileService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
@@ -56,20 +53,20 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
      * @return
      */
     private String transPrivateUrl(String url, String path, String ossConfigId) {
-        Object object = RedisUtil.getValue(RedisConstant.OSS + ossConfigId);
+        Object object = CacheUtil.getValue(RedisConstant.OSS + ossConfigId);
         if (ObjectUtil.isEmpty(object)) {
             throw new MyException("未找到OSS配置信息，请联系管理员");
         }
         OssProperties ossProperties = JSON.parseObject(JSON.toJSONString(object), OssProperties.class);
         if (ossProperties != null) {
             if (ossProperties.getAccessPolicy().equals(AccessPolicyType.PRIVATE.getType())) {
-                String cacheUrl = (String) RedisUtil.getValue(RedisConstant.OSS_CACHE + path);
+                String cacheUrl = (String) CacheUtil.getValue(RedisConstant.OSS_CACHE + path);
                 if (StringUtils.isNotBlank(cacheUrl)) {
                     return cacheUrl;
                 }
                 OssClient ossClient = OssUtil.getOssClientByOssProperties(ossProperties);
                 String privateUrl = ossClient.getPrivateUrl(path, Duration.ofSeconds(ossProperties.getUrlValidAccessTime()));
-                RedisUtil.setValue(RedisConstant.OSS_CACHE + path, privateUrl, Long.valueOf(ossProperties.getUrlValidCacheTime()), TimeUnit.SECONDS);
+                CacheUtil.setValue(RedisConstant.OSS_CACHE + path, privateUrl, Long.valueOf(ossProperties.getUrlValidCacheTime()), TimeUnit.SECONDS);
                 return privateUrl;
             }
         }

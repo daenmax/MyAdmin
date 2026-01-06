@@ -2,7 +2,7 @@ package cn.daenx.framework.oss.utils;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.oss.core.OssClient;
 import cn.daenx.framework.oss.vo.OssProperties;
 import cn.hutool.core.util.ObjectUtil;
@@ -26,7 +26,7 @@ public class OssUtil {
      * 获取当前正在使用的OSS配置实例
      */
     public static OssClient getOssClient() {
-        Object object = RedisUtil.getValue(RedisConstant.OSS_USE);
+        Object object = CacheUtil.getValue(RedisConstant.OSS_USE);
         if (ObjectUtil.isEmpty(object)) {
             throw new MyException("未配置OSS配置信息，请联系管理员");
         }
@@ -38,7 +38,7 @@ public class OssUtil {
      * 获取指定的OSS配置实例
      */
     public static synchronized OssClient getOssClientByOssConfigId(String ossConfigId) {
-        Object object = RedisUtil.getValue(RedisConstant.OSS + ossConfigId);
+        Object object = CacheUtil.getValue(RedisConstant.OSS + ossConfigId);
         if (ObjectUtil.isEmpty(object)) {
             throw new MyException("未找到OSS配置信息，请联系管理员");
         }

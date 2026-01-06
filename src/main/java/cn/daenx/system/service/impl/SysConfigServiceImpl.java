@@ -5,7 +5,7 @@ import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.vo.system.config.*;
 import cn.daenx.framework.common.vo.system.config.SysLoginFailInfoConfigVo;
 import cn.daenx.system.domain.vo.SysRegisterDefaultInfoVo;
@@ -126,7 +126,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(vo.getId());
-        RedisUtil.setValue(RedisConstant.CONFIG + info.getKeyVa(), info);
+        CacheUtil.setValue(RedisConstant.CONFIG + info.getKeyVa(), info);
         //刷新邮箱配置队列
         updateSysEmailInfo(info.getKeyVa(), 2);
     }
@@ -154,7 +154,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         }
         //刷新redis缓存
         SysConfig info = getInfo(sysConfig.getId());
-        RedisUtil.setValue(RedisConstant.CONFIG + info.getKeyVa(), info);
+        CacheUtil.setValue(RedisConstant.CONFIG + info.getKeyVa(), info);
         //刷新邮箱配置队列
         updateSysEmailInfo(info.getKeyVa(), 1);
     }
@@ -171,7 +171,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         wrapper.in(SysConfig::getId, ids);
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
-            RedisUtil.del(RedisConstant.CONFIG + sysConfig.getKeyVa());
+            CacheUtil.del(RedisConstant.CONFIG + sysConfig.getKeyVa());
             //刷新邮箱配置队列
             updateSysEmailInfo(sysConfig.getKeyVa(), 3);
         }
@@ -192,7 +192,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public String getConfigByKey(String key) {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + key);
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + key);
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -208,11 +208,11 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public void refreshCache() {
-        RedisUtil.delBatch(RedisConstant.CONFIG + "*");
+        CacheUtil.delBatch(RedisConstant.CONFIG + "*");
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         for (SysConfig sysConfig : sysConfigs) {
-            RedisUtil.setValue(RedisConstant.CONFIG + sysConfig.getKeyVa(), sysConfig);
+            CacheUtil.setValue(RedisConstant.CONFIG + sysConfig.getKeyVa(), sysConfig);
             //刷新邮箱配置队列
             updateSysEmailInfo(sysConfig.getKeyVa(), 0);
         }
@@ -226,7 +226,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysUploadConfigVo getSysUploadImageSuffixs() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.upload.image");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.upload.image");
         if (ObjectUtil.isEmpty(object)) {
             return SystemConstant.UPLOAD_CONFIG_IMAGE;
         }
@@ -246,7 +246,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysUploadConfigVo getSysUploadFileSuffixs() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.upload.file");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.upload.file");
         if (ObjectUtil.isEmpty(object)) {
             return SystemConstant.UPLOAD_CONFIG_FILE;
         }
@@ -267,7 +267,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysRegisterDefaultInfoVo getSysRegisterDefaultInfoVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.register.default.info");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.register.default.info");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -288,7 +288,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysLoginFailInfoConfigVo getSysLoginFailInfoVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.login.fail.info");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.login.fail.info");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -309,7 +309,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysCaptchaConfigVo getSysCaptchaConfigVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.captcha.config");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.captcha.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -330,7 +330,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysSmsTemplateConfigVo getSysSmsTemplateConfigVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.smsTemplate.config");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.smsTemplate.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -351,7 +351,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysSendLimitConfigVo getSysSendLimitConfigVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.sendLimit.config");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.sendLimit.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -371,7 +371,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
      */
     @Override
     public SysEmailConfigVo getSysEmailConfigVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -398,13 +398,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return;
         }
         if (type == 0 || type == 1 || type == 2) {
-            RedisUtil.del(SystemConstant.EMAIL_POLL_KEY);
+            CacheUtil.del(SystemConstant.EMAIL_POLL_KEY);
             SysEmailConfigVo sysEmailConfigVo = getSysEmailConfigVo();
             List<SysEmailConfigVo.Email> list = sysEmailConfigVo.getEmails().stream().filter(item -> "true".equals(item.getEnable())).collect(Collectors.toList());
             List<String> emailList = MyUtil.joinToList(list, SysEmailConfigVo.Email::getEmail);
-            RedisUtil.leftPushAll(SystemConstant.EMAIL_POLL_KEY, emailList);
+            CacheUtil.leftPushAll(SystemConstant.EMAIL_POLL_KEY, emailList);
         } else {
-            RedisUtil.del(SystemConstant.EMAIL_POLL_KEY);
+            CacheUtil.del(SystemConstant.EMAIL_POLL_KEY);
         }
     }
 }

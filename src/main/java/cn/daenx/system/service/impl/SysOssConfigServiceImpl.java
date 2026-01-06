@@ -5,7 +5,7 @@ import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.oss.utils.OssUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.vo.ComStatusUpdVo;
 import cn.daenx.system.domain.vo.SysOssConfigAddVo;
 import cn.daenx.system.domain.vo.SysOssConfigPageVo;
@@ -44,13 +44,13 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         LambdaQueryWrapper<SysOssConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysOssConfig::getStatus, CommonConstant.STATUS_NORMAL);
         List<SysOssConfig> sysOssConfigs = sysOssConfigMapper.selectList(wrapper);
-        RedisUtil.delBatch(RedisConstant.OSS + "*");
-        RedisUtil.del(RedisConstant.OSS_USE);
+        CacheUtil.delBatch(RedisConstant.OSS + "*");
+        CacheUtil.del(RedisConstant.OSS_USE);
         for (SysOssConfig sysOssConfig : sysOssConfigs) {
-            RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), sysOssConfig);
+            CacheUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), sysOssConfig);
             if (sysOssConfig.getInUse().equals(SystemConstant.IN_USE_YES)) {
                 //正在使用的
-                RedisUtil.setValue(RedisConstant.OSS_USE, sysOssConfig);
+                CacheUtil.setValue(RedisConstant.OSS_USE, sysOssConfig);
             }
         }
     }
@@ -139,10 +139,10 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
             throw new MyException("修改失败");
         }
         SysOssConfig sysOssConfig = getInfo(vo.getId());
-        RedisUtil.setValue(RedisConstant.OSS + vo.getId(), sysOssConfig);
+        CacheUtil.setValue(RedisConstant.OSS + vo.getId(), sysOssConfig);
         if (sysOssConfig.getInUse().equals(SystemConstant.IN_USE_YES)) {
             //正在使用的
-            RedisUtil.setValue(RedisConstant.OSS_USE, sysOssConfig);
+            CacheUtil.setValue(RedisConstant.OSS_USE, sysOssConfig);
         }
     }
 
@@ -173,7 +173,7 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         if (insert < 1) {
             throw new MyException("新增失败");
         }
-        RedisUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), getInfo(sysOssConfig.getId()));
+        CacheUtil.setValue(RedisConstant.OSS + sysOssConfig.getId(), getInfo(sysOssConfig.getId()));
     }
 
     /**

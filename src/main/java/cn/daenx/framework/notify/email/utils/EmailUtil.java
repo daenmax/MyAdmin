@@ -5,7 +5,7 @@ import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
 import cn.daenx.framework.common.vo.CheckSendVo;
 import cn.daenx.framework.common.vo.system.config.SysConfigVo;
@@ -123,7 +123,7 @@ public class EmailUtil {
      * @return
      */
     private static SysEmailConfigVo getSysEmailConfigVo() {
-        Object object = RedisUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
+        Object object = CacheUtil.getValue(RedisConstant.CONFIG + "sys.email.config");
         if (ObjectUtil.isEmpty(object)) {
             return null;
         }
@@ -184,9 +184,9 @@ public class EmailUtil {
     private static String rightPopAndLeftPushEmail() {
         //这里两种方式，自己决定用哪一种哈~
         //使用redis lua方式
-        String email = RedisUtil.getRedisTemplate().execute(nextEmailScript, CollUtil.newArrayList(SystemConstant.EMAIL_POLL_KEY), "");
+//        String email = CacheUtil.getRedisTemplate().execute(nextEmailScript, CollUtil.newArrayList(SystemConstant.EMAIL_POLL_KEY), "");
         //使用 rightPopAndLeftPush方式
-//        String email = (String) RedisUtil.rightPopAndLeftPush(SystemConstant.EMAIL_POLL_KEY);
+        String email = (String) CacheUtil.rightPopAndLeftPush(SystemConstant.EMAIL_POLL_KEY);
         return email;
     }
 
@@ -255,13 +255,13 @@ public class EmailUtil {
         Integer needWait = sysSendLimitConfigVo.getEmail().getNeedWait();
 
         //判断今天是否还可以发送
-        Set<String> yyyyMMdd = RedisUtil.getList(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
+        List<Object> yyyyMMdd = CacheUtil.getList(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
         if (yyyyMMdd.size() >= dayMax) {
             Integer remainSecondsOneDay = MyUtil.getRemainSecondsOneDay(LocalDateTime.now());
             String str = MyUtil.timeDistance(Long.valueOf(String.valueOf(remainSecondsOneDay * 1000)));
             return new CheckSendVo(false, remainSecondsOneDay, "今日请求过多，请于" + str + "后再试");
         }
-        String lastSendTimeStr = (String) RedisUtil.getValue(RedisConstant.SEND_EMAIL + key);
+        String lastSendTimeStr = (String) CacheUtil.getValue(RedisConstant.SEND_EMAIL + key);
         if (ObjectUtil.isEmpty(lastSendTimeStr)) {
             return new CheckSendVo(true, 0, "可以进行发送");
         }
@@ -300,10 +300,10 @@ public class EmailUtil {
         Integer dayMax = sysSendLimitConfigVo.getEmail().getDayMax();
         Integer needWait = sysSendLimitConfigVo.getEmail().getNeedWait();
         String dateStrByFormat = MyUtil.getDateStrByFormat("yyyy-MM-dd HH:mm:ss");
-        RedisUtil.setValue(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + ":" + IdUtil.fastSimpleUUID(), dateStrByFormat, 1L, TimeUnit.DAYS);
-        RedisUtil.setValue(RedisConstant.SEND_EMAIL + key, dateStrByFormat);
+        CacheUtil.setValue(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + ":" + IdUtil.fastSimpleUUID(), dateStrByFormat, 1L, TimeUnit.DAYS);
+        CacheUtil.setValue(RedisConstant.SEND_EMAIL + key, dateStrByFormat);
         //计算下次可以发的秒数
-        Collection<String> yyyyMMdd = RedisUtil.getList(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
+        List<Object> yyyyMMdd = CacheUtil.getList(RedisConstant.SEND_EMAIL + MyUtil.getDateStrByFormat("yyyyMMdd") + ":" + key + "*");
         if (yyyyMMdd.size() >= dayMax) {
             Integer remainSecondsOneDay = MyUtil.getRemainSecondsOneDay(LocalDateTime.now());
             return remainSecondsOneDay;

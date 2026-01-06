@@ -2,7 +2,7 @@ package cn.daenx.framework.serializer;
 
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.RedisUtil;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;
@@ -32,7 +32,7 @@ public class CustomSerializer extends SerializerAbstract {
     public Object handleDict(Dict dict, String fieldValue) {
         Map<String, String> map = new HashMap<>();
         if (StringUtils.isNotBlank(dict.dictCode())) {
-            Object object = RedisUtil.getValue(RedisConstant.DICT + dict.dictCode());
+            Object object = CacheUtil.getValue(RedisConstant.DICT + dict.dictCode());
             List<SysDictDetailVo> list = JSON.parseArray(JSON.toJSONString(object), SysDictDetailVo.class);
             if(CollUtil.isEmpty(list)){
                 for (SysDictDetailVo sysDictDetail : list) {
