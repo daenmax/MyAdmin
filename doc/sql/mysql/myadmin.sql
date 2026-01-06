@@ -843,12 +843,7 @@ CREATE TABLE `sys_role_user`  (
 -- ----------------------------
 -- Records of sys_role_user
 -- ----------------------------
-INSERT INTO `sys_role_user` VALUES ('174eceae15692e5091c28f3d6a3a1f54', '2', '1650855280223846402');
-INSERT INTO `sys_role_user` VALUES ('324278c72420d197e3ddbfaa0ea86d32', '2', '1640613543627415553');
-INSERT INTO `sys_role_user` VALUES ('63578445258df9ce8ba9e9b15eb20ca2', '2', '2');
 INSERT INTO `sys_role_user` VALUES ('678a429aa947e14570e5077ebcea755a', '1', '1');
-INSERT INTO `sys_role_user` VALUES ('84ad78b7cf812e176217fe126ac29298', '2', '1643141570206871554');
-INSERT INTO `sys_role_user` VALUES ('e12edec621a0f93ce2a9643d7e79b99e', '2', '1657562040456413185');
 
 -- ----------------------------
 -- Table structure for sys_social

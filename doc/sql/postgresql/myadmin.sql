@@ -1255,12 +1255,7 @@ COMMENT ON TABLE "public"."sys_role_user" IS '角色用户关联表';
 -- ----------------------------
 -- Records of sys_role_user
 -- ----------------------------
-INSERT INTO "public"."sys_role_user" VALUES ('174eceae15692e5091c28f3d6a3a1f54', '2', '1650855280223846402');
-INSERT INTO "public"."sys_role_user" VALUES ('1d6f2251b32492648a8b1c488f8a1f2f', '2', '1643141570206871554');
 INSERT INTO "public"."sys_role_user" VALUES ('678a429aa947e14570e5077ebcea755a', '1', '1');
-INSERT INTO "public"."sys_role_user" VALUES ('735afe9f516a5cf19e09326d05ea6190', '2', '1640613543627415553');
-INSERT INTO "public"."sys_role_user" VALUES ('e12edec621a0f93ce2a9643d7e79b99e', '2', '1657562040456413185');
-INSERT INTO "public"."sys_role_user" VALUES ('fed886b635dfcdb135ff7ca51b908861', '2', '2');
 
 -- ----------------------------
 -- Table structure for sys_social

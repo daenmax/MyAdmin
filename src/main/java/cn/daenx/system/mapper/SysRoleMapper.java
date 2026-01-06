@@ -18,7 +18,9 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 
     @Override
     @DataScope(alias = "sys_role")
-    int deleteByIds(@Param(Constants.COLL) Collection<?> idList);
+    default int deleteByIds(@Param(Constants.COLL) Collection<?> idList){
+        return BaseMapper.super.deleteByIds(idList);
+    }
 
     List<SysRole> getSysRoleListByUserId(@Param("userId") String userId);
 
