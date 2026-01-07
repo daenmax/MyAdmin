@@ -15,11 +15,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 @Component
 @Slf4j
 public class LoginUtil {
 
     private static Long timeOut;
+
     @Value("${sa-token.timeout}")
     public void setTimeOut(Long timeOut) {
         LoginUtil.timeOut = timeOut;
@@ -73,6 +75,14 @@ public class LoginUtil {
 //        StpUtil.logoutByTokenValue(token);
     }
 
+    /**
+     * 退出登录
+     */
+    public static void logoutByLoginId(String loginId) {
+        StpUtil.kickout(loginId);
+//        StpUtil.logout(loginId);
+    }
+
 
     /**
      * 退出登录
@@ -80,20 +90,23 @@ public class LoginUtil {
      * @param roleId
      */
     public static void logoutByRoleId(String roleId) {
-        List<String> loginTokenList = getLoginTokenList();
-        if (CollUtil.isEmpty(loginTokenList)) {
+        List<String> loginSessionList = getLoginSessionList();
+        if (CollUtil.isEmpty(loginSessionList)) {
             return;
         }
-        loginTokenList.parallelStream().forEach(key -> {
-            String token = key.replace("Authorization:login:token:", "");
+        loginSessionList.parallelStream().forEach(sessionId -> {
+            SaSession session = StpUtil.getSessionBySessionId(sessionId);
+            String tokenValue = session.getTerminalList().get(0).getTokenValue();
+            String loginId = (String) session.getLoginId();
             // 如果已经过期则跳过
-            if (getTokenActiveTimeoutByToken(token) < -1) {
+            long tokenTimeout = getTokenTimeoutByLoginId(loginId);
+            if (tokenTimeout != -1 && tokenTimeout <= 0) {
                 return;
             }
-            SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
-            if (loginUserByToken.getRoles().stream().anyMatch(r -> r.getId().equals(roleId))) {
+            SysLoginUserVo loginUserVo = (SysLoginUserVo) StpUtil.getTokenSessionByToken(tokenValue).get(LOGIN_KEY);
+            if (loginUserVo.getRoles().stream().anyMatch(r -> r.getId().equals(roleId))) {
                 try {
-                    logoutByToken(token);
+                    logoutByToken(tokenValue);
                 } catch (NotLoginException ignored) {
                 }
             }
@@ -106,21 +119,53 @@ public class LoginUtil {
      * @param roleIds
      */
     public static void logoutByRoleIds(List<String> roleIds) {
-        List<String> loginTokenList = getLoginTokenList();
-        if (CollUtil.isEmpty(loginTokenList)) {
+        List<String> loginSessionList = getLoginSessionList();
+        if (CollUtil.isEmpty(loginSessionList)) {
             return;
         }
-        // 角色关联的在线用户量过大会导致redis阻塞卡顿 谨慎操作
-        loginTokenList.parallelStream().forEach(key -> {
-            String token = key.replace("Authorization:login:token:", "");
+        loginSessionList.parallelStream().forEach(sessionId -> {
+            SaSession session = StpUtil.getSessionBySessionId(sessionId);
+            String tokenValue = session.getTerminalList().get(0).getTokenValue();
+            String loginId = (String) session.getLoginId();
             // 如果已经过期则跳过
-            if (getTokenActiveTimeoutByToken(token) < -1) {
+            long tokenTimeout = getTokenTimeoutByLoginId(loginId);
+            if (tokenTimeout != -1 && tokenTimeout <= 0) {
                 return;
             }
-            SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
-            if (loginUserByToken.getRoles().stream().anyMatch(r -> roleIds.contains(r.getId()))) {
+            SysLoginUserVo loginUserVo = (SysLoginUserVo) StpUtil.getTokenSessionByToken(tokenValue).get(LOGIN_KEY);
+            if (loginUserVo.getRoles().stream().anyMatch(r -> roleIds.contains(r.getId()))) {
                 try {
-                    logoutByToken(token);
+                    logoutByLoginId(tokenValue);
+                } catch (NotLoginException ignored) {
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 下线相关用户
+     *
+     * @param positionId
+     */
+    public static void logoutByPositionId(String positionId) {
+        List<String> loginSessionList = getLoginSessionList();
+        if (CollUtil.isEmpty(loginSessionList)) {
+            return;
+        }
+        loginSessionList.parallelStream().forEach(sessionId -> {
+            SaSession session = StpUtil.getSessionBySessionId(sessionId);
+            String tokenValue = session.getTerminalList().get(0).getTokenValue();
+            String loginId = (String) session.getLoginId();
+            // 如果已经过期则跳过
+            long tokenTimeout = getTokenTimeoutByLoginId(loginId);
+            if (tokenTimeout != -1 && tokenTimeout <= 0) {
+                return;
+            }
+            SysLoginUserVo loginUserVo = (SysLoginUserVo) StpUtil.getTokenSessionByToken(tokenValue).get(LOGIN_KEY);
+            if (loginUserVo.getPositions().stream().anyMatch(r -> r.getId().equals(positionId))) {
+                try {
+                    logoutByLoginId(loginId);
                 } catch (NotLoginException ignored) {
                 }
             }
@@ -133,52 +178,29 @@ public class LoginUtil {
      * @param positionIds
      */
     public static void logoutByPositionIds(List<String> positionIds) {
-        List<String> loginTokenList = getLoginTokenList();
-        if (CollUtil.isEmpty(loginTokenList)) {
+        List<String> loginSessionList = getLoginSessionList();
+        if (CollUtil.isEmpty(loginSessionList)) {
             return;
         }
-        // 角色关联的在线用户量过大会导致redis阻塞卡顿 谨慎操作
-        loginTokenList.parallelStream().forEach(key -> {
-            String token = key.replace("Authorization:login:token:", "");
+        loginSessionList.parallelStream().forEach(sessionId -> {
+            SaSession session = StpUtil.getSessionBySessionId(sessionId);
+            String tokenValue = session.getTerminalList().get(0).getTokenValue();
+            String loginId = (String) session.getLoginId();
             // 如果已经过期则跳过
-            if (getTokenActiveTimeoutByToken(token) < -1) {
+            long tokenTimeout = getTokenTimeoutByLoginId(loginId);
+            if (tokenTimeout != -1 && tokenTimeout <= 0) {
                 return;
             }
-            SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
-            if (loginUserByToken.getPositions().stream().anyMatch(r -> positionIds.contains(r.getId()))) {
+            SysLoginUserVo loginUserVo = (SysLoginUserVo) StpUtil.getTokenSessionByToken(tokenValue).get(LOGIN_KEY);
+            if (loginUserVo.getPositions().stream().anyMatch(r -> positionIds.contains(r.getId()))) {
                 try {
-                    logoutByToken(token);
+                    logoutByLoginId(loginId);
                 } catch (NotLoginException ignored) {
                 }
             }
         });
     }
 
-    /**
-     * 下线相关用户
-     *
-     * @param positionId
-     */
-    public static void logoutByPositionId(String positionId) {
-        List<String> loginTokenList = getLoginTokenList();
-        if (CollUtil.isEmpty(loginTokenList)) {
-            return;
-        }
-        loginTokenList.parallelStream().forEach(key -> {
-            String token = key.replace("Authorization:login:token:", "");
-            // 如果已经过期则跳过
-            if (getTokenActiveTimeoutByToken(token) < -1) {
-                return;
-            }
-            SysLoginUserVo loginUserByToken = getLoginUserByToken(token);
-            if (loginUserByToken.getPositions().stream().anyMatch(r -> r.getId().equals(positionId))) {
-                try {
-                    logoutByToken(token);
-                } catch (NotLoginException ignored) {
-                }
-            }
-        });
-    }
 
     /**
      * 退出登录
@@ -250,7 +272,7 @@ public class LoginUtil {
     }
 
     /**
-     * 获取登录用户的token列表
+     * 获取当前token列表（包含已经退出登录的和已登录的）
      *
      * @return
      */
@@ -260,12 +282,32 @@ public class LoginUtil {
     }
 
     /**
-     * 获取token的有效期
+     * 获取登录用户的session列表（只包含已登录的）
+     *
+     * @return
+     */
+    public static List<String> getLoginSessionList() {
+        List<String> keys = StpUtil.searchSessionId("", 0, -1, false);
+        return keys;
+    }
+
+    /**
+     * 获取token的有效期，（单位：s，返回-1代表永久有效）
      *
      * @param token
      * @return
      */
-    public static long getTokenActiveTimeoutByToken(String token) {
-        return StpUtil.stpLogic.getTokenActiveTimeoutByToken(token);
+    public static long getTokenTimeoutByToken(String token) {
+        return StpUtil.stpLogic.getTokenTimeout(token);
+    }
+
+    /**
+     * 获取token的有效期，（单位：s，返回-1代表永久有效）
+     *
+     * @param loginId
+     * @return
+     */
+    public static long getTokenTimeoutByLoginId(String loginId) {
+        return StpUtil.stpLogic.getTokenTimeoutByLoginId(loginId);
     }
 }

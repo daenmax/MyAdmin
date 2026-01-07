@@ -1066,12 +1066,6 @@ COMMENT ON TABLE "public"."sys_position_user" IS '岗位用户关联表';
 -- Records of sys_position_user
 -- ----------------------------
 INSERT INTO "public"."sys_position_user" VALUES ('1', '1', '1');
-INSERT INTO "public"."sys_position_user" VALUES ('2', '3', '1');
-INSERT INTO "public"."sys_position_user" VALUES ('42e86a19ad715b820d5c8cf7b3b72903', '4', '1650855280223846402');
-INSERT INTO "public"."sys_position_user" VALUES ('717fdf27dcdd03d408eb36a1ef984758', '4', '2');
-INSERT INTO "public"."sys_position_user" VALUES ('b3c2b07469aaf75e3a713a26ace28fee', '3', '2');
-INSERT INTO "public"."sys_position_user" VALUES ('ca85f7ed198da507a18615493bcb88ae', '4', '1657562040456413185');
-INSERT INTO "public"."sys_position_user" VALUES ('f0f6c52d96ddb3348c09119bf8bab858', '4', '1640613543627415553');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1367,11 +1361,6 @@ COMMENT ON TABLE "public"."sys_user" IS '用户表';
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO "public"."sys_user" VALUES ('1', '100', 'admin', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755555555', '1330166565@qq.com', NULL, NULL, NULL, NULL, '1', '宇宙第一帅的人', '1', '2023-03-01 13:42:39', '1', '2023-05-14 16:31:39', 0);
-INSERT INTO "public"."sys_user" VALUES ('1640613543627415553', '101', 'liumm', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-03-28 15:15:25', '1', '2023-04-14 10:05:02', 0);
-INSERT INTO "public"."sys_user" VALUES ('1643141570206871554', '100', 'abcdefg', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', NULL, NULL, NULL, NULL, NULL, NULL, '3', NULL, '1', '2023-04-04 14:40:53', '1', '2023-04-13 23:02:42', 0);
-INSERT INTO "public"."sys_user" VALUES ('1650855280223846402', '105', 'test01', '678e82d907d3e6e71f81d5cf3ddacc3671dc618c38a1b7a9f9393a83d025b296', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, '2023-04-25 21:32:25', NULL, '2023-04-25 21:32:25', 0);
-INSERT INTO "public"."sys_user" VALUES ('1657562040456413185', '105', 'admin22', '15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225', '0', NULL, NULL, NULL, NULL, NULL, NULL, '2', NULL, NULL, '2023-05-14 09:42:41', NULL, '2023-05-14 09:42:41', 0);
-INSERT INTO "public"."sys_user" VALUES ('2', '102', 'test', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '0', '18755533444', '555@163.com', '1', '2', '2023-05-10 11:01:47', NULL, '2', '4', '1', '2023-03-01 14:09:35', '1', '2023-03-01 14:09:35', 0);
 
 -- ----------------------------
 -- Table structure for sys_user_dept
@@ -1434,12 +1423,6 @@ COMMENT ON TABLE "public"."sys_user_detail" IS '用户信息表';
 -- Records of sys_user_detail
 -- ----------------------------
 INSERT INTO "public"."sys_user_detail" VALUES ('21366e78e6a156e9cf45061da65d06e5', '1', '我是管理员', 'Daen', '18', '1', '每一次离开都是为了更好的相遇
-你好世界', '不一样的烟花', '625bcbc99e7524b543c81ffaed6dd2ab', 350, NULL, '2023-03-01 13:42:39', '1', '2023-06-26 15:49:37', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('7550e77dfbabea70ec44aaebda2f90ed', '2', '测试用户', '宝贝', '18', '0', 'ε=(´ο｀*)))唉', '生气气1', '', 0, NULL, '2023-03-01 14:09:35', '2', '2023-04-16 19:49:01', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('886c73e7e8f458649f3048f672f042e6', '1650855280223846402', NULL, NULL, '0', '2', NULL, NULL, NULL, 0, NULL, '2023-04-25 21:32:25', NULL, '2023-04-25 21:32:25', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('945acc4f5450533dd672260cfa1d66c9', '1640613543627415553', '刘萌萌', '刘二萌', '18', '0', NULL, NULL, NULL, 85560, '1', '2023-03-28 15:15:25', '1', '2023-04-14 10:05:03', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('ac5182e7b0e1c9ce11e7381e19b4733d', '1657562040456413185', NULL, NULL, '0', '2', NULL, NULL, NULL, 0, NULL, '2023-05-14 09:42:41', NULL, '2023-05-14 09:42:41', 0);
-INSERT INTO "public"."sys_user_detail" VALUES ('f6d09bb65ad0ac3d6239214d7e456f8e', '1643141570206871554', '阿萨德', NULL, '0', '0', '2', NULL, NULL, 0, '1', '2023-04-04 14:40:53', '1', '2023-04-13 23:02:42', 0);
 
 -- ----------------------------
 -- Table structure for test_data

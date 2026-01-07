@@ -677,12 +677,6 @@ CREATE TABLE `sys_position_user`  (
 -- Records of sys_position_user
 -- ----------------------------
 INSERT INTO `sys_position_user` VALUES ('1', '1', '1');
-INSERT INTO `sys_position_user` VALUES ('1a31ee7fd56906a5ca54936771ff9e74', '3', '2');
-INSERT INTO `sys_position_user` VALUES ('2', '3', '1');
-INSERT INTO `sys_position_user` VALUES ('217b12c2ee17d54d1e1915d104fbe013', '4', '2');
-INSERT INTO `sys_position_user` VALUES ('42e86a19ad715b820d5c8cf7b3b72903', '4', '1650855280223846402');
-INSERT INTO `sys_position_user` VALUES ('517d21035a2a98a4f700750784f6a484', '4', '1640613543627415553');
-INSERT INTO `sys_position_user` VALUES ('ca85f7ed198da507a18615493bcb88ae', '4', '1657562040456413185');
 
 -- ----------------------------
 -- Table structure for sys_role
