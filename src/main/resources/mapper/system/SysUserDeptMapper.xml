@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.daenx.system.mapper.SysUserDeptMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.system.domain.po.SysUserDept">
+<mapper namespace="cn.daenx.data.system.mapper.SysUserDeptMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.data.system.domain.po.SysUserDept">
     <!--@mbg.generated-->
     <!--@Table sys_user_dept-->
     <id column="id" jdbcType="VARCHAR" property="id" />

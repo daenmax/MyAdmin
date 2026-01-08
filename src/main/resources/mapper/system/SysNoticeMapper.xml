@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.daenx.system.mapper.SysNoticeMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.system.domain.po.SysNotice">
+<mapper namespace="cn.daenx.data.system.mapper.SysNoticeMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.data.system.domain.po.SysNotice">
     <!--@mbg.generated-->
     <!--@Table sys_notice-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -22,7 +22,7 @@
     update_time, is_delete
   </sql>
 
-  <select id="getPageWrapper" resultType="cn.daenx.system.domain.dto.SysNoticePageDto">
+  <select id="getPageWrapper" resultType="cn.daenx.data.system.domain.dto.SysNoticePageDto">
     SELECT
       sn.*,
       su.username AS createName

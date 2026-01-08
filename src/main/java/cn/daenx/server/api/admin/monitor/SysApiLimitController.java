@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.system.service.SysApiLimitService;
+import cn.daenx.data.system.service.SysApiLimitService;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.ComStatusUpdVo;
 import cn.daenx.framework.common.vo.Result;
-import cn.daenx.system.domain.po.SysApiLimit;
-import cn.daenx.system.domain.vo.SysApiLimitAddVo;
-import cn.daenx.system.domain.vo.SysApiLimitPageVo;
-import cn.daenx.system.domain.vo.SysApiLimitUpdVo;
+import cn.daenx.data.system.domain.po.SysApiLimit;
+import cn.daenx.data.system.domain.vo.SysApiLimitAddVo;
+import cn.daenx.data.system.domain.vo.SysApiLimitPageVo;
+import cn.daenx.data.system.domain.vo.SysApiLimitUpdVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;

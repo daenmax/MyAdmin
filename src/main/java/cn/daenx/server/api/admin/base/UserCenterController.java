@@ -2,11 +2,9 @@ package cn.daenx.server.api.admin.base;
 
 import cn.daenx.framework.common.vo.Result;
 import cn.daenx.framework.common.vo.RouterVo;
-import cn.daenx.system.domain.vo.*;
-import cn.daenx.system.service.LoginService;
-import cn.daenx.system.service.SysUserService;
-import cn.dev33.satoken.annotation.SaIgnore;
-import cn.hutool.core.util.ObjectUtil;
+import cn.daenx.data.system.domain.vo.*;
+import cn.daenx.data.system.service.LoginService;
+import cn.daenx.data.system.service.SysUserService;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

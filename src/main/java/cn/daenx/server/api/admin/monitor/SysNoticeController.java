@@ -2,12 +2,12 @@ package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.Result;
-import cn.daenx.system.domain.dto.SysNoticePageDto;
-import cn.daenx.system.domain.po.SysNotice;
-import cn.daenx.system.domain.vo.SysNoticeAddVo;
-import cn.daenx.system.domain.vo.SysNoticePageVo;
-import cn.daenx.system.domain.vo.SysNoticeUpdVo;
-import cn.daenx.system.service.SysNoticeService;
+import cn.daenx.data.system.domain.dto.SysNoticePageDto;
+import cn.daenx.data.system.domain.po.SysNotice;
+import cn.daenx.data.system.domain.vo.SysNoticeAddVo;
+import cn.daenx.data.system.domain.vo.SysNoticePageVo;
+import cn.daenx.data.system.domain.vo.SysNoticeUpdVo;
+import cn.daenx.data.system.service.SysNoticeService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;

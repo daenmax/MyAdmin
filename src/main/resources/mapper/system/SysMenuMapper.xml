@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.daenx.system.mapper.SysMenuMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.system.domain.po.SysMenu">
+<mapper namespace="cn.daenx.data.system.mapper.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.data.system.domain.po.SysMenu">
     <!--@mbg.generated-->
     <!--@Table sys_menu-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -60,7 +60,7 @@
       AND sru.user_id = #{userId}
   </select>
 
-  <select id="getMenuTreeByUserId" resultType="cn.daenx.system.domain.po.SysMenu">
+  <select id="getMenuTreeByUserId" resultType="cn.daenx.data.system.domain.po.SysMenu">
       SELECT DISTINCT sm.id,
                       sm.parent_id,
                       sm.menu_name,
@@ -89,7 +89,7 @@
                sm.order_num
   </select>
 
-  <select id="getMenuList" resultType="cn.daenx.system.domain.po.SysMenu">
+  <select id="getMenuList" resultType="cn.daenx.data.system.domain.po.SysMenu">
       SELECT DISTINCT sm.id,
                       sm.parent_id,
                       sm.menu_name,
@@ -112,7 +112,7 @@
       ${ew.getCustomSqlSegment}
     </select>
 
-  <select id="getMenuListByRoleId" resultType="cn.daenx.system.domain.po.SysMenu">
+  <select id="getMenuListByRoleId" resultType="cn.daenx.data.system.domain.po.SysMenu">
       SELECT
           sm.*
       FROM

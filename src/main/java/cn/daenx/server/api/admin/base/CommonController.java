@@ -1,9 +1,9 @@
 package cn.daenx.server.api.admin.base;
 
 import cn.daenx.framework.common.vo.Result;
-import cn.daenx.system.domain.po.SysDictDetail;
-import cn.daenx.system.service.SysConfigService;
-import cn.daenx.system.service.SysDictDetailService;
+import cn.daenx.data.system.domain.po.SysDictDetail;
+import cn.daenx.data.system.service.SysConfigService;
+import cn.daenx.data.system.service.SysDictDetailService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 

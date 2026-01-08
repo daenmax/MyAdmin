@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.daenx.system.mapper.SysDeptMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.system.domain.po.SysDept">
+<mapper namespace="cn.daenx.data.system.mapper.SysDeptMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.data.system.domain.po.SysDept">
     <!--@mbg.generated-->
     <!--@Table sys_dept-->
     <id column="id" jdbcType="VARCHAR" property="id" />
@@ -26,7 +26,7 @@
     create_id, create_time, update_id, update_time, is_delete
   </sql>
 
-  <select id="getDeptListByRoleId" resultType="cn.daenx.system.domain.po.SysDept">
+  <select id="getDeptListByRoleId" resultType="cn.daenx.data.system.domain.po.SysDept">
     SELECT
       sd.*
     FROM
@@ -39,15 +39,15 @@
       sd.parent_id,
       sd.sort
   </select>
-  <resultMap id="deptMap" type="cn.daenx.system.domain.po.SysDept">
+  <resultMap id="deptMap" type="cn.daenx.data.system.domain.po.SysDept">
     <result column="id" jdbcType="VARCHAR" property="id"/>
     <result column="leader_user_id" jdbcType="VARCHAR" property="leaderUserId"/>
     <association property="leaderUser"
                  column="leader_user_id"
-                 javaType="cn.daenx.system.domain.dto.LeaderUserDto"
+                 javaType="cn.daenx.data.system.domain.dto.LeaderUserDto"
                  select="queryUser"/>
   </resultMap>
-  <select id="queryUser" resultType="cn.daenx.system.domain.dto.LeaderUserDto">
+  <select id="queryUser" resultType="cn.daenx.data.system.domain.dto.LeaderUserDto">
     SELECT su.*,
            sud.nick_name,
            sud.real_name,

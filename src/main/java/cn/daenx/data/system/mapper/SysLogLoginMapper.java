@@ -1,0 +1,9 @@
+package cn.daenx.data.system.mapper;
+
+import cn.daenx.data.system.domain.po.SysLogLogin;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface SysLogLoginMapper extends BaseMapper<SysLogLogin> {
+}

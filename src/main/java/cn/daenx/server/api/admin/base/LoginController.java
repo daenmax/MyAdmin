@@ -1,10 +1,9 @@
 package cn.daenx.server.api.admin.base;
 
 import cn.daenx.framework.common.vo.Result;
-import cn.daenx.framework.common.vo.RouterVo;
-import cn.daenx.system.domain.vo.SysLoginVo;
-import cn.daenx.system.domain.vo.SysRegisterVo;
-import cn.daenx.system.service.LoginService;
+import cn.daenx.data.system.domain.vo.SysLoginVo;
+import cn.daenx.data.system.domain.vo.SysRegisterVo;
+import cn.daenx.data.system.service.LoginService;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
@@ -12,8 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("")

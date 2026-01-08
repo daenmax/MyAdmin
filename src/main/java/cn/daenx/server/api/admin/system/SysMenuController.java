@@ -2,11 +2,11 @@ package cn.daenx.server.api.admin.system;
 
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.vo.Result;
-import cn.daenx.system.domain.po.SysMenu;
-import cn.daenx.system.domain.vo.SysMenuAddVo;
-import cn.daenx.system.domain.vo.SysMenuPageVo;
-import cn.daenx.system.domain.vo.SysMenuUpdVo;
-import cn.daenx.system.service.SysMenuService;
+import cn.daenx.data.system.domain.po.SysMenu;
+import cn.daenx.data.system.domain.vo.SysMenuAddVo;
+import cn.daenx.data.system.domain.vo.SysMenuPageVo;
+import cn.daenx.data.system.domain.vo.SysMenuUpdVo;
+import cn.daenx.data.system.service.SysMenuService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import jakarta.annotation.Resource;
