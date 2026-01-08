@@ -10,7 +10,7 @@ import cn.daenx.framework.notify.feishu.vo.FeishuSendResult;
 import cn.daenx.framework.notify.feishu.vo.SendFeishuVo;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.notify.sms.vo.SendSmsVo;
 import cn.daenx.framework.notify.sms.vo.SmsSendResult;
 import cn.daenx.framework.notify.wecom.utils.WecomUtil;

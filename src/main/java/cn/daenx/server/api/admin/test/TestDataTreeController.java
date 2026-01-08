@@ -2,14 +2,14 @@ package cn.daenx.server.api.admin.test;
 
 import cn.daenx.framework.common.constant.enums.LogOperType;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.logSave.annotation.Log;
-import cn.daenx.data.test.domain.po.TestDataTree;
-import cn.daenx.data.test.domain.vo.TestDataTreeAddVo;
-import cn.daenx.data.test.domain.vo.TestDataTreePageVo;
-import cn.daenx.data.test.domain.vo.TestDataTreeUpdVo;
-import cn.daenx.data.test.service.TestDataTreeService;
+import cn.daenx.modules.test.domain.po.TestDataTree;
+import cn.daenx.modules.test.domain.vo.testData.TestDataTreeAddDto;
+import cn.daenx.modules.test.domain.vo.testData.TestDataTreePageDto;
+import cn.daenx.modules.test.domain.vo.testData.TestDataTreeUpdDto;
+import cn.daenx.modules.test.service.TestDataTreeService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +33,7 @@ public class TestDataTreeController {
     @Log(name = "测试树表数据-列表", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:list")
     @GetMapping("/list")
-    public Result list(TestDataTreePageVo vo) {
+    public Result list(TestDataTreePageDto vo) {
         List<TestDataTree> list = testDataTreeService.getAll(vo);
         return Result.ok(list);
     }
@@ -47,7 +47,7 @@ public class TestDataTreeController {
     @Log(name = "测试树表数据-新增", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody TestDataTreeAddVo vo) {
+    public Result add(@Validated @RequestBody TestDataTreeAddDto vo) {
         testDataTreeService.addInfo(vo);
         return Result.ok();
     }
@@ -75,7 +75,7 @@ public class TestDataTreeController {
     @Log(name = "测试树表数据-修改", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody TestDataTreeUpdVo vo) {
+    public Result edit(@Validated @RequestBody TestDataTreeUpdDto vo) {
         testDataTreeService.editInfo(vo);
         return Result.ok();
     }
@@ -106,7 +106,7 @@ public class TestDataTreeController {
     @Log(name = "测试数据-修改状态", type = LogOperType.EDIT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
         testDataTreeService.changeStatus(vo);
         return Result.ok();
     }

@@ -1,11 +1,11 @@
 package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.data.system.domain.po.SysLogLogin;
-import cn.daenx.data.system.domain.vo.SysLogLoginPageVo;
-import cn.daenx.data.system.service.SysLogLoginService;
+import cn.daenx.modules.system.domain.po.SysLogLogin;
+import cn.daenx.modules.system.domain.dto.sysLog.SysLogLoginPageDto;
+import cn.daenx.modules.system.service.SysLogLoginService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -30,7 +30,7 @@ public class SysLogLoginController {
      */
     @SaCheckPermission("monitor:logLogin:page")
     @GetMapping(value = "/page")
-    public Result page(SysLogLoginPageVo vo) {
+    public Result page(SysLogLoginPageDto vo) {
         IPage<SysLogLogin> page = sysLogLoginService.getPage(vo);
         return Result.ok(page);
     }
@@ -40,7 +40,7 @@ public class SysLogLoginController {
      */
     @SaCheckPermission("monitor:logLogin:export")
     @PostMapping("/exportData")
-    public void exportData(SysLogLoginPageVo vo, HttpServletResponse response) {
+    public void exportData(SysLogLoginPageDto vo, HttpServletResponse response) {
         List<SysLogLogin> list = sysLogLoginService.getAll(vo);
         ExcelUtil.exportXlsx(response, "登录日志", "登录日志", list, SysLogLogin.class);
     }

@@ -1,15 +1,17 @@
 package cn.daenx.server.api.admin.system;
 
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
+import cn.daenx.modules.system.domain.dto.sysRole.*;
+import cn.daenx.modules.system.domain.dto.sysUser.SysUserPageDto;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.data.system.domain.dto.SysUserPageDto;
-import cn.daenx.data.system.domain.po.SysRole;
-import cn.daenx.data.system.domain.vo.*;
-import cn.daenx.data.system.service.SysDeptService;
-import cn.daenx.data.system.service.SysRoleService;
-import cn.daenx.data.system.service.SysUserService;
+import cn.daenx.modules.system.domain.po.SysRole;
+import cn.daenx.modules.system.service.SysDeptService;
+import cn.daenx.modules.system.service.SysRoleService;
+import cn.daenx.modules.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
@@ -43,7 +45,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:page")
     @GetMapping(value = "/page")
-    public Result page(SysRolePageVo vo) {
+    public Result page(SysRolePageDto vo) {
         IPage<SysRole> page = sysRoleService.getPage(vo);
         return Result.ok(page);
     }
@@ -53,7 +55,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:export")
     @PostMapping("/exportData")
-    public void exportData(SysRolePageVo vo, HttpServletResponse response) {
+    public void exportData(SysRolePageDto vo, HttpServletResponse response) {
         List<SysRole> list = sysRoleService.getAll(vo);
         ExcelUtil.exportXlsx(response, "角色", "角色数据", list, SysRole.class);
     }
@@ -79,7 +81,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysRoleUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysRoleUpdDto vo) {
         sysRoleService.editInfo(vo);
         return Result.ok();
     }
@@ -92,7 +94,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysRoleAddVo vo) {
+    public Result add(@Validated @RequestBody SysRoleAddDto vo) {
         sysRoleService.addInfo(vo);
         return Result.ok();
     }
@@ -121,7 +123,7 @@ public class SysRoleController {
      */
     @GetMapping(value = "/roleDeptTreeSelect/{roleId}")
     public Result roleDeptTreeSelect(@PathVariable("roleId") String roleId) {
-        List<Tree<String>> list = sysDeptService.deptTree(new SysDeptPageVo());
+        List<Tree<String>> list = sysDeptService.deptTree(new SysDeptPageDto());
         Map<String, Object> map = new HashMap<>();
         map.put("checkedKeys", sysDeptService.selectDeptListByRoleId(roleId));
         map.put("depts", list);
@@ -137,7 +139,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/dataScope")
-    public Result dataScope(@Validated @RequestBody SysRoleDataScopeUpdVo vo) {
+    public Result dataScope(@Validated @RequestBody SysRoleDataScopeUpdDto vo) {
         sysRoleService.dataScope(vo);
         return Result.ok();
     }
@@ -148,11 +150,11 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:page")
     @GetMapping("/allocatedAuthUserPage")
-    public Result allocatedPage(SysUserPageVo vo, String roleId) {
+    public Result allocatedPage(SysUserPageDto vo, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }
-        IPage<SysUserPageDto> page = sysUserService.getUserListByRoleId(vo, roleId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByRoleId(vo, roleId);
         return Result.ok(page);
     }
 
@@ -161,11 +163,11 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:page")
     @GetMapping("/unallocatedAuthUserPage")
-    public Result unallocatedAuthUserPage(SysUserPageVo vo, String roleId) {
+    public Result unallocatedAuthUserPage(SysUserPageDto vo, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }
-        IPage<SysUserPageDto> page = sysUserService.getUserListByUnRoleId(vo, roleId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByUnRoleId(vo, roleId);
         return Result.ok(page);
     }
 
@@ -176,7 +178,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/cancelAuthUser")
-    public Result cancelAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
+    public Result cancelAuthUser(@Validated @RequestBody SysRoleUpdAuthUserDto vo) {
         sysRoleService.cancelAuthUser(vo);
         return Result.ok();
     }
@@ -188,7 +190,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/saveAuthUser")
-    public Result saveAuthUser(@Validated @RequestBody SysRoleUpdAuthUserVo vo) {
+    public Result saveAuthUser(@Validated @RequestBody SysRoleUpdAuthUserDto vo) {
         sysRoleService.saveAuthUser(vo);
         return Result.ok();
     }
@@ -202,7 +204,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
         sysRoleService.changeStatus(vo);
         return Result.ok();
     }

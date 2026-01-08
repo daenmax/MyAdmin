@@ -1,6 +1,6 @@
 package cn.daenx.framework.notify.email.service.impl;
 
-import cn.daenx.framework.common.vo.system.config.SysEmailConfigVo;
+import cn.daenx.framework.common.domain.vo.system.config.SysEmailConfigVo;
 import cn.daenx.framework.notify.email.service.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;

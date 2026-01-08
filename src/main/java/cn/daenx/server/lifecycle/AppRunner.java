@@ -1,6 +1,6 @@
 package cn.daenx.server.lifecycle;
 
-import cn.daenx.data.system.service.*;
+import cn.daenx.modules.system.service.*;
 import jakarta.annotation.Resource;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

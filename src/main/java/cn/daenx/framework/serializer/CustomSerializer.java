@@ -3,7 +3,7 @@ package cn.daenx.framework.serializer;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.framework.common.vo.system.other.SysDictDetailVo;
+import cn.daenx.framework.common.domain.vo.system.other.SysDictDetailVo;
 import cn.daenx.framework.serializer.annotation.Dict;
 import cn.daenx.framework.serializer.annotation.DictDetail;
 import cn.daenx.framework.serializer.annotation.Masked;

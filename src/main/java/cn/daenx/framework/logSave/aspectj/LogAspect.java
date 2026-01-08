@@ -5,7 +5,7 @@ import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.enums.LogOperType;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
-import cn.daenx.framework.common.vo.system.other.SysLogOperVo;
+import cn.daenx.framework.common.domain.vo.system.other.SysLogOperVo;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.hutool.extra.spring.SpringUtil;

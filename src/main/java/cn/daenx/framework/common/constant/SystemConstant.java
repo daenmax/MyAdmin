@@ -1,7 +1,7 @@
 package cn.daenx.framework.common.constant;
 
 
-import cn.daenx.framework.common.vo.system.config.SysUploadConfigVo;
+import cn.daenx.framework.common.domain.vo.system.config.SysUploadConfigVo;
 
 public class SystemConstant {
 

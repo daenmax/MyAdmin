@@ -1,19 +1,19 @@
 package cn.daenx.server.api.admin.test;
 
+import cn.daenx.modules.test.domain.dto.testData.TestDataPageVo;
+import cn.daenx.modules.test.domain.vo.testData.TestDataPageDto;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.common.constant.enums.LogOperType;
 import cn.daenx.framework.excel.ExcelResult;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.test.domain.dto.TestDataPageDto;
-import cn.daenx.data.test.domain.po.TestData;
-import cn.daenx.data.test.domain.vo.TestDataAddVo;
-import cn.daenx.data.test.service.TestDataService;
-import cn.daenx.data.test.domain.vo.TestDataImportVo;
-import cn.daenx.data.test.domain.vo.TestDataPageVo;
-import cn.daenx.data.test.domain.vo.TestDataUpdVo;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.test.domain.po.TestData;
+import cn.daenx.modules.test.domain.vo.testData.TestDataAddDto;
+import cn.daenx.modules.test.service.TestDataService;
+import cn.daenx.modules.test.domain.vo.testData.TestDataImportDto;
+import cn.daenx.modules.test.domain.vo.testData.TestDataUpdDto;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -43,7 +43,7 @@ public class TestDataController {
     @Log(name = "测试数据-分页列表_MP分页插件", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:page")
     @GetMapping("/page")
-    public Result page(TestDataPageVo vo) {
+    public Result page(TestDataPageDto vo) {
         IPage<TestData> page = testDataService.getPage(vo);
         return Result.ok(page);
     }
@@ -58,8 +58,8 @@ public class TestDataController {
     @Log(name = "测试数据-分页列表_自己写的SQL", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:page")
     @GetMapping("/page2")
-    public Result page2(TestDataPageVo vo) {
-        IPage<TestDataPageDto> page = testDataService.getPage2(vo);
+    public Result page2(TestDataPageDto vo) {
+        IPage<TestDataPageVo> page = testDataService.getPage2(vo);
         return Result.ok(page);
     }
 
@@ -73,8 +73,8 @@ public class TestDataController {
     @Log(name = "测试数据-分页列表_MP自定义SQL", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:page")
     @GetMapping("/page3")
-    public Result page3(TestDataPageVo vo) {
-        IPage<TestDataPageDto> page = testDataService.getPage3(vo);
+    public Result page3(TestDataPageDto vo) {
+        IPage<TestDataPageVo> page = testDataService.getPage3(vo);
         return Result.ok(page);
     }
 
@@ -87,7 +87,7 @@ public class TestDataController {
     @Log(name = "测试数据-新增", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody TestDataAddVo vo) {
+    public Result add(@Validated @RequestBody TestDataAddDto vo) {
         testDataService.addInfo(vo);
         return Result.ok();
     }
@@ -115,7 +115,7 @@ public class TestDataController {
     @Log(name = "测试数据-修改", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody TestDataUpdVo vo) {
+    public Result edit(@Validated @RequestBody TestDataUpdDto vo) {
         testDataService.editInfo(vo);
         return Result.ok();
     }
@@ -143,9 +143,9 @@ public class TestDataController {
     @Log(name = "测试数据-导出", type = LogOperType.EXPORT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:export")
     @PostMapping("/exportData")
-    public void exportData(TestDataPageVo vo, HttpServletResponse response) {
-        List<TestDataPageDto> list = testDataService.exportData(vo);
-        ExcelUtil.exportXlsx(response, "测试数据", "测试数据", list, TestDataPageDto.class);
+    public void exportData(TestDataPageDto vo, HttpServletResponse response) {
+        List<TestDataPageVo> list = testDataService.exportData(vo);
+        ExcelUtil.exportXlsx(response, "测试数据", "测试数据", list, TestDataPageVo.class);
     }
 
     /**
@@ -155,8 +155,8 @@ public class TestDataController {
     @SaCheckPermission("test:data:import")
     @PostMapping("/importData")
     public Result importData(@RequestPart("file") MultipartFile file) throws IOException {
-        ExcelResult<TestDataImportVo> excelResult = ExcelUtil.importExcel(file.getInputStream(), TestDataImportVo.class, true);
-        List<TestDataImportVo> dataList = excelResult.getList();
+        ExcelResult<TestDataImportDto> excelResult = ExcelUtil.importExcel(file.getInputStream(), TestDataImportDto.class, true);
+        List<TestDataImportDto> dataList = excelResult.getList();
         Integer num = testDataService.importData(dataList);
         return Result.ok("成功导入" + num + "条");
     }
@@ -167,7 +167,7 @@ public class TestDataController {
     @Log(name = "测试数据-下载导入模板", type = LogOperType.OTHER, recordParams = true, recordResult = false)
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
-        ExcelUtil.exportXlsx(response, "测试数据", "测试数据", new ArrayList<>(), TestDataImportVo.class);
+        ExcelUtil.exportXlsx(response, "测试数据", "测试数据", new ArrayList<>(), TestDataImportDto.class);
     }
 
     /**
@@ -179,7 +179,7 @@ public class TestDataController {
     @Log(name = "测试数据-修改状态", type = LogOperType.EDIT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
         testDataService.changeStatus(vo);
         return Result.ok();
     }

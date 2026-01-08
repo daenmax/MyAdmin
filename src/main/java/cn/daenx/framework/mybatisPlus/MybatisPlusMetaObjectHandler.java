@@ -1,6 +1,6 @@
 package cn.daenx.framework.mybatisPlus;
 
-import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
+import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;

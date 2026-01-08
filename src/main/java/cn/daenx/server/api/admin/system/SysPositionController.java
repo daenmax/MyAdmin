@@ -1,13 +1,17 @@
 package cn.daenx.server.api.admin.system;
 
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
+import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionAddDto;
+import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionPageDto;
+import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionUpdAuthUserDto;
+import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionUpdDto;
+import cn.daenx.modules.system.domain.dto.sysUser.SysUserPageDto;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.data.system.domain.dto.SysUserPageDto;
-import cn.daenx.data.system.domain.po.SysPosition;
-import cn.daenx.data.system.domain.vo.*;
-import cn.daenx.data.system.service.SysPositionService;
-import cn.daenx.data.system.service.SysUserService;
+import cn.daenx.modules.system.domain.po.SysPosition;
+import cn.daenx.modules.system.service.SysPositionService;
+import cn.daenx.modules.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -37,7 +41,7 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:page")
     @GetMapping(value = "/page")
-    public Result page(SysPositionPageVo vo) {
+    public Result page(SysPositionPageDto vo) {
         IPage<SysPosition> page = sysPositionService.getPage(vo);
         return Result.ok(page);
     }
@@ -47,7 +51,7 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:export")
     @PostMapping("/exportData")
-    public void exportData(SysPositionPageVo vo, HttpServletResponse response) {
+    public void exportData(SysPositionPageDto vo, HttpServletResponse response) {
         List<SysPosition> list = sysPositionService.getAll(vo);
         ExcelUtil.exportXlsx(response, "岗位", "岗位", list, SysPosition.class);
     }
@@ -74,7 +78,7 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysPositionUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysPositionUpdDto vo) {
         sysPositionService.editInfo(vo);
         return Result.ok();
     }
@@ -87,7 +91,7 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysPositionAddVo vo) {
+    public Result add(@Validated @RequestBody SysPositionAddDto vo) {
         sysPositionService.addInfo(vo);
         return Result.ok();
     }
@@ -115,11 +119,11 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:page")
     @GetMapping("/allocatedAuthUserPage")
-    public Result allocatedAuthUserPage(SysUserPageVo vo, String positionId) {
+    public Result allocatedAuthUserPage(SysUserPageDto vo, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
-        IPage<SysUserPageDto> page = sysUserService.getUserListByPositionId(vo, positionId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByPositionId(vo, positionId);
         return Result.ok(page);
     }
 
@@ -128,11 +132,11 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:page")
     @GetMapping("/unallocatedAuthUserPage")
-    public Result unallocatedAuthUserPage(SysUserPageVo vo, String positionId) {
+    public Result unallocatedAuthUserPage(SysUserPageDto vo, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
-        IPage<SysUserPageDto> page = sysUserService.getUserListByUnPositionId(vo, positionId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByUnPositionId(vo, positionId);
         return Result.ok(page);
     }
 
@@ -143,7 +147,7 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:edit")
     @PostMapping("/cancelAuthUser")
-    public Result cancelAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
+    public Result cancelAuthUser(@Validated @RequestBody SysPositionUpdAuthUserDto vo) {
         sysPositionService.cancelAuthUser(vo);
         return Result.ok();
     }
@@ -155,7 +159,7 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:edit")
     @PostMapping("/saveAuthUser")
-    public Result saveAuthUser(@Validated @RequestBody SysPositionUpdAuthUserVo vo) {
+    public Result saveAuthUser(@Validated @RequestBody SysPositionUpdAuthUserDto vo) {
         sysPositionService.saveAuthUser(vo);
         return Result.ok();
     }

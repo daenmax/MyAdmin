@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.monitor;
 
+import cn.daenx.modules.system.domain.vo.sysNotice.SysNoticePageVo;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.system.domain.dto.SysNoticePageDto;
-import cn.daenx.data.system.domain.po.SysNotice;
-import cn.daenx.data.system.domain.vo.SysNoticeAddVo;
-import cn.daenx.data.system.domain.vo.SysNoticePageVo;
-import cn.daenx.data.system.domain.vo.SysNoticeUpdVo;
-import cn.daenx.data.system.service.SysNoticeService;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.po.SysNotice;
+import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticeAddDto;
+import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticePageDto;
+import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticeUpdDto;
+import cn.daenx.modules.system.service.SysNoticeService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -31,8 +31,8 @@ public class SysNoticeController {
      */
     @SaCheckPermission("monitor:notice:page")
     @GetMapping("/page")
-    public Result page(SysNoticePageVo vo) {
-        IPage<SysNoticePageDto> page = sysNoticeService.getPage(vo);
+    public Result page(SysNoticePageDto vo) {
+        IPage<SysNoticePageVo> page = sysNoticeService.getPage(vo);
         return Result.ok(page);
     }
 
@@ -44,7 +44,7 @@ public class SysNoticeController {
      */
     @SaCheckPermission("monitor:notice:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysNoticeAddVo vo) {
+    public Result add(@Validated @RequestBody SysNoticeAddDto vo) {
         sysNoticeService.addInfo(vo);
         return Result.ok();
     }
@@ -70,7 +70,7 @@ public class SysNoticeController {
      */
     @SaCheckPermission("monitor:notice:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysNoticeUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysNoticeUpdDto vo) {
         sysNoticeService.editInfo(vo);
         return Result.ok();
     }

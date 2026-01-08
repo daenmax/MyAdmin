@@ -1,15 +1,15 @@
 package cn.daenx.server.api.admin.monitor;
 
+import cn.daenx.modules.system.domain.vo.sysFile.SysFilePageVo;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.constant.enums.LogOperType;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.oss.vo.UploadResult;
-import cn.daenx.data.system.domain.dto.SysFilePageDto;
-import cn.daenx.data.system.domain.po.SysFile;
-import cn.daenx.data.system.domain.vo.SysFilePageVo;
-import cn.daenx.data.system.service.SysFileService;
+import cn.daenx.modules.system.domain.po.SysFile;
+import cn.daenx.modules.system.domain.dto.sysFile.SysFilePageDto;
+import cn.daenx.modules.system.service.SysFileService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -37,8 +37,8 @@ public class SysFileController {
      */
     @SaCheckPermission("monitor:file:page")
     @GetMapping(value = "/page")
-    public Result page(SysFilePageVo vo) {
-        IPage<SysFilePageDto> page = sysFileService.getPage(vo);
+    public Result page(SysFilePageDto vo) {
+        IPage<SysFilePageVo> page = sysFileService.getPage(vo);
         return Result.ok(page);
     }
 

@@ -1,10 +1,12 @@
 package cn.daenx.server.api.admin.base;
 
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.framework.common.vo.RouterVo;
-import cn.daenx.data.system.domain.vo.*;
-import cn.daenx.data.system.service.LoginService;
-import cn.daenx.data.system.service.SysUserService;
+import cn.daenx.modules.system.domain.dto.sysUser.SysUserUpdBindDto;
+import cn.daenx.modules.system.domain.dto.sysUser.SysUserUpdInfoDto;
+import cn.daenx.modules.system.domain.dto.sysUser.SysUserUpdPwdDto;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.domain.vo.RouterVo;
+import cn.daenx.modules.system.service.LoginService;
+import cn.daenx.modules.system.service.SysUserService;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +63,7 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/editProfile")
-    public Result edit(@Validated @RequestBody SysUserUpdInfoVo vo) {
+    public Result edit(@Validated @RequestBody SysUserUpdInfoDto vo) {
         sysUserService.updInfo(vo);
         return Result.ok();
     }
@@ -72,7 +74,7 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/editPwd")
-    public Result editPwd(@Validated @RequestBody SysUserUpdPwdVo vo) {
+    public Result editPwd(@Validated @RequestBody SysUserUpdPwdDto vo) {
         sysUserService.updatePwd(vo);
         return Result.ok("修改成功，请重新登录", null);
     }
@@ -97,7 +99,7 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/getEmailValidCode")
-    public Result getEmailValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
+    public Result getEmailValidCode(@Validated @RequestBody SysUserUpdBindDto vo) {
         loginService.validatedCaptcha(vo);
         return sysUserService.getEmailValidCode(vo);
     }
@@ -108,7 +110,7 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/getPhoneValidCode")
-    public Result getPhoneValidCode(@Validated @RequestBody SysUserUpdBindVo vo) {
+    public Result getPhoneValidCode(@Validated @RequestBody SysUserUpdBindDto vo) {
         loginService.validatedCaptcha(vo);
         return sysUserService.getPhoneValidCode(vo);
     }
@@ -120,7 +122,7 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/updateBindEmail")
-    public Result updateBindEmail(@Validated @RequestBody SysUserUpdBindVo vo) {
+    public Result updateBindEmail(@Validated @RequestBody SysUserUpdBindDto vo) {
         return sysUserService.updateBindEmail(vo);
     }
 
@@ -130,7 +132,7 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/updateBindPhone")
-    public Result updateBindPhone(@Validated @RequestBody SysUserUpdBindVo vo) {
+    public Result updateBindPhone(@Validated @RequestBody SysUserUpdBindDto vo) {
         return sysUserService.updateBindPhone(vo);
     }
 }

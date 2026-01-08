@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.daenx.data.system.mapper.SysRoleUserMapper">
-  <resultMap id="BaseResultMap" type="cn.daenx.data.system.domain.po.SysRoleUser">
+<mapper namespace="cn.daenx.modules.system.mapper.SysRoleUserMapper">
+  <resultMap id="BaseResultMap" type="cn.daenx.modules.system.domain.po.SysRoleUser">
     <!--@mbg.generated-->
     <!--@Table sys_role_user-->
     <id column="id" jdbcType="VARCHAR" property="id" />

@@ -1,6 +1,6 @@
 package cn.daenx.framework.satoken.service;
 
-import cn.daenx.framework.common.vo.system.other.SysLoginUserVo;
+import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.dev33.satoken.stp.StpInterface;
 import org.springframework.stereotype.Component;

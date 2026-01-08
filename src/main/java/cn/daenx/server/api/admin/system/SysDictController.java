@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.system;
 
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.data.system.domain.po.SysDict;
-import cn.daenx.data.system.domain.vo.SysDictAddVo;
-import cn.daenx.data.system.domain.vo.SysDictPageVo;
-import cn.daenx.data.system.domain.vo.SysDictUpdVo;
-import cn.daenx.data.system.service.SysDictService;
+import cn.daenx.modules.system.domain.po.SysDict;
+import cn.daenx.modules.system.domain.dto.sysDict.SysDictAddDto;
+import cn.daenx.modules.system.domain.dto.sysDict.SysDictPageDto;
+import cn.daenx.modules.system.domain.dto.sysDict.SysDictUpdDto;
+import cn.daenx.modules.system.service.SysDictService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -32,7 +32,7 @@ public class SysDictController {
      */
     @SaCheckPermission("system:dict:page")
     @GetMapping(value = "/page")
-    public Result page(SysDictPageVo vo) {
+    public Result page(SysDictPageDto vo) {
         IPage<SysDict> page = sysDictService.getPage(vo);
         return Result.ok(page);
     }
@@ -42,7 +42,7 @@ public class SysDictController {
      */
     @SaCheckPermission("system:dict:export")
     @PostMapping("/exportData")
-    public void exportData(SysDictPageVo vo, HttpServletResponse response) {
+    public void exportData(SysDictPageDto vo, HttpServletResponse response) {
         List<SysDict> list = sysDictService.getAll(vo);
         ExcelUtil.exportXlsx(response, "字典", "字典编码", list, SysDict.class);
     }
@@ -56,7 +56,7 @@ public class SysDictController {
      */
     @SaCheckPermission("system:dict:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysDictAddVo vo) {
+    public Result add(@Validated @RequestBody SysDictAddDto vo) {
         sysDictService.addInfo(vo);
         return Result.ok();
     }
@@ -82,7 +82,7 @@ public class SysDictController {
      */
     @SaCheckPermission("system:dict:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysDictUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysDictUpdDto vo) {
         sysDictService.editInfo(vo);
         return Result.ok();
     }
@@ -124,7 +124,7 @@ public class SysDictController {
      */
     @GetMapping(value = "/optionSelect")
     public Result optionSelect() {
-        List<SysDict> list = sysDictService.getAll(new SysDictPageVo());
+        List<SysDict> list = sysDictService.getAll(new SysDictPageDto());
         return Result.ok(list);
     }
 }

@@ -1,6 +1,6 @@
 package cn.daenx.framework.common.utils;
 
-import cn.daenx.framework.common.vo.TreeEntity;
+import cn.daenx.framework.common.domain.vo.TreeEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;

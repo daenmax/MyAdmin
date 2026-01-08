@@ -1,7 +1,7 @@
 package cn.daenx.framework.notify.feishu.service.impl;
 
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.vo.system.config.SysFeishuConfigVo;
+import cn.daenx.framework.common.domain.vo.system.config.SysFeishuConfigVo;
 import cn.daenx.framework.notify.feishu.service.FeishuService;
 import cn.daenx.framework.notify.feishu.vo.FeishuSendResult;
 import cn.hutool.core.util.ObjectUtil;

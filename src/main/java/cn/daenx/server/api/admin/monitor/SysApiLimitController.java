@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.data.system.service.SysApiLimitService;
+import cn.daenx.modules.system.service.SysApiLimitService;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.system.domain.po.SysApiLimit;
-import cn.daenx.data.system.domain.vo.SysApiLimitAddVo;
-import cn.daenx.data.system.domain.vo.SysApiLimitPageVo;
-import cn.daenx.data.system.domain.vo.SysApiLimitUpdVo;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.po.SysApiLimit;
+import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitAddDto;
+import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitPageDto;
+import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitUpdDto;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -32,7 +32,7 @@ public class SysApiLimitController {
      */
     @SaCheckPermission("monitor:apiLimit:page")
     @GetMapping(value = "/page")
-    public Result page(SysApiLimitPageVo vo) {
+    public Result page(SysApiLimitPageDto vo) {
         IPage<SysApiLimit> page = SysApiLimitService.getPage(vo);
         return Result.ok(page);
     }
@@ -58,7 +58,7 @@ public class SysApiLimitController {
      */
     @SaCheckPermission("monitor:apiLimit:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysApiLimitAddVo vo) {
+    public Result add(@Validated @RequestBody SysApiLimitAddDto vo) {
         SysApiLimitService.addInfo(vo);
         return Result.ok();
     }
@@ -71,7 +71,7 @@ public class SysApiLimitController {
      */
     @SaCheckPermission("monitor:apiLimit:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysApiLimitUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysApiLimitUpdDto vo) {
         SysApiLimitService.editInfo(vo);
         return Result.ok();
     }
@@ -84,7 +84,7 @@ public class SysApiLimitController {
      */
     @SaCheckPermission("monitor:apiLimit:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
         SysApiLimitService.changeStatus(vo);
         return Result.ok();
     }

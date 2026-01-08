@@ -1,14 +1,14 @@
 package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComIdVo;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.system.domain.po.SysJob;
-import cn.daenx.data.system.domain.vo.SysJobAddVo;
-import cn.daenx.data.system.domain.vo.SysJobPageVo;
-import cn.daenx.data.system.domain.vo.SysJobUpdVo;
-import cn.daenx.data.system.service.SysJobService;
+import cn.daenx.framework.common.domain.dto.ComIdDto;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.po.SysJob;
+import cn.daenx.modules.system.domain.dto.sysJob.SysJobAddDto;
+import cn.daenx.modules.system.domain.dto.sysJob.SysJobPageDto;
+import cn.daenx.modules.system.domain.dto.sysJob.SysJobUpdDto;
+import cn.daenx.modules.system.service.SysJobService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -33,7 +33,7 @@ public class SysJobController {
      */
     @SaCheckPermission("monitor:job:page")
     @GetMapping(value = "/page")
-    public Result page(SysJobPageVo vo) {
+    public Result page(SysJobPageDto vo) {
         IPage<SysJob> page = sysJobService.getPage(vo);
         return Result.ok(page);
     }
@@ -59,7 +59,7 @@ public class SysJobController {
      */
     @SaCheckPermission("monitor:job:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysJobAddVo vo) {
+    public Result add(@Validated @RequestBody SysJobAddDto vo) {
         sysJobService.addInfo(vo);
         return Result.ok();
     }
@@ -72,7 +72,7 @@ public class SysJobController {
      */
     @SaCheckPermission("monitor:job:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysJobUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysJobUpdDto vo) {
         sysJobService.editInfo(vo);
         return Result.ok();
     }
@@ -85,7 +85,7 @@ public class SysJobController {
      */
     @SaCheckPermission("monitor:job:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
         sysJobService.changeStatus(vo);
         return Result.ok();
     }
@@ -114,7 +114,7 @@ public class SysJobController {
      */
     @SaCheckPermission("monitor:job:run")
     @PostMapping("/run")
-    public Result run(@Validated @RequestBody ComIdVo vo) {
+    public Result run(@Validated @RequestBody ComIdDto vo) {
         sysJobService.run(vo.getId());
         return Result.ok();
     }

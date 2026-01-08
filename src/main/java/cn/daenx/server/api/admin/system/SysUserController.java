@@ -1,13 +1,15 @@
 package cn.daenx.server.api.admin.system;
 
+import cn.daenx.modules.system.domain.vo.sysDept.SysDeptTreeVo;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
+import cn.daenx.modules.system.domain.dto.sysUser.*;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.ComStatusUpdVo;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.data.system.domain.dto.SysUserPageDto;
-import cn.daenx.data.system.domain.vo.*;
-import cn.daenx.data.system.service.SysDeptService;
-import cn.daenx.data.system.service.SysUserService;
+import cn.daenx.modules.system.service.SysDeptService;
+import cn.daenx.modules.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -38,7 +40,7 @@ public class SysUserController {
     @GetMapping("/deptTree")
     public Result deptTree() {
 //        List<Tree<String>> trees = sysDeptService.deptTree(new SysDeptPageVo());
-        List<SysDeptTree> trees = sysDeptService.deptTreeNew(new SysDeptPageVo());
+        List<SysDeptTreeVo> trees = sysDeptService.deptTreeNew(new SysDeptPageDto());
         return Result.ok(trees);
     }
 
@@ -50,8 +52,8 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:page")
     @GetMapping(value = "/page")
-    public Result page(SysUserPageVo vo) {
-        IPage<SysUserPageDto> page = sysUserService.getPage(vo);
+    public Result page(SysUserPageDto vo) {
+        IPage<SysUserPageVo> page = sysUserService.getPage(vo);
         return Result.ok(page);
     }
 
@@ -60,9 +62,9 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:export")
     @PostMapping("/exportData")
-    public void exportData(SysUserPageVo vo, HttpServletResponse response) {
-        List<SysUserPageDto> list = sysUserService.exportData(vo);
-        ExcelUtil.exportXlsx(response, "用户", "系统用户", list, SysUserPageDto.class);
+    public void exportData(SysUserPageDto vo, HttpServletResponse response) {
+        List<SysUserPageVo> list = sysUserService.exportData(vo);
+        ExcelUtil.exportXlsx(response, "用户", "系统用户", list, SysUserPageVo.class);
     }
 
     /**
@@ -86,7 +88,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysUserUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysUserUpdDto vo) {
         sysUserService.editInfo(vo);
         return Result.ok();
     }
@@ -99,7 +101,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysUserAddVo vo) {
+    public Result add(@Validated @RequestBody SysUserAddDto vo) {
         sysUserService.addInfo(vo);
         return Result.ok();
     }
@@ -113,7 +115,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdVo vo) {
+    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
         sysUserService.changeStatus(vo);
         return Result.ok();
     }
@@ -127,7 +129,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:resetPwd")
     @PostMapping("/resetPwd")
-    public Result resetPwd(@Validated @RequestBody SysUserResetPwdVo vo) {
+    public Result resetPwd(@Validated @RequestBody SysUserResetPwdDto vo) {
         sysUserService.resetPwd(vo);
         return Result.ok();
     }
@@ -169,7 +171,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:edit")
     @PostMapping("/authRole")
-    public Result saveAuthRole(@Validated @RequestBody SysUserUpdAuthRoleVo vo) {
+    public Result saveAuthRole(@Validated @RequestBody SysUserUpdAuthRoleDto vo) {
         sysUserService.saveAuthRole(vo);
         return Result.ok();
     }

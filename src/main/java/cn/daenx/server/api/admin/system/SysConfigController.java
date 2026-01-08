@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.system;
 
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.data.system.domain.po.SysConfig;
-import cn.daenx.data.system.domain.vo.SysConfigAddVo;
-import cn.daenx.data.system.domain.vo.SysConfigPageVo;
-import cn.daenx.data.system.domain.vo.SysConfigUpdVo;
-import cn.daenx.data.system.service.SysConfigService;
+import cn.daenx.modules.system.domain.po.SysConfig;
+import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigAddDto;
+import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigPageDto;
+import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigUpdDto;
+import cn.daenx.modules.system.service.SysConfigService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -33,7 +33,7 @@ public class SysConfigController {
      */
     @SaCheckPermission("system:config:page")
     @GetMapping(value = "/page")
-    public Result page(SysConfigPageVo vo) {
+    public Result page(SysConfigPageDto vo) {
         IPage<SysConfig> page = sysConfigService.getPage(vo);
         return Result.ok(page);
     }
@@ -43,7 +43,7 @@ public class SysConfigController {
      */
     @SaCheckPermission("system:config:export")
     @PostMapping("/exportData")
-    public void exportData(SysConfigPageVo vo, HttpServletResponse response) {
+    public void exportData(SysConfigPageDto vo, HttpServletResponse response) {
         List<SysConfig> list = sysConfigService.getAll(vo);
         ExcelUtil.exportXlsx(response, "系统参数", "系统参数", list, SysConfig.class);
     }
@@ -70,7 +70,7 @@ public class SysConfigController {
      */
     @SaCheckPermission("system:config:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysConfigUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysConfigUpdDto vo) {
         sysConfigService.editInfo(vo);
         return Result.ok();
     }
@@ -83,7 +83,7 @@ public class SysConfigController {
      */
     @SaCheckPermission("system:config:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysConfigAddVo vo) {
+    public Result add(@Validated @RequestBody SysConfigAddDto vo) {
         sysConfigService.addInfo(vo);
         return Result.ok();
     }

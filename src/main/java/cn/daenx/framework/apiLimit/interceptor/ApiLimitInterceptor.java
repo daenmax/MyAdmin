@@ -4,7 +4,7 @@ import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.utils.ServletUtils;
-import cn.daenx.framework.common.vo.system.other.SysApiLimitVo;
+import cn.daenx.framework.common.domain.vo.system.other.SysApiLimitVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.hutool.core.util.ObjectUtil;
@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,8 +25,9 @@ import java.util.Arrays;
 /**
  * 接口限流拦截器
  */
-@Configuration
 @Slf4j
+@Configuration
+@ConditionalOnProperty(prefix = "cache", value = "type", havingValue = "redis")
 public class ApiLimitInterceptor implements HandlerInterceptor {
     @Resource
     private RedisScript<Long> apiLimitScript;
@@ -36,9 +38,6 @@ public class ApiLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!"redis".equals(CacheUtil.getType())) {
-            return true;
-        }
         String requestURI = request.getRequestURI();
         if (ObjectUtil.isNotEmpty(contextPath)) {
             requestURI = requestURI.replaceFirst(contextPath, "");

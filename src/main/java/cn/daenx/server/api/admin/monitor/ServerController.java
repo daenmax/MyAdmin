@@ -1,8 +1,8 @@
 package cn.daenx.server.api.admin.monitor;
 
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.system.domain.vo.ServerInfoVo;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.vo.server.ServerInfoVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.NumberUtil;
 import org.springframework.web.bind.annotation.GetMapping;

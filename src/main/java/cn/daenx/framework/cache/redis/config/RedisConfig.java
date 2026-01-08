@@ -1,6 +1,9 @@
 package cn.daenx.framework.cache.redis.config;
 
+import cn.daenx.framework.common.utils.MyUtil;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -15,7 +18,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  *
  * @author DaenMax
  */
+@Slf4j
 @Configuration
+@ConditionalOnProperty(prefix = "cache", value = "type", havingValue = "redis")
 public class RedisConfig {
 
     @Resource
@@ -23,6 +28,7 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        log.info(MyUtil.getLogPrex() + "缓存策略：{}", "redis");
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 

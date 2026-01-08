@@ -1,14 +1,14 @@
 package cn.daenx.server.api.admin.system;
 
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.system.domain.dto.SysUserPageDto;
-import cn.daenx.data.system.domain.po.SysDept;
-import cn.daenx.data.system.domain.vo.SysDeptAddVo;
-import cn.daenx.data.system.domain.vo.SysDeptPageVo;
-import cn.daenx.data.system.domain.vo.SysDeptUpdVo;
-import cn.daenx.data.system.service.SysDeptService;
-import cn.daenx.data.system.service.SysUserService;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
+import cn.daenx.modules.system.domain.po.SysDept;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptAddDto;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptUpdDto;
+import cn.daenx.modules.system.service.SysDeptService;
+import cn.daenx.modules.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +34,7 @@ public class SysDeptController {
      */
     @SaCheckPermission("system:dept:list")
     @GetMapping(value = "/list")
-    public Result list(SysDeptPageVo vo) {
+    public Result list(SysDeptPageDto vo) {
         List<SysDept> list = sysDeptService.getAll(vo);
         return Result.ok(list);
     }
@@ -48,7 +48,7 @@ public class SysDeptController {
     @SaCheckPermission("system:dept:list")
     @GetMapping(value = "/list/exclude/{id}")
     public Result excludeChild(@PathVariable(value = "id", required = false) String id) {
-        List<SysDept> list = sysDeptService.getAllNoLeaderUser(new SysDeptPageVo());
+        List<SysDept> list = sysDeptService.getAllNoLeaderUser(new SysDeptPageDto());
         List<SysDept> collect = list.stream().filter(item -> item.getId().equals(id)).collect(Collectors.toList());
         sysDeptService.removeList(list, collect);
         return Result.ok(list);
@@ -75,7 +75,7 @@ public class SysDeptController {
      */
     @SaCheckPermission("system:dept:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysDeptUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysDeptUpdDto vo) {
         sysDeptService.editInfo(vo);
         return Result.ok();
     }
@@ -88,7 +88,7 @@ public class SysDeptController {
      */
     @SaCheckPermission("system:dept:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysDeptAddVo vo) {
+    public Result add(@Validated @RequestBody SysDeptAddDto vo) {
         sysDeptService.addInfo(vo);
         return Result.ok();
     }
@@ -119,7 +119,7 @@ public class SysDeptController {
     @SaCheckPermission("system:user:list")
     @GetMapping(value = "/getUserList")
     public Result getUserList(String id, String keyword) {
-        List<SysUserPageDto> userList = sysUserService.getUserList(id, keyword, keyword, keyword, keyword, keyword);
+        List<SysUserPageVo> userList = sysUserService.getUserList(id, keyword, keyword, keyword, keyword, keyword);
         return Result.ok(userList);
     }
 }

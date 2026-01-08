@@ -1,12 +1,12 @@
 package cn.daenx.server.api.admin.system;
 
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.system.domain.po.SysMenu;
-import cn.daenx.data.system.domain.vo.SysMenuAddVo;
-import cn.daenx.data.system.domain.vo.SysMenuPageVo;
-import cn.daenx.data.system.domain.vo.SysMenuUpdVo;
-import cn.daenx.data.system.service.SysMenuService;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.po.SysMenu;
+import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuAddDto;
+import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuPageDto;
+import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuUpdDto;
+import cn.daenx.modules.system.service.SysMenuService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.tree.Tree;
 import jakarta.annotation.Resource;
@@ -32,7 +32,7 @@ public class SysMenuController {
      */
     @SaCheckPermission("system:menu:page")
     @GetMapping(value = "/page")
-    public Result page(SysMenuPageVo vo) {
+    public Result page(SysMenuPageDto vo) {
         List<SysMenu> list = sysMenuService.getList(vo);
         return Result.ok(list);
     }
@@ -58,7 +58,7 @@ public class SysMenuController {
      */
     @SaCheckPermission("system:menu:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysMenuUpdVo vo) {
+    public Result edit(@Validated @RequestBody SysMenuUpdDto vo) {
         sysMenuService.editInfo(vo);
         return Result.ok();
     }
@@ -71,7 +71,7 @@ public class SysMenuController {
      */
     @SaCheckPermission("system:menu:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysMenuAddVo vo) {
+    public Result add(@Validated @RequestBody SysMenuAddDto vo) {
         sysMenuService.addInfo(vo);
         return Result.ok();
     }
@@ -99,7 +99,7 @@ public class SysMenuController {
      * @return
      */
     @GetMapping(value = "/treeSelect")
-    public Result treeSelect(SysMenuPageVo vo) {
+    public Result treeSelect(SysMenuPageDto vo) {
         List<Tree<String>> list = sysMenuService.treeSelect(vo);
         return Result.ok(list);
     }
@@ -113,7 +113,7 @@ public class SysMenuController {
      */
     @GetMapping(value = "/roleMenuTreeSelect/{roleId}")
     public Result roleMenuTreeSelect(@PathVariable("roleId") String roleId) {
-        List<Tree<String>> list = sysMenuService.treeSelect(new SysMenuPageVo());
+        List<Tree<String>> list = sysMenuService.treeSelect(new SysMenuPageDto());
         Map<String, Object> map = new HashMap<>();
         map.put("checkedKeys", sysMenuService.selectMenuListByRoleId(roleId));
         map.put("menus", list);

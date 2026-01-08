@@ -1,9 +1,9 @@
 package cn.daenx.server.api.admin.base;
 
-import cn.daenx.framework.common.vo.Result;
-import cn.daenx.data.system.domain.vo.SysLoginVo;
-import cn.daenx.data.system.domain.vo.SysRegisterVo;
-import cn.daenx.data.system.service.LoginService;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.dto.sysLogin.SysLoginDto;
+import cn.daenx.modules.system.domain.dto.sysLogin.SysRegisterDto;
+import cn.daenx.modules.system.service.LoginService;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.core.util.ObjectUtil;
 import jakarta.annotation.Resource;
@@ -37,7 +37,7 @@ public class LoginController {
      */
     @SaIgnore
     @PostMapping("/getEmailValidCode")
-    public Result getEmailValidCode(@Validated @RequestBody SysLoginVo vo) {
+    public Result getEmailValidCode(@Validated @RequestBody SysLoginDto vo) {
         return loginService.getEmailValidCode(vo);
     }
 
@@ -48,7 +48,7 @@ public class LoginController {
      */
     @SaIgnore
     @PostMapping("/getPhoneValidCode")
-    public Result getPhoneValidCode(@Validated @RequestBody SysLoginVo vo) {
+    public Result getPhoneValidCode(@Validated @RequestBody SysLoginDto vo) {
         return loginService.getPhoneValidCode(vo);
     }
 
@@ -60,7 +60,7 @@ public class LoginController {
      */
     @SaIgnore
     @PostMapping("/login")
-    public Result login(@Validated @RequestBody SysLoginVo vo) {
+    public Result login(@Validated @RequestBody SysLoginDto vo) {
         if (ObjectUtil.isEmpty(vo.getLoginType())) {
             return Result.error("loginType不能为空");
         }
@@ -83,7 +83,7 @@ public class LoginController {
      */
     @SaIgnore
     @PostMapping("/register")
-    public Result register(@Validated @RequestBody SysRegisterVo vo) {
+    public Result register(@Validated @RequestBody SysRegisterDto vo) {
         loginService.register(vo);
         return Result.ok("注册成功");
     }

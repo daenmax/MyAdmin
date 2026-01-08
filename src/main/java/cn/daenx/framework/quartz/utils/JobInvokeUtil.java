@@ -1,7 +1,7 @@
 package cn.daenx.framework.quartz.utils;
 
 
-import cn.daenx.framework.common.vo.system.other.SysJobVo;
+import cn.daenx.framework.common.domain.vo.system.other.SysJobVo;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import org.apache.commons.lang3.StringUtils;

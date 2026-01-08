@@ -1,14 +1,14 @@
 package cn.daenx.server.api.admin.test;
 
 import cn.daenx.framework.common.constant.enums.LogOperType;
-import cn.daenx.framework.common.vo.Result;
+import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.framework.excel.ExcelResult;
 import cn.daenx.framework.excel.ReadRetVo;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.repeatSubmit.annotation.RepeatSubmit;
-import cn.daenx.data.test.domain.vo.TestSheetAVo;
-import cn.daenx.data.test.domain.vo.TestSheetBVo;
+import cn.daenx.modules.test.domain.vo.testSheet.TestSheetADto;
+import cn.daenx.modules.test.domain.vo.testSheet.TestSheetBDto;
 import cn.dev33.satoken.annotation.SaIgnore;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -62,15 +62,15 @@ public class TestController {
     @PostMapping("/importData")
     public Result importData(@RequestPart("file") MultipartFile file) throws IOException {
         ExcelReader reader = ExcelUtil.createImport(file.getInputStream());
-        ReadRetVo<TestSheetAVo> sheetA = ExcelUtil.readSheet("班级信息", TestSheetAVo.class, true);
-        ReadRetVo<TestSheetBVo> sheetB = ExcelUtil.readSheet("学生信息", TestSheetBVo.class, true);
+        ReadRetVo<TestSheetADto> sheetA = ExcelUtil.readSheet("班级信息", TestSheetADto.class, true);
+        ReadRetVo<TestSheetBDto> sheetB = ExcelUtil.readSheet("学生信息", TestSheetBDto.class, true);
         ExcelUtil.finishRead(reader, sheetA, sheetB);
 
-        ExcelResult<TestSheetAVo> sheetAResult = ExcelUtil.transResult(sheetA);
-        ExcelResult<TestSheetBVo> sheetBResult = ExcelUtil.transResult(sheetB);
+        ExcelResult<TestSheetADto> sheetAResult = ExcelUtil.transResult(sheetA);
+        ExcelResult<TestSheetBDto> sheetBResult = ExcelUtil.transResult(sheetB);
 
-        List<TestSheetAVo> sheetAList = sheetAResult.getList();
-        List<TestSheetBVo> sheetBList = sheetBResult.getList();
+        List<TestSheetADto> sheetAList = sheetAResult.getList();
+        List<TestSheetBDto> sheetBList = sheetBResult.getList();
         return Result.ok("成功");
     }
 
@@ -82,35 +82,35 @@ public class TestController {
     public void exportData(HttpServletResponse response) {
         ExcelWriter writer = ExcelUtil.createExport(response, "多sheet表测试");
 
-        List<TestSheetAVo> sheetAList = new ArrayList<>();
-        TestSheetAVo sheetA1 = new TestSheetAVo();
+        List<TestSheetADto> sheetAList = new ArrayList<>();
+        TestSheetADto sheetA1 = new TestSheetADto();
         sheetA1.setClassName("奋进班");
         sheetA1.setClassNum("89");
         sheetA1.setType("0");
         sheetA1.setRemark("位于3楼");
         sheetAList.add(sheetA1);
-        TestSheetAVo sheetA2 = new TestSheetAVo();
+        TestSheetADto sheetA2 = new TestSheetADto();
         sheetA2.setClassName("娇子班");
         sheetA2.setClassNum("70");
         sheetA2.setType("1");
         sheetA2.setRemark("位于5楼");
         sheetAList.add(sheetA2);
-        ExcelUtil.writeSheet(writer, "班级信息", sheetAList, TestSheetAVo.class);
+        ExcelUtil.writeSheet(writer, "班级信息", sheetAList, TestSheetADto.class);
 
-        List<TestSheetBVo> sheetBList = new ArrayList<>();
-        TestSheetBVo sheetB1 = new TestSheetBVo();
+        List<TestSheetBDto> sheetBList = new ArrayList<>();
+        TestSheetBDto sheetB1 = new TestSheetBDto();
         sheetB1.setStudentName("张三");
         sheetB1.setStudentAge("21");
         sheetB1.setType("0");
         sheetB1.setRemark("位于3楼");
         sheetBList.add(sheetB1);
-        TestSheetBVo sheetB2 = new TestSheetBVo();
+        TestSheetBDto sheetB2 = new TestSheetBDto();
         sheetB2.setStudentName("王苗苗");
         sheetB2.setStudentAge("19");
         sheetB2.setType("1");
         sheetB2.setRemark("位于5楼");
         sheetBList.add(sheetB2);
-        ExcelUtil.writeSheet(writer, "学生信息", sheetBList, TestSheetBVo.class);
+        ExcelUtil.writeSheet(writer, "学生信息", sheetBList, TestSheetBDto.class);
 
         ExcelUtil.finishWrite(writer);
     }
