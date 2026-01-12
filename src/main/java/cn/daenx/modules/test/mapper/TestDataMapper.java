@@ -1,7 +1,7 @@
 package cn.daenx.modules.test.mapper;
 
-import cn.daenx.modules.test.domain.dto.testData.TestDataPageVo;
-import cn.daenx.modules.test.domain.vo.testData.TestDataPageDto;
+import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
+import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.modules.test.domain.po.TestData;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;

@@ -1,4 +1,4 @@
-package cn.daenx.modules.test.domain.vo.testData;
+package cn.daenx.modules.test.domain.dto.testData;
 
 import cn.daenx.framework.common.domain.dto.BasePageDto;
 import lombok.Data;

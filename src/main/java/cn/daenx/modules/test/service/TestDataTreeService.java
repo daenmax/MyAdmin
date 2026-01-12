@@ -3,9 +3,9 @@ package cn.daenx.modules.test.service;
 
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.modules.test.domain.po.TestDataTree;
-import cn.daenx.modules.test.domain.vo.testData.TestDataTreeAddDto;
-import cn.daenx.modules.test.domain.vo.testData.TestDataTreePageDto;
-import cn.daenx.modules.test.domain.vo.testData.TestDataTreeUpdDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataTreeAddDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataTreePageDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataTreeUpdDto;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package cn.daenx.server.api.admin.test;
 
-import cn.daenx.modules.test.domain.dto.testData.TestDataPageVo;
-import cn.daenx.modules.test.domain.vo.testData.TestDataPageDto;
+import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
+import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
 import cn.daenx.framework.logSave.annotation.Log;
 import cn.daenx.framework.common.constant.enums.LogOperType;
 import cn.daenx.framework.excel.ExcelResult;
@@ -10,10 +10,10 @@ import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.domain.vo.Result;
 import cn.daenx.modules.test.domain.po.TestData;
-import cn.daenx.modules.test.domain.vo.testData.TestDataAddDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataAddDto;
 import cn.daenx.modules.test.service.TestDataService;
-import cn.daenx.modules.test.domain.vo.testData.TestDataImportDto;
-import cn.daenx.modules.test.domain.vo.testData.TestDataUpdDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataImportDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataUpdDto;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;

@@ -1,4 +1,4 @@
-package cn.daenx.modules.test.domain.vo.testData;
+package cn.daenx.modules.test.domain.dto.testData;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
