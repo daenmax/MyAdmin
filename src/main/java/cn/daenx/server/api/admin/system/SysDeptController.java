@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 部门管理
+ */
 @RestController
 @RequestMapping("/system/dept")
 public class SysDeptController {

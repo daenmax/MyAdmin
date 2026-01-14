@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 角色管理
+ */
 @RestController
 @RequestMapping("/system/role")
 public class SysRoleController {

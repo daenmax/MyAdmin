@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 功能测试
+ */
 @RestController
 @RequestMapping("/tool/functest")
 public class FunctestController {

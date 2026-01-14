@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 通知公告
+ */
 @RestController
 @RequestMapping("/monitor/notice")
 public class SysNoticeController {

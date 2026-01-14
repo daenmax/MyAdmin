@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 岗位管理
+ */
 @RestController
 @RequestMapping("/system/position")
 public class SysPositionController {

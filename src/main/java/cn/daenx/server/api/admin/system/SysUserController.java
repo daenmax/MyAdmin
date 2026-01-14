@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用户管理
+ */
 @RestController
 @RequestMapping("/system/user")
 public class SysUserController {

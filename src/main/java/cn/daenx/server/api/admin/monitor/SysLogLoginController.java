@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 登录日志
+ */
 @RestController
 @RequestMapping("/monitor/logLogin")
 public class SysLogLoginController {

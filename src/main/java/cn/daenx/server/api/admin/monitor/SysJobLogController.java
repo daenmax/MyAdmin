@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 定时任务日志
+ */
 @RestController
 @RequestMapping("/monitor/jobLog")
 public class SysJobLogController {

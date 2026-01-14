@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 接口限制
+ */
 @RestController
 @RequestMapping("/monitor/apiLimit")
 public class SysApiLimitController {

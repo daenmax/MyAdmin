@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 登录接口
+ */
 @RestController
 @RequestMapping("")
 public class LoginController {

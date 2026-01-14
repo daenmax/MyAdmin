@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 参数设置
+ */
 @RestController
 @RequestMapping("/system/config")
 public class SysConfigController {

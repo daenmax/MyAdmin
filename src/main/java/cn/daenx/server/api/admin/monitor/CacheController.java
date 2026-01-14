@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
-
+/**
+ * 缓存监控
+ */
 @RestController
 @RequestMapping("/monitor/cache")
 public class CacheController {

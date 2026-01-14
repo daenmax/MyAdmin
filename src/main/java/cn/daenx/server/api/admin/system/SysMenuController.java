@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 菜单管理
+ */
 @RestController
 @RequestMapping("/system/menu")
 public class SysMenuController {

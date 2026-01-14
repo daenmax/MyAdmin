@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 字典明细管理
+ */
 @RestController
 @RequestMapping("/system/dict/detail")
 public class SysDictDetailController {

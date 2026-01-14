@@ -22,7 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-
+/**
+ * 服务监控
+ */
 @RestController
 @RequestMapping("/monitor/server")
 public class ServerController {

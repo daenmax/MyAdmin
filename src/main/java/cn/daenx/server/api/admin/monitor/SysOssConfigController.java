@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+/**
+ * 文件存储配置
+ */
 @RestController
 @RequestMapping("/monitor/ossConfig")
 public class SysOssConfigController {

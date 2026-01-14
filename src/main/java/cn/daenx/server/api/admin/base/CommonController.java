@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 公用接口
+ */
 @RestController
 @RequestMapping("/common")
 public class CommonController {

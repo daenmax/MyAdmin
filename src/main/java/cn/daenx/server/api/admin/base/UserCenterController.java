@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用户中心
+ */
 @RestController
 @RequestMapping("/userCenter")
 public class UserCenterController {

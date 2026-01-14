@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 测试接口
+ */
 @Tag(name = "功能测试", description = "对系统内的一些功能进行测试和展示使用方法")
 @RestController
 @SaIgnore

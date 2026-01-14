@@ -22,7 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * 文件管理
+ */
 @RestController
 @RequestMapping("/monitor/file")
 public class SysFileController {
