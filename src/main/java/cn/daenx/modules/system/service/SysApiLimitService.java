@@ -1,10 +1,10 @@
 package cn.daenx.modules.system.service;
 
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.modules.system.domain.po.SysApiLimit;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitAddDto;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitPageDto;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitUpdDto;
+import cn.daenx.modules.system.domain.po.SysApiLimit;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,10 +15,10 @@ public interface SysApiLimitService extends IService<SysApiLimit> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysApiLimit> getPage(SysApiLimitPageDto vo);
+    IPage<SysApiLimit> getPage(SysApiLimitPageDto dto);
 
     /**
      * 查询
@@ -31,23 +31,23 @@ public interface SysApiLimitService extends IService<SysApiLimit> {
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysApiLimitAddDto vo);
+    void addInfo(SysApiLimitAddDto dto);
 
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysApiLimitUpdDto vo);
+    void editInfo(SysApiLimitUpdDto dto);
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeStatus(ComStatusUpdDto vo);
+    void changeStatus(ComStatusUpdDto dto);
 
     /**
      * 删除

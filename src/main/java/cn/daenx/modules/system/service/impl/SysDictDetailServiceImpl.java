@@ -1,28 +1,27 @@
 package cn.daenx.modules.system.service.impl;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.modules.system.service.SysDictService;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictDetailAddDto;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictDetailPageDto;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictDetailUpdDto;
+import cn.daenx.modules.system.domain.po.SysDictDetail;
+import cn.daenx.modules.system.mapper.SysDictDetailMapper;
+import cn.daenx.modules.system.service.SysDictDetailService;
+import cn.daenx.modules.system.service.SysDictService;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.modules.system.mapper.SysDictDetailMapper;
-import cn.daenx.modules.system.domain.po.SysDictDetail;
-import cn.daenx.modules.system.service.SysDictDetailService;
 
 @Service
 public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, SysDictDetail> implements SysDictDetailService {
@@ -65,42 +64,42 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysDictDetail> getPage(SysDictDetailPageDto vo) {
+    public IPage<SysDictDetail> getPage(SysDictDetailPageDto dto) {
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByAsc(SysDictDetail::getSort);
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getDictCode()), SysDictDetail::getDictCode, vo.getDictCode());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getLabel()), SysDictDetail::getLabel, vo.getLabel());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysDictDetail::getValue, vo.getValue());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDictDetail::getStatus, vo.getStatus());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getRemark()), SysDictDetail::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getDictCode()), SysDictDetail::getDictCode, dto.getDictCode());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getLabel()), SysDictDetail::getLabel, dto.getLabel());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getValue()), SysDictDetail::getValue, dto.getValue());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysDictDetail::getStatus, dto.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getRemark()), SysDictDetail::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDictDetail::getCreateTime, startTime, endTime);
-        Page<SysDictDetail> sysDictDetailPage = sysDictDetailMapper.selectPage(vo.getPage(false), wrapper);
+        Page<SysDictDetail> sysDictDetailPage = sysDictDetailMapper.selectPage(dto.getPage(false), wrapper);
         return sysDictDetailPage;
     }
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysDictDetail> getAll(SysDictDetailPageDto vo) {
+    public List<SysDictDetail> getAll(SysDictDetailPageDto dto) {
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByAsc(SysDictDetail::getSort);
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getDictCode()), SysDictDetail::getDictCode, vo.getDictCode());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getLabel()), SysDictDetail::getLabel, vo.getLabel());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysDictDetail::getValue, vo.getValue());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDictDetail::getStatus, vo.getStatus());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getRemark()), SysDictDetail::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getDictCode()), SysDictDetail::getDictCode, dto.getDictCode());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getLabel()), SysDictDetail::getLabel, dto.getLabel());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getValue()), SysDictDetail::getValue, dto.getValue());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysDictDetail::getStatus, dto.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getRemark()), SysDictDetail::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDictDetail::getCreateTime, startTime, endTime);
         List<SysDictDetail> sysDictDetailList = sysDictDetailMapper.selectList(wrapper);
         return sysDictDetailList;
@@ -109,29 +108,29 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysDictDetailAddDto vo) {
-        if (!sysDictService.checkDictExist(vo.getDictCode(), null)) {
+    public void addInfo(SysDictDetailAddDto dto) {
+        if (!sysDictService.checkDictExist(dto.getDictCode(), null)) {
             throw new MyException("字典编码不存在");
         }
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDictDetail::getDictCode, vo.getDictCode());
-        wrapper.eq(SysDictDetail::getValue, vo.getValue());
+        wrapper.eq(SysDictDetail::getDictCode, dto.getDictCode());
+        wrapper.eq(SysDictDetail::getValue, dto.getValue());
         Long aLong = sysDictDetailMapper.selectCount(wrapper);
         if (aLong > 0) {
             throw new MyException("字典键值已存在");
         }
         SysDictDetail sysDictDetail = new SysDictDetail();
-        sysDictDetail.setDictCode(vo.getDictCode());
-        sysDictDetail.setLabel(vo.getLabel());
-        sysDictDetail.setValue(vo.getValue());
-        sysDictDetail.setSort(vo.getSort());
-        sysDictDetail.setCssClass(vo.getCssClass());
-        sysDictDetail.setListClass(vo.getListClass());
-        sysDictDetail.setStatus(vo.getStatus());
-        sysDictDetail.setRemark(vo.getRemark());
+        sysDictDetail.setDictCode(dto.getDictCode());
+        sysDictDetail.setLabel(dto.getLabel());
+        sysDictDetail.setValue(dto.getValue());
+        sysDictDetail.setSort(dto.getSort());
+        sysDictDetail.setCssClass(dto.getCssClass());
+        sysDictDetail.setListClass(dto.getListClass());
+        sysDictDetail.setStatus(dto.getStatus());
+        sysDictDetail.setRemark(dto.getRemark());
         int insert = sysDictDetailMapper.insert(sysDictDetail);
         if (insert < 1) {
             throw new MyException("新增失败");
@@ -154,31 +153,31 @@ public class SysDictDetailServiceImpl extends ServiceImpl<SysDictDetailMapper, S
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void editInfo(SysDictDetailUpdDto vo) {
-        if (!sysDictService.checkDictExist(vo.getDictCode(), null)) {
+    public void editInfo(SysDictDetailUpdDto dto) {
+        if (!sysDictService.checkDictExist(dto.getDictCode(), null)) {
             throw new MyException("字典编码不存在");
         }
         LambdaQueryWrapper<SysDictDetail> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDictDetail::getDictCode, vo.getDictCode());
-        wrapper.eq(SysDictDetail::getValue, vo.getValue());
-        wrapper.ne(SysDictDetail::getId, vo.getId());
+        wrapper.eq(SysDictDetail::getDictCode, dto.getDictCode());
+        wrapper.eq(SysDictDetail::getValue, dto.getValue());
+        wrapper.ne(SysDictDetail::getId, dto.getId());
         Long aLong = sysDictDetailMapper.selectCount(wrapper);
         if (aLong > 0) {
             throw new MyException("字典键值已存在");
         }
         LambdaUpdateWrapper<SysDictDetail> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysDictDetail::getId, vo.getId());
-        updateWrapper.set(SysDictDetail::getDictCode, vo.getDictCode());
-        updateWrapper.set(SysDictDetail::getLabel, vo.getLabel());
-        updateWrapper.set(SysDictDetail::getValue, vo.getValue());
-        updateWrapper.set(SysDictDetail::getSort, vo.getSort());
-        updateWrapper.set(SysDictDetail::getCssClass, vo.getCssClass());
-        updateWrapper.set(SysDictDetail::getListClass, vo.getListClass());
-        updateWrapper.set(SysDictDetail::getStatus, vo.getStatus());
-        updateWrapper.set(SysDictDetail::getRemark, vo.getRemark());
+        updateWrapper.eq(SysDictDetail::getId, dto.getId());
+        updateWrapper.set(SysDictDetail::getDictCode, dto.getDictCode());
+        updateWrapper.set(SysDictDetail::getLabel, dto.getLabel());
+        updateWrapper.set(SysDictDetail::getValue, dto.getValue());
+        updateWrapper.set(SysDictDetail::getSort, dto.getSort());
+        updateWrapper.set(SysDictDetail::getCssClass, dto.getCssClass());
+        updateWrapper.set(SysDictDetail::getListClass, dto.getListClass());
+        updateWrapper.set(SysDictDetail::getStatus, dto.getStatus());
+        updateWrapper.set(SysDictDetail::getRemark, dto.getRemark());
         int update = sysDictDetailMapper.update(new SysDictDetail(), updateWrapper);
         if (update < 1) {
             throw new MyException("修改字典明细失败");

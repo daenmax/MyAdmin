@@ -1,8 +1,8 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.vo.sysJob.SysJobLogPageVo;
-import cn.daenx.modules.system.domain.po.SysJobLog;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobLogPageDto;
+import cn.daenx.modules.system.domain.po.SysJobLog;
+import cn.daenx.modules.system.domain.vo.sysJob.SysJobLogPageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,18 +13,18 @@ public interface SysJobLogService extends IService<SysJobLog> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysJobLogPageVo> getPage(SysJobLogPageDto vo);
+    IPage<SysJobLogPageVo> getPage(SysJobLogPageDto dto);
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysJobLogPageVo> getAll(SysJobLogPageDto vo);
+    List<SysJobLogPageVo> getAll(SysJobLogPageDto dto);
 
     /**
      * 查询

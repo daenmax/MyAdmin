@@ -1,4 +1,4 @@
-package cn.daenx.framework.notify.sms.vo;
+package cn.daenx.framework.notify.sms.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -10,7 +10,7 @@ import java.util.List;
  * 短信测试
  */
 @Data
-public class SendSmsVo {
+public class SendSmsDto {
     /**
      * 使用平台：aliyun=阿里云，tencent=腾讯云
      */

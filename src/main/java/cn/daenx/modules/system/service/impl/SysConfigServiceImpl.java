@@ -1,21 +1,18 @@
 package cn.daenx.modules.system.service.impl;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.domain.vo.system.config.*;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.framework.common.domain.vo.system.config.*;
-import cn.daenx.framework.common.domain.vo.system.config.SysLoginFailInfoConfigVo;
-import cn.daenx.framework.common.domain.vo.system.config.SysRegisterDefaultInfoVo;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigAddDto;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigPageDto;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigUpdDto;
-import cn.daenx.modules.system.mapper.SysConfigMapper;
 import cn.daenx.modules.system.domain.po.SysConfig;
+import cn.daenx.modules.system.mapper.SysConfigMapper;
 import cn.daenx.modules.system.service.SysConfigService;
-
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -35,16 +32,16 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Resource
     private SysConfigMapper sysConfigMapper;
 
-    private LambdaQueryWrapper<SysConfig> getWrapper(SysConfigPageDto vo) {
+    private LambdaQueryWrapper<SysConfig> getWrapper(SysConfigPageDto dto) {
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysConfig::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getKeyVa()), SysConfig::getKeyVa, vo.getKeyVa());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getValue()), SysConfig::getValue, vo.getValue());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), SysConfig::getType, vo.getType());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysConfig::getStatus, vo.getStatus());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getRemark()), SysConfig::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getName()), SysConfig::getName, dto.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getKeyVa()), SysConfig::getKeyVa, dto.getKeyVa());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getValue()), SysConfig::getValue, dto.getValue());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getType()), SysConfig::getType, dto.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysConfig::getStatus, dto.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getRemark()), SysConfig::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysConfig::getCreateTime, startTime, endTime);
         return wrapper;
     }
@@ -52,25 +49,25 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysConfig> getPage(SysConfigPageDto vo) {
-        LambdaQueryWrapper<SysConfig> wrapper = getWrapper(vo);
-        Page<SysConfig> sysConfigPage = sysConfigMapper.selectPage(vo.getPage(true), wrapper);
+    public IPage<SysConfig> getPage(SysConfigPageDto dto) {
+        LambdaQueryWrapper<SysConfig> wrapper = getWrapper(dto);
+        Page<SysConfig> sysConfigPage = sysConfigMapper.selectPage(dto.getPage(true), wrapper);
         return sysConfigPage;
     }
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysConfig> getAll(SysConfigPageDto vo) {
-        LambdaQueryWrapper<SysConfig> wrapper = getWrapper(vo);
+    public List<SysConfig> getAll(SysConfigPageDto dto) {
+        LambdaQueryWrapper<SysConfig> wrapper = getWrapper(dto);
         List<SysConfig> sysConfigs = sysConfigMapper.selectList(wrapper);
         return sysConfigs;
     }
@@ -105,27 +102,27 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void editInfo(SysConfigUpdDto vo) {
-        if (checkKeyExist(vo.getKeyVa(), vo.getId())) {
+    public void editInfo(SysConfigUpdDto dto) {
+        if (checkKeyExist(dto.getKeyVa(), dto.getId())) {
             throw new MyException("参数键值已存在");
         }
         LambdaUpdateWrapper<SysConfig> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysConfig::getId, vo.getId());
-        wrapper.set(SysConfig::getName, vo.getName());
-        wrapper.set(SysConfig::getKeyVa, vo.getKeyVa());
-        wrapper.set(SysConfig::getValue, vo.getValue());
-        wrapper.set(SysConfig::getType, vo.getType());
-        wrapper.set(SysConfig::getStatus, vo.getStatus());
-        wrapper.set(SysConfig::getRemark, vo.getRemark());
+        wrapper.eq(SysConfig::getId, dto.getId());
+        wrapper.set(SysConfig::getName, dto.getName());
+        wrapper.set(SysConfig::getKeyVa, dto.getKeyVa());
+        wrapper.set(SysConfig::getValue, dto.getValue());
+        wrapper.set(SysConfig::getType, dto.getType());
+        wrapper.set(SysConfig::getStatus, dto.getStatus());
+        wrapper.set(SysConfig::getRemark, dto.getRemark());
         int rows = sysConfigMapper.update(new SysConfig(), wrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
         //刷新redis缓存
-        SysConfig info = getInfo(vo.getId());
+        SysConfig info = getInfo(dto.getId());
         CacheUtil.setValue(RedisConstant.CONFIG + info.getKeyVa(), info);
         //刷新邮箱配置队列
         updateSysEmailInfo(info.getKeyVa(), 2);
@@ -134,20 +131,20 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysConfigAddDto vo) {
-        if (checkKeyExist(vo.getKeyVa(), null)) {
-            throw new MyException("参数键值" + vo.getKeyVa() + "已存在");
+    public void addInfo(SysConfigAddDto dto) {
+        if (checkKeyExist(dto.getKeyVa(), null)) {
+            throw new MyException("参数键值" + dto.getKeyVa() + "已存在");
         }
         SysConfig sysConfig = new SysConfig();
-        sysConfig.setName(vo.getName());
-        sysConfig.setKeyVa(vo.getKeyVa());
-        sysConfig.setValue(vo.getValue());
-        sysConfig.setType(vo.getType());
-        sysConfig.setStatus(vo.getStatus());
-        sysConfig.setRemark(vo.getRemark());
+        sysConfig.setName(dto.getName());
+        sysConfig.setKeyVa(dto.getKeyVa());
+        sysConfig.setValue(dto.getValue());
+        sysConfig.setType(dto.getType());
+        sysConfig.setStatus(dto.getStatus());
+        sysConfig.setRemark(dto.getRemark());
         int insert = sysConfigMapper.insert(sysConfig);
         if (insert < 1) {
             throw new MyException("新增失败");

@@ -5,7 +5,10 @@ import cn.daenx.modules.system.domain.po.SysDictDetail;
 import cn.daenx.modules.system.service.SysConfigService;
 import cn.daenx.modules.system.service.SysDictDetailService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -24,7 +27,7 @@ public class CommonController {
      * @param dictCode 字典编码
      */
     @GetMapping(value = "/dict/{dictCode}")
-    public Result dictType(@PathVariable String dictCode) {
+    public Result<List<SysDictDetail>> dictType(@PathVariable String dictCode) {
         List<SysDictDetail> data = sysDictDetailService.getDictDetailByCodeFromRedis(dictCode);
         return Result.ok(data);
     }
@@ -38,7 +41,7 @@ public class CommonController {
      * @param key 参数键名
      */
     @GetMapping(value = "/config/{key}")
-    public Result getConfigByKey(@PathVariable String key) {
+    public Result<String> getConfigByKey(@PathVariable String key) {
         String value = sysConfigService.getConfigByKey(key);
         return Result.ok(value);
     }

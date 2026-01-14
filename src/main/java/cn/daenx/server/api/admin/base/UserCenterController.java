@@ -1,10 +1,10 @@
 package cn.daenx.server.api.admin.base;
 
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.domain.vo.RouterVo;
 import cn.daenx.modules.system.domain.dto.sysUser.SysUserUpdBindDto;
 import cn.daenx.modules.system.domain.dto.sysUser.SysUserUpdInfoDto;
 import cn.daenx.modules.system.domain.dto.sysUser.SysUserUpdPwdDto;
-import cn.daenx.framework.common.domain.vo.Result;
-import cn.daenx.framework.common.domain.vo.RouterVo;
 import cn.daenx.modules.system.service.LoginService;
 import cn.daenx.modules.system.service.SysUserService;
 import jakarta.annotation.Resource;
@@ -30,7 +30,7 @@ public class UserCenterController {
      * @return
      */
     @GetMapping("/getInfo")
-    public Result getInfo() {
+    public Result<Map<String, Object>> getInfo() {
         Map<String, Object> map = loginService.getInfo();
         return Result.ok(map);
     }
@@ -41,7 +41,7 @@ public class UserCenterController {
      * @return 路由信息
      */
     @GetMapping("/getRouters")
-    public Result getRouters() {
+    public Result<List<RouterVo>> getRouters() {
         List<RouterVo> routers = loginService.getRouters();
         return Result.ok(routers);
     }
@@ -52,7 +52,7 @@ public class UserCenterController {
      * @return
      */
     @GetMapping("/getProfile")
-    public Result getProfile() {
+    public Result<Map<String, Object>> getProfile() {
         Map<String, Object> map = sysUserService.profile();
         return Result.ok(map);
     }
@@ -63,8 +63,8 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/editProfile")
-    public Result edit(@Validated @RequestBody SysUserUpdInfoDto vo) {
-        sysUserService.updInfo(vo);
+    public Result<Void> edit(@Validated @RequestBody SysUserUpdInfoDto dto) {
+        sysUserService.updInfo(dto);
         return Result.ok();
     }
 
@@ -74,8 +74,8 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/editPwd")
-    public Result editPwd(@Validated @RequestBody SysUserUpdPwdDto vo) {
-        sysUserService.updatePwd(vo);
+    public Result<Void> editPwd(@Validated @RequestBody SysUserUpdPwdDto dto) {
+        sysUserService.updatePwd(dto);
         return Result.ok("修改成功，请重新登录", null);
     }
 
@@ -85,7 +85,7 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/editAvatar")
-    public Result editAvatar(@RequestPart("avatar") MultipartFile file) {
+    public Result<Map<String, Object>> editAvatar(@RequestPart("avatar") MultipartFile file) {
         String imgUrl = sysUserService.avatar(file);
         Map<String, Object> map = new HashMap<>();
         map.put("imgUrl", imgUrl);
@@ -99,9 +99,10 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/getEmailValidCode")
-    public Result getEmailValidCode(@Validated @RequestBody SysUserUpdBindDto vo) {
-        loginService.validatedCaptcha(vo);
-        return sysUserService.getEmailValidCode(vo);
+    public Result<Map<String, Object>> getEmailValidCode(@Validated @RequestBody SysUserUpdBindDto dto) {
+        loginService.validatedCaptcha(dto);
+        Map<String, Object> map = sysUserService.getEmailValidCode(dto);
+        return Result.ok(map);
     }
 
     /**
@@ -110,9 +111,10 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/getPhoneValidCode")
-    public Result getPhoneValidCode(@Validated @RequestBody SysUserUpdBindDto vo) {
-        loginService.validatedCaptcha(vo);
-        return sysUserService.getPhoneValidCode(vo);
+    public Result<Map<String, Object>> getPhoneValidCode(@Validated @RequestBody SysUserUpdBindDto dto) {
+        loginService.validatedCaptcha(dto);
+        Map<String, Object> map = sysUserService.getPhoneValidCode(dto);
+        return Result.ok(map);
     }
 
 
@@ -122,8 +124,9 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/updateBindEmail")
-    public Result updateBindEmail(@Validated @RequestBody SysUserUpdBindDto vo) {
-        return sysUserService.updateBindEmail(vo);
+    public Result<Map<String, Object>> updateBindEmail(@Validated @RequestBody SysUserUpdBindDto dto) {
+        Map<String, Object> map = sysUserService.updateBindEmail(dto);
+        return Result.ok(map);
     }
 
     /**
@@ -132,7 +135,8 @@ public class UserCenterController {
      * @return
      */
     @PostMapping("/updateBindPhone")
-    public Result updateBindPhone(@Validated @RequestBody SysUserUpdBindDto vo) {
-        return sysUserService.updateBindPhone(vo);
+    public Result<Map<String, Object>> updateBindPhone(@Validated @RequestBody SysUserUpdBindDto dto) {
+        Map<String, Object> map = sysUserService.updateBindPhone(dto);
+        return Result.ok(map);
     }
 }

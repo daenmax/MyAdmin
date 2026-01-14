@@ -1,10 +1,9 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
-import cn.daenx.modules.system.domain.dto.sysUser.*;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.dto.sysUser.*;
 import cn.daenx.modules.system.domain.po.SysUser;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
@@ -117,32 +116,32 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 修改个人资料
      *
-     * @param vo
+     * @param dto
      */
-    void updInfo(SysUserUpdInfoDto vo);
+    void updInfo(SysUserUpdInfoDto dto);
 
     /**
      * 修改个人密码
      *
-     * @param vo
+     * @param dto
      */
-    void updatePwd(SysUserUpdPwdDto vo);
+    void updatePwd(SysUserUpdPwdDto dto);
 
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysUserPageVo> getPage(SysUserPageDto vo);
+    IPage<SysUserPageVo> getPage(SysUserPageDto dto);
 
     /**
      * 导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysUserPageVo> exportData(SysUserPageDto vo);
+    List<SysUserPageVo> exportData(SysUserPageDto dto);
 
     /**
      * 查询
@@ -155,30 +154,30 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysUserUpdDto vo);
+    void editInfo(SysUserUpdDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysUserAddDto vo);
+    void addInfo(SysUserAddDto dto);
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeStatus(ComStatusUpdDto vo);
+    void changeStatus(ComStatusUpdDto dto);
 
     /**
      * 重置用户密码
      *
-     * @param vo
+     * @param dto
      */
-    void resetPwd(SysUserResetPwdDto vo);
+    void resetPwd(SysUserResetPwdDto dto);
 
     /**
      * 删除
@@ -198,45 +197,45 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 保存用户授权角色
      *
-     * @param vo
+     * @param dto
      */
-    void saveAuthRole(SysUserUpdAuthRoleDto vo);
+    void saveAuthRole(SysUserUpdAuthRoleDto dto);
 
     /**
      * 查询已分配该角色的用户列表
      *
-     * @param vo
+     * @param dto
      * @param roleId
      * @return
      */
-    IPage<SysUserPageVo> getUserListByRoleId(SysUserPageDto vo, String roleId);
+    IPage<SysUserPageVo> getUserListByRoleId(SysUserPageDto dto, String roleId);
 
     /**
      * 查询未分配该角色的用户列表
      *
-     * @param vo
+     * @param dto
      * @param roleId
      * @return
      */
-    IPage<SysUserPageVo> getUserListByUnRoleId(SysUserPageDto vo, String roleId);
+    IPage<SysUserPageVo> getUserListByUnRoleId(SysUserPageDto dto, String roleId);
 
     /**
      * 查询已分配该岗位的用户列表
      *
-     * @param vo
+     * @param dto
      * @param positionId
      * @return
      */
-    IPage<SysUserPageVo> getUserListByPositionId(SysUserPageDto vo, String positionId);
+    IPage<SysUserPageVo> getUserListByPositionId(SysUserPageDto dto, String positionId);
 
     /**
      * 查询未分配该岗位的用户列表
      *
-     * @param vo
+     * @param dto
      * @param positionId
      * @return
      */
-    IPage<SysUserPageVo> getUserListByUnPositionId(SysUserPageDto vo, String positionId);
+    IPage<SysUserPageVo> getUserListByUnPositionId(SysUserPageDto dto, String positionId);
 
     /**
      * 获取用户列表
@@ -263,32 +262,32 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 获取邮箱验证码
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    Result getEmailValidCode(SysUserUpdBindDto vo);
+    Map<String, Object>  getEmailValidCode(SysUserUpdBindDto dto);
 
     /**
      * 获取手机验证码
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    Result getPhoneValidCode(SysUserUpdBindDto vo);
+    Map<String, Object>  getPhoneValidCode(SysUserUpdBindDto dto);
 
     /**
      * 修改邮箱绑定
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    Result updateBindEmail(SysUserUpdBindDto vo);
+    Map<String, Object>  updateBindEmail(SysUserUpdBindDto dto);
 
     /**
      * 修改手机绑定
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    Result updateBindPhone(SysUserUpdBindDto vo);
+    Map<String, Object>  updateBindPhone(SysUserUpdBindDto dto);
 }

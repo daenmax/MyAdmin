@@ -1,22 +1,22 @@
 package cn.daenx.modules.system.service.impl;
 
-import cn.daenx.modules.system.domain.vo.sysNotice.SysNoticePageVo;
 import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticeAddDto;
 import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticePageDto;
 import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticeUpdDto;
+import cn.daenx.modules.system.domain.po.SysNotice;
+import cn.daenx.modules.system.domain.vo.sysNotice.SysNoticePageVo;
+import cn.daenx.modules.system.mapper.SysNoticeMapper;
+import cn.daenx.modules.system.service.SysNoticeService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.modules.system.domain.po.SysNotice;
-import cn.daenx.modules.system.mapper.SysNoticeMapper;
-import cn.daenx.modules.system.service.SysNoticeService;
 
 import java.util.List;
 
@@ -25,15 +25,15 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     @Resource
     private SysNoticeMapper sysNoticeMapper;
 
-    private QueryWrapper<SysNotice> getWrapper(SysNoticePageDto vo) {
+    private QueryWrapper<SysNotice> getWrapper(SysNoticePageDto dto) {
         QueryWrapper<SysNotice> wrapper = new QueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getTitle()), "sn.title", vo.getTitle());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "sn.type", vo.getType());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sn.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "sn.remark", vo.getRemark());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getCreateName()), "su.username", vo.getCreateName());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getTitle()), "sn.title", dto.getTitle());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getType()), "sn.type", dto.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), "sn.status", dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), "sn.remark", dto.getRemark());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getCreateName()), "su.username", dto.getCreateName());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "sn.create_time", startTime, endTime);
         wrapper.eq("sn.is_delete", SystemConstant.IS_DELETE_NO);
         return wrapper;
@@ -42,30 +42,30 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @DataScope(alias = "sys_notice")
     @Override
-    public IPage<SysNoticePageVo> getPage(SysNoticePageDto vo) {
-        QueryWrapper<SysNotice> wrapper = getWrapper(vo);
-        IPage<SysNoticePageVo> iPage = sysNoticeMapper.getPageWrapper(vo.getPage(true), wrapper);
+    public IPage<SysNoticePageVo> getPage(SysNoticePageDto dto) {
+        QueryWrapper<SysNotice> wrapper = getWrapper(dto);
+        IPage<SysNoticePageVo> iPage = sysNoticeMapper.getPageWrapper(dto.getPage(true), wrapper);
         return iPage;
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysNoticeAddDto vo) {
+    public void addInfo(SysNoticeAddDto dto) {
         SysNotice sysNotice = new SysNotice();
-        sysNotice.setTitle(vo.getTitle());
-        sysNotice.setContent(vo.getContent());
-        sysNotice.setType(vo.getType());
-        sysNotice.setStatus(vo.getStatus());
-        sysNotice.setRemark(vo.getRemark());
+        sysNotice.setTitle(dto.getTitle());
+        sysNotice.setContent(dto.getContent());
+        sysNotice.setType(dto.getType());
+        sysNotice.setStatus(dto.getStatus());
+        sysNotice.setRemark(dto.getRemark());
         int insert = sysNoticeMapper.insert(sysNotice);
         if (insert < 1) {
             throw new MyException("新增失败");
@@ -87,18 +87,18 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeMapper, SysNotice
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @DataScope(alias = "sys_notice")
     @Override
-    public void editInfo(SysNoticeUpdDto vo) {
+    public void editInfo(SysNoticeUpdDto dto) {
         LambdaUpdateWrapper<SysNotice> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysNotice::getId, vo.getId());
-        updateWrapper.set(SysNotice::getTitle, vo.getTitle());
-        updateWrapper.set(SysNotice::getContent, vo.getContent());
-        updateWrapper.set(SysNotice::getType, vo.getType());
-        updateWrapper.set(SysNotice::getStatus, vo.getStatus());
-        updateWrapper.set(SysNotice::getRemark, vo.getRemark());
+        updateWrapper.eq(SysNotice::getId, dto.getId());
+        updateWrapper.set(SysNotice::getTitle, dto.getTitle());
+        updateWrapper.set(SysNotice::getContent, dto.getContent());
+        updateWrapper.set(SysNotice::getType, dto.getType());
+        updateWrapper.set(SysNotice::getStatus, dto.getStatus());
+        updateWrapper.set(SysNotice::getRemark, dto.getRemark());
         int rows = sysNoticeMapper.update(new SysNotice(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");

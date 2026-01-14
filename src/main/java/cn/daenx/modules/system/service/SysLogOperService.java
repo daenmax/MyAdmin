@@ -1,7 +1,7 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.po.SysLogOper;
 import cn.daenx.modules.system.domain.dto.sysLog.SysLogOperPageDto;
+import cn.daenx.modules.system.domain.po.SysLogOper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -18,18 +18,18 @@ public interface SysLogOperService extends IService<SysLogOper> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysLogOper> getPage(SysLogOperPageDto vo);
+    IPage<SysLogOper> getPage(SysLogOperPageDto dto);
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysLogOper> getAll(SysLogOperPageDto vo);
+    List<SysLogOper> getAll(SysLogOperPageDto dto);
 
     /**
      * 删除

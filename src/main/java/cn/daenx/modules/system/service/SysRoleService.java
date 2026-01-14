@@ -1,9 +1,8 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.dto.sysRole.*;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.modules.system.domain.dto.sysRole.*;
 import cn.daenx.modules.system.domain.po.SysRole;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,18 +18,18 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysRole> getPage(SysRolePageDto vo);
+    IPage<SysRole> getPage(SysRolePageDto dto);
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysRole> getAll(SysRolePageDto vo);
+    List<SysRole> getAll(SysRolePageDto dto);
 
     /**
      * 查询
@@ -43,9 +42,9 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysRoleUpdDto vo);
+    void editInfo(SysRoleUpdDto dto);
 
     /**
      * 检查是否存在，已存在返回true
@@ -59,9 +58,9 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysRoleAddDto vo);
+    void addInfo(SysRoleAddDto dto);
 
     /**
      * 删除
@@ -73,30 +72,30 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 修改数据权限
      *
-     * @param vo
+     * @param dto
      */
-    void dataScope(SysRoleDataScopeUpdDto vo);
+    void dataScope(SysRoleDataScopeUpdDto dto);
 
     /**
      * 取消授权用户
      *
-     * @param vo
+     * @param dto
      */
-    void cancelAuthUser(SysRoleUpdAuthUserDto vo);
+    void cancelAuthUser(SysRoleUpdAuthUserDto dto);
 
     /**
      * 保存授权用户
      *
-     * @param vo
+     * @param dto
      */
-    void saveAuthUser(SysRoleUpdAuthUserDto vo);
+    void saveAuthUser(SysRoleUpdAuthUserDto dto);
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeStatus(ComStatusUpdDto vo);
+    void changeStatus(ComStatusUpdDto dto);
 
     /**
      * 判断是否有是超级管理员的角色

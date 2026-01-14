@@ -1,4 +1,4 @@
-package cn.daenx.framework.notify.sms.vo;
+package cn.daenx.framework.notify.sms.domain;
 
 import lombok.Builder;
 import lombok.Data;

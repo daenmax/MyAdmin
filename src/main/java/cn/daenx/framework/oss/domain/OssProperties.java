@@ -1,6 +1,5 @@
-package cn.daenx.framework.oss.vo;
+package cn.daenx.framework.oss.domain;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**

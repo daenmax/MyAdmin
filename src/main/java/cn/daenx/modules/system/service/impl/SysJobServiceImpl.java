@@ -1,29 +1,29 @@
 package cn.daenx.modules.system.service.impl;
 
 import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.domain.vo.system.config.SysSmsTemplateConfigVo;
 import cn.daenx.framework.common.domain.vo.system.other.SysJobVo;
-import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.notify.dingTalk.utils.DingTalkUtil;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
-import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.notify.feishu.utils.FeishuUtil;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
-import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.notify.wecom.utils.WecomUtil;
 import cn.daenx.framework.quartz.constant.QuartzConstant;
 import cn.daenx.framework.quartz.constant.ScheduleConstants;
 import cn.daenx.framework.quartz.exception.TaskException;
 import cn.daenx.framework.quartz.utils.CronUtils;
 import cn.daenx.framework.quartz.utils.ScheduleUtils;
-import cn.daenx.modules.system.mapper.SysJobMapper;
-import cn.daenx.modules.system.domain.po.SysJob;
-import cn.daenx.modules.system.service.SysConfigService;
-import cn.daenx.modules.system.service.SysJobService;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobAddDto;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobPageDto;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobUpdDto;
+import cn.daenx.modules.system.domain.po.SysJob;
+import cn.daenx.modules.system.mapper.SysJobMapper;
+import cn.daenx.modules.system.service.SysConfigService;
+import cn.daenx.modules.system.service.SysJobService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -89,18 +89,18 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
         sysJob.setNextValidTime(localDateTime);
     }
 
-    private LambdaQueryWrapper<SysJob> getWrapper(SysJobPageDto vo) {
+    private LambdaQueryWrapper<SysJob> getWrapper(SysJobPageDto dto) {
         LambdaQueryWrapper<SysJob> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getJobName()), SysJob::getJobName, vo.getJobName());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getJobGroup()), SysJob::getJobGroup, vo.getJobGroup());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getInvokeTarget()), SysJob::getInvokeTarget, vo.getInvokeTarget());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getCronExpression()), SysJob::getCronExpression, vo.getCronExpression());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysJob::getStatus, vo.getStatus());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getMisfirePolicy()), SysJob::getMisfirePolicy, vo.getMisfirePolicy());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getConcurrent()), SysJob::getConcurrent, vo.getConcurrent());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysJob::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getJobName()), SysJob::getJobName, dto.getJobName());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getJobGroup()), SysJob::getJobGroup, dto.getJobGroup());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getInvokeTarget()), SysJob::getInvokeTarget, dto.getInvokeTarget());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getCronExpression()), SysJob::getCronExpression, dto.getCronExpression());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysJob::getStatus, dto.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getMisfirePolicy()), SysJob::getMisfirePolicy, dto.getMisfirePolicy());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getConcurrent()), SysJob::getConcurrent, dto.getConcurrent());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), SysJob::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysJob::getCreateTime, startTime, endTime);
         return wrapper;
     }
@@ -108,14 +108,14 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @DataScope(alias = "sys_job")
     @Override
-    public IPage<SysJob> getPage(SysJobPageDto vo) {
-        LambdaQueryWrapper<SysJob> wrapper = getWrapper(vo);
-        Page<SysJob> sysJobPage = sysJobMapper.selectPage(vo.getPage(true), wrapper);
+    public IPage<SysJob> getPage(SysJobPageDto dto) {
+        LambdaQueryWrapper<SysJob> wrapper = getWrapper(dto);
+        Page<SysJob> sysJobPage = sysJobMapper.selectPage(dto.getPage(true), wrapper);
         for (SysJob record : sysJobPage.getRecords()) {
             setNextRunTime(record);
         }
@@ -139,39 +139,39 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysJobAddDto vo) {
-        if (!CronUtils.isValid(vo.getCronExpression())) {
+    public void addInfo(SysJobAddDto dto) {
+        if (!CronUtils.isValid(dto.getCronExpression())) {
             throw new MyException("新增任务失败，Cron表达式不正确");
         }
-        if (StringUtils.containsIgnoreCase(vo.getInvokeTarget(), QuartzConstant.LOOKUP_RMI)) {
+        if (StringUtils.containsIgnoreCase(dto.getInvokeTarget(), QuartzConstant.LOOKUP_RMI)) {
             throw new MyException("新增任务失败，目标字符串不允许'rmi'调用");
         }
-        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{QuartzConstant.LOOKUP_LDAP, QuartzConstant.LOOKUP_LDAPS})) {
+        if (StringUtils.containsAnyIgnoreCase(dto.getInvokeTarget(), new String[]{QuartzConstant.LOOKUP_LDAP, QuartzConstant.LOOKUP_LDAPS})) {
             throw new MyException("新增任务失败，目标字符串不允许'ldap(s)'调用");
         }
-        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{"http://", "https://"})) {
+        if (StringUtils.containsAnyIgnoreCase(dto.getInvokeTarget(), new String[]{"http://", "https://"})) {
             throw new MyException("新增任务失败，目标字符串不允许'http(s)'调用");
         }
-        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), QuartzConstant.JOB_ERROR_STR)) {
+        if (StringUtils.containsAnyIgnoreCase(dto.getInvokeTarget(), QuartzConstant.JOB_ERROR_STR)) {
             throw new MyException("新增任务失败，目标字符串存在违规");
         }
-        if (!ScheduleUtils.whiteList(vo.getInvokeTarget())) {
+        if (!ScheduleUtils.whiteList(dto.getInvokeTarget())) {
             throw new MyException("新增任务失败，目标字符串不在白名单内");
         }
         SysJob sysJob = new SysJob();
-        sysJob.setJobName(vo.getJobName());
-        sysJob.setJobGroup(vo.getJobGroup());
-        sysJob.setInvokeTarget(vo.getInvokeTarget());
-        sysJob.setCronExpression(vo.getCronExpression());
-        sysJob.setStatus(vo.getStatus());
-        sysJob.setMisfirePolicy(vo.getMisfirePolicy());
-        sysJob.setConcurrent(vo.getConcurrent());
-        sysJob.setRemark(vo.getRemark());
-        sysJob.setNotifyChannel(vo.getNotifyChannel());
-        sysJob.setNotifyObjs(vo.getNotifyObjs());
+        sysJob.setJobName(dto.getJobName());
+        sysJob.setJobGroup(dto.getJobGroup());
+        sysJob.setInvokeTarget(dto.getInvokeTarget());
+        sysJob.setCronExpression(dto.getCronExpression());
+        sysJob.setStatus(dto.getStatus());
+        sysJob.setMisfirePolicy(dto.getMisfirePolicy());
+        sysJob.setConcurrent(dto.getConcurrent());
+        sysJob.setRemark(dto.getRemark());
+        sysJob.setNotifyChannel(dto.getNotifyChannel());
+        sysJob.setNotifyObjs(dto.getNotifyObjs());
         int insert = sysJobMapper.insert(sysJob);
         if (insert < 1) {
             throw new MyException("新增失败");
@@ -185,69 +185,69 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @DataScope(alias = "sys_job")
     @Override
-    public void editInfo(SysJobUpdDto vo) {
-        if (!CronUtils.isValid(vo.getCronExpression())) {
+    public void editInfo(SysJobUpdDto dto) {
+        if (!CronUtils.isValid(dto.getCronExpression())) {
             throw new MyException("修改任务失败，Cron表达式不正确");
         }
-        if (StringUtils.containsIgnoreCase(vo.getInvokeTarget(), QuartzConstant.LOOKUP_RMI)) {
+        if (StringUtils.containsIgnoreCase(dto.getInvokeTarget(), QuartzConstant.LOOKUP_RMI)) {
             throw new MyException("修改任务失败，目标字符串不允许'rmi'调用");
         }
-        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{QuartzConstant.LOOKUP_LDAP, QuartzConstant.LOOKUP_LDAPS})) {
+        if (StringUtils.containsAnyIgnoreCase(dto.getInvokeTarget(), new String[]{QuartzConstant.LOOKUP_LDAP, QuartzConstant.LOOKUP_LDAPS})) {
             throw new MyException("修改任务失败，目标字符串不允许'ldap(s)'调用");
         }
-        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), new String[]{"http://", "https://"})) {
+        if (StringUtils.containsAnyIgnoreCase(dto.getInvokeTarget(), new String[]{"http://", "https://"})) {
             throw new MyException("修改任务失败，目标字符串不允许'http(s)'调用");
         }
-        if (StringUtils.containsAnyIgnoreCase(vo.getInvokeTarget(), QuartzConstant.JOB_ERROR_STR)) {
+        if (StringUtils.containsAnyIgnoreCase(dto.getInvokeTarget(), QuartzConstant.JOB_ERROR_STR)) {
             throw new MyException("修改任务失败，目标字符串存在违规");
         }
-        if (!ScheduleUtils.whiteList(vo.getInvokeTarget())) {
+        if (!ScheduleUtils.whiteList(dto.getInvokeTarget())) {
             throw new MyException("修改任务失败，目标字符串不在白名单内");
         }
 
         LambdaUpdateWrapper<SysJob> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysJob::getId, vo.getId());
-        updateWrapper.set(SysJob::getJobName, vo.getJobName());
-        updateWrapper.set(SysJob::getJobGroup, vo.getJobGroup());
-        updateWrapper.set(SysJob::getInvokeTarget, vo.getInvokeTarget());
-        updateWrapper.set(SysJob::getCronExpression, vo.getCronExpression());
-        updateWrapper.set(SysJob::getStatus, vo.getStatus());
-        updateWrapper.set(SysJob::getMisfirePolicy, vo.getMisfirePolicy());
-        updateWrapper.set(SysJob::getConcurrent, vo.getConcurrent());
-        updateWrapper.set(SysJob::getRemark, vo.getRemark());
-        updateWrapper.set(SysJob::getNotifyChannel, vo.getNotifyChannel());
-        updateWrapper.set(SysJob::getNotifyObjs, vo.getNotifyObjs());
+        updateWrapper.eq(SysJob::getId, dto.getId());
+        updateWrapper.set(SysJob::getJobName, dto.getJobName());
+        updateWrapper.set(SysJob::getJobGroup, dto.getJobGroup());
+        updateWrapper.set(SysJob::getInvokeTarget, dto.getInvokeTarget());
+        updateWrapper.set(SysJob::getCronExpression, dto.getCronExpression());
+        updateWrapper.set(SysJob::getStatus, dto.getStatus());
+        updateWrapper.set(SysJob::getMisfirePolicy, dto.getMisfirePolicy());
+        updateWrapper.set(SysJob::getConcurrent, dto.getConcurrent());
+        updateWrapper.set(SysJob::getRemark, dto.getRemark());
+        updateWrapper.set(SysJob::getNotifyChannel, dto.getNotifyChannel());
+        updateWrapper.set(SysJob::getNotifyObjs, dto.getNotifyObjs());
         int rows = sysJobMapper.update(new SysJob(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        SysJob job = getInfo(vo.getId());
+        SysJob job = getInfo(dto.getId());
         updateSchedulerJob(job);
     }
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
     @DataScope(alias = "sys_job")
     @Override
-    public void changeStatus(ComStatusUpdDto vo) {
+    public void changeStatus(ComStatusUpdDto dto) {
         LambdaUpdateWrapper<SysJob> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysJob::getId, vo.getId());
-        updateWrapper.set(SysJob::getStatus, vo.getStatus());
+        updateWrapper.eq(SysJob::getId, dto.getId());
+        updateWrapper.set(SysJob::getStatus, dto.getStatus());
         int rows = sysJobMapper.update(new SysJob(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        SysJob job = getInfo(vo.getId());
-        if (ScheduleConstants.Status.NORMAL.getValue().equals(vo.getStatus())) {
+        SysJob job = getInfo(dto.getId());
+        if (ScheduleConstants.Status.NORMAL.getValue().equals(dto.getStatus())) {
             resumeSchedulerJob(job);
-        } else if (ScheduleConstants.Status.PAUSE.getValue().equals(vo.getStatus())) {
+        } else if (ScheduleConstants.Status.PAUSE.getValue().equals(dto.getStatus())) {
             pauseSchedulerJob(job);
         }
     }

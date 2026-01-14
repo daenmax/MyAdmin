@@ -5,6 +5,7 @@ import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.modules.system.domain.dto.sysLog.SysLogLoginPageDto;
+import cn.daenx.modules.system.domain.po.SysLogLogin;
 import cn.daenx.modules.system.mapper.SysLogLoginMapper;
 import cn.daenx.modules.system.service.SysLogLoginService;
 import cn.hutool.core.util.ObjectUtil;
@@ -16,7 +17,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import cn.daenx.modules.system.domain.po.SysLogLogin;
 
 import java.util.List;
 
@@ -54,17 +54,17 @@ public class SysLogLoginServiceImpl extends ServiceImpl<SysLogLoginMapper, SysLo
         sysLogLoginMapper.insert(sysLogLogin);
     }
 
-    private LambdaQueryWrapper<SysLogLogin> getWrapper(SysLogLoginPageDto vo) {
+    private LambdaQueryWrapper<SysLogLogin> getWrapper(SysLogLoginPageDto dto) {
         LambdaQueryWrapper<SysLogLogin> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getUsername()), SysLogLogin::getUsername, vo.getUsername());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getIp()), SysLogLogin::getIp, vo.getIp());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getLocation()), SysLogLogin::getLocation, vo.getLocation());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getBrowser()), SysLogLogin::getBrowser, vo.getBrowser());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getOs()), SysLogLogin::getOs, vo.getOs());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysLogLogin::getStatus, vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysLogLogin::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getUsername()), SysLogLogin::getUsername, dto.getUsername());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getIp()), SysLogLogin::getIp, dto.getIp());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getLocation()), SysLogLogin::getLocation, dto.getLocation());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getBrowser()), SysLogLogin::getBrowser, dto.getBrowser());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getOs()), SysLogLogin::getOs, dto.getOs());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysLogLogin::getStatus, dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), SysLogLogin::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysLogLogin::getCreateTime, startTime, endTime);
         return wrapper;
     }
@@ -72,27 +72,27 @@ public class SysLogLoginServiceImpl extends ServiceImpl<SysLogLoginMapper, SysLo
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @DataScope(alias = "sys_log_login")
     @Override
-    public IPage<SysLogLogin> getPage(SysLogLoginPageDto vo) {
-        LambdaQueryWrapper<SysLogLogin> wrapper = getWrapper(vo);
-        Page<SysLogLogin> sysLogLoginPage = sysLogLoginMapper.selectPage(vo.getPage(true), wrapper);
+    public IPage<SysLogLogin> getPage(SysLogLoginPageDto dto) {
+        LambdaQueryWrapper<SysLogLogin> wrapper = getWrapper(dto);
+        Page<SysLogLogin> sysLogLoginPage = sysLogLoginMapper.selectPage(dto.getPage(true), wrapper);
         return sysLogLoginPage;
     }
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @DataScope(alias = "sys_log_login")
     @Override
-    public List<SysLogLogin> getAll(SysLogLoginPageDto vo) {
-        LambdaQueryWrapper<SysLogLogin> wrapper = getWrapper(vo);
+    public List<SysLogLogin> getAll(SysLogLoginPageDto dto) {
+        LambdaQueryWrapper<SysLogLogin> wrapper = getWrapper(dto);
         List<SysLogLogin> sysLogLoginList = sysLogLoginMapper.selectList(wrapper);
         return sysLogLoginList;
     }

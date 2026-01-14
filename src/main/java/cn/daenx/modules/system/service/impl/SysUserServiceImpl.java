@@ -1,32 +1,29 @@
 package cn.daenx.modules.system.service.impl;
 
-import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
-import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionPageDto;
-import cn.daenx.modules.system.domain.dto.sysRole.SysRolePageDto;
-import cn.daenx.modules.system.domain.dto.sysUser.*;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.CheckSendVo;
 import cn.daenx.framework.common.domain.vo.system.config.SysSendLimitConfigVo;
 import cn.daenx.framework.common.domain.vo.system.config.SysSmsTemplateConfigVo;
 import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
-import cn.daenx.framework.notify.sms.vo.SmsSendResult;
-import cn.daenx.framework.oss.vo.UploadResult;
-import cn.daenx.framework.notify.email.utils.EmailUtil;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.cache.utils.CacheUtil;
+import cn.daenx.framework.notify.email.utils.EmailUtil;
+import cn.daenx.framework.notify.sms.domain.SmsSendResult;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
-import cn.daenx.framework.common.domain.vo.CheckSendVo;
-import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.oss.domain.UploadResult;
 import cn.daenx.framework.satoken.utils.LoginUtil;
+import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionPageDto;
+import cn.daenx.modules.system.domain.dto.sysRole.SysRolePageDto;
+import cn.daenx.modules.system.domain.dto.sysUser.*;
 import cn.daenx.modules.system.domain.po.*;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
 import cn.daenx.modules.system.mapper.SysUserDetailMapper;
 import cn.daenx.modules.system.mapper.SysUserMapper;
-
 import cn.daenx.modules.system.service.*;
-
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -312,19 +309,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 修改个人资料
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void updInfo(SysUserUpdInfoDto vo) {
+    public void updInfo(SysUserUpdInfoDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         LambdaUpdateWrapper<SysUserDetail> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUserDetail::getUserId, loginUser.getId());
-        wrapper.set(SysUserDetail::getNickName, vo.getNickName());
-        wrapper.set(SysUserDetail::getRealName, vo.getRealName());
-        wrapper.set(SysUserDetail::getAge, vo.getAge());
-        wrapper.set(SysUserDetail::getSex, vo.getSex());
-        wrapper.set(SysUserDetail::getProfile, vo.getProfile());
-        wrapper.set(SysUserDetail::getUserSign, vo.getUserSign());
+        wrapper.set(SysUserDetail::getNickName, dto.getNickName());
+        wrapper.set(SysUserDetail::getRealName, dto.getRealName());
+        wrapper.set(SysUserDetail::getAge, dto.getAge());
+        wrapper.set(SysUserDetail::getSex, dto.getSex());
+        wrapper.set(SysUserDetail::getProfile, dto.getProfile());
+        wrapper.set(SysUserDetail::getUserSign, dto.getUserSign());
         int update = sysUserDetailMapper.update(new SysUserDetail(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
@@ -334,20 +331,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 修改个人密码
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void updatePwd(SysUserUpdPwdDto vo) {
-        if (vo.getNewPassword().equals(vo.getOldPassword())) {
+    public void updatePwd(SysUserUpdPwdDto dto) {
+        if (dto.getNewPassword().equals(dto.getOldPassword())) {
             throw new MyException("新密码不能与旧密码一样");
         }
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         SysUser sysUser = getUserByUserId(loginUser.getId());
-        String sha256 = SaSecureUtil.sha256(vo.getOldPassword());
+        String sha256 = SaSecureUtil.sha256(dto.getOldPassword());
         if (!sha256.equals(sysUser.getPassword())) {
             throw new MyException("旧密码输入错误");
         }
-        String newPwd = SaSecureUtil.sha256(vo.getNewPassword());
+        String newPwd = SaSecureUtil.sha256(dto.getNewPassword());
         LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUser::getId, sysUser.getId());
         wrapper.set(SysUser::getPassword, newPwd);
@@ -362,15 +359,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysUserPageVo> getPage(SysUserPageDto vo) {
-        QueryWrapper<SysUser> wrapper = getWrapper(vo);
-        vo.setOrderByColumn("su.create_time");
-        vo.setIsAsc("desc");
-        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(false), wrapper);
+    public IPage<SysUserPageVo> getPage(SysUserPageDto dto) {
+        QueryWrapper<SysUser> wrapper = getWrapper(dto);
+        dto.setOrderByColumn("su.create_time");
+        dto.setIsAsc("desc");
+        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(dto.getPage(false), wrapper);
         for (SysUserPageVo record : sysUserPage.getRecords()) {
             record.setAdmin(CommonConstant.SUPER_ADMIN.equals(record.getId()));
         }
@@ -380,12 +377,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysUserPageVo> exportData(SysUserPageDto vo) {
-        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+    public List<SysUserPageVo> exportData(SysUserPageDto dto) {
+        QueryWrapper<SysUser> wrapper = getWrapper(dto);
         List<SysUserPageVo> list = sysUserMapper.getAll(wrapper);
         for (SysUserPageVo record : list) {
             record.setAdmin(CommonConstant.SUPER_ADMIN.equals(record.getId()));
@@ -393,27 +390,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return list;
     }
 
-    private QueryWrapper<SysUser> getWrapper(SysUserPageDto vo) {
+    private QueryWrapper<SysUser> getWrapper(SysUserPageDto dto) {
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
-        if (ObjectUtil.isNotEmpty(vo.getDeptId())) {
-            List<SysDept> listByParentId = sysDeptService.getListByParentId(vo.getDeptId(), true);
+        if (ObjectUtil.isNotEmpty(dto.getDeptId())) {
+            List<SysDept> listByParentId = sysDeptService.getListByParentId(dto.getDeptId(), true);
             List<String> ids = MyUtil.joinToList(listByParentId, SysDept::getId);
             wrapper.inSql("su.id", "select sys_user_dept.user_id from sys_user_dept where sys_user_dept.dept_id in('" + MyUtil.join(ids, String::trim, "','") + "')");
         }
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getUsername()), "su.username", vo.getUsername());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "su.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getPhone()), "su.phone", vo.getPhone());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getEmail()), "su.email", vo.getEmail());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "su.remark", vo.getRemark());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getUserType()), "su.user_type", vo.getUserType());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getNickName()), "sud.nick_name", vo.getNickName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRealName()), "sud.real_name", vo.getRealName());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getAge()), "sud.age", vo.getAge());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getSex()), "sud.sex", vo.getSex());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getProfile()), "sud.profile", vo.getProfile());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getUserSign()), "sud.user_sign", vo.getUserSign());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getUsername()), "su.username", dto.getUsername());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), "su.status", dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getPhone()), "su.phone", dto.getPhone());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getEmail()), "su.email", dto.getEmail());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), "su.remark", dto.getRemark());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getUserType()), "su.user_type", dto.getUserType());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getNickName()), "sud.nick_name", dto.getNickName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRealName()), "sud.real_name", dto.getRealName());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getAge()), "sud.age", dto.getAge());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getSex()), "sud.sex", dto.getSex());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getProfile()), "sud.profile", dto.getProfile());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getUserSign()), "sud.user_sign", dto.getUserSign());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "su.create_time", startTime, endTime);
         wrapper.eq("su.is_delete", SystemConstant.IS_DELETE_NO);
         return wrapper;
@@ -462,55 +459,55 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void editInfo(SysUserUpdDto vo) {
+    public void editInfo(SysUserUpdDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        if (loginUser.getId().equals(vo.getId())) {
+        if (loginUser.getId().equals(dto.getId())) {
             throw new MyException("禁止操作自己");
         }
-        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, dto.getId())) {
             throw new MyException("禁止操作超级管理员");
         }
-        if (sysRoleService.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getRoleIds())) {
+        if (sysRoleService.isHasAdmin(SystemConstant.ROLE_ADMIN, dto.getRoleIds())) {
             throw new MyException("禁止修改为超级管理员");
         }
-        SysUserPageVo sysUserByPermissions = getSysUserByPermissions(vo.getId());
+        SysUserPageVo sysUserByPermissions = getSysUserByPermissions(dto.getId());
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysUser::getId, vo.getId());
-        updateWrapper.set(SysUser::getStatus, vo.getStatus());
-        updateWrapper.set(SysUser::getPhone, vo.getPhone());
-        updateWrapper.set(SysUser::getEmail, vo.getEmail());
-        updateWrapper.set(SysUser::getOpenId, vo.getOpenId());
-        updateWrapper.set(SysUser::getApiKey, vo.getApiKey());
-        updateWrapper.set(SysUser::getBanToTime, vo.getBanToTime());
-        updateWrapper.set(SysUser::getExpireToTime, vo.getExpireToTime());
-        updateWrapper.set(SysUser::getUserType, vo.getUserType());
-        updateWrapper.set(SysUser::getRemark, vo.getRemark());
+        updateWrapper.eq(SysUser::getId, dto.getId());
+        updateWrapper.set(SysUser::getStatus, dto.getStatus());
+        updateWrapper.set(SysUser::getPhone, dto.getPhone());
+        updateWrapper.set(SysUser::getEmail, dto.getEmail());
+        updateWrapper.set(SysUser::getOpenId, dto.getOpenId());
+        updateWrapper.set(SysUser::getApiKey, dto.getApiKey());
+        updateWrapper.set(SysUser::getBanToTime, dto.getBanToTime());
+        updateWrapper.set(SysUser::getExpireToTime, dto.getExpireToTime());
+        updateWrapper.set(SysUser::getUserType, dto.getUserType());
+        updateWrapper.set(SysUser::getRemark, dto.getRemark());
         int rows = sysUserMapper.update(new SysUser(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
         //修改detail
         LambdaUpdateWrapper<SysUserDetail> updateWrapperDetail = new LambdaUpdateWrapper<>();
-        updateWrapperDetail.eq(SysUserDetail::getUserId, vo.getId());
-        updateWrapperDetail.set(SysUserDetail::getNickName, vo.getNickName());
-        updateWrapperDetail.set(SysUserDetail::getRealName, vo.getRealName());
-        updateWrapperDetail.set(SysUserDetail::getAge, vo.getAge());
-        updateWrapperDetail.set(SysUserDetail::getSex, vo.getSex());
-        updateWrapperDetail.set(SysUserDetail::getProfile, vo.getProfile());
-        updateWrapperDetail.set(SysUserDetail::getUserSign, vo.getUserSign());
-        updateWrapperDetail.set(SysUserDetail::getMoney, vo.getMoney());
+        updateWrapperDetail.eq(SysUserDetail::getUserId, dto.getId());
+        updateWrapperDetail.set(SysUserDetail::getNickName, dto.getNickName());
+        updateWrapperDetail.set(SysUserDetail::getRealName, dto.getRealName());
+        updateWrapperDetail.set(SysUserDetail::getAge, dto.getAge());
+        updateWrapperDetail.set(SysUserDetail::getSex, dto.getSex());
+        updateWrapperDetail.set(SysUserDetail::getProfile, dto.getProfile());
+        updateWrapperDetail.set(SysUserDetail::getUserSign, dto.getUserSign());
+        updateWrapperDetail.set(SysUserDetail::getMoney, dto.getMoney());
         int rowsDetail = sysUserDetailMapper.update(new SysUserDetail(), updateWrapperDetail);
         if (rowsDetail < 1) {
             throw new MyException("修改失败");
         }
         //修改关联数据
-        sysRoleUserService.handleUserRole(vo.getId(), vo.getRoleIds());
-        sysPositionUserService.handleUserPosition(vo.getId(), vo.getPositionIds());
-        sysUserDeptService.handleUserDept(vo.getId(), vo.getDeptIds());
+        sysRoleUserService.handleUserRole(dto.getId(), dto.getRoleIds());
+        sysPositionUserService.handleUserPosition(dto.getId(), dto.getPositionIds());
+        sysUserDeptService.handleUserDept(dto.getId(), dto.getDeptIds());
         //注销该账户的登录
         LoginUtil.logoutByUsername(sysUserByPermissions.getUsername());
     }
@@ -518,95 +515,95 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addInfo(SysUserAddDto vo) {
-        if (vo.getUsername().contains("@")) {
+    public void addInfo(SysUserAddDto dto) {
+        if (dto.getUsername().contains("@")) {
             throw new MyException("账号不能包含@符号");
         }
-        if (StringUtils.isNotBlank(vo.getPhone())) {
-            if (checkUserByPhone(vo.getPhone(), null)) {
+        if (StringUtils.isNotBlank(dto.getPhone())) {
+            if (checkUserByPhone(dto.getPhone(), null)) {
                 throw new MyException("手机号已存在");
             }
         }
-        if (StringUtils.isNotBlank(vo.getEmail())) {
-            if (checkUserByEmail(vo.getEmail(), null)) {
+        if (StringUtils.isNotBlank(dto.getEmail())) {
+            if (checkUserByEmail(dto.getEmail(), null)) {
                 throw new MyException("邮箱已存在");
             }
         }
-        if (StringUtils.isNotBlank(vo.getOpenId())) {
-            if (checkUserByOpenId(vo.getOpenId(), null)) {
+        if (StringUtils.isNotBlank(dto.getOpenId())) {
+            if (checkUserByOpenId(dto.getOpenId(), null)) {
                 throw new MyException("openId已存在");
             }
         }
-        if (StringUtils.isNotBlank(vo.getApiKey())) {
-            if (checkUserByApiKey(vo.getApiKey())) {
+        if (StringUtils.isNotBlank(dto.getApiKey())) {
+            if (checkUserByApiKey(dto.getApiKey())) {
                 throw new MyException("apiKey已存在");
             }
         }
-        if (sysRoleService.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getRoleIds())) {
+        if (sysRoleService.isHasAdmin(SystemConstant.ROLE_ADMIN, dto.getRoleIds())) {
             throw new MyException("禁止新增为超级管理员");
         }
-        SysUser userByUsername = getUserByUsername(vo.getUsername());
+        SysUser userByUsername = getUserByUsername(dto.getUsername());
         if (ObjectUtil.isNotEmpty(userByUsername)) {
             throw new MyException("用户账号已存在");
         }
         SysUser sysUser = new SysUser();
-        sysUser.setUsername(vo.getUsername());
-        String newPwd = SaSecureUtil.sha256(vo.getPassword());
+        sysUser.setUsername(dto.getUsername());
+        String newPwd = SaSecureUtil.sha256(dto.getPassword());
         sysUser.setPassword(newPwd);
-        sysUser.setStatus(vo.getStatus());
-        sysUser.setPhone(vo.getPhone());
-        sysUser.setEmail(vo.getEmail());
-        sysUser.setOpenId(vo.getOpenId());
-        sysUser.setApiKey(vo.getApiKey());
-        sysUser.setBanToTime(vo.getBanToTime());
-        sysUser.setExpireToTime(vo.getExpireToTime());
-        sysUser.setRemark(vo.getRemark());
-        sysUser.setUserType(vo.getUserType());
+        sysUser.setStatus(dto.getStatus());
+        sysUser.setPhone(dto.getPhone());
+        sysUser.setEmail(dto.getEmail());
+        sysUser.setOpenId(dto.getOpenId());
+        sysUser.setApiKey(dto.getApiKey());
+        sysUser.setBanToTime(dto.getBanToTime());
+        sysUser.setExpireToTime(dto.getExpireToTime());
+        sysUser.setRemark(dto.getRemark());
+        sysUser.setUserType(dto.getUserType());
         int rows = sysUserMapper.insert(sysUser);
         if (rows < 1) {
             throw new MyException("新增失败");
         }
         SysUserDetail sysUserDetail = new SysUserDetail();
         sysUserDetail.setUserId(sysUser.getId());
-        sysUserDetail.setNickName(vo.getNickName());
-        sysUserDetail.setRealName(vo.getRealName());
-        sysUserDetail.setAge(vo.getAge());
-        sysUserDetail.setSex(vo.getSex());
-        sysUserDetail.setProfile(vo.getProfile());
-        sysUserDetail.setUserSign(vo.getUserSign());
-        sysUserDetail.setAvatar(vo.getAvatar());
-        sysUserDetail.setMoney(vo.getMoney());
+        sysUserDetail.setNickName(dto.getNickName());
+        sysUserDetail.setRealName(dto.getRealName());
+        sysUserDetail.setAge(dto.getAge());
+        sysUserDetail.setSex(dto.getSex());
+        sysUserDetail.setProfile(dto.getProfile());
+        sysUserDetail.setUserSign(dto.getUserSign());
+        sysUserDetail.setAvatar(dto.getAvatar());
+        sysUserDetail.setMoney(dto.getMoney());
         int rowsDetail = sysUserDetailMapper.insert(sysUserDetail);
         if (rowsDetail < 1) {
             throw new MyException("新增失败");
         }
         //新增关联数据
-        sysRoleUserService.handleUserRole(sysUser.getId(), vo.getRoleIds());
-        sysPositionUserService.handleUserPosition(sysUser.getId(), vo.getPositionIds());
-        sysUserDeptService.handleUserDept(sysUser.getId(), vo.getDeptIds());
+        sysRoleUserService.handleUserRole(sysUser.getId(), dto.getRoleIds());
+        sysPositionUserService.handleUserPosition(sysUser.getId(), dto.getPositionIds());
+        sysUserDeptService.handleUserDept(sysUser.getId(), dto.getDeptIds());
     }
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void changeStatus(ComStatusUpdDto vo) {
+    public void changeStatus(ComStatusUpdDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        if (loginUser.getId().equals(vo.getId())) {
+        if (loginUser.getId().equals(dto.getId())) {
             throw new MyException("禁止操作自己");
         }
-        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, dto.getId())) {
             throw new MyException("禁止操作超级管理员");
         }
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysUser::getId, vo.getId());
-        updateWrapper.set(SysUser::getStatus, vo.getStatus());
+        updateWrapper.eq(SysUser::getId, dto.getId());
+        updateWrapper.set(SysUser::getStatus, dto.getStatus());
         int rows = sysUserMapper.update(new SysUser(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
@@ -616,21 +613,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 重置用户密码
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void resetPwd(SysUserResetPwdDto vo) {
+    public void resetPwd(SysUserResetPwdDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        if (loginUser.getId().equals(vo.getId())) {
+        if (loginUser.getId().equals(dto.getId())) {
             throw new MyException("禁止操作自己");
         }
-        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, dto.getId())) {
             throw new MyException("禁止操作超级管理员");
         }
-        SysUserPageVo sysUserByPermissions = getSysUserByPermissions(vo.getId());
-        String newPwd = SaSecureUtil.sha256(vo.getPassword());
+        SysUserPageVo sysUserByPermissions = getSysUserByPermissions(dto.getId());
+        String newPwd = SaSecureUtil.sha256(dto.getPassword());
         LambdaUpdateWrapper<SysUser> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysUser::getId, vo.getId());
+        updateWrapper.eq(SysUser::getId, dto.getId());
         updateWrapper.set(SysUser::getPassword, newPwd);
         int rows = sysUserMapper.update(new SysUser(), updateWrapper);
         if (rows < 1) {
@@ -703,20 +700,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 保存用户授权角色
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void saveAuthRole(SysUserUpdAuthRoleDto vo) {
+    public void saveAuthRole(SysUserUpdAuthRoleDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        if (loginUser.getId().equals(vo.getUserId())) {
+        if (loginUser.getId().equals(dto.getUserId())) {
             throw new MyException("禁止操作自己");
         }
-        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, vo.getUserId())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isAdmin(SystemConstant.ROLE_ADMIN, dto.getUserId())) {
             throw new MyException("禁止操作超级管理员");
         }
-        SysUserPageVo sysUserByPermissions = getSysUserByPermissions(vo.getUserId());
+        SysUserPageVo sysUserByPermissions = getSysUserByPermissions(dto.getUserId());
         //修改关联数据
-        sysRoleUserService.handleUserRole(vo.getUserId(), vo.getRoleIds());
+        sysRoleUserService.handleUserRole(dto.getUserId(), dto.getRoleIds());
         //注销该账户的登录
         LoginUtil.logoutByUsername(sysUserByPermissions.getUsername());
     }
@@ -724,15 +721,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 查询已分配该角色的用户列表
      *
-     * @param vo
+     * @param dto
      * @param roleId
      * @return
      */
     @Override
-    public IPage<SysUserPageVo> getUserListByRoleId(SysUserPageDto vo, String roleId) {
-        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+    public IPage<SysUserPageVo> getUserListByRoleId(SysUserPageDto dto, String roleId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(dto);
         wrapper.exists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
-        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(dto.getPage(true), wrapper);
         for (SysUserPageVo record : sysUserPage.getRecords()) {
             record.setAdmin(CommonConstant.SUPER_ADMIN.equals(record.getId()));
         }
@@ -742,15 +739,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 查询未分配该角色的用户列表
      *
-     * @param vo
+     * @param dto
      * @param roleId
      * @return
      */
     @Override
-    public IPage<SysUserPageVo> getUserListByUnRoleId(SysUserPageDto vo, String roleId) {
-        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+    public IPage<SysUserPageVo> getUserListByUnRoleId(SysUserPageDto dto, String roleId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(dto);
         wrapper.notExists("SELECT * FROM sys_role_user sur WHERE sur.role_id = '" + roleId + "' AND sur.user_id = su.id");
-        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(dto.getPage(true), wrapper);
         for (SysUserPageVo record : sysUserPage.getRecords()) {
             record.setAdmin(CommonConstant.SUPER_ADMIN.equals(record.getId()));
         }
@@ -760,15 +757,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 查询已分配该岗位的用户列表
      *
-     * @param vo
+     * @param dto
      * @param positionId
      * @return
      */
     @Override
-    public IPage<SysUserPageVo> getUserListByPositionId(SysUserPageDto vo, String positionId) {
-        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+    public IPage<SysUserPageVo> getUserListByPositionId(SysUserPageDto dto, String positionId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(dto);
         wrapper.exists("SELECT * FROM sys_position_user spr WHERE spr.position_id = '" + positionId + "' AND spr.user_id = su.id");
-        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(dto.getPage(true), wrapper);
         for (SysUserPageVo record : sysUserPage.getRecords()) {
             record.setAdmin(CommonConstant.SUPER_ADMIN.equals(record.getId()));
         }
@@ -778,15 +775,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 查询未分配该岗位的用户列表
      *
-     * @param vo
+     * @param dto
      * @param positionId
      * @return
      */
     @Override
-    public IPage<SysUserPageVo> getUserListByUnPositionId(SysUserPageDto vo, String positionId) {
-        QueryWrapper<SysUser> wrapper = getWrapper(vo);
+    public IPage<SysUserPageVo> getUserListByUnPositionId(SysUserPageDto dto, String positionId) {
+        QueryWrapper<SysUser> wrapper = getWrapper(dto);
         wrapper.notExists("SELECT * FROM sys_position_user spr WHERE spr.position_id = '" + positionId + "' AND spr.user_id = su.id");
-        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(vo.getPage(true), wrapper);
+        IPage<SysUserPageVo> sysUserPage = sysUserMapper.getPageWrapper(dto.getPage(true), wrapper);
         for (SysUserPageVo record : sysUserPage.getRecords()) {
             record.setAdmin(CommonConstant.SUPER_ADMIN.equals(record.getId()));
         }
@@ -854,12 +851,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     /**
      * 获取邮箱验证码
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public Result getEmailValidCode(SysUserUpdBindDto vo) {
-        if (ObjectUtil.isEmpty(vo.getEmail())) {
+    public Map<String, Object> getEmailValidCode(SysUserUpdBindDto dto) {
+        if (ObjectUtil.isEmpty(dto.getEmail())) {
             throw new MyException("请填写邮箱");
         }
         SysSendLimitConfigVo sysSendLimitConfigVo = sysConfigService.getSysSendLimitConfigVo();
@@ -870,14 +867,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
+        Boolean exist = checkUserByEmail(dto.getEmail(), loginUser.getId());
         if (exist) {
             throw new MyException("该邮箱已经被其他账户绑定");
         }
-        if (vo.getEmail().equals(loginUser.getEmail())) {
+        if (dto.getEmail().equals(loginUser.getEmail())) {
             throw new MyException("当前账户已经绑定了此邮箱");
         }
-        String value = (String) CacheUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        String value = (String) CacheUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + dto.getEmail());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -889,27 +886,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String code = RandomUtil.randomNumbers(6);
         String subject = "【" + applicationName + "】" + "邮件验证";
         String content = MyUtil.buildCodeValida(applicationName, code);
-        Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
+        Boolean aBoolean = EmailUtil.sendEmail(dto.getEmail(), subject, content, true, null);
         if (!aBoolean) {
             throw new MyException("发送邮件失败，请联系管理员");
         }
-        CacheUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + dto.getEmail(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = EmailUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
-        return Result.ok(map);
+        return map;
     }
 
     /**
      * 获取手机验证码
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public Result getPhoneValidCode(SysUserUpdBindDto vo) {
-        if (ObjectUtil.isEmpty(vo.getPhone())) {
+    public Map<String, Object> getPhoneValidCode(SysUserUpdBindDto dto) {
+        if (ObjectUtil.isEmpty(dto.getPhone())) {
             throw new MyException("请填写手机号");
         }
         SysSendLimitConfigVo sysSendLimitConfigVo = sysConfigService.getSysSendLimitConfigVo();
@@ -920,14 +917,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
+        Boolean exist = checkUserByPhone(dto.getPhone(), loginUser.getId());
         if (exist) {
             throw new MyException("该手机号已经被其他账户绑定");
         }
-        if (vo.getPhone().equals(loginUser.getPhone())) {
+        if (dto.getPhone().equals(loginUser.getPhone())) {
             throw new MyException("当前账户已经绑定了此手机号");
         }
-        String value = (String) CacheUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        String value = (String) CacheUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + dto.getPhone());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -946,51 +943,51 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String code = RandomUtil.randomNumbers(6);
         Map<String, String> smsMap = new HashMap<>();
         smsMap.put(sysSmsTemplateConfigVo.getBindPhone().getVariable(), code);
-        SmsSendResult smsSendResult = SmsUtil.sendSms(vo.getPhone(), sysSmsTemplateConfigVo.getBindPhone().getTemplateId(), smsMap);
+        SmsSendResult smsSendResult = SmsUtil.sendSms(dto.getPhone(), sysSmsTemplateConfigVo.getBindPhone().getTemplateId(), smsMap);
         if (!smsSendResult.isSuccess()) {
             throw new MyException("发送短信失败，请联系管理员");
         }
-        CacheUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + dto.getPhone(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = SmsUtil.saveSendByUserId(loginUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
-        return Result.ok(map);
+        return map;
     }
 
     /**
      * 修改邮箱绑定
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public Result updateBindEmail(SysUserUpdBindDto vo) {
-        if (ObjectUtil.isEmpty(vo.getEmail())) {
+    public Map<String, Object> updateBindEmail(SysUserUpdBindDto dto) {
+        if (ObjectUtil.isEmpty(dto.getEmail())) {
             throw new MyException("请填写邮箱");
         }
-        if (ObjectUtil.isEmpty(vo.getValidCode())) {
+        if (ObjectUtil.isEmpty(dto.getValidCode())) {
             throw new MyException("请填写收到的邮箱验证码");
         }
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        String validCode = (String) CacheUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
+        String validCode = (String) CacheUtil.getValue(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + dto.getEmail());
         if (ObjectUtil.isEmpty(validCode)) {
             throw new MyException("邮箱验证码错误或者已失效");
         }
-        if (!vo.getValidCode().equals(validCode)) {
+        if (!dto.getValidCode().equals(validCode)) {
             throw new MyException("邮箱验证码错误，请检查");
         }
-        CacheUtil.del(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + vo.getEmail());
-        Boolean exist = checkUserByEmail(vo.getEmail(), loginUser.getId());
+        CacheUtil.del(RedisConstant.VALIDA_EMAIL + loginUser.getId() + ":" + dto.getEmail());
+        Boolean exist = checkUserByEmail(dto.getEmail(), loginUser.getId());
         if (exist) {
             throw new MyException("该邮箱已经被其他账户绑定");
         }
-        if (vo.getEmail().equals(loginUser.getEmail())) {
+        if (dto.getEmail().equals(loginUser.getEmail())) {
             throw new MyException("当前账户已经绑定了此邮箱");
         }
         LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUser::getId, loginUser.getId());
-        wrapper.set(SysUser::getEmail, vo.getEmail());
+        wrapper.set(SysUser::getEmail, dto.getEmail());
         int update = sysUserMapper.update(new SysUser(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
@@ -998,42 +995,42 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LoginUtil.logout();
         Map<String, Object> map = new HashMap<>();
         map.put("msg", "绑定成功，请重新登录");
-        return Result.ok(map);
+        return map;
     }
 
     /**
      * 修改手机绑定
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public Result updateBindPhone(SysUserUpdBindDto vo) {
-        if (ObjectUtil.isEmpty(vo.getPhone())) {
+    public Map<String, Object> updateBindPhone(SysUserUpdBindDto dto) {
+        if (ObjectUtil.isEmpty(dto.getPhone())) {
             throw new MyException("请填写手机号");
         }
-        if (ObjectUtil.isEmpty(vo.getValidCode())) {
+        if (ObjectUtil.isEmpty(dto.getValidCode())) {
             throw new MyException("请填写收到的短信验证码");
         }
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        String validCode = (String) CacheUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
+        String validCode = (String) CacheUtil.getValue(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + dto.getPhone());
         if (ObjectUtil.isEmpty(validCode)) {
             throw new MyException("短信验证码错误或者已失效");
         }
-        if (!vo.getValidCode().equals(validCode)) {
+        if (!dto.getValidCode().equals(validCode)) {
             throw new MyException("短信验证码错误，请检查");
         }
-        CacheUtil.del(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + vo.getPhone());
-        Boolean exist = checkUserByPhone(vo.getPhone(), loginUser.getId());
+        CacheUtil.del(RedisConstant.VALIDA_PHONE + loginUser.getId() + ":" + dto.getPhone());
+        Boolean exist = checkUserByPhone(dto.getPhone(), loginUser.getId());
         if (exist) {
             throw new MyException("该手机号已经被其他账户绑定");
         }
-        if (vo.getPhone().equals(loginUser.getPhone())) {
+        if (dto.getPhone().equals(loginUser.getPhone())) {
             throw new MyException("当前账户已经绑定了此手机号");
         }
         LambdaUpdateWrapper<SysUser> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysUser::getId, loginUser.getId());
-        wrapper.set(SysUser::getPhone, vo.getPhone());
+        wrapper.set(SysUser::getPhone, dto.getPhone());
         int update = sysUserMapper.update(new SysUser(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
@@ -1041,6 +1038,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         LoginUtil.logout();
         Map<String, Object> map = new HashMap<>();
         map.put("msg", "绑定成功，请重新登录");
-        return Result.ok(map);
+        return map;
     }
 }

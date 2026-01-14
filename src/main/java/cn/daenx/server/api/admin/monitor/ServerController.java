@@ -1,7 +1,7 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.modules.system.domain.vo.server.ServerInfoVo;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.util.NumberUtil;
@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import oshi.hardware.CentralProcessor;
+import oshi.hardware.CentralProcessor.TickType;
 import oshi.hardware.GlobalMemory;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OSFileStore;
 import oshi.software.os.OperatingSystem;
 import oshi.util.Util;
-import oshi.hardware.CentralProcessor.TickType;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class ServerController {
      */
     @SaCheckPermission("monitor:server:list")
     @GetMapping("/getInfo")
-    public Result server() {
+    public Result<ServerInfoVo> server() {
         oshi.SystemInfo si = new oshi.SystemInfo();
         HardwareAbstractionLayer hal = si.getHardware();
         ServerInfoVo serverInfoVo = new ServerInfoVo();

@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("")
@@ -25,8 +26,8 @@ public class LoginController {
      */
     @SaIgnore
     @GetMapping("/captcha")
-    public Result captcha() {
-        HashMap<String, Object> map = loginService.createCaptcha();
+    public Result<Map<String, Object>> captcha() {
+        Map<String, Object> map = loginService.createCaptcha();
         return Result.ok(map);
     }
 
@@ -37,8 +38,9 @@ public class LoginController {
      */
     @SaIgnore
     @PostMapping("/getEmailValidCode")
-    public Result getEmailValidCode(@Validated @RequestBody SysLoginDto vo) {
-        return loginService.getEmailValidCode(vo);
+    public Result<Map<String, Object>> getEmailValidCode(@Validated @RequestBody SysLoginDto dto) {
+        Map<String, Object> map = loginService.getEmailValidCode(dto);
+        return Result.ok(map);
     }
 
     /**
@@ -48,24 +50,25 @@ public class LoginController {
      */
     @SaIgnore
     @PostMapping("/getPhoneValidCode")
-    public Result getPhoneValidCode(@Validated @RequestBody SysLoginDto vo) {
-        return loginService.getPhoneValidCode(vo);
+    public Result<Map<String, Object>> getPhoneValidCode(@Validated @RequestBody SysLoginDto dto) {
+        Map<String, Object> map = loginService.getPhoneValidCode(dto);
+        return Result.ok(map);
     }
 
     /**
      * PC登录
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaIgnore
     @PostMapping("/login")
-    public Result login(@Validated @RequestBody SysLoginDto vo) {
-        if (ObjectUtil.isEmpty(vo.getLoginType())) {
+    public Result<Map<String, String>> login(@Validated @RequestBody SysLoginDto dto) {
+        if (ObjectUtil.isEmpty(dto.getLoginType())) {
             return Result.error("loginType不能为空");
         }
-        String token = loginService.login(vo);
-        HashMap<String, String> map = new HashMap<>();
+        String token = loginService.login(dto);
+        Map<String, String> map = new HashMap<>();
         map.put("token", token);
         return Result.ok(map);
     }
@@ -78,13 +81,13 @@ public class LoginController {
      * 只接受账号和密码
      * 手机号、邮箱、openid需要另外单独绑定
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaIgnore
     @PostMapping("/register")
-    public Result register(@Validated @RequestBody SysRegisterDto vo) {
-        loginService.register(vo);
+    public Result<String> register(@Validated @RequestBody SysRegisterDto dto) {
+        loginService.register(dto);
         return Result.ok("注册成功");
     }
 
@@ -94,7 +97,7 @@ public class LoginController {
      */
     @SaIgnore
     @PostMapping("/logout")
-    public Result logout() {
+    public Result<String> logout() {
         loginService.logout();
         return Result.ok("退出成功");
     }

@@ -1,9 +1,9 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.vo.sysFile.SysFilePageVo;
-import cn.daenx.framework.oss.vo.UploadResult;
-import cn.daenx.modules.system.domain.po.SysFile;
+import cn.daenx.framework.oss.domain.UploadResult;
 import cn.daenx.modules.system.domain.dto.sysFile.SysFilePageDto;
+import cn.daenx.modules.system.domain.po.SysFile;
+import cn.daenx.modules.system.domain.vo.sysFile.SysFilePageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,10 +44,10 @@ public interface SysFileService extends IService<SysFile> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysFilePageVo> getPage(SysFilePageDto vo);
+    IPage<SysFilePageVo> getPage(SysFilePageDto dto);
 
     /**
      * 删除

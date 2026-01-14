@@ -1,8 +1,9 @@
 package cn.daenx.server.api.admin.monitor;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,15 +17,17 @@ import java.util.*;
 @RestController
 @RequestMapping("/monitor/cache")
 public class CacheController {
-    @Resource
-    private RedisTemplate redisTemplate;
 
     /**
      * 查询缓存详细信息
      */
     @SaCheckPermission("monitor:cache:list")
     @GetMapping("/getInfo")
-    public Result getInfo() throws Exception {
+    public Result<Map<String, Object>> getInfo() throws Exception {
+        if (!"redis".equals(CacheUtil.getType())) {
+            throw new MyException("当前未使用redis模式");
+        }
+        RedisTemplate<String, Object> redisTemplate = CacheUtil.getRedisTemplate();
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info());
         Properties commandStats = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info("commandstats"));
         Object dbSize = redisTemplate.execute((RedisCallback<Object>) connection -> connection.dbSize());

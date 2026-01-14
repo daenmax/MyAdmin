@@ -1,29 +1,28 @@
 package cn.daenx.modules.system.service.impl;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.oss.utils.OssUtil;
-import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.modules.system.domain.dto.sysOss.SysOssConfigAddDto;
 import cn.daenx.modules.system.domain.dto.sysOss.SysOssConfigPageDto;
 import cn.daenx.modules.system.domain.dto.sysOss.SysOssConfigUpdDto;
-import cn.daenx.modules.system.mapper.SysFileMapper;
 import cn.daenx.modules.system.domain.po.SysFile;
-
+import cn.daenx.modules.system.domain.po.SysOssConfig;
+import cn.daenx.modules.system.mapper.SysFileMapper;
+import cn.daenx.modules.system.mapper.SysOssConfigMapper;
+import cn.daenx.modules.system.service.SysOssConfigService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.modules.system.mapper.SysOssConfigMapper;
-import cn.daenx.modules.system.domain.po.SysOssConfig;
-import cn.daenx.modules.system.service.SysOssConfigService;
 
 import java.util.List;
 
@@ -55,21 +54,21 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
         }
     }
 
-    private LambdaQueryWrapper<SysOssConfig> getWrapper(SysOssConfigPageDto vo) {
+    private LambdaQueryWrapper<SysOssConfig> getWrapper(SysOssConfigPageDto dto) {
         LambdaQueryWrapper<SysOssConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysOssConfig::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getBucketName()), SysOssConfig::getBucketName, vo.getBucketName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getPrefix()), SysOssConfig::getPrefix, vo.getPrefix());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getEndpoint()), SysOssConfig::getEndpoint, vo.getEndpoint());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getDomain()), SysOssConfig::getDomain, vo.getDomain());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getIsHttps()), SysOssConfig::getIsHttps, vo.getIsHttps());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRegion()), SysOssConfig::getRegion, vo.getRegion());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getAccessPolicy()), SysOssConfig::getAccessPolicy, vo.getAccessPolicy());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getInUse()), SysOssConfig::getInUse, vo.getInUse());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysOssConfig::getStatus, vo.getStatus());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getRemark()), SysOssConfig::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getName()), SysOssConfig::getName, dto.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getBucketName()), SysOssConfig::getBucketName, dto.getBucketName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getPrefix()), SysOssConfig::getPrefix, dto.getPrefix());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getEndpoint()), SysOssConfig::getEndpoint, dto.getEndpoint());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getDomain()), SysOssConfig::getDomain, dto.getDomain());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getIsHttps()), SysOssConfig::getIsHttps, dto.getIsHttps());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRegion()), SysOssConfig::getRegion, dto.getRegion());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getAccessPolicy()), SysOssConfig::getAccessPolicy, dto.getAccessPolicy());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getInUse()), SysOssConfig::getInUse, dto.getInUse());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysOssConfig::getStatus, dto.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getRemark()), SysOssConfig::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysOssConfig::getCreateTime, startTime, endTime);
         return wrapper;
     }
@@ -77,25 +76,25 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysOssConfig> getPage(SysOssConfigPageDto vo) {
-        LambdaQueryWrapper<SysOssConfig> wrapper = getWrapper(vo);
-        Page<SysOssConfig> sysOssConfigPage = sysOssConfigMapper.selectPage(vo.getPage(true), wrapper);
+    public IPage<SysOssConfig> getPage(SysOssConfigPageDto dto) {
+        LambdaQueryWrapper<SysOssConfig> wrapper = getWrapper(dto);
+        Page<SysOssConfig> sysOssConfigPage = sysOssConfigMapper.selectPage(dto.getPage(true), wrapper);
         return sysOssConfigPage;
     }
 
     /**
      * 获取所有列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysOssConfig> getAll(SysOssConfigPageDto vo) {
-        LambdaQueryWrapper<SysOssConfig> wrapper = getWrapper(vo);
+    public List<SysOssConfig> getAll(SysOssConfigPageDto dto) {
+        LambdaQueryWrapper<SysOssConfig> wrapper = getWrapper(dto);
         List<SysOssConfig> sysOssConfigs = sysOssConfigMapper.selectList(wrapper);
         return sysOssConfigs;
     }
@@ -114,32 +113,32 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void editInfo(SysOssConfigUpdDto vo) {
+    public void editInfo(SysOssConfigUpdDto dto) {
         LambdaUpdateWrapper<SysOssConfig> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysOssConfig::getId, vo.getId());
-        wrapper.set(SysOssConfig::getName, vo.getName());
-        wrapper.set(SysOssConfig::getAccessKey, vo.getAccessKey());
-        wrapper.set(SysOssConfig::getSecretKey, vo.getSecretKey());
-        wrapper.set(SysOssConfig::getBucketName, vo.getBucketName());
-        wrapper.set(SysOssConfig::getPrefix, vo.getPrefix());
-        wrapper.set(SysOssConfig::getEndpoint, vo.getEndpoint());
-        wrapper.set(SysOssConfig::getDomain, vo.getDomain());
-        wrapper.set(SysOssConfig::getIsHttps, vo.getIsHttps());
-        wrapper.set(SysOssConfig::getRegion, vo.getRegion());
-        wrapper.set(SysOssConfig::getAccessPolicy, vo.getAccessPolicy());
-        wrapper.set(SysOssConfig::getStatus, vo.getStatus());
-        wrapper.set(SysOssConfig::getUrlValidAccessTime, vo.getUrlValidAccessTime());
-        wrapper.set(SysOssConfig::getUrlValidCacheTime, vo.getUrlValidCacheTime());
-        wrapper.set(SysOssConfig::getRemark, vo.getRemark());
+        wrapper.eq(SysOssConfig::getId, dto.getId());
+        wrapper.set(SysOssConfig::getName, dto.getName());
+        wrapper.set(SysOssConfig::getAccessKey, dto.getAccessKey());
+        wrapper.set(SysOssConfig::getSecretKey, dto.getSecretKey());
+        wrapper.set(SysOssConfig::getBucketName, dto.getBucketName());
+        wrapper.set(SysOssConfig::getPrefix, dto.getPrefix());
+        wrapper.set(SysOssConfig::getEndpoint, dto.getEndpoint());
+        wrapper.set(SysOssConfig::getDomain, dto.getDomain());
+        wrapper.set(SysOssConfig::getIsHttps, dto.getIsHttps());
+        wrapper.set(SysOssConfig::getRegion, dto.getRegion());
+        wrapper.set(SysOssConfig::getAccessPolicy, dto.getAccessPolicy());
+        wrapper.set(SysOssConfig::getStatus, dto.getStatus());
+        wrapper.set(SysOssConfig::getUrlValidAccessTime, dto.getUrlValidAccessTime());
+        wrapper.set(SysOssConfig::getUrlValidCacheTime, dto.getUrlValidCacheTime());
+        wrapper.set(SysOssConfig::getRemark, dto.getRemark());
         int rows = sysOssConfigMapper.update(new SysOssConfig(), wrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        SysOssConfig sysOssConfig = getInfo(vo.getId());
-        CacheUtil.setValue(RedisConstant.OSS + vo.getId(), sysOssConfig);
+        SysOssConfig sysOssConfig = getInfo(dto.getId());
+        CacheUtil.setValue(RedisConstant.OSS + dto.getId(), sysOssConfig);
         if (sysOssConfig.getInUse().equals(SystemConstant.IN_USE_YES)) {
             //正在使用的
             CacheUtil.setValue(RedisConstant.OSS_USE, sysOssConfig);
@@ -149,25 +148,25 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysOssConfigAddDto vo) {
+    public void addInfo(SysOssConfigAddDto dto) {
         SysOssConfig sysOssConfig = new SysOssConfig();
-        sysOssConfig.setName(vo.getName());
-        sysOssConfig.setAccessKey(vo.getAccessKey());
-        sysOssConfig.setSecretKey(vo.getSecretKey());
-        sysOssConfig.setBucketName(vo.getBucketName());
-        sysOssConfig.setPrefix(vo.getPrefix());
-        sysOssConfig.setEndpoint(vo.getEndpoint());
-        sysOssConfig.setDomain(vo.getDomain());
-        sysOssConfig.setIsHttps(vo.getIsHttps());
-        sysOssConfig.setRegion(vo.getRegion());
-        sysOssConfig.setAccessPolicy(vo.getAccessPolicy());
-        sysOssConfig.setStatus(vo.getStatus());
-        sysOssConfig.setUrlValidAccessTime(vo.getUrlValidAccessTime());
-        sysOssConfig.setUrlValidCacheTime(vo.getUrlValidCacheTime());
-        sysOssConfig.setRemark(vo.getRemark());
+        sysOssConfig.setName(dto.getName());
+        sysOssConfig.setAccessKey(dto.getAccessKey());
+        sysOssConfig.setSecretKey(dto.getSecretKey());
+        sysOssConfig.setBucketName(dto.getBucketName());
+        sysOssConfig.setPrefix(dto.getPrefix());
+        sysOssConfig.setEndpoint(dto.getEndpoint());
+        sysOssConfig.setDomain(dto.getDomain());
+        sysOssConfig.setIsHttps(dto.getIsHttps());
+        sysOssConfig.setRegion(dto.getRegion());
+        sysOssConfig.setAccessPolicy(dto.getAccessPolicy());
+        sysOssConfig.setStatus(dto.getStatus());
+        sysOssConfig.setUrlValidAccessTime(dto.getUrlValidAccessTime());
+        sysOssConfig.setUrlValidCacheTime(dto.getUrlValidCacheTime());
+        sysOssConfig.setRemark(dto.getRemark());
         sysOssConfig.setInUse(SystemConstant.IN_USE_NO);
         int insert = sysOssConfigMapper.insert(sysOssConfig);
         if (insert < 1) {
@@ -202,14 +201,14 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     /**
      * 修改配置状态
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void changeStatus(ComStatusUpdDto vo) {
+    public void changeStatus(ComStatusUpdDto dto) {
         LambdaUpdateWrapper<SysOssConfig> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysOssConfig::getId, vo.getId());
-        wrapper.set(SysOssConfig::getStatus, vo.getStatus());
-        if (!vo.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
+        wrapper.eq(SysOssConfig::getId, dto.getId());
+        wrapper.set(SysOssConfig::getStatus, dto.getStatus());
+        if (!dto.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             //不是启用，那么强制设置使用状态为否
             wrapper.set(SysOssConfig::getInUse, SystemConstant.IN_USE_NO);
         }
@@ -224,26 +223,26 @@ public class SysOssConfigServiceImpl extends ServiceImpl<SysOssConfigMapper, Sys
     /**
      * 修改使用状态
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void changeInUse(ComStatusUpdDto vo) {
-        SysOssConfig info = getInfo(vo.getId());
+    public void changeInUse(ComStatusUpdDto dto) {
+        SysOssConfig info = getInfo(dto.getId());
         if (!info.getStatus().equals(CommonConstant.STATUS_NORMAL)) {
             throw new MyException("OSS配置状态非正常，无法启用");
         }
-        if (info.getInUse().equals(vo.getStatus())) {
+        if (info.getInUse().equals(dto.getStatus())) {
             throw new MyException("已是当前状态");
         }
         LambdaUpdateWrapper<SysOssConfig> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysOssConfig::getId, vo.getId());
-        wrapper.set(SysOssConfig::getInUse, vo.getStatus());
+        wrapper.eq(SysOssConfig::getId, dto.getId());
+        wrapper.set(SysOssConfig::getInUse, dto.getStatus());
         int rows = sysOssConfigMapper.update(new SysOssConfig(), wrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        info.setInUse(vo.getStatus());
-        if(vo.getStatus().equals(SystemConstant.IN_USE_YES)){
+        info.setInUse(dto.getStatus());
+        if(dto.getStatus().equals(SystemConstant.IN_USE_YES)){
             //启用，那么关闭其他配置的使用状态
             LambdaUpdateWrapper<SysOssConfig> wrapper2 = new LambdaUpdateWrapper<>();
             wrapper2.ne(SysOssConfig::getId, info.getId());

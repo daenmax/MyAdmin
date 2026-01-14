@@ -38,7 +38,7 @@ public class TestController {
      */
     @Operation(method = "肯定是GET啦", summary = "测试接口", description = "我是description")
     @GetMapping("/test")
-    public Result test() {
+    public Result<String> test() {
         return Result.ok("查询成功");
     }
 
@@ -51,7 +51,7 @@ public class TestController {
     @Operation(method = "肯定是GET啦", summary = "测试接口", description = "我是description")
     @GetMapping("/test2")
     @RepeatSubmit
-    public Result test2() {
+    public Result<String> test2() {
         return Result.ok("查询成功");
     }
 
@@ -60,7 +60,7 @@ public class TestController {
      */
     @Log(name = "多sheet表-导入", type = LogOperType.IMPORT, recordParams = false, recordResult = true)
     @PostMapping("/importData")
-    public Result importData(@RequestPart("file") MultipartFile file) throws IOException {
+    public Result<String> importData(@RequestPart("file") MultipartFile file) throws IOException {
         ExcelReader reader = ExcelUtil.createImport(file.getInputStream());
         ReadRetVo<TestSheetADto> sheetA = ExcelUtil.readSheet("班级信息", TestSheetADto.class, true);
         ReadRetVo<TestSheetBDto> sheetB = ExcelUtil.readSheet("学生信息", TestSheetBDto.class, true);

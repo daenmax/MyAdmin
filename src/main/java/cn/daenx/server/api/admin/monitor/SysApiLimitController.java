@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.modules.system.service.SysApiLimitService;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.domain.vo.Result;
-import cn.daenx.modules.system.domain.po.SysApiLimit;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitAddDto;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitPageDto;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitUpdDto;
+import cn.daenx.modules.system.domain.po.SysApiLimit;
+import cn.daenx.modules.system.service.SysApiLimitService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -27,13 +27,13 @@ public class SysApiLimitController {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:page")
     @GetMapping(value = "/page")
-    public Result page(SysApiLimitPageDto vo) {
-        IPage<SysApiLimit> page = SysApiLimitService.getPage(vo);
+    public Result<IPage<SysApiLimit>> page(SysApiLimitPageDto dto) {
+        IPage<SysApiLimit> page = SysApiLimitService.getPage(dto);
         return Result.ok(page);
     }
 
@@ -45,7 +45,7 @@ public class SysApiLimitController {
      */
     @SaCheckPermission("monitor:apiLimit:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysApiLimit> query(@RequestParam(name = "id", required = true) String id) {
         SysApiLimit SysApiLimit = SysApiLimitService.getInfo(id);
         return Result.ok(SysApiLimit);
     }
@@ -53,39 +53,39 @@ public class SysApiLimitController {
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysApiLimitAddDto vo) {
-        SysApiLimitService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysApiLimitAddDto dto) {
+        SysApiLimitService.addInfo(dto);
         return Result.ok();
     }
 
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:edit")
     @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysApiLimitUpdDto vo) {
-        SysApiLimitService.editInfo(vo);
+    public Result<Void> edit(@Validated @RequestBody SysApiLimitUpdDto dto) {
+        SysApiLimitService.editInfo(dto);
         return Result.ok();
     }
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:apiLimit:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
-        SysApiLimitService.changeStatus(vo);
+    public Result<Void> changeStatus(@Validated @RequestBody ComStatusUpdDto dto) {
+        SysApiLimitService.changeStatus(dto);
         return Result.ok();
     }
 
@@ -97,7 +97,7 @@ public class SysApiLimitController {
      */
     @SaCheckPermission("monitor:apiLimit:del")
     @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -112,7 +112,7 @@ public class SysApiLimitController {
      */
     @SaCheckPermission("monitor:apiLimit:refreshCache")
     @PostMapping("/refreshCache")
-    public Result refreshCache() {
+    public Result<Void> refreshCache() {
         SysApiLimitService.refreshApiLimitCache();
         return Result.ok();
     }

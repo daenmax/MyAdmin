@@ -1,14 +1,14 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.modules.system.domain.vo.sysFile.SysFilePageVo;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.constant.enums.LogOperType;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.logSave.annotation.Log;
-import cn.daenx.framework.oss.vo.UploadResult;
-import cn.daenx.modules.system.domain.po.SysFile;
+import cn.daenx.framework.oss.domain.UploadResult;
 import cn.daenx.modules.system.domain.dto.sysFile.SysFilePageDto;
+import cn.daenx.modules.system.domain.po.SysFile;
+import cn.daenx.modules.system.domain.vo.sysFile.SysFilePageVo;
 import cn.daenx.modules.system.service.SysFileService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
@@ -32,13 +32,13 @@ public class SysFileController {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:file:page")
     @GetMapping(value = "/page")
-    public Result page(SysFilePageDto vo) {
-        IPage<SysFilePageVo> page = sysFileService.getPage(vo);
+    public Result<IPage<SysFilePageVo>> page(SysFilePageDto dto) {
+        IPage<SysFilePageVo> page = sysFileService.getPage(dto);
         return Result.ok(page);
     }
 
@@ -50,7 +50,7 @@ public class SysFileController {
      */
     @SaCheckPermission("monitor:file:list")
     @GetMapping("/listByIds/{fileIds}")
-    public Result listByIds(@NotEmpty(message = "文件ID列表不能为空") @PathVariable String[] fileIds) {
+    public Result<List<SysFile>> listByIds(@NotEmpty(message = "文件ID列表不能为空") @PathVariable String[] fileIds) {
         List<SysFile> list = sysFileService.getListByIds(Arrays.asList(fileIds));
         return Result.ok(list);
     }
@@ -63,7 +63,7 @@ public class SysFileController {
      */
     @SaCheckPermission("monitor:file:del")
     @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -79,7 +79,7 @@ public class SysFileController {
     @Log(name = "上传文件", type = LogOperType.UPLOAD, recordParams = false, recordResult = true)
     @SaCheckPermission("monitor:file:upload")
     @PostMapping("/uploadFile")
-    public Result upload(@RequestPart("file") MultipartFile file) {
+    public Result<UploadResult> upload(@RequestPart("file") MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadFile(file, SystemConstant.FILE_FROM_USER);
         return Result.ok(uploadResult);
     }
@@ -92,7 +92,7 @@ public class SysFileController {
     @Log(name = "上传图片", type = LogOperType.UPLOAD, recordParams = false, recordResult = true)
     @SaCheckPermission("monitor:file:upload")
     @PostMapping("/uploadImage")
-    public Result avatar(@RequestPart("file") MultipartFile file) {
+    public Result<UploadResult> avatar(@RequestPart("file") MultipartFile file) {
         UploadResult uploadResult = sysFileService.uploadImage(file, SystemConstant.FILE_FROM_USER);
         return Result.ok(uploadResult);
     }

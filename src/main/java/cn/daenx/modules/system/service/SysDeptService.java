@@ -1,10 +1,10 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.po.SysDept;
 import cn.daenx.modules.system.domain.dto.sysDept.SysDeptAddDto;
 import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
-import cn.daenx.modules.system.domain.vo.sysDept.SysDeptTreeVo;
 import cn.daenx.modules.system.domain.dto.sysDept.SysDeptUpdDto;
+import cn.daenx.modules.system.domain.po.SysDept;
+import cn.daenx.modules.system.domain.vo.sysDept.SysDeptTreeVo;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,33 +18,33 @@ public interface SysDeptService extends IService<SysDept> {
      *
      * @return
      */
-    List<Tree<String>> deptTree(SysDeptPageDto vo);
-    List<SysDeptTreeVo> deptTreeNew(SysDeptPageDto vo);
+    List<Tree<String>> deptTree(SysDeptPageDto dto);
+    List<SysDeptTreeVo> deptTreeNew(SysDeptPageDto dto);
 
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysDept> getPage(SysDeptPageDto vo);
+    IPage<SysDept> getPage(SysDeptPageDto dto);
 
     /**
      * 获取所有列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysDept> getAll(SysDeptPageDto vo);
+    List<SysDept> getAll(SysDeptPageDto dto);
 
     /**
      * 获取所有列表
      * 不翻译leaderUser
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysDept> getAllNoLeaderUser(SysDeptPageDto vo);
+    List<SysDept> getAllNoLeaderUser(SysDeptPageDto dto);
 
     /**
      * 通过父ID获取子成员
@@ -83,16 +83,16 @@ public interface SysDeptService extends IService<SysDept> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysDeptUpdDto vo);
+    void editInfo(SysDeptUpdDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysDeptAddDto vo);
+    void addInfo(SysDeptAddDto dto);
 
     /**
      * 删除

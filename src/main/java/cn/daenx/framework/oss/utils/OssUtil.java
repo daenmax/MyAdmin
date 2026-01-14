@@ -1,10 +1,10 @@
 package cn.daenx.framework.oss.utils;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.oss.core.OssClient;
-import cn.daenx.framework.oss.vo.OssProperties;
+import cn.daenx.framework.oss.domain.OssProperties;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;

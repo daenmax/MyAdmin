@@ -1,7 +1,7 @@
 package cn.daenx.framework.notify.dingTalk.service.impl;
 
 import cn.daenx.framework.common.domain.vo.system.config.SysDingTalkConfigVo;
-import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;
+import cn.daenx.framework.notify.dingTalk.domain.DingTalkSendResult;
 import cn.daenx.framework.notify.dingTalk.service.DingTalkService;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;

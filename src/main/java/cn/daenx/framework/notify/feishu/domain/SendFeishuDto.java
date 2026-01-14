@@ -1,13 +1,13 @@
-package cn.daenx.framework.notify.wecom.vo;
+package cn.daenx.framework.notify.feishu.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 企业微信发送消息
+ * 飞书发送消息
  */
 @Data
-public class SendWecomVo {
+public class SendFeishuDto {
     /**
      * 机器人名称，在系统参数里自己填的
      */

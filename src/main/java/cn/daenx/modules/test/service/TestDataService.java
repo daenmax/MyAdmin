@@ -1,13 +1,13 @@
 package cn.daenx.modules.test.service;
 
 
-import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
-import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.modules.test.domain.po.TestData;
 import cn.daenx.modules.test.domain.dto.testData.TestDataAddDto;
 import cn.daenx.modules.test.domain.dto.testData.TestDataImportDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
 import cn.daenx.modules.test.domain.dto.testData.TestDataUpdDto;
+import cn.daenx.modules.test.domain.po.TestData;
+import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,35 +19,35 @@ public interface TestDataService extends IService<TestData> {
      * 分页列表
      * 测试数据分页列表_MP分页插件
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<TestData> getPage(TestDataPageDto vo);
+    IPage<TestData> getPage(TestDataPageDto dto);
 
     /**
      * 分页列表2
      * 测试数据分页列表_自己写的SQL
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<TestDataPageVo> getPage2(TestDataPageDto vo);
+    IPage<TestDataPageVo> getPage2(TestDataPageDto dto);
 
     /**
      * 分页列表3
      * 测试数据分页列表_MP自定义SQL
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<TestDataPageVo> getPage3(TestDataPageDto vo);
+    IPage<TestDataPageVo> getPage3(TestDataPageDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(TestDataAddDto vo);
+    void addInfo(TestDataAddDto dto);
 
     /**
      * 查询
@@ -60,9 +60,9 @@ public interface TestDataService extends IService<TestData> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(TestDataUpdDto vo);
+    void editInfo(TestDataUpdDto dto);
 
     /**
      * 删除
@@ -74,10 +74,10 @@ public interface TestDataService extends IService<TestData> {
     /**
      * 导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<TestDataPageVo> exportData(TestDataPageDto vo);
+    List<TestDataPageVo> exportData(TestDataPageDto dto);
 
     /**
      * 导入
@@ -90,8 +90,8 @@ public interface TestDataService extends IService<TestData> {
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeStatus(ComStatusUpdDto vo);
+    void changeStatus(ComStatusUpdDto dto);
 
 }

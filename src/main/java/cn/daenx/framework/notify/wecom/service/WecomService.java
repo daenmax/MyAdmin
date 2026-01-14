@@ -1,7 +1,7 @@
 package cn.daenx.framework.notify.wecom.service;
 
 import cn.daenx.framework.common.domain.vo.system.config.SysWecomConfigVo;
-import cn.daenx.framework.notify.wecom.vo.WecomSendResult;
+import cn.daenx.framework.notify.wecom.domain.WecomSendResult;
 
 public interface WecomService {
     WecomSendResult sendMsg(SysWecomConfigVo configVo, String content);

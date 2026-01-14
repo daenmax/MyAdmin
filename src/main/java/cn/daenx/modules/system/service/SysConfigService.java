@@ -1,12 +1,10 @@
 package cn.daenx.modules.system.service;
 
 import cn.daenx.framework.common.domain.vo.system.config.*;
-import cn.daenx.framework.common.domain.vo.system.config.SysLoginFailInfoConfigVo;
-import cn.daenx.framework.common.domain.vo.system.config.SysRegisterDefaultInfoVo;
-import cn.daenx.modules.system.domain.po.SysConfig;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigAddDto;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigPageDto;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigUpdDto;
+import cn.daenx.modules.system.domain.po.SysConfig;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,18 +14,18 @@ public interface SysConfigService extends IService<SysConfig> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysConfig> getPage(SysConfigPageDto vo);
+    IPage<SysConfig> getPage(SysConfigPageDto dto);
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysConfig> getAll(SysConfigPageDto vo);
+    List<SysConfig> getAll(SysConfigPageDto dto);
 
     /**
      * 查询
@@ -40,16 +38,16 @@ public interface SysConfigService extends IService<SysConfig> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysConfigUpdDto vo);
+    void editInfo(SysConfigUpdDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysConfigAddDto vo);
+    void addInfo(SysConfigAddDto dto);
 
     /**
      * 删除

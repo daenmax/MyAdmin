@@ -1,10 +1,10 @@
 package cn.daenx.modules.system.service;
 
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.modules.system.domain.po.SysOssConfig;
 import cn.daenx.modules.system.domain.dto.sysOss.SysOssConfigAddDto;
 import cn.daenx.modules.system.domain.dto.sysOss.SysOssConfigPageDto;
 import cn.daenx.modules.system.domain.dto.sysOss.SysOssConfigUpdDto;
+import cn.daenx.modules.system.domain.po.SysOssConfig;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,18 +20,18 @@ public interface SysOssConfigService extends IService<SysOssConfig> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysOssConfig> getPage(SysOssConfigPageDto vo);
+    IPage<SysOssConfig> getPage(SysOssConfigPageDto dto);
 
     /**
      * 获取所有列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysOssConfig> getAll(SysOssConfigPageDto vo);
+    List<SysOssConfig> getAll(SysOssConfigPageDto dto);
 
     /**
      * 查询
@@ -44,16 +44,16 @@ public interface SysOssConfigService extends IService<SysOssConfig> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysOssConfigUpdDto vo);
+    void editInfo(SysOssConfigUpdDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysOssConfigAddDto vo);
+    void addInfo(SysOssConfigAddDto dto);
 
     /**
      * 删除
@@ -65,14 +65,14 @@ public interface SysOssConfigService extends IService<SysOssConfig> {
     /**
      * 修改配置状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeStatus(ComStatusUpdDto vo);
+    void changeStatus(ComStatusUpdDto dto);
 
     /**
      * 修改使用状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeInUse(ComStatusUpdDto vo);
+    void changeInUse(ComStatusUpdDto dto);
 }

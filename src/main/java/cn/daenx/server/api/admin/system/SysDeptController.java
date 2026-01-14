@@ -1,12 +1,12 @@
 package cn.daenx.server.api.admin.system;
 
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.vo.Result;
-import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
-import cn.daenx.modules.system.domain.po.SysDept;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.modules.system.domain.dto.sysDept.SysDeptAddDto;
 import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
 import cn.daenx.modules.system.domain.dto.sysDept.SysDeptUpdDto;
+import cn.daenx.modules.system.domain.po.SysDept;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
 import cn.daenx.modules.system.service.SysDeptService;
 import cn.daenx.modules.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -29,13 +29,13 @@ public class SysDeptController {
     /**
      * 列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:dept:list")
     @GetMapping(value = "/list")
-    public Result list(SysDeptPageDto vo) {
-        List<SysDept> list = sysDeptService.getAll(vo);
+    public Result<List<SysDept>> list(SysDeptPageDto dto) {
+        List<SysDept> list = sysDeptService.getAll(dto);
         return Result.ok(list);
     }
 
@@ -47,7 +47,7 @@ public class SysDeptController {
      */
     @SaCheckPermission("system:dept:list")
     @GetMapping(value = "/list/exclude/{id}")
-    public Result excludeChild(@PathVariable(value = "id", required = false) String id) {
+    public Result<List<SysDept>> excludeChild(@PathVariable(value = "id", required = false) String id) {
         List<SysDept> list = sysDeptService.getAllNoLeaderUser(new SysDeptPageDto());
         List<SysDept> collect = list.stream().filter(item -> item.getId().equals(id)).collect(Collectors.toList());
         sysDeptService.removeList(list, collect);
@@ -62,7 +62,7 @@ public class SysDeptController {
      */
     @SaCheckPermission("system:dept:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysDept> query(@RequestParam(name = "id", required = true) String id) {
         SysDept sysDept = sysDeptService.getInfo(id);
         return Result.ok(sysDept);
     }
@@ -70,26 +70,26 @@ public class SysDeptController {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:dept:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysDeptUpdDto vo) {
-        sysDeptService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody SysDeptUpdDto dto) {
+        sysDeptService.editInfo(dto);
         return Result.ok();
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:dept:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysDeptAddDto vo) {
-        sysDeptService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysDeptAddDto dto) {
+        sysDeptService.addInfo(dto);
         return Result.ok();
     }
 
@@ -100,8 +100,8 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:dept:del")
-    @PostMapping("/del")
-    public Result del(@RequestParam(value = "id") String id) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");
         }
@@ -118,7 +118,7 @@ public class SysDeptController {
      */
     @SaCheckPermission("system:user:list")
     @GetMapping(value = "/getUserList")
-    public Result getUserList(String id, String keyword) {
+    public Result<List<SysUserPageVo>> getUserList(String id, String keyword) {
         List<SysUserPageVo> userList = sysUserService.getUserList(id, keyword, keyword, keyword, keyword, keyword);
         return Result.ok(userList);
     }

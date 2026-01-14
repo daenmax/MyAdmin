@@ -1,15 +1,15 @@
 package cn.daenx.server.api.admin.system;
 
-import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionAddDto;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionPageDto;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionUpdAuthUserDto;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionUpdDto;
 import cn.daenx.modules.system.domain.dto.sysUser.SysUserPageDto;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.domain.vo.Result;
-import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.modules.system.domain.po.SysPosition;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
 import cn.daenx.modules.system.service.SysPositionService;
 import cn.daenx.modules.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -36,13 +36,13 @@ public class SysPositionController {
     /**
      * 列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:position:page")
     @GetMapping(value = "/page")
-    public Result page(SysPositionPageDto vo) {
-        IPage<SysPosition> page = sysPositionService.getPage(vo);
+    public Result<IPage<SysPosition>> page(SysPositionPageDto dto) {
+        IPage<SysPosition> page = sysPositionService.getPage(dto);
         return Result.ok(page);
     }
 
@@ -51,8 +51,8 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:export")
     @PostMapping("/exportData")
-    public void exportData(SysPositionPageDto vo, HttpServletResponse response) {
-        List<SysPosition> list = sysPositionService.getAll(vo);
+    public void exportData(SysPositionPageDto dto, HttpServletResponse response) {
+        List<SysPosition> list = sysPositionService.getAll(dto);
         ExcelUtil.exportXlsx(response, "岗位", "岗位", list, SysPosition.class);
     }
 
@@ -65,7 +65,7 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysPosition> query(@RequestParam(name = "id", required = true) String id) {
         SysPosition sysPosition = sysPositionService.getInfo(id);
         return Result.ok(sysPosition);
     }
@@ -73,26 +73,26 @@ public class SysPositionController {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:position:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysPositionUpdDto vo) {
-        sysPositionService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody SysPositionUpdDto dto) {
+        sysPositionService.editInfo(dto);
         return Result.ok();
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:position:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysPositionAddDto vo) {
-        sysPositionService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysPositionAddDto dto) {
+        sysPositionService.addInfo(dto);
         return Result.ok();
     }
 
@@ -103,8 +103,8 @@ public class SysPositionController {
      * @return
      */
     @SaCheckPermission("system:position:del")
-    @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -119,11 +119,11 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:page")
     @GetMapping("/allocatedAuthUserPage")
-    public Result allocatedAuthUserPage(SysUserPageDto vo, String positionId) {
+    public Result<IPage<SysUserPageVo>> allocatedAuthUserPage(SysUserPageDto dto, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
-        IPage<SysUserPageVo> page = sysUserService.getUserListByPositionId(vo, positionId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByPositionId(dto, positionId);
         return Result.ok(page);
     }
 
@@ -132,35 +132,35 @@ public class SysPositionController {
      */
     @SaCheckPermission("system:position:page")
     @GetMapping("/unallocatedAuthUserPage")
-    public Result unallocatedAuthUserPage(SysUserPageDto vo, String positionId) {
+    public Result<IPage<SysUserPageVo>> unallocatedAuthUserPage(SysUserPageDto dto, String positionId) {
         if (ObjectUtil.isEmpty(positionId)) {
             throw new MyException("positionId不能为空");
         }
-        IPage<SysUserPageVo> page = sysUserService.getUserListByUnPositionId(vo, positionId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByUnPositionId(dto, positionId);
         return Result.ok(page);
     }
 
     /**
      * 取消授权用户
      *
-     * @param vo
+     * @param dto
      */
     @SaCheckPermission("system:position:edit")
     @PostMapping("/cancelAuthUser")
-    public Result cancelAuthUser(@Validated @RequestBody SysPositionUpdAuthUserDto vo) {
-        sysPositionService.cancelAuthUser(vo);
+    public Result<Void> cancelAuthUser(@Validated @RequestBody SysPositionUpdAuthUserDto dto) {
+        sysPositionService.cancelAuthUser(dto);
         return Result.ok();
     }
 
     /**
      * 保存授权用户
      *
-     * @param vo
+     * @param dto
      */
     @SaCheckPermission("system:position:edit")
     @PostMapping("/saveAuthUser")
-    public Result saveAuthUser(@Validated @RequestBody SysPositionUpdAuthUserDto vo) {
-        sysPositionService.saveAuthUser(vo);
+    public Result<Void> saveAuthUser(@Validated @RequestBody SysPositionUpdAuthUserDto dto) {
+        sysPositionService.saveAuthUser(dto);
         return Result.ok();
     }
 }

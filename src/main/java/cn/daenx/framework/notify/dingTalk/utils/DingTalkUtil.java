@@ -1,12 +1,12 @@
 package cn.daenx.framework.notify.dingTalk.utils;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.framework.notify.dingTalk.vo.DingTalkSendResult;
 import cn.daenx.framework.common.domain.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.domain.vo.system.config.SysDingTalkConfigVo;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.notify.dingTalk.domain.DingTalkSendResult;
 import cn.daenx.framework.notify.dingTalk.service.DingTalkService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;

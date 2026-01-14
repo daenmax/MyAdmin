@@ -1,21 +1,21 @@
-package cn.daenx.framework.notify.wecom.vo;
+package cn.daenx.framework.notify.dingTalk.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class WecomSendResult {
+public class DingTalkSendResult {
     /**
      * 是否成功
      */
     private boolean isSuccess;
     /**
-     * 企业微信返回的
+     * 钉钉返回的
      */
     private Integer code;
     /**
-     * 企业微信返回的
+     * 钉钉返回的
      */
     private String msg;
     private String botName;

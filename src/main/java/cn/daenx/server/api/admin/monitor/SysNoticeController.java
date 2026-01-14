@@ -1,12 +1,12 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.modules.system.domain.vo.sysNotice.SysNoticePageVo;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.vo.Result;
-import cn.daenx.modules.system.domain.po.SysNotice;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticeAddDto;
 import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticePageDto;
 import cn.daenx.modules.system.domain.dto.sysNotice.SysNoticeUpdDto;
+import cn.daenx.modules.system.domain.po.SysNotice;
+import cn.daenx.modules.system.domain.vo.sysNotice.SysNoticePageVo;
 import cn.daenx.modules.system.service.SysNoticeService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
@@ -26,26 +26,26 @@ public class SysNoticeController {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:notice:page")
     @GetMapping("/page")
-    public Result page(SysNoticePageDto vo) {
-        IPage<SysNoticePageVo> page = sysNoticeService.getPage(vo);
+    public Result<IPage<SysNoticePageVo>> page(SysNoticePageDto dto) {
+        IPage<SysNoticePageVo> page = sysNoticeService.getPage(dto);
         return Result.ok(page);
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:notice:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysNoticeAddDto vo) {
-        sysNoticeService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysNoticeAddDto dto) {
+        sysNoticeService.addInfo(dto);
         return Result.ok();
     }
 
@@ -57,7 +57,7 @@ public class SysNoticeController {
      */
     @SaCheckPermission("monitor:notice:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysNotice> query(@RequestParam(name = "id", required = true) String id) {
         SysNotice sysNotice = sysNoticeService.getInfo(id);
         return Result.ok(sysNotice);
     }
@@ -65,13 +65,13 @@ public class SysNoticeController {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:notice:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysNoticeUpdDto vo) {
-        sysNoticeService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody SysNoticeUpdDto dto) {
+        sysNoticeService.editInfo(dto);
         return Result.ok();
     }
 
@@ -82,8 +82,8 @@ public class SysNoticeController {
      * @return
      */
     @SaCheckPermission("monitor:notice:del")
-    @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }

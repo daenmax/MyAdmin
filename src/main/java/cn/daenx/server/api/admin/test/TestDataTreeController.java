@@ -1,14 +1,14 @@
 package cn.daenx.server.api.admin.test;
 
 import cn.daenx.framework.common.constant.enums.LogOperType;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.logSave.annotation.Log;
-import cn.daenx.modules.test.domain.po.TestDataTree;
 import cn.daenx.modules.test.domain.dto.testData.TestDataTreeAddDto;
 import cn.daenx.modules.test.domain.dto.testData.TestDataTreePageDto;
 import cn.daenx.modules.test.domain.dto.testData.TestDataTreeUpdDto;
+import cn.daenx.modules.test.domain.po.TestDataTree;
 import cn.daenx.modules.test.service.TestDataTreeService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import jakarta.annotation.Resource;
@@ -27,28 +27,28 @@ public class TestDataTreeController {
     /**
      * 测试树表数据-列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Log(name = "测试树表数据-列表", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:list")
     @GetMapping("/list")
-    public Result list(TestDataTreePageDto vo) {
-        List<TestDataTree> list = testDataTreeService.getAll(vo);
+    public Result<List<TestDataTree>> list(TestDataTreePageDto dto) {
+        List<TestDataTree> list = testDataTreeService.getAll(dto);
         return Result.ok(list);
     }
 
     /**
      * 测试树表数据-新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Log(name = "测试树表数据-新增", type = LogOperType.ADD, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody TestDataTreeAddDto vo) {
-        testDataTreeService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody TestDataTreeAddDto dto) {
+        testDataTreeService.addInfo(dto);
         return Result.ok();
     }
 
@@ -61,7 +61,7 @@ public class TestDataTreeController {
     @Log(name = "测试树表数据-查询", type = LogOperType.QUERY, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<TestDataTree> query(@RequestParam(name = "id", required = true) String id) {
         TestDataTree testDataTree = testDataTreeService.getInfo(id);
         return Result.ok(testDataTree);
     }
@@ -69,14 +69,14 @@ public class TestDataTreeController {
     /**
      * 测试树表数据-修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Log(name = "测试树表数据-修改", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody TestDataTreeUpdDto vo) {
-        testDataTreeService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody TestDataTreeUpdDto dto) {
+        testDataTreeService.editInfo(dto);
         return Result.ok();
     }
 
@@ -88,8 +88,8 @@ public class TestDataTreeController {
      */
     @Log(name = "测试树表数据-删除", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:del")
-    @PostMapping("/del")
-    public Result del(@RequestParam(value = "id") String id) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");
         }
@@ -100,14 +100,14 @@ public class TestDataTreeController {
     /**
      * 测试数据-修改状态
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Log(name = "测试数据-修改状态", type = LogOperType.EDIT, recordParams = true, recordResult = false)
     @SaCheckPermission("test:data:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
-        testDataTreeService.changeStatus(vo);
+    public Result<Void> changeStatus(@Validated @RequestBody ComStatusUpdDto dto) {
+        testDataTreeService.changeStatus(dto);
         return Result.ok();
     }
 }

@@ -1,8 +1,8 @@
 package cn.daenx.framework.notify.wecom.service.impl;
 
 import cn.daenx.framework.common.domain.vo.system.config.SysWecomConfigVo;
+import cn.daenx.framework.notify.wecom.domain.WecomSendResult;
 import cn.daenx.framework.notify.wecom.service.WecomService;
-import cn.daenx.framework.notify.wecom.vo.WecomSendResult;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;

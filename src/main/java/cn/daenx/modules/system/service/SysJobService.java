@@ -1,10 +1,10 @@
 package cn.daenx.modules.system.service;
 
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.modules.system.domain.po.SysJob;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobAddDto;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobPageDto;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobUpdDto;
+import cn.daenx.modules.system.domain.po.SysJob;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,10 +19,10 @@ public interface SysJobService extends IService<SysJob> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysJob> getPage(SysJobPageDto vo);
+    IPage<SysJob> getPage(SysJobPageDto dto);
 
     /**
      * 查询
@@ -35,23 +35,23 @@ public interface SysJobService extends IService<SysJob> {
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysJobAddDto vo);
+    void addInfo(SysJobAddDto dto);
 
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysJobUpdDto vo);
+    void editInfo(SysJobUpdDto dto);
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeStatus(ComStatusUpdDto vo);
+    void changeStatus(ComStatusUpdDto dto);
 
     /**
      * 删除

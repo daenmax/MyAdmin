@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.system;
 
-import cn.daenx.modules.system.domain.vo.sysDept.SysDeptTreeVo;
-import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
-import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
-import cn.daenx.modules.system.domain.dto.sysUser.*;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.excel.utils.ExcelUtil;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
+import cn.daenx.modules.system.domain.dto.sysUser.*;
+import cn.daenx.modules.system.domain.vo.sysDept.SysDeptTreeVo;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
 import cn.daenx.modules.system.service.SysDeptService;
 import cn.daenx.modules.system.service.SysUserService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
@@ -38,7 +38,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:list")
     @GetMapping("/deptTree")
-    public Result deptTree() {
+    public Result<List<SysDeptTreeVo>> deptTree() {
 //        List<Tree<String>> trees = sysDeptService.deptTree(new SysDeptPageVo());
         List<SysDeptTreeVo> trees = sysDeptService.deptTreeNew(new SysDeptPageDto());
         return Result.ok(trees);
@@ -47,13 +47,13 @@ public class SysUserController {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:user:page")
     @GetMapping(value = "/page")
-    public Result page(SysUserPageDto vo) {
-        IPage<SysUserPageVo> page = sysUserService.getPage(vo);
+    public Result<IPage<SysUserPageVo>> page(SysUserPageDto dto) {
+        IPage<SysUserPageVo> page = sysUserService.getPage(dto);
         return Result.ok(page);
     }
 
@@ -62,8 +62,8 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:export")
     @PostMapping("/exportData")
-    public void exportData(SysUserPageDto vo, HttpServletResponse response) {
-        List<SysUserPageVo> list = sysUserService.exportData(vo);
+    public void exportData(SysUserPageDto dto, HttpServletResponse response) {
+        List<SysUserPageVo> list = sysUserService.exportData(dto);
         ExcelUtil.exportXlsx(response, "用户", "系统用户", list, SysUserPageVo.class);
     }
 
@@ -75,7 +75,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = false) String id) {
+    public Result<Map<String, Object>> query(@RequestParam(name = "id", required = false) String id) {
         Map<String, Object> map = sysUserService.getInfo(id);
         return Result.ok(map);
     }
@@ -83,26 +83,26 @@ public class SysUserController {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:user:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysUserUpdDto vo) {
-        sysUserService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody SysUserUpdDto dto) {
+        sysUserService.editInfo(dto);
         return Result.ok();
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:user:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysUserAddDto vo) {
-        sysUserService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysUserAddDto dto) {
+        sysUserService.addInfo(dto);
         return Result.ok();
     }
 
@@ -110,13 +110,13 @@ public class SysUserController {
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:user:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
-        sysUserService.changeStatus(vo);
+    public Result<Void> changeStatus(@Validated @RequestBody ComStatusUpdDto dto) {
+        sysUserService.changeStatus(dto);
         return Result.ok();
     }
 
@@ -124,13 +124,13 @@ public class SysUserController {
     /**
      * 重置用户密码
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:user:resetPwd")
     @PostMapping("/resetPwd")
-    public Result resetPwd(@Validated @RequestBody SysUserResetPwdDto vo) {
-        sysUserService.resetPwd(vo);
+    public Result<Void> resetPwd(@Validated @RequestBody SysUserResetPwdDto dto) {
+        sysUserService.resetPwd(dto);
         return Result.ok();
     }
 
@@ -141,8 +141,8 @@ public class SysUserController {
      * @return
      */
     @SaCheckPermission("system:user:del")
-    @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -159,7 +159,7 @@ public class SysUserController {
      */
     @SaCheckPermission("system:user:query")
     @GetMapping(value = {"/authRole/{id}"})
-    public Result authRole(@PathVariable(value = "id", required = false) String id) {
+    public Result<Map<String, Object>> authRole(@PathVariable(value = "id", required = false) String id) {
         Map<String, Object> map = sysUserService.authRole(id);
         return Result.ok(map);
     }
@@ -167,12 +167,12 @@ public class SysUserController {
     /**
      * 保存用户授权角色
      *
-     * @param vo
+     * @param dto
      */
     @SaCheckPermission("system:user:edit")
     @PostMapping("/authRole")
-    public Result saveAuthRole(@Validated @RequestBody SysUserUpdAuthRoleDto vo) {
-        sysUserService.saveAuthRole(vo);
+    public Result<Void> saveAuthRole(@Validated @RequestBody SysUserUpdAuthRoleDto dto) {
+        sysUserService.saveAuthRole(dto);
         return Result.ok();
     }
 

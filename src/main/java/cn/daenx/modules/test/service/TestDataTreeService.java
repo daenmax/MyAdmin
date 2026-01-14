@@ -2,10 +2,10 @@ package cn.daenx.modules.test.service;
 
 
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.modules.test.domain.po.TestDataTree;
 import cn.daenx.modules.test.domain.dto.testData.TestDataTreeAddDto;
 import cn.daenx.modules.test.domain.dto.testData.TestDataTreePageDto;
 import cn.daenx.modules.test.domain.dto.testData.TestDataTreeUpdDto;
+import cn.daenx.modules.test.domain.po.TestDataTree;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -15,17 +15,17 @@ public interface TestDataTreeService extends IService<TestDataTree> {
     /**
      * 获取列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<TestDataTree> getAll(TestDataTreePageDto vo);
+    List<TestDataTree> getAll(TestDataTreePageDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(TestDataTreeAddDto vo);
+    void addInfo(TestDataTreeAddDto dto);
 
     /**
      * 查询
@@ -38,9 +38,9 @@ public interface TestDataTreeService extends IService<TestDataTree> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(TestDataTreeUpdDto vo);
+    void editInfo(TestDataTreeUpdDto dto);
 
     /**
      * 删除
@@ -52,7 +52,7 @@ public interface TestDataTreeService extends IService<TestDataTree> {
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
-    void changeStatus(ComStatusUpdDto vo);
+    void changeStatus(ComStatusUpdDto dto);
 }

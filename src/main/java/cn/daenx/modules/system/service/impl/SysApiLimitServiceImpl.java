@@ -1,28 +1,28 @@
 package cn.daenx.modules.system.service.impl;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
-import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.common.constant.RedisConstant;
+import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.modules.system.domain.po.SysApiLimit;
+import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitAddDto;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitPageDto;
 import cn.daenx.modules.system.domain.dto.sysApiLimit.SysApiLimitUpdDto;
+import cn.daenx.modules.system.domain.po.SysApiLimit;
+import cn.daenx.modules.system.mapper.SysApiLimitMapper;
+import cn.daenx.modules.system.service.SysApiLimitService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.modules.system.mapper.SysApiLimitMapper;
-import cn.daenx.modules.system.service.SysApiLimitService;
 
 import java.util.List;
 
@@ -31,16 +31,16 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
     @Resource
     private SysApiLimitMapper sysApiLimitMapper;
 
-    private LambdaQueryWrapper<SysApiLimit> getWrapper(SysApiLimitPageDto vo) {
+    private LambdaQueryWrapper<SysApiLimit> getWrapper(SysApiLimitPageDto dto) {
         LambdaQueryWrapper<SysApiLimit> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getApiName()), SysApiLimit::getApiName, vo.getApiName());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getApiUri()), SysApiLimit::getApiUri, vo.getApiUri());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getLimitType()), SysApiLimit::getLimitType, vo.getLimitType());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRetMsg()), SysApiLimit::getRetMsg, vo.getRetMsg());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysApiLimit::getStatus, vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysApiLimit::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getApiName()), SysApiLimit::getApiName, dto.getApiName());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getApiUri()), SysApiLimit::getApiUri, dto.getApiUri());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getLimitType()), SysApiLimit::getLimitType, dto.getLimitType());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRetMsg()), SysApiLimit::getRetMsg, dto.getRetMsg());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysApiLimit::getStatus, dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), SysApiLimit::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysApiLimit::getCreateTime, startTime, endTime);
         return wrapper;
     }
@@ -49,14 +49,14 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @DataScope(alias = "sys_api_limit")
     @Override
-    public IPage<SysApiLimit> getPage(SysApiLimitPageDto vo) {
-        LambdaQueryWrapper<SysApiLimit> wrapper = getWrapper(vo);
-        Page<SysApiLimit> sysApiLimitPage = sysApiLimitMapper.selectPage(vo.getPage(true), wrapper);
+    public IPage<SysApiLimit> getPage(SysApiLimitPageDto dto) {
+        LambdaQueryWrapper<SysApiLimit> wrapper = getWrapper(dto);
+        Page<SysApiLimit> sysApiLimitPage = sysApiLimitMapper.selectPage(dto.getPage(true), wrapper);
         return sysApiLimitPage;
     }
 
@@ -76,54 +76,54 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysApiLimitAddDto vo) {
-        if (SystemConstant.API_LIMIT_CURRENT.equals(vo.getLimitType())) {
+    public void addInfo(SysApiLimitAddDto dto) {
+        if (SystemConstant.API_LIMIT_CURRENT.equals(dto.getLimitType())) {
             //限流
-            if (ObjectUtil.isEmpty(vo.getSingleFrequency()) && ObjectUtil.isEmpty(vo.getWholeFrequency())) {
+            if (ObjectUtil.isEmpty(dto.getSingleFrequency()) && ObjectUtil.isEmpty(dto.getWholeFrequency())) {
                 throw new MyException("单个用户限制和全部用户限制最少填写一个");
             }
-            if (ObjectUtil.isNotEmpty(vo.getSingleFrequency())) {
-                if (ObjectUtil.isEmpty(vo.getSingleTime()) || ObjectUtil.isEmpty(vo.getSingleTimeUnit())) {
+            if (ObjectUtil.isNotEmpty(dto.getSingleFrequency())) {
+                if (ObjectUtil.isEmpty(dto.getSingleTime()) || ObjectUtil.isEmpty(dto.getSingleTimeUnit())) {
                     throw new MyException("单个用户限制填写不完整");
                 }
-                if (vo.getSingleFrequency() <= 0) {
+                if (dto.getSingleFrequency() <= 0) {
                     throw new MyException("次数最小为1");
                 }
-                if (vo.getSingleTime() <= 0) {
+                if (dto.getSingleTime() <= 0) {
                     throw new MyException("时间最小为1");
                 }
             }
-            if (ObjectUtil.isNotEmpty(vo.getWholeFrequency())) {
-                if (ObjectUtil.isEmpty(vo.getWholeTime()) || ObjectUtil.isEmpty(vo.getWholeTimeUnit())) {
+            if (ObjectUtil.isNotEmpty(dto.getWholeFrequency())) {
+                if (ObjectUtil.isEmpty(dto.getWholeTime()) || ObjectUtil.isEmpty(dto.getWholeTimeUnit())) {
                     throw new MyException("全部用户限制填写不完整");
                 }
-                if (vo.getWholeFrequency() <= 0) {
+                if (dto.getWholeFrequency() <= 0) {
                     throw new MyException("次数最小为1");
                 }
-                if (vo.getWholeTime() <= 0) {
+                if (dto.getWholeTime() <= 0) {
                     throw new MyException("时间最小为1");
                 }
             }
         }
-        if (checkApiLimitExist(vo.getApiUri(), vo.getLimitType(), null)) {
+        if (checkApiLimitExist(dto.getApiUri(), dto.getLimitType(), null)) {
             throw new MyException("当前接口已经存在当前限制类型");
         }
         SysApiLimit sysApiLimit = new SysApiLimit();
-        sysApiLimit.setApiName(vo.getApiName());
-        sysApiLimit.setApiUri(vo.getApiUri());
-        sysApiLimit.setSingleFrequency(vo.getSingleFrequency());
-        sysApiLimit.setSingleTime(vo.getSingleTime());
-        sysApiLimit.setSingleTimeUnit(vo.getSingleTimeUnit());
-        sysApiLimit.setWholeFrequency(vo.getWholeFrequency());
-        sysApiLimit.setWholeTime(vo.getWholeTime());
-        sysApiLimit.setWholeTimeUnit(vo.getWholeTimeUnit());
-        sysApiLimit.setLimitType(vo.getLimitType());
-        sysApiLimit.setRetMsg(vo.getRetMsg());
-        sysApiLimit.setStatus(vo.getStatus());
-        sysApiLimit.setRemark(vo.getRemark());
+        sysApiLimit.setApiName(dto.getApiName());
+        sysApiLimit.setApiUri(dto.getApiUri());
+        sysApiLimit.setSingleFrequency(dto.getSingleFrequency());
+        sysApiLimit.setSingleTime(dto.getSingleTime());
+        sysApiLimit.setSingleTimeUnit(dto.getSingleTimeUnit());
+        sysApiLimit.setWholeFrequency(dto.getWholeFrequency());
+        sysApiLimit.setWholeTime(dto.getWholeTime());
+        sysApiLimit.setWholeTimeUnit(dto.getWholeTimeUnit());
+        sysApiLimit.setLimitType(dto.getLimitType());
+        sysApiLimit.setRetMsg(dto.getRetMsg());
+        sysApiLimit.setStatus(dto.getStatus());
+        sysApiLimit.setRemark(dto.getRemark());
         int insert = sysApiLimitMapper.insert(sysApiLimit);
         if (insert < 1) {
             throw new MyException("新增失败");
@@ -136,65 +136,65 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @DataScope(alias = "sys_api_limit")
     @Override
-    public void editInfo(SysApiLimitUpdDto vo) {
-        if (SystemConstant.API_LIMIT_CURRENT.equals(vo.getLimitType())) {
+    public void editInfo(SysApiLimitUpdDto dto) {
+        if (SystemConstant.API_LIMIT_CURRENT.equals(dto.getLimitType())) {
             //限流
-            if (ObjectUtil.isEmpty(vo.getSingleFrequency()) && ObjectUtil.isEmpty(vo.getWholeFrequency())) {
+            if (ObjectUtil.isEmpty(dto.getSingleFrequency()) && ObjectUtil.isEmpty(dto.getWholeFrequency())) {
                 throw new MyException("单个用户限制和全部用户限制最少填写一个");
             }
-            if (ObjectUtil.isNotEmpty(vo.getSingleFrequency())) {
-                if (ObjectUtil.isEmpty(vo.getSingleTime()) || ObjectUtil.isEmpty(vo.getSingleTimeUnit())) {
+            if (ObjectUtil.isNotEmpty(dto.getSingleFrequency())) {
+                if (ObjectUtil.isEmpty(dto.getSingleTime()) || ObjectUtil.isEmpty(dto.getSingleTimeUnit())) {
                     throw new MyException("单个用户限制填写不完整");
                 }
-                if (vo.getSingleFrequency() <= 0) {
+                if (dto.getSingleFrequency() <= 0) {
                     throw new MyException("次数最小为1");
                 }
-                if (vo.getSingleTime() <= 0) {
+                if (dto.getSingleTime() <= 0) {
                     throw new MyException("时间最小为1");
                 }
             }
-            if (ObjectUtil.isNotEmpty(vo.getWholeFrequency())) {
-                if (ObjectUtil.isEmpty(vo.getWholeTime()) || ObjectUtil.isEmpty(vo.getWholeTimeUnit())) {
+            if (ObjectUtil.isNotEmpty(dto.getWholeFrequency())) {
+                if (ObjectUtil.isEmpty(dto.getWholeTime()) || ObjectUtil.isEmpty(dto.getWholeTimeUnit())) {
                     throw new MyException("全部用户限制填写不完整");
                 }
-                if (vo.getWholeFrequency() <= 0) {
+                if (dto.getWholeFrequency() <= 0) {
                     throw new MyException("次数最小为1");
                 }
-                if (vo.getWholeTime() <= 0) {
+                if (dto.getWholeTime() <= 0) {
                     throw new MyException("时间最小为1");
                 }
             }
         }
-        if (checkApiLimitExist(vo.getApiUri(), vo.getLimitType(), vo.getId())) {
+        if (checkApiLimitExist(dto.getApiUri(), dto.getLimitType(), dto.getId())) {
             throw new MyException("当前接口已经存在当前限制类型");
         }
-        SysApiLimit sysApiLimitOld = getInfo(vo.getId());
+        SysApiLimit sysApiLimitOld = getInfo(dto.getId());
         if (ObjectUtil.isEmpty(sysApiLimitOld)) {
             throw new MyException("ID错误");
         }
         LambdaUpdateWrapper<SysApiLimit> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysApiLimit::getId, vo.getId());
-        updateWrapper.set(SysApiLimit::getApiName, vo.getApiName());
-        updateWrapper.set(SysApiLimit::getApiUri, vo.getApiUri());
-        updateWrapper.set(SysApiLimit::getSingleFrequency, vo.getSingleFrequency());
-        updateWrapper.set(SysApiLimit::getSingleTime, vo.getSingleTime());
-        updateWrapper.set(SysApiLimit::getSingleTimeUnit, vo.getSingleTimeUnit());
-        updateWrapper.set(SysApiLimit::getWholeFrequency, vo.getWholeFrequency());
-        updateWrapper.set(SysApiLimit::getWholeTime, vo.getWholeTime());
-        updateWrapper.set(SysApiLimit::getWholeTimeUnit, vo.getWholeTimeUnit());
-        updateWrapper.set(SysApiLimit::getLimitType, vo.getLimitType());
-        updateWrapper.set(SysApiLimit::getRetMsg, vo.getRetMsg());
-        updateWrapper.set(SysApiLimit::getStatus, vo.getStatus());
-        updateWrapper.set(SysApiLimit::getRemark, vo.getRemark());
+        updateWrapper.eq(SysApiLimit::getId, dto.getId());
+        updateWrapper.set(SysApiLimit::getApiName, dto.getApiName());
+        updateWrapper.set(SysApiLimit::getApiUri, dto.getApiUri());
+        updateWrapper.set(SysApiLimit::getSingleFrequency, dto.getSingleFrequency());
+        updateWrapper.set(SysApiLimit::getSingleTime, dto.getSingleTime());
+        updateWrapper.set(SysApiLimit::getSingleTimeUnit, dto.getSingleTimeUnit());
+        updateWrapper.set(SysApiLimit::getWholeFrequency, dto.getWholeFrequency());
+        updateWrapper.set(SysApiLimit::getWholeTime, dto.getWholeTime());
+        updateWrapper.set(SysApiLimit::getWholeTimeUnit, dto.getWholeTimeUnit());
+        updateWrapper.set(SysApiLimit::getLimitType, dto.getLimitType());
+        updateWrapper.set(SysApiLimit::getRetMsg, dto.getRetMsg());
+        updateWrapper.set(SysApiLimit::getStatus, dto.getStatus());
+        updateWrapper.set(SysApiLimit::getRemark, dto.getRemark());
         int rows = sysApiLimitMapper.update(new SysApiLimit(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        SysApiLimit sysApiLimitNew = getInfo(vo.getId());
+        SysApiLimit sysApiLimitNew = getInfo(dto.getId());
         if (!sysApiLimitOld.getLimitType().equals(sysApiLimitNew.getLimitType()) || !sysApiLimitOld.getApiUri().equals(sysApiLimitNew.getApiUri())) {
             //修改了限制类型或者接口URI，需要清除原来的
             cleanCache(sysApiLimitOld);
@@ -206,19 +206,19 @@ public class SysApiLimitServiceImpl extends ServiceImpl<SysApiLimitMapper, SysAp
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
     @DataScope(alias = "sys_api_limit")
     @Override
-    public void changeStatus(ComStatusUpdDto vo) {
+    public void changeStatus(ComStatusUpdDto dto) {
         LambdaUpdateWrapper<SysApiLimit> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(SysApiLimit::getId, vo.getId());
-        updateWrapper.set(SysApiLimit::getStatus, vo.getStatus());
+        updateWrapper.eq(SysApiLimit::getId, dto.getId());
+        updateWrapper.set(SysApiLimit::getStatus, dto.getStatus());
         int rows = sysApiLimitMapper.update(new SysApiLimit(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
         }
-        SysApiLimit sysApiLimit = getInfo(vo.getId());
+        SysApiLimit sysApiLimit = getInfo(dto.getId());
         //刷新redis缓存
         initApiLimit(sysApiLimit);
     }

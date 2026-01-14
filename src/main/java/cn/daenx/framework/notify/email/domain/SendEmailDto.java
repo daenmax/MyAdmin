@@ -1,4 +1,4 @@
-package cn.daenx.framework.notify.email.vo;
+package cn.daenx.framework.notify.email.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * 邮箱测试
  */
 @Data
-public class SendEmailVo {
+public class SendEmailDto {
     /**
      * 使用邮箱
      */

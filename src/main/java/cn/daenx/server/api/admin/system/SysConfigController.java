@@ -1,12 +1,12 @@
 package cn.daenx.server.api.admin.system;
 
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.excel.utils.ExcelUtil;
-import cn.daenx.modules.system.domain.po.SysConfig;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigAddDto;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigPageDto;
 import cn.daenx.modules.system.domain.dto.sysConfig.SysConfigUpdDto;
+import cn.daenx.modules.system.domain.po.SysConfig;
 import cn.daenx.modules.system.service.SysConfigService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
@@ -28,13 +28,13 @@ public class SysConfigController {
     /**
      * 列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:config:page")
     @GetMapping(value = "/page")
-    public Result page(SysConfigPageDto vo) {
-        IPage<SysConfig> page = sysConfigService.getPage(vo);
+    public Result<IPage<SysConfig>> page(SysConfigPageDto dto) {
+        IPage<SysConfig> page = sysConfigService.getPage(dto);
         return Result.ok(page);
     }
 
@@ -43,8 +43,8 @@ public class SysConfigController {
      */
     @SaCheckPermission("system:config:export")
     @PostMapping("/exportData")
-    public void exportData(SysConfigPageDto vo, HttpServletResponse response) {
-        List<SysConfig> list = sysConfigService.getAll(vo);
+    public void exportData(SysConfigPageDto dto, HttpServletResponse response) {
+        List<SysConfig> list = sysConfigService.getAll(dto);
         ExcelUtil.exportXlsx(response, "系统参数", "系统参数", list, SysConfig.class);
     }
 
@@ -57,7 +57,7 @@ public class SysConfigController {
      */
     @SaCheckPermission("system:config:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysConfig> query(@RequestParam(name = "id", required = true) String id) {
         SysConfig sysConfig = sysConfigService.getInfo(id);
         return Result.ok(sysConfig);
     }
@@ -65,26 +65,26 @@ public class SysConfigController {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:config:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysConfigUpdDto vo) {
-        sysConfigService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody SysConfigUpdDto dto) {
+        sysConfigService.editInfo(dto);
         return Result.ok();
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:config:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysConfigAddDto vo) {
-        sysConfigService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysConfigAddDto dto) {
+        sysConfigService.addInfo(dto);
         return Result.ok();
     }
 
@@ -95,8 +95,8 @@ public class SysConfigController {
      * @return
      */
     @SaCheckPermission("system:config:del")
-    @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -111,7 +111,7 @@ public class SysConfigController {
      */
     @SaCheckPermission("system:config:refreshCache")
     @PostMapping("/refreshCache")
-    public Result refreshCache() {
+    public Result<Void> refreshCache() {
         sysConfigService.refreshCache();
         return Result.ok();
     }

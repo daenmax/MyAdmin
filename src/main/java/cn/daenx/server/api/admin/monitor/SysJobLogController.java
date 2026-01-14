@@ -1,10 +1,10 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.modules.system.domain.vo.sysJob.SysJobLogPageVo;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobLogPageDto;
+import cn.daenx.modules.system.domain.vo.sysJob.SysJobLogPageVo;
 import cn.daenx.modules.system.service.SysJobLogService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
@@ -25,26 +25,26 @@ public class SysJobLogController {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:jobLog:page")
     @GetMapping(value = "/page")
-    public Result page(SysJobLogPageDto vo) {
-        IPage<SysJobLogPageVo> page = sysJobLogService.getPage(vo);
+    public Result<IPage<SysJobLogPageVo>> page(SysJobLogPageDto dto) {
+        IPage<SysJobLogPageVo> page = sysJobLogService.getPage(dto);
         return Result.ok(page);
     }
 
     /**
      * 导出
      *
-     * @param vo
+     * @param dto
      * @param response
      */
     @SaCheckPermission("monitor:jobLog:export")
     @PostMapping("/exportData")
-    public void exportData(SysJobLogPageDto vo, HttpServletResponse response) {
-        List<SysJobLogPageVo> list = sysJobLogService.getAll(vo);
+    public void exportData(SysJobLogPageDto dto, HttpServletResponse response) {
+        List<SysJobLogPageVo> list = sysJobLogService.getAll(dto);
         ExcelUtil.exportXlsx(response, "定时任务执行日志", "定时任务执行日志", list, SysJobLogPageVo.class);
     }
 
@@ -56,7 +56,7 @@ public class SysJobLogController {
      */
     @SaCheckPermission("monitor:jobLog:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysJobLogPageVo> query(@RequestParam(name = "id", required = true) String id) {
         SysJobLogPageVo sysJobLogPageVo = sysJobLogService.getInfo(id);
         return Result.ok(sysJobLogPageVo);
     }
@@ -68,8 +68,8 @@ public class SysJobLogController {
      * @return
      */
     @SaCheckPermission("monitor:jobLog:del")
-    @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -84,7 +84,7 @@ public class SysJobLogController {
      */
     @SaCheckPermission("monitor:jobLog:del")
     @PostMapping("/clean")
-    public Result clean() {
+    public Result<Void> clean() {
         sysJobLogService.clean();
         return Result.ok();
     }

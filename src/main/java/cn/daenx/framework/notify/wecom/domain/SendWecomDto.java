@@ -1,13 +1,13 @@
-package cn.daenx.framework.notify.dingTalk.vo;
+package cn.daenx.framework.notify.wecom.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * 钉钉测试
+ * 企业微信发送消息
  */
 @Data
-public class SendDingTalkVo {
+public class SendWecomDto {
     /**
      * 机器人名称，在系统参数里自己填的
      */

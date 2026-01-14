@@ -1,10 +1,10 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.po.SysPosition;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionAddDto;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionPageDto;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionUpdAuthUserDto;
 import cn.daenx.modules.system.domain.dto.sysPosition.SysPositionUpdDto;
+import cn.daenx.modules.system.domain.po.SysPosition;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -36,18 +36,18 @@ public interface SysPositionService extends IService<SysPosition> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysPosition> getPage(SysPositionPageDto vo);
+    IPage<SysPosition> getPage(SysPositionPageDto dto);
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysPosition> getAll(SysPositionPageDto vo);
+    List<SysPosition> getAll(SysPositionPageDto dto);
 
     /**
      * 查询
@@ -60,16 +60,16 @@ public interface SysPositionService extends IService<SysPosition> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysPositionUpdDto vo);
+    void editInfo(SysPositionUpdDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysPositionAddDto vo);
+    void addInfo(SysPositionAddDto dto);
 
     /**
      * 删除
@@ -82,15 +82,15 @@ public interface SysPositionService extends IService<SysPosition> {
     /**
      * 取消授权用户
      *
-     * @param vo
+     * @param dto
      */
-    void cancelAuthUser(SysPositionUpdAuthUserDto vo);
+    void cancelAuthUser(SysPositionUpdAuthUserDto dto);
 
     /**
      * 保存授权用户
      *
-     * @param vo
+     * @param dto
      */
-    void saveAuthUser(SysPositionUpdAuthUserDto vo);
+    void saveAuthUser(SysPositionUpdAuthUserDto dto);
 
 }

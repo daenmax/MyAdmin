@@ -1,7 +1,7 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.po.SysLogLogin;
 import cn.daenx.modules.system.domain.dto.sysLog.SysLogLoginPageDto;
+import cn.daenx.modules.system.domain.po.SysLogLogin;
 import cn.hutool.http.useragent.UserAgent;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -24,18 +24,18 @@ public interface SysLogLoginService extends IService<SysLogLogin> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysLogLogin> getPage(SysLogLoginPageDto vo);
+    IPage<SysLogLogin> getPage(SysLogLoginPageDto dto);
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysLogLogin> getAll(SysLogLoginPageDto vo);
+    List<SysLogLogin> getAll(SysLogLoginPageDto dto);
 
     /**
      * 删除

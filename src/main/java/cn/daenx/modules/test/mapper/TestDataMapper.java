@@ -1,9 +1,9 @@
 package cn.daenx.modules.test.mapper;
 
-import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
-import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
 import cn.daenx.framework.dataScope.annotation.DataScope;
+import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
 import cn.daenx.modules.test.domain.po.TestData;
+import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -20,11 +20,11 @@ public interface TestDataMapper extends BaseMapper<TestData> {
      * 测试数据分页列表_自己写的SQL
      *
      * @param page
-     * @param vo
+     * @param dto
      * @return
      */
     @DataScope(alias = "td")
-    IPage<TestDataPageVo> getPage(Page<TestDataPageVo> page, @Param("vo") TestDataPageDto vo);
+    IPage<TestDataPageVo> getPage(Page<TestDataPageVo> page, @Param("vo") TestDataPageDto dto);
 
     /**
      * 测试数据分页列表_MP自定义SQL

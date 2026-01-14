@@ -1,31 +1,30 @@
 package cn.daenx.modules.system.service.impl;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.modules.system.mapper.SysDictDetailMapper;
-import cn.daenx.modules.system.domain.po.SysDictDetail;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictAddDto;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictPageDto;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictUpdDto;
+import cn.daenx.modules.system.domain.po.SysDict;
+import cn.daenx.modules.system.domain.po.SysDictDetail;
+import cn.daenx.modules.system.mapper.SysDictDetailMapper;
+import cn.daenx.modules.system.mapper.SysDictMapper;
+import cn.daenx.modules.system.service.SysDictService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.modules.system.mapper.SysDictMapper;
-import cn.daenx.modules.system.domain.po.SysDict;
-import cn.daenx.modules.system.service.SysDictService;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements SysDictService {
@@ -45,36 +44,36 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysDict> getPage(SysDictPageDto vo) {
-        LambdaQueryWrapper<SysDict> wrapper = getWrapper(vo);
-        Page<SysDict> sysDictPage = sysDictMapper.selectPage(vo.getPage(true), wrapper);
+    public IPage<SysDict> getPage(SysDictPageDto dto) {
+        LambdaQueryWrapper<SysDict> wrapper = getWrapper(dto);
+        Page<SysDict> sysDictPage = sysDictMapper.selectPage(dto.getPage(true), wrapper);
         return sysDictPage;
     }
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysDict> getAll(SysDictPageDto vo) {
-        LambdaQueryWrapper<SysDict> wrapper = getWrapper(vo);
+    public List<SysDict> getAll(SysDictPageDto dto) {
+        LambdaQueryWrapper<SysDict> wrapper = getWrapper(dto);
         List<SysDict> sysDictList = sysDictMapper.selectList(wrapper);
         return sysDictList;
     }
 
-    private LambdaQueryWrapper<SysDict> getWrapper(SysDictPageDto vo) {
+    private LambdaQueryWrapper<SysDict> getWrapper(SysDictPageDto dto) {
         LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDict::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDict::getCode, vo.getCode());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDict::getStatus, vo.getStatus());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getName()), SysDict::getName, dto.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getCode()), SysDict::getCode, dto.getCode());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysDict::getStatus, dto.getStatus());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDict::getCreateTime, startTime, endTime);
         return wrapper;
     }
@@ -83,18 +82,18 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
      * +
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysDictAddDto vo) {
-        if (checkDictExist(vo.getCode(), null)) {
+    public void addInfo(SysDictAddDto dto) {
+        if (checkDictExist(dto.getCode(), null)) {
             throw new MyException("字典编码已存在");
         }
         SysDict sysDict = new SysDict();
-        sysDict.setCode(vo.getCode());
-        sysDict.setName(vo.getName());
-        sysDict.setStatus(vo.getStatus());
-        sysDict.setRemark(vo.getRemark());
+        sysDict.setCode(dto.getCode());
+        sysDict.setName(dto.getName());
+        sysDict.setStatus(dto.getStatus());
+        sysDict.setRemark(dto.getRemark());
         int insert = sysDictMapper.insert(sysDict);
         if (insert > 0) {
             //刷新redis缓存
@@ -118,21 +117,21 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void editInfo(SysDictUpdDto vo) {
-        if (checkDictExist(vo.getCode(), vo.getId())) {
+    public void editInfo(SysDictUpdDto dto) {
+        if (checkDictExist(dto.getCode(), dto.getId())) {
             throw new MyException("字典编码已存在");
         }
-        SysDict info = getInfo(vo.getId());
+        SysDict info = getInfo(dto.getId());
         LambdaUpdateWrapper<SysDict> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysDict::getId, vo.getId());
-        wrapper.set(SysDict::getName, vo.getName());
-        wrapper.set(SysDict::getCode, vo.getCode());
-        wrapper.set(SysDict::getStatus, vo.getStatus());
-        wrapper.set(SysDict::getRemark, vo.getRemark());
+        wrapper.eq(SysDict::getId, dto.getId());
+        wrapper.set(SysDict::getName, dto.getName());
+        wrapper.set(SysDict::getCode, dto.getCode());
+        wrapper.set(SysDict::getStatus, dto.getStatus());
+        wrapper.set(SysDict::getRemark, dto.getRemark());
         int rows = sysDictMapper.update(new SysDict(), wrapper);
         if (rows > 0) {
             LambdaQueryWrapper<SysDictDetail> queryWrapper = new LambdaQueryWrapper<>();
@@ -141,7 +140,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
             if (count > 0) {
                 //修改字典明细
                 LambdaUpdateWrapper<SysDictDetail> updateWrapper = new LambdaUpdateWrapper<>();
-                updateWrapper.set(SysDictDetail::getDictCode, vo.getCode());
+                updateWrapper.set(SysDictDetail::getDictCode, dto.getCode());
                 updateWrapper.eq(SysDictDetail::getDictCode, info.getCode());
                 int update = sysDictDetailMapper.update(new SysDictDetail(), updateWrapper);
                 if (update < 1) {

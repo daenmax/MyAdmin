@@ -1,4 +1,4 @@
-package cn.daenx.framework.notify.feishu.vo;
+package cn.daenx.framework.notify.feishu.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

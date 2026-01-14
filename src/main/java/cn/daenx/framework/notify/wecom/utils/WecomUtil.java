@@ -1,13 +1,13 @@
 package cn.daenx.framework.notify.wecom.utils;
 
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.domain.vo.system.config.SysConfigVo;
 import cn.daenx.framework.common.domain.vo.system.config.SysWecomConfigVo;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.notify.wecom.domain.WecomSendResult;
 import cn.daenx.framework.notify.wecom.service.WecomService;
-import cn.daenx.framework.notify.wecom.vo.WecomSendResult;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;

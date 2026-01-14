@@ -1,12 +1,13 @@
 package cn.daenx.modules.system.service.impl;
 
-import cn.daenx.modules.system.domain.dto.sysRole.*;
 import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.satoken.utils.LoginUtil;
+import cn.daenx.modules.system.domain.dto.sysRole.*;
+import cn.daenx.modules.system.domain.po.SysRole;
 import cn.daenx.modules.system.domain.po.SysRoleUser;
 import cn.daenx.modules.system.mapper.SysRoleMapper;
 import cn.daenx.modules.system.mapper.SysUserMapper;
@@ -22,7 +23,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import cn.daenx.modules.system.domain.po.SysRole;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -64,41 +64,41 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
     @DataScope(alias = "sys_role")
-    public IPage<SysRole> getPage(SysRolePageDto vo) {
-        LambdaQueryWrapper<SysRole> wrapper = getWrapper(vo);
-        Page<SysRole> sysRolePage = sysRoleMapper.selectPage(vo.getPage(false), wrapper);
+    public IPage<SysRole> getPage(SysRolePageDto dto) {
+        LambdaQueryWrapper<SysRole> wrapper = getWrapper(dto);
+        Page<SysRole> sysRolePage = sysRoleMapper.selectPage(dto.getPage(false), wrapper);
         return sysRolePage;
     }
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
     @DataScope(alias = "sys_role")
-    public List<SysRole> getAll(SysRolePageDto vo) {
-        LambdaQueryWrapper<SysRole> wrapper = getWrapper(vo);
+    public List<SysRole> getAll(SysRolePageDto dto) {
+        LambdaQueryWrapper<SysRole> wrapper = getWrapper(dto);
         List<SysRole> sysRoleList = sysRoleMapper.selectList(wrapper);
         return sysRoleList;
     }
 
-    private LambdaQueryWrapper<SysRole> getWrapper(SysRolePageDto vo) {
+    private LambdaQueryWrapper<SysRole> getWrapper(SysRolePageDto dto) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByAsc(SysRole::getSort);
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysRole::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysRole::getCode, vo.getCode());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getDataScope()), SysRole::getDataScope, vo.getDataScope());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysRole::getStatus, vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysRole::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getName()), SysRole::getName, dto.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getCode()), SysRole::getCode, dto.getCode());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getDataScope()), SysRole::getDataScope, dto.getDataScope());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysRole::getStatus, dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), SysRole::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysRole::getCreateTime, startTime, endTime);
         return wrapper;
     }
@@ -134,59 +134,59 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void editInfo(SysRoleUpdDto vo) {
-        SysRole sysRole = sysRoleMapper.selectById(vo.getId());
+    public void editInfo(SysRoleUpdDto dto) {
+        SysRole sysRole = sysRoleMapper.selectById(dto.getId());
         if (SystemConstant.ROLE_ADMIN.equals(sysRole.getCode())) {
             throw new MyException("禁止操作超级管理员角色");
         }
-        if (checkRoleExist(vo.getCode(), vo.getId())) {
+        if (checkRoleExist(dto.getCode(), dto.getId())) {
             throw new MyException("角色编码已存在");
         }
         LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysRole::getId, vo.getId());
-        wrapper.set(SysRole::getName, vo.getName());
-        wrapper.set(SysRole::getCode, vo.getCode());
-        wrapper.set(SysRole::getSort, vo.getSort());
-        wrapper.set(SysRole::getMenuCheckStrictly, vo.getMenuCheckStrictly());
-        wrapper.set(SysRole::getDeptCheckStrictly, vo.getDeptCheckStrictly());
-        wrapper.set(SysRole::getRemark, vo.getRemark());
+        wrapper.eq(SysRole::getId, dto.getId());
+        wrapper.set(SysRole::getName, dto.getName());
+        wrapper.set(SysRole::getCode, dto.getCode());
+        wrapper.set(SysRole::getSort, dto.getSort());
+        wrapper.set(SysRole::getMenuCheckStrictly, dto.getMenuCheckStrictly());
+        wrapper.set(SysRole::getDeptCheckStrictly, dto.getDeptCheckStrictly());
+        wrapper.set(SysRole::getRemark, dto.getRemark());
         int update = sysRoleMapper.update(new SysRole(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
         //更新角色菜单关联信息
-        sysRoleMenuService.handleRoleMenu(vo.getId(), vo.getMenuIds());
+        sysRoleMenuService.handleRoleMenu(dto.getId(), dto.getMenuIds());
         //下线相关用户
-        LoginUtil.logoutByRoleId(vo.getId());
+        LoginUtil.logoutByRoleId(dto.getId());
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysRoleAddDto vo) {
-        if (checkRoleExist(vo.getCode(), null)) {
+    public void addInfo(SysRoleAddDto dto) {
+        if (checkRoleExist(dto.getCode(), null)) {
             throw new MyException("角色编码已存在");
         }
         SysRole sysRole = new SysRole();
-        sysRole.setName(vo.getName());
-        sysRole.setCode(vo.getCode());
-        sysRole.setSort(vo.getSort());
-        sysRole.setMenuCheckStrictly(vo.getMenuCheckStrictly());
-        sysRole.setDeptCheckStrictly(vo.getDeptCheckStrictly());
-        sysRole.setStatus(vo.getStatus());
-        sysRole.setRemark(vo.getRemark());
+        sysRole.setName(dto.getName());
+        sysRole.setCode(dto.getCode());
+        sysRole.setSort(dto.getSort());
+        sysRole.setMenuCheckStrictly(dto.getMenuCheckStrictly());
+        sysRole.setDeptCheckStrictly(dto.getDeptCheckStrictly());
+        sysRole.setStatus(dto.getStatus());
+        sysRole.setRemark(dto.getRemark());
         int insert = sysRoleMapper.insert(sysRole);
         if (insert < 1) {
             throw new MyException("新增失败");
         }
         //更新角色菜单关联信息
-        sysRoleMenuService.handleRoleMenu(sysRole.getId(), vo.getMenuIds());
+        sysRoleMenuService.handleRoleMenu(sysRole.getId(), dto.getMenuIds());
     }
 
     /**
@@ -235,44 +235,44 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 修改数据权限
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void dataScope(SysRoleDataScopeUpdDto vo) {
-        SysRole sysRole = sysRoleMapper.selectById(vo.getId());
+    public void dataScope(SysRoleDataScopeUpdDto dto) {
+        SysRole sysRole = sysRoleMapper.selectById(dto.getId());
         if (SystemConstant.ROLE_ADMIN.equals(sysRole.getCode())) {
             throw new MyException("禁止操作超级管理员角色");
         }
         LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysRole::getId, vo.getId());
-        wrapper.set(SysRole::getDeptCheckStrictly, vo.getDeptCheckStrictly());
-        wrapper.set(SysRole::getDataScope, vo.getDataScope());
+        wrapper.eq(SysRole::getId, dto.getId());
+        wrapper.set(SysRole::getDeptCheckStrictly, dto.getDeptCheckStrictly());
+        wrapper.set(SysRole::getDataScope, dto.getDataScope());
         int update = sysRoleMapper.update(new SysRole(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
         //更新角色部门关联信息
-        sysRoleDeptService.handleRoleDept(vo.getId(), vo.getDeptIds());
+        sysRoleDeptService.handleRoleDept(dto.getId(), dto.getDeptIds());
         //下线相关用户
-        LoginUtil.logoutByRoleId(vo.getId());
+        LoginUtil.logoutByRoleId(dto.getId());
     }
 
     /**
      * 取消授权用户
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void cancelAuthUser(SysRoleUpdAuthUserDto vo) {
+    public void cancelAuthUser(SysRoleUpdAuthUserDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        if(vo.getUserIds().contains(loginUser.getId())){
+        if(dto.getUserIds().contains(loginUser.getId())){
             throw new MyException("禁止操作自己");
         }
-        if (!loginUser.getIsAdmin() && sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, dto.getUserIds())) {
             throw new MyException("禁止操作超级管理员");
         }
-        for (String userId : vo.getUserIds()) {
-            sysRoleUserService.delUserRole(userId, vo.getRoleId());
+        for (String userId : dto.getUserIds()) {
+            sysRoleUserService.delUserRole(userId, dto.getRoleId());
             LoginUtil.logoutByUserId(userId);
         }
     }
@@ -280,19 +280,19 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 保存授权用户
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void saveAuthUser(SysRoleUpdAuthUserDto vo) {
+    public void saveAuthUser(SysRoleUpdAuthUserDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
-        if(vo.getUserIds().contains(loginUser.getId())){
+        if(dto.getUserIds().contains(loginUser.getId())){
             throw new MyException("禁止操作自己");
         }
-        if (!loginUser.getIsAdmin() && sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, vo.getUserIds())) {
+        if (!loginUser.getIsAdmin() && sysUserMapper.isHasAdmin(SystemConstant.ROLE_ADMIN, dto.getUserIds())) {
             throw new MyException("禁止操作超级管理员");
         }
-        for (String userId : vo.getUserIds()) {
-            sysRoleUserService.addUserRole(userId, vo.getRoleId());
+        for (String userId : dto.getUserIds()) {
+            sysRoleUserService.addUserRole(userId, dto.getRoleId());
             LoginUtil.logoutByUserId(userId);
         }
     }
@@ -300,23 +300,23 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void changeStatus(ComStatusUpdDto vo) {
-        SysRole sysRole = sysRoleMapper.selectById(vo.getId());
+    public void changeStatus(ComStatusUpdDto dto) {
+        SysRole sysRole = sysRoleMapper.selectById(dto.getId());
         if (SystemConstant.ROLE_ADMIN.equals(sysRole.getCode())) {
             throw new MyException("禁止操作超级管理员角色");
         }
         LambdaUpdateWrapper<SysRole> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysRole::getId, vo.getId());
-        wrapper.set(SysRole::getStatus, vo.getStatus());
+        wrapper.eq(SysRole::getId, dto.getId());
+        wrapper.set(SysRole::getStatus, dto.getStatus());
         int update = sysRoleMapper.update(new SysRole(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
         //下线相关用户
-        LoginUtil.logoutByRoleId(vo.getId());
+        LoginUtil.logoutByRoleId(dto.getId());
     }
 
     /**

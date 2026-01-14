@@ -2,10 +2,10 @@ package cn.daenx.modules.system.service;
 
 import cn.daenx.framework.common.domain.vo.RouterVo;
 import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
-import cn.daenx.modules.system.domain.po.SysMenu;
 import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuAddDto;
 import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuPageDto;
 import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuUpdDto;
+import cn.daenx.modules.system.domain.po.SysMenu;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,10 +17,10 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysMenu> getList(SysMenuPageDto vo);
+    List<SysMenu> getList(SysMenuPageDto dto);
 
     /**
      * 查询
@@ -33,16 +33,16 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysMenuUpdDto vo);
+    void editInfo(SysMenuUpdDto dto);
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysMenuAddDto vo);
+    void addInfo(SysMenuAddDto dto);
 
     /**
      * 删除
@@ -75,10 +75,10 @@ public interface SysMenuService extends IService<SysMenu> {
     /**
      * 获取菜单下拉树列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<Tree<String>> treeSelect(SysMenuPageDto vo);
+    List<Tree<String>> treeSelect(SysMenuPageDto dto);
 
     /**
      * 根据角色ID查询菜单树信息

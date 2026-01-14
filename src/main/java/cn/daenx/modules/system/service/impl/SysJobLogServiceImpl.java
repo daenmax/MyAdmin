@@ -1,11 +1,11 @@
 package cn.daenx.modules.system.service.impl;
 
-import cn.daenx.modules.system.domain.vo.sysJob.SysJobLogPageVo;
 import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.vo.system.other.SysJobLogVo;
-import cn.daenx.modules.system.domain.po.SysJobLog;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobLogPageDto;
+import cn.daenx.modules.system.domain.po.SysJobLog;
+import cn.daenx.modules.system.domain.vo.sysJob.SysJobLogPageVo;
 import cn.daenx.modules.system.mapper.SysJobLogMapper;
 import cn.daenx.modules.system.service.SysJobLogService;
 import cn.hutool.core.util.ObjectUtil;
@@ -34,14 +34,14 @@ public class SysJobLogServiceImpl extends ServiceImpl<SysJobLogMapper, SysJobLog
         sysJobLogMapper.insert(sysJobLog);
     }
 
-    private QueryWrapper<SysJobLog> getWrapperQuery(SysJobLogPageDto vo) {
+    private QueryWrapper<SysJobLog> getWrapperQuery(SysJobLogPageDto dto) {
         QueryWrapper<SysJobLog> wrapper = new QueryWrapper<>();
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getId()), "sjl.id", vo.getId());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getJobName()), "sj.job_name", vo.getJobName());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sjl.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "sjl.remark", vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getId()), "sjl.id", dto.getId());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getJobName()), "sj.job_name", dto.getJobName());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), "sjl.status", dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), "sjl.remark", dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "sjl.create_time", startTime, endTime);
         wrapper.eq("sjl.is_delete", SystemConstant.IS_DELETE_NO);
         return wrapper;
@@ -50,25 +50,25 @@ public class SysJobLogServiceImpl extends ServiceImpl<SysJobLogMapper, SysJobLog
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysJobLogPageVo> getPage(SysJobLogPageDto vo) {
-        QueryWrapper<SysJobLog> wrapperQuery = getWrapperQuery(vo);
-        IPage<SysJobLogPageVo> iPage = sysJobLogMapper.getPageWrapper(vo.getPage(true), wrapperQuery);
+    public IPage<SysJobLogPageVo> getPage(SysJobLogPageDto dto) {
+        QueryWrapper<SysJobLog> wrapperQuery = getWrapperQuery(dto);
+        IPage<SysJobLogPageVo> iPage = sysJobLogMapper.getPageWrapper(dto.getPage(true), wrapperQuery);
         return iPage;
     }
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysJobLogPageVo> getAll(SysJobLogPageDto vo) {
-        QueryWrapper<SysJobLog> wrapperQuery = getWrapperQuery(vo);
+    public List<SysJobLogPageVo> getAll(SysJobLogPageDto dto) {
+        QueryWrapper<SysJobLog> wrapperQuery = getWrapperQuery(dto);
         List<SysJobLogPageVo> list = sysJobLogMapper.getAll(wrapperQuery);
         return list;
     }

@@ -1,34 +1,34 @@
 package cn.daenx.modules.system.service.impl;
 
-import cn.daenx.modules.system.domain.vo.sysFile.SysFilePageVo;
+import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
+import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.domain.vo.system.config.SysUploadConfigVo;
-import cn.daenx.framework.dataScope.annotation.DataScope;
-import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.framework.oss.core.OssClient;
+import cn.daenx.framework.oss.domain.OssProperties;
+import cn.daenx.framework.oss.domain.UploadResult;
 import cn.daenx.framework.oss.enums.AccessPolicyType;
 import cn.daenx.framework.oss.utils.OssUtil;
-import cn.daenx.framework.oss.vo.OssProperties;
-import cn.daenx.framework.oss.vo.UploadResult;
-import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.cache.utils.CacheUtil;
-import cn.daenx.modules.system.service.SysConfigService;
 import cn.daenx.modules.system.domain.dto.sysFile.SysFilePageDto;
+import cn.daenx.modules.system.domain.po.SysFile;
+import cn.daenx.modules.system.domain.vo.sysFile.SysFilePageVo;
+import cn.daenx.modules.system.mapper.SysFileMapper;
+import cn.daenx.modules.system.service.SysConfigService;
+import cn.daenx.modules.system.service.SysFileService;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.modules.system.domain.po.SysFile;
-import cn.daenx.modules.system.mapper.SysFileMapper;
-import cn.daenx.modules.system.service.SysFileService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -195,20 +195,20 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
         return upload(file, remark);
     }
 
-    private QueryWrapper<SysFile> getWrapper(SysFilePageDto vo) {
+    private QueryWrapper<SysFile> getWrapper(SysFilePageDto dto) {
         QueryWrapper<SysFile> wrapper = new QueryWrapper<>();
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getOriginalName()), "sf.original_name", vo.getOriginalName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getFileName()), "sf.file_name", vo.getFileName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getFileSuffix()), "sf.file_suffix", vo.getFileSuffix());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getFileUrl()), "sf.file_url", vo.getFileUrl());
-        wrapper.between(ObjectUtil.isNotEmpty(vo.getFileSizeMin()) && ObjectUtil.isNotEmpty(vo.getFileSizeMax()), "sf.file_size", vo.getFileSizeMin(), vo.getFileSizeMax());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getFileMd5()), "sf.file_md5", vo.getFileMd5());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getFileType()), "sf.file_type", vo.getFileType());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getOssId()), "sf.oss_id", vo.getOssId());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getStatus()), "sf.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "sf.remark", vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getOriginalName()), "sf.original_name", dto.getOriginalName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getFileName()), "sf.file_name", dto.getFileName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getFileSuffix()), "sf.file_suffix", dto.getFileSuffix());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getFileUrl()), "sf.file_url", dto.getFileUrl());
+        wrapper.between(ObjectUtil.isNotEmpty(dto.getFileSizeMin()) && ObjectUtil.isNotEmpty(dto.getFileSizeMax()), "sf.file_size", dto.getFileSizeMin(), dto.getFileSizeMax());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getFileMd5()), "sf.file_md5", dto.getFileMd5());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getFileType()), "sf.file_type", dto.getFileType());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getOssId()), "sf.oss_id", dto.getOssId());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getStatus()), "sf.status", dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), "sf.remark", dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "sf.create_time", startTime, endTime);
         wrapper.eq("sf.is_delete", SystemConstant.IS_DELETE_NO);
         return wrapper;
@@ -217,13 +217,13 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> impl
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysFilePageVo> getPage(SysFilePageDto vo) {
-        QueryWrapper<SysFile> wrapper = getWrapper(vo);
-        IPage<SysFilePageVo> iPage = sysFileMapper.getPageWrapper(vo.getPage(true), wrapper);
+    public IPage<SysFilePageVo> getPage(SysFilePageDto dto) {
+        QueryWrapper<SysFile> wrapper = getWrapper(dto);
+        IPage<SysFilePageVo> iPage = sysFileMapper.getPageWrapper(dto.getPage(true), wrapper);
         for (SysFilePageVo record : iPage.getRecords()) {
             record.setFileUrl(transPrivateUrl(record.getFileUrl(), record.getFileName(), record.getOssId()));
         }

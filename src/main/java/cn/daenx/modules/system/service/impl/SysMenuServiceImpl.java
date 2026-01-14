@@ -2,21 +2,23 @@ package cn.daenx.modules.system.service.impl;
 
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.utils.MyUtil;
-import cn.daenx.framework.common.utils.TreeBuildUtils;
 import cn.daenx.framework.common.domain.vo.RouterVo;
 import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.common.domain.vo.system.other.SysRoleVo;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.TreeBuildUtils;
 import cn.daenx.framework.satoken.utils.LoginUtil;
-import cn.daenx.modules.system.domain.po.SysMenu;
-import cn.daenx.modules.system.domain.po.SysRole;
-import cn.daenx.modules.system.domain.po.SysRoleMenu;
 import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuAddDto;
 import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuPageDto;
 import cn.daenx.modules.system.domain.dto.sysMenu.SysMenuUpdDto;
+import cn.daenx.modules.system.domain.po.SysMenu;
+import cn.daenx.modules.system.domain.po.SysRole;
+import cn.daenx.modules.system.domain.po.SysRoleMenu;
+import cn.daenx.modules.system.mapper.SysMenuMapper;
 import cn.daenx.modules.system.mapper.SysRoleMapper;
 import cn.daenx.modules.system.mapper.SysRoleMenuMapper;
+import cn.daenx.modules.system.service.SysMenuService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.lang.tree.Tree;
@@ -24,12 +26,10 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.daenx.modules.system.mapper.SysMenuMapper;
-import cn.daenx.modules.system.service.SysMenuService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,27 +47,27 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysMenu> getList(SysMenuPageDto vo) {
+    public List<SysMenu> getList(SysMenuPageDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         List<SysMenu> menus = null;
         if (loginUser.getIsAdmin()) {
             LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.like(ObjectUtil.isNotEmpty(vo.getMenuName()), SysMenu::getMenuName, vo.getMenuName());
-            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getVisible()), SysMenu::getVisible, vo.getVisible());
-            queryWrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysMenu::getStatus, vo.getStatus());
+            queryWrapper.like(ObjectUtil.isNotEmpty(dto.getMenuName()), SysMenu::getMenuName, dto.getMenuName());
+            queryWrapper.eq(ObjectUtil.isNotEmpty(dto.getVisible()), SysMenu::getVisible, dto.getVisible());
+            queryWrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysMenu::getStatus, dto.getStatus());
             queryWrapper.orderByAsc(SysMenu::getParentId);
             queryWrapper.orderByAsc(SysMenu::getOrderNum);
             menus = sysMenuMapper.selectList(queryWrapper);
         } else {
             QueryWrapper<SysMenu> wrapper1 = new QueryWrapper<>();
             wrapper1.eq("sru.user_id", loginUser.getId());
-            wrapper1.like(ObjectUtil.isNotEmpty(vo.getMenuName()), "sm.menu_name", vo.getMenuName());
-            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getVisible()), "sm.visible", vo.getVisible());
-            wrapper1.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "sm.status", vo.getStatus());
+            wrapper1.like(ObjectUtil.isNotEmpty(dto.getMenuName()), "sm.menu_name", dto.getMenuName());
+            wrapper1.eq(ObjectUtil.isNotEmpty(dto.getVisible()), "sm.visible", dto.getVisible());
+            wrapper1.eq(ObjectUtil.isNotEmpty(dto.getStatus()), "sm.status", dto.getStatus());
             wrapper1.orderByAsc("sm.parent_id");
             wrapper1.orderByAsc("sm.order_num");
             menus = sysMenuMapper.getMenuList(wrapper1);
@@ -89,38 +89,38 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void editInfo(SysMenuUpdDto vo) {
-        if (checkMenuExist(vo.getMenuName(), vo.getId())) {
+    public void editInfo(SysMenuUpdDto dto) {
+        if (checkMenuExist(dto.getMenuName(), dto.getId())) {
             throw new MyException("字典名称已存在");
         }
-        if ("0".equals(vo.getIsFrame()) && !Validator.isUrl(vo.getPath())) {
+        if ("0".equals(dto.getIsFrame()) && !Validator.isUrl(dto.getPath())) {
             throw new MyException("地址必须以http(s)://开头");
         }
-        if (vo.getId().equals(vo.getParentId())) {
+        if (dto.getId().equals(dto.getParentId())) {
             throw new MyException("上级菜单不能选择自己");
         }
-        if (ObjectUtil.isEmpty(vo.getIcon())) {
-            vo.setIcon("#");
+        if (ObjectUtil.isEmpty(dto.getIcon())) {
+            dto.setIcon("#");
         }
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(SysMenu::getId, vo.getId());
-        wrapper.set(SysMenu::getParentId, vo.getParentId());
-        wrapper.set(SysMenu::getMenuName, vo.getMenuName());
-        wrapper.set(SysMenu::getOrderNum, vo.getOrderNum());
-        wrapper.set(SysMenu::getPath, vo.getPath());
-        wrapper.set(SysMenu::getQueryParam, vo.getQueryParam());
-        wrapper.set(SysMenu::getComponent, vo.getComponent());
-        wrapper.set(SysMenu::getPerms, vo.getPerms());
-        wrapper.set(SysMenu::getIcon, vo.getIcon());
-        wrapper.set(SysMenu::getVisible, vo.getVisible());
-        wrapper.set(SysMenu::getStatus, vo.getStatus());
-        wrapper.set(SysMenu::getMenuType, vo.getMenuType());
-        wrapper.set(SysMenu::getIsFrame, vo.getIsFrame());
-        wrapper.set(SysMenu::getIsCache, vo.getIsCache());
-        wrapper.set(SysMenu::getRemark, vo.getRemark());
+        wrapper.eq(SysMenu::getId, dto.getId());
+        wrapper.set(SysMenu::getParentId, dto.getParentId());
+        wrapper.set(SysMenu::getMenuName, dto.getMenuName());
+        wrapper.set(SysMenu::getOrderNum, dto.getOrderNum());
+        wrapper.set(SysMenu::getPath, dto.getPath());
+        wrapper.set(SysMenu::getQueryParam, dto.getQueryParam());
+        wrapper.set(SysMenu::getComponent, dto.getComponent());
+        wrapper.set(SysMenu::getPerms, dto.getPerms());
+        wrapper.set(SysMenu::getIcon, dto.getIcon());
+        wrapper.set(SysMenu::getVisible, dto.getVisible());
+        wrapper.set(SysMenu::getStatus, dto.getStatus());
+        wrapper.set(SysMenu::getMenuType, dto.getMenuType());
+        wrapper.set(SysMenu::getIsFrame, dto.getIsFrame());
+        wrapper.set(SysMenu::getIsCache, dto.getIsCache());
+        wrapper.set(SysMenu::getRemark, dto.getRemark());
         int update = sysMenuMapper.update(new SysMenu(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
@@ -156,34 +156,34 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysMenuAddDto vo) {
-        if (checkMenuExist(vo.getMenuName(), null)) {
+    public void addInfo(SysMenuAddDto dto) {
+        if (checkMenuExist(dto.getMenuName(), null)) {
             throw new MyException("字典名称已存在");
         }
-        if ("0".equals(vo.getIsFrame()) && !Validator.isUrl(vo.getPath())) {
+        if ("0".equals(dto.getIsFrame()) && !Validator.isUrl(dto.getPath())) {
             throw new MyException("地址必须以http(s)://开头");
         }
-        if (ObjectUtil.isEmpty(vo.getIcon())) {
-            vo.setIcon("#");
+        if (ObjectUtil.isEmpty(dto.getIcon())) {
+            dto.setIcon("#");
         }
         SysMenu sysMenu = new SysMenu();
-        sysMenu.setParentId(vo.getParentId());
-        sysMenu.setMenuName(vo.getMenuName());
-        sysMenu.setOrderNum(vo.getOrderNum());
-        sysMenu.setPath(vo.getPath());
-        sysMenu.setQueryParam(vo.getQueryParam());
-        sysMenu.setComponent(vo.getComponent());
-        sysMenu.setPerms(vo.getPerms());
-        sysMenu.setIcon(vo.getIcon());
-        sysMenu.setVisible(vo.getVisible());
-        sysMenu.setStatus(vo.getStatus());
-        sysMenu.setMenuType(vo.getMenuType());
-        sysMenu.setIsFrame(vo.getIsFrame());
-        sysMenu.setIsCache(vo.getIsCache());
-        sysMenu.setRemark(vo.getRemark());
+        sysMenu.setParentId(dto.getParentId());
+        sysMenu.setMenuName(dto.getMenuName());
+        sysMenu.setOrderNum(dto.getOrderNum());
+        sysMenu.setPath(dto.getPath());
+        sysMenu.setQueryParam(dto.getQueryParam());
+        sysMenu.setComponent(dto.getComponent());
+        sysMenu.setPerms(dto.getPerms());
+        sysMenu.setIcon(dto.getIcon());
+        sysMenu.setVisible(dto.getVisible());
+        sysMenu.setStatus(dto.getStatus());
+        sysMenu.setMenuType(dto.getMenuType());
+        sysMenu.setIsFrame(dto.getIsFrame());
+        sysMenu.setIsCache(dto.getIsCache());
+        sysMenu.setRemark(dto.getRemark());
         int insert = sysMenuMapper.insert(sysMenu);
         if (insert < 1) {
             throw new MyException("新增失败");
@@ -489,12 +489,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     /**
      * 获取菜单下拉树列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<Tree<String>> treeSelect(SysMenuPageDto vo) {
-        List<SysMenu> menus = getList(vo);
+    public List<Tree<String>> treeSelect(SysMenuPageDto dto) {
+        List<SysMenu> menus = getList(dto);
         return buildMenuTreeSelect(menus);
     }
 

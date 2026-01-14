@@ -1,14 +1,14 @@
 package cn.daenx.server.api.admin.system;
 
-import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
+import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
+import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
 import cn.daenx.modules.system.domain.dto.sysRole.*;
 import cn.daenx.modules.system.domain.dto.sysUser.SysUserPageDto;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.framework.common.domain.vo.Result;
-import cn.daenx.framework.excel.utils.ExcelUtil;
 import cn.daenx.modules.system.domain.po.SysRole;
+import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
 import cn.daenx.modules.system.service.SysDeptService;
 import cn.daenx.modules.system.service.SysRoleService;
 import cn.daenx.modules.system.service.SysUserService;
@@ -40,13 +40,13 @@ public class SysRoleController {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:role:page")
     @GetMapping(value = "/page")
-    public Result page(SysRolePageDto vo) {
-        IPage<SysRole> page = sysRoleService.getPage(vo);
+    public Result<IPage<SysRole>> page(SysRolePageDto dto) {
+        IPage<SysRole> page = sysRoleService.getPage(dto);
         return Result.ok(page);
     }
 
@@ -55,8 +55,8 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:export")
     @PostMapping("/exportData")
-    public void exportData(SysRolePageDto vo, HttpServletResponse response) {
-        List<SysRole> list = sysRoleService.getAll(vo);
+    public void exportData(SysRolePageDto dto, HttpServletResponse response) {
+        List<SysRole> list = sysRoleService.getAll(dto);
         ExcelUtil.exportXlsx(response, "角色", "角色数据", list, SysRole.class);
     }
 
@@ -68,7 +68,7 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysRole> query(@RequestParam(name = "id", required = true) String id) {
         SysRole sysRole = sysRoleService.getInfo(id);
         return Result.ok(sysRole);
     }
@@ -76,26 +76,26 @@ public class SysRoleController {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:role:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysRoleUpdDto vo) {
-        sysRoleService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody SysRoleUpdDto dto) {
+        sysRoleService.editInfo(dto);
         return Result.ok();
     }
 
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:role:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysRoleAddDto vo) {
-        sysRoleService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysRoleAddDto dto) {
+        sysRoleService.addInfo(dto);
         return Result.ok();
     }
 
@@ -106,8 +106,8 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:del")
-    @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -122,7 +122,7 @@ public class SysRoleController {
      * @return
      */
     @GetMapping(value = "/roleDeptTreeSelect/{roleId}")
-    public Result roleDeptTreeSelect(@PathVariable("roleId") String roleId) {
+    public Result<Map<String, Object>> roleDeptTreeSelect(@PathVariable("roleId") String roleId) {
         List<Tree<String>> list = sysDeptService.deptTree(new SysDeptPageDto());
         Map<String, Object> map = new HashMap<>();
         map.put("checkedKeys", sysDeptService.selectDeptListByRoleId(roleId));
@@ -134,13 +134,13 @@ public class SysRoleController {
     /**
      * 修改数据权限
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/dataScope")
-    public Result dataScope(@Validated @RequestBody SysRoleDataScopeUpdDto vo) {
-        sysRoleService.dataScope(vo);
+    public Result<Void> dataScope(@Validated @RequestBody SysRoleDataScopeUpdDto dto) {
+        sysRoleService.dataScope(dto);
         return Result.ok();
     }
 
@@ -150,11 +150,11 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:page")
     @GetMapping("/allocatedAuthUserPage")
-    public Result allocatedPage(SysUserPageDto vo, String roleId) {
+    public Result<IPage<SysUserPageVo>> allocatedPage(SysUserPageDto dto, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }
-        IPage<SysUserPageVo> page = sysUserService.getUserListByRoleId(vo, roleId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByRoleId(dto, roleId);
         return Result.ok(page);
     }
 
@@ -163,35 +163,35 @@ public class SysRoleController {
      */
     @SaCheckPermission("system:role:page")
     @GetMapping("/unallocatedAuthUserPage")
-    public Result unallocatedAuthUserPage(SysUserPageDto vo, String roleId) {
+    public Result<IPage<SysUserPageVo>> unallocatedAuthUserPage(SysUserPageDto dto, String roleId) {
         if (ObjectUtil.isEmpty(roleId)) {
             throw new MyException("roleId不能为空");
         }
-        IPage<SysUserPageVo> page = sysUserService.getUserListByUnRoleId(vo, roleId);
+        IPage<SysUserPageVo> page = sysUserService.getUserListByUnRoleId(dto, roleId);
         return Result.ok(page);
     }
 
     /**
      * 取消授权用户
      *
-     * @param vo
+     * @param dto
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/cancelAuthUser")
-    public Result cancelAuthUser(@Validated @RequestBody SysRoleUpdAuthUserDto vo) {
-        sysRoleService.cancelAuthUser(vo);
+    public Result<Void> cancelAuthUser(@Validated @RequestBody SysRoleUpdAuthUserDto dto) {
+        sysRoleService.cancelAuthUser(dto);
         return Result.ok();
     }
 
     /**
      * 保存授权用户
      *
-     * @param vo
+     * @param dto
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/saveAuthUser")
-    public Result saveAuthUser(@Validated @RequestBody SysRoleUpdAuthUserDto vo) {
-        sysRoleService.saveAuthUser(vo);
+    public Result<Void> saveAuthUser(@Validated @RequestBody SysRoleUpdAuthUserDto dto) {
+        sysRoleService.saveAuthUser(dto);
         return Result.ok();
     }
 
@@ -199,13 +199,13 @@ public class SysRoleController {
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("system:role:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
-        sysRoleService.changeStatus(vo);
+    public Result<Void> changeStatus(@Validated @RequestBody ComStatusUpdDto dto) {
+        sysRoleService.changeStatus(dto);
         return Result.ok();
     }
 }

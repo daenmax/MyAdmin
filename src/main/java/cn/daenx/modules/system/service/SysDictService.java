@@ -1,9 +1,9 @@
 package cn.daenx.modules.system.service;
 
-import cn.daenx.modules.system.domain.po.SysDict;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictAddDto;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictPageDto;
 import cn.daenx.modules.system.domain.dto.sysDict.SysDictUpdDto;
+import cn.daenx.modules.system.domain.po.SysDict;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -25,26 +25,26 @@ public interface SysDictService extends IService<SysDict> {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    IPage<SysDict> getPage(SysDictPageDto vo);
+    IPage<SysDict> getPage(SysDictPageDto dto);
 
     /**
      * 获取所有列表，用于导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
-    List<SysDict> getAll(SysDictPageDto vo);
+    List<SysDict> getAll(SysDictPageDto dto);
 
     /**
      * +
      * 新增
      *
-     * @param vo
+     * @param dto
      */
-    void addInfo(SysDictAddDto vo);
+    void addInfo(SysDictAddDto dto);
 
     /**
      * 查询
@@ -57,9 +57,9 @@ public interface SysDictService extends IService<SysDict> {
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
-    void editInfo(SysDictUpdDto vo);
+    void editInfo(SysDictUpdDto dto);
 
     /**
      * 删除

@@ -1,33 +1,32 @@
 package cn.daenx.modules.system.service.impl;
 
-import cn.daenx.modules.system.domain.dto.sysLogin.SysSubmitCaptchaDto;
-import cn.daenx.modules.system.domain.dto.sysLogin.SysLoginDto;
-import cn.daenx.modules.system.domain.dto.sysLogin.SysRegisterDto;
 import cn.daenx.framework.cache.utils.CacheUtil;
 import cn.daenx.framework.common.constant.CommonConstant;
 import cn.daenx.framework.common.constant.RedisConstant;
 import cn.daenx.framework.common.constant.SystemConstant;
 import cn.daenx.framework.common.constant.enums.DeviceType;
 import cn.daenx.framework.common.constant.enums.LoginType;
-import cn.daenx.framework.common.utils.*;
+import cn.daenx.framework.common.domain.vo.CheckSendVo;
 import cn.daenx.framework.common.domain.vo.RouterVo;
-import cn.daenx.framework.common.domain.vo.system.config.SysRegisterDefaultInfoVo;
-import cn.daenx.framework.common.domain.vo.system.config.SysCaptchaConfigVo;
-import cn.daenx.framework.common.domain.vo.system.config.SysLoginFailInfoConfigVo;
-import cn.daenx.framework.common.domain.vo.system.config.SysSendLimitConfigVo;
-import cn.daenx.framework.common.domain.vo.system.config.SysSmsTemplateConfigVo;
+import cn.daenx.framework.common.domain.vo.system.config.*;
 import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
 import cn.daenx.framework.common.domain.vo.system.other.SysPositionVo;
 import cn.daenx.framework.common.domain.vo.system.other.SysRoleVo;
-import cn.daenx.framework.notify.sms.vo.SmsSendResult;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.common.utils.MyUtil;
+import cn.daenx.framework.common.utils.ServletUtils;
 import cn.daenx.framework.notify.email.utils.EmailUtil;
+import cn.daenx.framework.notify.sms.domain.SmsSendResult;
 import cn.daenx.framework.notify.sms.utils.SmsUtil;
 import cn.daenx.framework.satoken.utils.LoginUtil;
-import cn.daenx.framework.common.exception.MyException;
-import cn.daenx.framework.common.domain.vo.CheckSendVo;
-import cn.daenx.framework.common.domain.vo.Result;
+import cn.daenx.modules.system.domain.dto.sysLogin.SysLoginDto;
+import cn.daenx.modules.system.domain.dto.sysLogin.SysRegisterDto;
+import cn.daenx.modules.system.domain.dto.sysLogin.SysSubmitCaptchaDto;
+import cn.daenx.modules.system.domain.po.SysMenu;
+import cn.daenx.modules.system.domain.po.SysPosition;
+import cn.daenx.modules.system.domain.po.SysRole;
+import cn.daenx.modules.system.domain.po.SysUser;
 import cn.daenx.modules.system.domain.vo.sysUser.SysUserPageVo;
-import cn.daenx.modules.system.domain.po.*;
 import cn.daenx.modules.system.service.*;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
@@ -82,8 +81,8 @@ public class LoginServiceImpl implements LoginService {
      * @return
      */
     @Override
-    public HashMap<String, Object> createCaptcha() {
-        HashMap<String, Object> map = new HashMap<>();
+    public Map<String, Object> createCaptcha() {
+        Map<String, Object> map = new HashMap<>();
         SysCaptchaConfigVo sysCaptchaConfigVo = sysConfigService.getSysCaptchaConfigVo();
         if (sysCaptchaConfigVo == null) {
             map.put("captchaLock", false);
@@ -97,12 +96,12 @@ public class LoginServiceImpl implements LoginService {
         //0=图片验证码，1=腾讯验证码
         if (sysCaptchaConfigVo.getConfig().getType() == 0) {
             //0=图片验证码
-            HashMap<String, Object> captchaImgToBase64 = createCaptchaImgToBase64(sysCaptchaConfigVo);
+            Map<String, Object> captchaImgToBase64 = createCaptchaImgToBase64(sysCaptchaConfigVo);
             map.put("image", captchaImgToBase64);
             return map;
         } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
             //1=腾讯验证码
-            HashMap<String, Object> captchaSlider = createCaptchaSlider(sysCaptchaConfigVo);
+            Map<String, Object> captchaSlider = createCaptchaSlider(sysCaptchaConfigVo);
             map.put("slider", captchaSlider);
             return map;
         }
@@ -116,8 +115,8 @@ public class LoginServiceImpl implements LoginService {
      * @param sysCaptchaConfigVo
      * @return
      */
-    private HashMap<String, Object> createCaptchaImgToBase64(SysCaptchaConfigVo sysCaptchaConfigVo) {
-        HashMap<String, Object> map = new HashMap<>();
+    private Map<String, Object> createCaptchaImgToBase64(SysCaptchaConfigVo sysCaptchaConfigVo) {
+        Map<String, Object> map = new HashMap<>();
         String base64 = "";
         String code = "";
         Integer captchaImgType = sysCaptchaConfigVo.getImage().getType();
@@ -176,8 +175,8 @@ public class LoginServiceImpl implements LoginService {
      * @param sysCaptchaConfigVo
      * @return
      */
-    private HashMap<String, Object> createCaptchaSlider(SysCaptchaConfigVo sysCaptchaConfigVo) {
-        HashMap<String, Object> map = new HashMap<>();
+    private Map<String, Object> createCaptchaSlider(SysCaptchaConfigVo sysCaptchaConfigVo) {
+        Map<String, Object> map = new HashMap<>();
         String uuid = IdUtil.randomUUID();
         CacheUtil.setValue(RedisConstant.CAPTCHA_SLIDER + uuid, "1", 300L, TimeUnit.SECONDS);
         map.put("uuid", uuid);
@@ -187,58 +186,58 @@ public class LoginServiceImpl implements LoginService {
     /**
      * 校验验证码
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void validatedCaptcha(SysSubmitCaptchaDto vo) {
+    public void validatedCaptcha(SysSubmitCaptchaDto dto) {
         SysCaptchaConfigVo sysCaptchaConfigVo = sysConfigService.getSysCaptchaConfigVo();
         if (!"true".equals(sysCaptchaConfigVo.getConfig().getLock())) {
             return;
         }
         if (sysCaptchaConfigVo.getConfig().getType() == 0) {
             //图片验证码
-            if (ObjectUtil.isEmpty(vo.getCode()) || ObjectUtil.isEmpty(vo.getUuid())) {
+            if (ObjectUtil.isEmpty(dto.getCode()) || ObjectUtil.isEmpty(dto.getUuid())) {
                 throw new MyException("验证码相关参数不能为空");
             }
-            String codeReal = (String) CacheUtil.getValue(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+            String codeReal = (String) CacheUtil.getValue(RedisConstant.CAPTCHA_IMG + dto.getUuid());
             if (ObjectUtil.isEmpty(codeReal)) {
                 throw new MyException("验证码已过期，请刷新验证码");
             }
-            if (!codeReal.equals(vo.getCode())) {
-                CacheUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+            if (!codeReal.equals(dto.getCode())) {
+                CacheUtil.del(RedisConstant.CAPTCHA_IMG + dto.getUuid());
                 throw new MyException("验证码错误");
             }
-            CacheUtil.del(RedisConstant.CAPTCHA_IMG + vo.getUuid());
+            CacheUtil.del(RedisConstant.CAPTCHA_IMG + dto.getUuid());
         } else if (sysCaptchaConfigVo.getConfig().getType() == 1) {
             //腾讯验证码
-            if (ObjectUtil.isEmpty(vo.getRandStr()) || ObjectUtil.isEmpty(vo.getTicket()) || ObjectUtil.isEmpty(vo.getUuid())) {
+            if (ObjectUtil.isEmpty(dto.getRandStr()) || ObjectUtil.isEmpty(dto.getTicket()) || ObjectUtil.isEmpty(dto.getUuid())) {
                 throw new MyException("验证码相关参数不能为空");
             }
-            String codeReal = (String) CacheUtil.getValue(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
+            String codeReal = (String) CacheUtil.getValue(RedisConstant.CAPTCHA_SLIDER + dto.getUuid());
             if (ObjectUtil.isEmpty(codeReal)) {
                 throw new MyException("验证参数已过期，请重新验证");
             }
-            String md5 = SecureUtil.md5(vo.getRandStr() + vo.getTicket());
-            if (!MyUtil.checkTencentCaptchaSlider(vo.getRandStr(), vo.getTicket())) {
+            String md5 = SecureUtil.md5(dto.getRandStr() + dto.getTicket());
+            if (!MyUtil.checkTencentCaptchaSlider(dto.getRandStr(), dto.getTicket())) {
                 throw new MyException("验证失败，请重试");
             }
-            CacheUtil.del(RedisConstant.CAPTCHA_SLIDER + vo.getUuid());
+            CacheUtil.del(RedisConstant.CAPTCHA_SLIDER + dto.getUuid());
         }
     }
 
     /**
      * 获取邮箱验证码
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public Result getEmailValidCode(SysLoginDto vo) {
-        validatedCaptcha(vo);
-        if (ObjectUtil.isEmpty(vo.getEmail())) {
+    public Map<String, Object> getEmailValidCode(SysLoginDto dto) {
+        validatedCaptcha(dto);
+        if (ObjectUtil.isEmpty(dto.getEmail())) {
             throw new MyException("请填写邮箱");
         }
-        SysUser sysUser = sysUserService.getUserByEmail(vo.getEmail());
+        SysUser sysUser = sysUserService.getUserByEmail(dto.getEmail());
         if (ObjectUtil.isEmpty(sysUser)) {
             throw new MyException("邮箱不存在");
         }
@@ -251,7 +250,7 @@ public class LoginServiceImpl implements LoginService {
         }
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
-        String value = (String) CacheUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
+        String value = (String) CacheUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + dto.getEmail());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -263,34 +262,34 @@ public class LoginServiceImpl implements LoginService {
         String code = RandomUtil.randomNumbers(6);
         String subject = "【" + applicationName + "】" + "邮件验证";
         String content = MyUtil.buildCodeValida(applicationName, code);
-        Boolean aBoolean = EmailUtil.sendEmail(vo.getEmail(), subject, content, true, null);
+        Boolean aBoolean = EmailUtil.sendEmail(dto.getEmail(), subject, content, true, null);
         if (!aBoolean) {
             throw new MyException("发送邮件失败，请联系管理员");
         }
         //有效期30分钟
-        CacheUtil.setValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + dto.getEmail(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = EmailUtil.saveSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
         //这里设置一层验证码UUID缓存，为后面点击登录增加一道障碍，避免出现不输入验证码就一直点登录，对面通过遍历造成撞库泄露风险
-        CacheUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
-        return Result.ok(map);
+        CacheUtil.setValue(RedisConstant.CACHE_UUID + dto.getUuid(), dto.getUuid(), keepLive, TimeUnit.SECONDS);
+        return map;
     }
 
     /**
      * 获取手机验证码
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public Result getPhoneValidCode(SysLoginDto vo) {
-        validatedCaptcha(vo);
-        if (ObjectUtil.isEmpty(vo.getPhone())) {
+    public Map<String, Object> getPhoneValidCode(SysLoginDto dto) {
+        validatedCaptcha(dto);
+        if (ObjectUtil.isEmpty(dto.getPhone())) {
             throw new MyException("请填写手机号");
         }
-        SysUser sysUser = sysUserService.getUserByPhone(vo.getPhone());
+        SysUser sysUser = sysUserService.getUserByPhone(dto.getPhone());
         if (ObjectUtil.isEmpty(sysUser)) {
             throw new MyException("手机号不存在");
         }
@@ -303,7 +302,7 @@ public class LoginServiceImpl implements LoginService {
         }
         //例如：5分钟
         String keepLiveStr = MyUtil.timeDistance(keepLive * 1000);
-        String value = (String) CacheUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+        String value = (String) CacheUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + dto.getPhone());
         if (ObjectUtil.isNotEmpty(value)) {
             throw new MyException("验证码尚未失效，如未收到验证码请" + keepLiveStr + "后再试");
         }
@@ -322,52 +321,52 @@ public class LoginServiceImpl implements LoginService {
         String code = RandomUtil.randomNumbers(6);
         Map<String, String> smsMap = new HashMap<>();
         smsMap.put(sysSmsTemplateConfigVo.getBindPhone().getVariable(), code);
-        SmsSendResult smsSendResult = SmsUtil.sendSms(vo.getPhone(), sysSmsTemplateConfigVo.getBindPhone().getTemplateId(), smsMap);
+        SmsSendResult smsSendResult = SmsUtil.sendSms(dto.getPhone(), sysSmsTemplateConfigVo.getBindPhone().getTemplateId(), smsMap);
         if (!smsSendResult.isSuccess()) {
             throw new MyException("发送短信失败，请联系管理员");
         }
-        CacheUtil.setValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone(), code, keepLive, TimeUnit.SECONDS);
+        CacheUtil.setValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + dto.getPhone(), code, keepLive, TimeUnit.SECONDS);
         Integer waitTime = SmsUtil.saveSendByUserId(sysUser.getId(), sysSendLimitConfigVo);
         Map<String, Object> map = new HashMap<>();
         map.put("waitTime", waitTime);
         map.put("msg", "验证码已发送，" + keepLiveStr + "有效");
         //这里设置一层验证码UUID缓存，为后面点击登录增加一道障碍，避免出现不输入验证码就一直点登录，对面通过遍历造成撞库泄露风险
-        CacheUtil.setValue(RedisConstant.CACHE_UUID + vo.getUuid(), vo.getUuid(), keepLive, TimeUnit.SECONDS);
-        return Result.ok(map);
+        CacheUtil.setValue(RedisConstant.CACHE_UUID + dto.getUuid(), dto.getUuid(), keepLive, TimeUnit.SECONDS);
+        return map;
     }
 
     /**
      * PC登录
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public String login(SysLoginDto vo) {
+    public String login(SysLoginDto dto) {
         String remark = "PC登录";
         String clientIP = ServletUtils.getClientIP();
         HttpServletRequest request = ServletUtils.getRequest();
         UserAgent userAgent = UserAgentUtil.parse(request.getHeader("User-Agent"));
         SysUser sysUser = null;
-        if (vo.getLoginType().equals(LoginType.USERNAME.getCode())) {
+        if (dto.getLoginType().equals(LoginType.USERNAME.getCode())) {
             //账号密码登录
             //校验验证码
-            validatedCaptcha(vo);
+            validatedCaptcha(dto);
             remark = remark + "/" + LoginType.USERNAME.getDesc();
-            if (ObjectUtil.hasEmpty(vo.getUsername(), vo.getPassword())) {
+            if (ObjectUtil.hasEmpty(dto.getUsername(), dto.getPassword())) {
                 throw new MyException("账号和密码不能为空");
             }
             //判断用户输入的账号是 账号还是邮箱还是手机号
-            Integer usernameType = MyUtil.getUsernameType(vo.getUsername());
+            Integer usernameType = MyUtil.getUsernameType(dto.getUsername());
             if (usernameType == 1) {
-                sysUser = sysUserService.getUserByUsername(vo.getUsername());
+                sysUser = sysUserService.getUserByUsername(dto.getUsername());
             } else if (usernameType == 2) {
-                sysUser = sysUserService.getUserByEmail(vo.getUsername());
+                sysUser = sysUserService.getUserByEmail(dto.getUsername());
             } else if (usernameType == 3) {
-                sysUser = sysUserService.getUserByPhone(vo.getUsername());
+                sysUser = sysUserService.getUserByPhone(dto.getUsername());
                 if (sysUser == null) {
                     //某些情况下，账号会设置成手机号，这个时候，需要进行二次判断
-                    sysUser = sysUserService.getUserByUsername(vo.getUsername());
+                    sysUser = sysUserService.getUserByUsername(dto.getUsername());
                 }
             }
             if (ObjectUtil.isEmpty(sysUser)) {
@@ -375,7 +374,7 @@ public class LoginServiceImpl implements LoginService {
             }
             //校验账户状态
             sysUserService.validatedUser(sysUser);
-            String sha256 = SaSecureUtil.sha256(vo.getPassword());
+            String sha256 = SaSecureUtil.sha256(dto.getPassword());
             if (!sha256.equals(sysUser.getPassword())) {
                 SysLoginFailInfoConfigVo sysLoginFailInfoConfigVo = sysConfigService.getSysLoginFailInfoVo();
                 String msg = "密码错误";
@@ -406,60 +405,60 @@ public class LoginServiceImpl implements LoginService {
                 sysLogLoginService.saveLogin(sysUser.getId(), sysUser.getUsername(), SystemConstant.LOGIN_FAIL, remark, clientIP, userAgent);
                 throw new MyException(msg);
             }
-        } else if (vo.getLoginType().equals(LoginType.EMAIL.getCode())) {
+        } else if (dto.getLoginType().equals(LoginType.EMAIL.getCode())) {
             //邮箱验证码登录
             remark = remark + "/" + LoginType.EMAIL.getDesc();
-            if (ObjectUtil.hasEmpty(vo.getEmail())) {
+            if (ObjectUtil.hasEmpty(dto.getEmail())) {
                 throw new MyException("邮箱不能为空");
             }
-            if (ObjectUtil.hasEmpty(vo.getValidCode())) {
+            if (ObjectUtil.hasEmpty(dto.getValidCode())) {
                 throw new MyException("邮箱验证码不能为空");
             }
-            Object value = CacheUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
+            Object value = CacheUtil.getValue(RedisConstant.CACHE_UUID + dto.getUuid());
             if (ObjectUtil.isEmpty(value)) {
                 throw new MyException("请求不合法");
             }
-            sysUser = sysUserService.getUserByEmail(vo.getEmail());
+            sysUser = sysUserService.getUserByEmail(dto.getEmail());
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
             }
             //校验账户状态
             sysUserService.validatedUser(sysUser);
-            String validCode = (String) CacheUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getEmail());
+            String validCode = (String) CacheUtil.getValue(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + dto.getEmail());
             if (ObjectUtil.isEmpty(validCode)) {
                 throw new MyException("邮箱验证码错误或者已失效");
             }
-            if (!vo.getValidCode().equals(validCode)) {
+            if (!dto.getValidCode().equals(validCode)) {
                 throw new MyException("邮箱验证码错误，请检查");
             }
-            CacheUtil.del(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + vo.getPhone());
-        } else if (vo.getLoginType().equals(LoginType.PHONE.getCode())) {
+            CacheUtil.del(RedisConstant.LOGIN_EMAIL + sysUser.getId() + ":" + dto.getPhone());
+        } else if (dto.getLoginType().equals(LoginType.PHONE.getCode())) {
             //短信验证码登录
             remark = remark + "/" + LoginType.PHONE.getDesc();
-            if (ObjectUtil.hasEmpty(vo.getPhone())) {
+            if (ObjectUtil.hasEmpty(dto.getPhone())) {
                 throw new MyException("手机不能为空");
             }
-            if (ObjectUtil.hasEmpty(vo.getValidCode())) {
+            if (ObjectUtil.hasEmpty(dto.getValidCode())) {
                 throw new MyException("手机验证码不能为空");
             }
-            Object value = CacheUtil.getValue(RedisConstant.CACHE_UUID + vo.getUuid());
+            Object value = CacheUtil.getValue(RedisConstant.CACHE_UUID + dto.getUuid());
             if (ObjectUtil.isEmpty(value)) {
                 throw new MyException("请求不合法");
             }
-            sysUser = sysUserService.getUserByPhone(vo.getPhone());
+            sysUser = sysUserService.getUserByPhone(dto.getPhone());
             if (ObjectUtil.isEmpty(sysUser)) {
                 throw new MyException("账号不存在");
             }
             //校验账户状态
             sysUserService.validatedUser(sysUser);
-            String validCode = (String) CacheUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+            String validCode = (String) CacheUtil.getValue(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + dto.getPhone());
             if (ObjectUtil.isEmpty(validCode)) {
                 throw new MyException("短信验证码错误或者已失效");
             }
-            if (!vo.getValidCode().equals(validCode)) {
+            if (!dto.getValidCode().equals(validCode)) {
                 throw new MyException("短信验证码错误，请检查");
             }
-            CacheUtil.del(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + vo.getPhone());
+            CacheUtil.del(RedisConstant.LOGIN_PHONE + sysUser.getId() + ":" + dto.getPhone());
         } else {
             throw new MyException("错误的loginType");
         }
@@ -527,17 +526,17 @@ public class LoginServiceImpl implements LoginService {
      * 只接受账号和密码
      * 手机号、邮箱、openid需要另外单独绑定
      *
-     * @param vo
+     * @param dto
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void register(SysRegisterDto vo) {
-        validatedCaptcha(vo);
+    public void register(SysRegisterDto dto) {
+        validatedCaptcha(dto);
         //判空
-        if (ObjectUtil.isEmpty(vo.getUsername()) || ObjectUtil.isEmpty(vo.getPassword())) {
+        if (ObjectUtil.isEmpty(dto.getUsername()) || ObjectUtil.isEmpty(dto.getPassword())) {
             throw new MyException("账号和密码不能为空");
         }
-        if (vo.getUsername().contains("@")) {
+        if (dto.getUsername().contains("@")) {
             throw new MyException("账号不能包含@符号");
         }
         Boolean lockRegister = Boolean.parseBoolean(sysConfigService.getConfigByKey("sys.lock.register"));
@@ -561,13 +560,13 @@ public class LoginServiceImpl implements LoginService {
             throw new MyException("系统当前无法注册[0x5]");
         }
         //查询账号是否已存在
-        SysUser sysUser = sysUserService.getUserByUsername(vo.getUsername());
+        SysUser sysUser = sysUserService.getUserByUsername(dto.getUsername());
         if (ObjectUtil.isNotEmpty(sysUser)) {
             throw new MyException("账号已存在");
         }
-        String sha256 = SaSecureUtil.sha256(vo.getPassword());
+        String sha256 = SaSecureUtil.sha256(dto.getPassword());
         sysUser = new SysUser();
-        sysUser.setUsername(vo.getUsername());
+        sysUser.setUsername(dto.getUsername());
         sysUser.setPassword(sha256);
         sysUser.setStatus(SystemConstant.USER_STATUS_NORMAL);
         sysUser.setUserType(sysRegisterDefaultInfoVo.getUserType());

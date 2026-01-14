@@ -1,17 +1,17 @@
 package cn.daenx.modules.test.service.impl;
 
-import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
-import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
 import cn.daenx.framework.common.constant.SystemConstant;
-import cn.daenx.framework.dataScope.annotation.DataScope;
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
-import cn.daenx.modules.test.mapper.TestDataMapper;
-import cn.daenx.modules.test.domain.po.TestData;
-import cn.daenx.modules.test.service.TestDataService;
-import cn.daenx.modules.test.domain.dto.testData.TestDataImportDto;
-import cn.daenx.modules.test.domain.dto.testData.TestDataUpdDto;
+import cn.daenx.framework.common.exception.MyException;
+import cn.daenx.framework.dataScope.annotation.DataScope;
 import cn.daenx.modules.test.domain.dto.testData.TestDataAddDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataImportDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataPageDto;
+import cn.daenx.modules.test.domain.dto.testData.TestDataUpdDto;
+import cn.daenx.modules.test.domain.po.TestData;
+import cn.daenx.modules.test.domain.vo.testData.TestDataPageVo;
+import cn.daenx.modules.test.mapper.TestDataMapper;
+import cn.daenx.modules.test.service.TestDataService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -32,28 +32,28 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     @Resource
     private TestDataMapper testDataMapper;
 
-    private LambdaQueryWrapper<TestData> getWrapper(TestDataPageDto vo) {
+    private LambdaQueryWrapper<TestData> getWrapper(TestDataPageDto dto) {
         LambdaQueryWrapper<TestData> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), TestData::getTitle, vo.getTitle());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), TestData::getType, vo.getType());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), TestData::getStatus, vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), TestData::getContent, vo.getContent());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), TestData::getRemark, vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getTitle()), TestData::getTitle, dto.getTitle());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getType()), TestData::getType, dto.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), TestData::getStatus, dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getContent()), TestData::getContent, dto.getContent());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), TestData::getRemark, dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), TestData::getCreateTime, startTime, endTime);
         return wrapper;
     }
 
-    private QueryWrapper<TestData> getWrapperQuery(TestDataPageDto vo) {
+    private QueryWrapper<TestData> getWrapperQuery(TestDataPageDto dto) {
         QueryWrapper<TestData> wrapper = new QueryWrapper<>();
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getTitle()), "td.title", vo.getTitle());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getType()), "td.type", vo.getType());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), "td.status", vo.getStatus());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getContent()), "td.content", vo.getContent());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), "td.remark", vo.getRemark());
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getTitle()), "td.title", dto.getTitle());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getType()), "td.type", dto.getType());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), "td.status", dto.getStatus());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getContent()), "td.content", dto.getContent());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), "td.remark", dto.getRemark());
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), "td.create_time", startTime, endTime);
         wrapper.eq("td.is_delete", SystemConstant.IS_DELETE_NO);
         return wrapper;
@@ -63,14 +63,14 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      * 分页列表
      * 测试数据分页列表_MP分页插件
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @DataScope(alias = "test_data")
     @Override
-    public IPage<TestData> getPage(TestDataPageDto vo) {
-        LambdaQueryWrapper<TestData> wrapper = getWrapper(vo);
-        Page<TestData> testDataPage = testDataMapper.selectPage(vo.getPage(true), wrapper);
+    public IPage<TestData> getPage(TestDataPageDto dto) {
+        LambdaQueryWrapper<TestData> wrapper = getWrapper(dto);
+        Page<TestData> testDataPage = testDataMapper.selectPage(dto.getPage(true), wrapper);
         return testDataPage;
     }
 
@@ -78,13 +78,13 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      * 分页列表2
      * 测试数据分页列表_自己写的SQL
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<TestDataPageVo> getPage2(TestDataPageDto vo) {
-        Page<TestDataPageVo> page = new Page<>(vo.getPageNum(), vo.getPageSize());
-        IPage<TestDataPageVo> iPage = testDataMapper.getPage(page, vo);
+    public IPage<TestDataPageVo> getPage2(TestDataPageDto dto) {
+        Page<TestDataPageVo> page = new Page<>(dto.getPageNum(), dto.getPageSize());
+        IPage<TestDataPageVo> iPage = testDataMapper.getPage(page, dto);
         return iPage;
     }
 
@@ -92,13 +92,13 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
      * 分页列表3
      * 测试数据分页列表_MP自定义SQL
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<TestDataPageVo> getPage3(TestDataPageDto vo) {
-        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(vo);
-        IPage<TestDataPageVo> iPage = testDataMapper.getPageWrapper(vo.getPage(true), wrapperQuery);
+    public IPage<TestDataPageVo> getPage3(TestDataPageDto dto) {
+        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(dto);
+        IPage<TestDataPageVo> iPage = testDataMapper.getPageWrapper(dto.getPage(true), wrapperQuery);
         return iPage;
     }
 
@@ -106,16 +106,16 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(TestDataAddDto vo) {
+    public void addInfo(TestDataAddDto dto) {
         TestData testData = new TestData();
-        testData.setTitle(vo.getTitle());
-        testData.setContent(vo.getContent());
-        testData.setType(vo.getType());
-        testData.setStatus(vo.getStatus());
-        testData.setRemark(vo.getRemark());
+        testData.setTitle(dto.getTitle());
+        testData.setContent(dto.getContent());
+        testData.setType(dto.getType());
+        testData.setStatus(dto.getStatus());
+        testData.setRemark(dto.getRemark());
         int insert = testDataMapper.insert(testData);
         if (insert < 1) {
             throw new MyException("新增失败");
@@ -137,18 +137,18 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @DataScope(alias = "test_data")
     @Override
-    public void editInfo(TestDataUpdDto vo) {
+    public void editInfo(TestDataUpdDto dto) {
         LambdaUpdateWrapper<TestData> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(TestData::getId, vo.getId());
-        updateWrapper.set(TestData::getTitle, vo.getTitle());
-        updateWrapper.set(TestData::getContent, vo.getContent());
-        updateWrapper.set(TestData::getType, vo.getType());
-        updateWrapper.set(TestData::getStatus, vo.getStatus());
-        updateWrapper.set(TestData::getRemark, vo.getRemark());
+        updateWrapper.eq(TestData::getId, dto.getId());
+        updateWrapper.set(TestData::getTitle, dto.getTitle());
+        updateWrapper.set(TestData::getContent, dto.getContent());
+        updateWrapper.set(TestData::getType, dto.getType());
+        updateWrapper.set(TestData::getStatus, dto.getStatus());
+        updateWrapper.set(TestData::getRemark, dto.getRemark());
         int rows = testDataMapper.update(new TestData(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");
@@ -172,12 +172,12 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     /**
      * 导出
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<TestDataPageVo> exportData(TestDataPageDto vo) {
-        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(vo);
+    public List<TestDataPageVo> exportData(TestDataPageDto dto) {
+        QueryWrapper<TestData> wrapperQuery = getWrapperQuery(dto);
         List<TestDataPageVo> list = testDataMapper.getAll(wrapperQuery);
         return list;
     }
@@ -212,14 +212,14 @@ public class TestDataServiceImpl extends ServiceImpl<TestDataMapper, TestData> i
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      */
     @DataScope(alias = "test_data")
     @Override
-    public void changeStatus(ComStatusUpdDto vo) {
+    public void changeStatus(ComStatusUpdDto dto) {
         LambdaUpdateWrapper<TestData> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(TestData::getId, vo.getId());
-        updateWrapper.set(TestData::getStatus, vo.getStatus());
+        updateWrapper.eq(TestData::getId, dto.getId());
+        updateWrapper.set(TestData::getStatus, dto.getStatus());
         int rows = testDataMapper.update(new TestData(), updateWrapper);
         if (rows < 1) {
             throw new MyException("修改失败");

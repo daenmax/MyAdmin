@@ -1,4 +1,4 @@
-package cn.daenx.framework.oss.vo;
+package cn.daenx.framework.oss.domain;
 
 import lombok.Builder;
 import lombok.Data;

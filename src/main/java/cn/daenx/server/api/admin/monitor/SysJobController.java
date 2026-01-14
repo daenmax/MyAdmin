@@ -1,13 +1,13 @@
 package cn.daenx.server.api.admin.monitor;
 
-import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.domain.dto.ComIdDto;
 import cn.daenx.framework.common.domain.dto.ComStatusUpdDto;
 import cn.daenx.framework.common.domain.vo.Result;
-import cn.daenx.modules.system.domain.po.SysJob;
+import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobAddDto;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobPageDto;
 import cn.daenx.modules.system.domain.dto.sysJob.SysJobUpdDto;
+import cn.daenx.modules.system.domain.po.SysJob;
 import cn.daenx.modules.system.service.SysJobService;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.collection.CollUtil;
@@ -28,13 +28,13 @@ public class SysJobController {
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:job:page")
     @GetMapping(value = "/page")
-    public Result page(SysJobPageDto vo) {
-        IPage<SysJob> page = sysJobService.getPage(vo);
+    public Result<IPage<SysJob>> page(SysJobPageDto dto) {
+        IPage<SysJob> page = sysJobService.getPage(dto);
         return Result.ok(page);
     }
 
@@ -46,7 +46,7 @@ public class SysJobController {
      */
     @SaCheckPermission("monitor:job:query")
     @GetMapping(value = "/query")
-    public Result query(@RequestParam(name = "id", required = true) String id) {
+    public Result<SysJob> query(@RequestParam(name = "id", required = true) String id) {
         SysJob sysJob = sysJobService.getInfo(id);
         return Result.ok(sysJob);
     }
@@ -54,39 +54,39 @@ public class SysJobController {
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:job:add")
     @PostMapping("/add")
-    public Result add(@Validated @RequestBody SysJobAddDto vo) {
-        sysJobService.addInfo(vo);
+    public Result<Void> add(@Validated @RequestBody SysJobAddDto dto) {
+        sysJobService.addInfo(dto);
         return Result.ok();
     }
 
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:job:edit")
-    @PostMapping("/edit")
-    public Result edit(@Validated @RequestBody SysJobUpdDto vo) {
-        sysJobService.editInfo(vo);
+    @GetMapping(value = "/edit")
+    public Result<Void> edit(@Validated @RequestBody SysJobUpdDto dto) {
+        sysJobService.editInfo(dto);
         return Result.ok();
     }
 
     /**
      * 修改状态
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:job:edit")
     @PostMapping("/changeStatus")
-    public Result changeStatus(@Validated @RequestBody ComStatusUpdDto vo) {
-        sysJobService.changeStatus(vo);
+    public Result<Void> changeStatus(@Validated @RequestBody ComStatusUpdDto dto) {
+        sysJobService.changeStatus(dto);
         return Result.ok();
     }
 
@@ -97,8 +97,8 @@ public class SysJobController {
      * @return
      */
     @SaCheckPermission("monitor:job:del")
-    @PostMapping("/del")
-    public Result del(@RequestBody List<String> ids) {
+    @GetMapping(value = "/del")
+    public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");
         }
@@ -109,13 +109,13 @@ public class SysJobController {
     /**
      * 定时任务立即执行一次
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @SaCheckPermission("monitor:job:run")
     @PostMapping("/run")
-    public Result run(@Validated @RequestBody ComIdDto vo) {
-        sysJobService.run(vo.getId());
+    public Result<Void> run(@Validated @RequestBody ComIdDto dto) {
+        sysJobService.run(dto.getId());
         return Result.ok();
     }
 }

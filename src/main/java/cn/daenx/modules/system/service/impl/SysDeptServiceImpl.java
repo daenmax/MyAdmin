@@ -1,23 +1,22 @@
 package cn.daenx.modules.system.service.impl;
 
 import cn.daenx.framework.common.constant.SystemConstant;
+import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
+import cn.daenx.framework.common.domain.vo.system.other.SysRoleVo;
 import cn.daenx.framework.common.exception.MyException;
 import cn.daenx.framework.common.utils.MyUtil;
 import cn.daenx.framework.common.utils.TreeBuildUtils;
 import cn.daenx.framework.common.utils.TreeUtil;
-import cn.daenx.framework.common.domain.vo.system.other.SysLoginUserVo;
-import cn.daenx.framework.common.domain.vo.system.other.SysRoleVo;
 import cn.daenx.framework.satoken.utils.LoginUtil;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptAddDto;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
+import cn.daenx.modules.system.domain.dto.sysDept.SysDeptUpdDto;
 import cn.daenx.modules.system.domain.po.SysDept;
 import cn.daenx.modules.system.domain.po.SysRoleDept;
 import cn.daenx.modules.system.domain.po.SysUserDept;
-import cn.daenx.modules.system.domain.dto.sysDept.SysDeptAddDto;
-import cn.daenx.modules.system.domain.dto.sysDept.SysDeptPageDto;
 import cn.daenx.modules.system.domain.vo.sysDept.SysDeptTreeVo;
-import cn.daenx.modules.system.domain.dto.sysDept.SysDeptUpdDto;
 import cn.daenx.modules.system.mapper.SysDeptMapper;
 import cn.daenx.modules.system.mapper.SysRoleDeptMapper;
-import cn.daenx.modules.system.mapper.SysRoleMapper;
 import cn.daenx.modules.system.mapper.SysUserDeptMapper;
 import cn.daenx.modules.system.service.SysDeptParentService;
 import cn.daenx.modules.system.service.SysDeptService;
@@ -41,8 +40,6 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     @Resource
     private SysDeptMapper sysDeptMapper;
     @Resource
-    private SysRoleMapper sysRoleMapper;
-    @Resource
     private SysRoleDeptMapper sysRoleDeptMapper;
     @Resource
     private SysUserDeptMapper sysUserDeptMapper;
@@ -53,30 +50,30 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 分页列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public IPage<SysDept> getPage(SysDeptPageDto vo) {
-        LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
-        Page<SysDept> sysDeptPage = sysDeptMapper.selectPage(vo.getPage(false), wrapper);
+    public IPage<SysDept> getPage(SysDeptPageDto dto) {
+        LambdaQueryWrapper<SysDept> wrapper = getWrapper(dto);
+        Page<SysDept> sysDeptPage = sysDeptMapper.selectPage(dto.getPage(false), wrapper);
         return sysDeptPage;
     }
 
-    private LambdaQueryWrapper<SysDept> getWrapper(SysDeptPageDto vo) {
+    private LambdaQueryWrapper<SysDept> getWrapper(SysDeptPageDto dto) {
         SysLoginUserVo loginUser = LoginUtil.getLoginUser();
         List<SysRoleVo> roleList = loginUser.getRoles();
         Map<String, List<SysRoleVo>> roleMap = roleList.stream().collect(Collectors.groupingBy(SysRoleVo::getDataScope));
         LambdaQueryWrapper<SysDept> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getId()), SysDept::getId, vo.getId());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getName()), SysDept::getName, vo.getName());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getCode()), SysDept::getCode, vo.getCode());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getSummary()), SysDept::getSummary, vo.getSummary());
-        wrapper.like(ObjectUtil.isNotEmpty(vo.getRemark()), SysDept::getRemark, vo.getRemark());
-        wrapper.eq(ObjectUtil.isNotEmpty(vo.getStatus()), SysDept::getStatus, vo.getStatus());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getId()), SysDept::getId, dto.getId());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getName()), SysDept::getName, dto.getName());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getCode()), SysDept::getCode, dto.getCode());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getSummary()), SysDept::getSummary, dto.getSummary());
+        wrapper.like(ObjectUtil.isNotEmpty(dto.getRemark()), SysDept::getRemark, dto.getRemark());
+        wrapper.eq(ObjectUtil.isNotEmpty(dto.getStatus()), SysDept::getStatus, dto.getStatus());
         wrapper.eq(SysDept::getIsDelete, 0);
-        String startTime = vo.getStartTime();
-        String endTime = vo.getEndTime();
+        String startTime = dto.getStartTime();
+        String endTime = dto.getEndTime();
         wrapper.between(ObjectUtil.isNotEmpty(startTime) && ObjectUtil.isNotEmpty(endTime), SysDept::getCreateTime, startTime, endTime);
         wrapper.orderByAsc(SysDept::getDeptLevel, SysDept::getSort);
         if (!loginUser.getIsAdmin() && !roleMap.containsKey(SystemConstant.DATA_SCOPE_ALL)) {
@@ -112,12 +109,12 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 获取所有列表
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysDept> getAll(SysDeptPageDto vo) {
-        LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
+    public List<SysDept> getAll(SysDeptPageDto dto) {
+        LambdaQueryWrapper<SysDept> wrapper = getWrapper(dto);
         List<SysDept> sysDeptList = sysDeptMapper.selectListX(wrapper);
         for (SysDept sysDept : sysDeptList) {
             if (sysDept.getLeaderUser() != null) {
@@ -131,12 +128,12 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * 获取所有列表
      * 不翻译leaderUser
      *
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysDept> getAllNoLeaderUser(SysDeptPageDto vo) {
-        LambdaQueryWrapper<SysDept> wrapper = getWrapper(vo);
+    public List<SysDept> getAllNoLeaderUser(SysDeptPageDto dto) {
+        LambdaQueryWrapper<SysDept> wrapper = getWrapper(dto);
         List<SysDept> sysDeptList = sysDeptMapper.selectList(wrapper);
         return sysDeptList;
     }
@@ -147,19 +144,19 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
      * @return
      */
     @Override
-    public List<Tree<String>> deptTree(SysDeptPageDto vo) {
-        List<SysDept> all = getAll(vo);
+    public List<Tree<String>> deptTree(SysDeptPageDto dto) {
+        List<SysDept> all = getAll(dto);
         List<Tree<String>> trees = buildDeptTreeSelect(all);
         return trees;
     }
 
     /**
-     * @param vo
+     * @param dto
      * @return
      */
     @Override
-    public List<SysDeptTreeVo> deptTreeNew(SysDeptPageDto vo) {
-        List<SysDept> all = getAll(vo);
+    public List<SysDeptTreeVo> deptTreeNew(SysDeptPageDto dto) {
+        List<SysDept> all = getAll(dto);
         List<SysDeptTreeVo> list = new ArrayList<>();
         for (SysDept sysDept : all) {
             SysDeptTreeVo temp = new SysDeptTreeVo();
@@ -329,21 +326,21 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 修改
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void editInfo(SysDeptUpdDto vo) {
-        SysDept sysDeptOld = checkScope(vo.getId());
+    public void editInfo(SysDeptUpdDto dto) {
+        SysDept sysDeptOld = checkScope(dto.getId());
         if (sysDeptOld == null) {
             throw new MyException("你无权限操作此数据");
         }
-        if (checkCodeExist(vo.getCode(), vo.getId())) {
+        if (checkCodeExist(dto.getCode(), dto.getId())) {
             throw new MyException("部门编号已存在");
         }
         LambdaUpdateWrapper<SysDept> wrapper = new LambdaUpdateWrapper<>();
         //校验父ID
-        if (!"0".equals(vo.getParentId())) {
-            SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
+        if (!"0".equals(dto.getParentId())) {
+            SysDept sysDeptParent = sysDeptMapper.selectById(dto.getParentId());
             if (sysDeptParent == null) {
                 throw new MyException("父级错误");
             }
@@ -353,20 +350,20 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
             //修改level
             wrapper.set(SysDept::getDeptLevel, 0);
         }
-        wrapper.eq(SysDept::getId, vo.getId());
-        wrapper.set(SysDept::getParentId, vo.getParentId());
-        wrapper.set(SysDept::getName, vo.getName());
-        wrapper.set(SysDept::getCode, vo.getCode());
-        wrapper.set(SysDept::getSummary, vo.getSummary());
-        wrapper.set(SysDept::getLeaderUserId, vo.getLeaderUserId());
-        wrapper.set(SysDept::getSort, vo.getSort());
-        wrapper.set(SysDept::getStatus, vo.getStatus());
-        wrapper.set(SysDept::getRemark, vo.getRemark());
+        wrapper.eq(SysDept::getId, dto.getId());
+        wrapper.set(SysDept::getParentId, dto.getParentId());
+        wrapper.set(SysDept::getName, dto.getName());
+        wrapper.set(SysDept::getCode, dto.getCode());
+        wrapper.set(SysDept::getSummary, dto.getSummary());
+        wrapper.set(SysDept::getLeaderUserId, dto.getLeaderUserId());
+        wrapper.set(SysDept::getSort, dto.getSort());
+        wrapper.set(SysDept::getStatus, dto.getStatus());
+        wrapper.set(SysDept::getRemark, dto.getRemark());
         int update = sysDeptMapper.update(new SysDept(), wrapper);
         if (update < 1) {
             throw new MyException("修改失败");
         }
-        if (!sysDeptOld.getParentId().equals(vo.getParentId())) {
+        if (!sysDeptOld.getParentId().equals(dto.getParentId())) {
             //修改了父ID，重新计算所有层级结构
             sysDeptParentService.handleAll();
         }
@@ -375,27 +372,27 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     /**
      * 新增
      *
-     * @param vo
+     * @param dto
      */
     @Override
-    public void addInfo(SysDeptAddDto vo) {
-        if (checkCodeExist(vo.getCode(), null)) {
+    public void addInfo(SysDeptAddDto dto) {
+        if (checkCodeExist(dto.getCode(), null)) {
             throw new MyException("部门编号已存在");
         }
         //校验父ID
-        SysDept sysDeptParent = sysDeptMapper.selectById(vo.getParentId());
+        SysDept sysDeptParent = sysDeptMapper.selectById(dto.getParentId());
         if (sysDeptParent == null) {
             throw new MyException("父级错误");
         }
         SysDept sysDept = new SysDept();
-        sysDept.setParentId(vo.getParentId());
-        sysDept.setName(vo.getName());
-        sysDept.setCode(vo.getCode());
-        sysDept.setSummary(vo.getSummary());
-        sysDept.setLeaderUserId(vo.getLeaderUserId());
-        sysDept.setSort(vo.getSort());
-        sysDept.setStatus(vo.getStatus());
-        sysDept.setRemark(vo.getRemark());
+        sysDept.setParentId(dto.getParentId());
+        sysDept.setName(dto.getName());
+        sysDept.setCode(dto.getCode());
+        sysDept.setSummary(dto.getSummary());
+        sysDept.setLeaderUserId(dto.getLeaderUserId());
+        sysDept.setSort(dto.getSort());
+        sysDept.setStatus(dto.getStatus());
+        sysDept.setRemark(dto.getRemark());
         //设置level
         sysDept.setDeptLevel(sysDeptParent.getDeptLevel() + 1);
         int insert = sysDeptMapper.insert(sysDept);
