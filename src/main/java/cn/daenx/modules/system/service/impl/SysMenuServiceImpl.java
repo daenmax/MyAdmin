@@ -94,7 +94,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void editInfo(SysMenuUpdDto dto) {
         if (checkMenuExist(dto.getMenuName(), dto.getId())) {
-            throw new MyException("字典名称已存在");
+            throw new MyException("菜单名称已存在");
         }
         if ("0".equals(dto.getIsFrame()) && !Validator.isUrl(dto.getPath())) {
             throw new MyException("地址必须以http(s)://开头");
@@ -104,6 +104,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
         if (ObjectUtil.isEmpty(dto.getIcon())) {
             dto.setIcon("#");
+        }
+        if(ObjectUtil.isEmpty(dto.getParentId())){
+            dto.setParentId("0");
         }
         LambdaUpdateWrapper<SysMenu> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(SysMenu::getId, dto.getId());
@@ -161,13 +164,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void addInfo(SysMenuAddDto dto) {
         if (checkMenuExist(dto.getMenuName(), null)) {
-            throw new MyException("字典名称已存在");
+            throw new MyException("菜单名称已存在");
         }
         if ("0".equals(dto.getIsFrame()) && !Validator.isUrl(dto.getPath())) {
             throw new MyException("地址必须以http(s)://开头");
         }
         if (ObjectUtil.isEmpty(dto.getIcon())) {
             dto.setIcon("#");
+        }
+        if (ObjectUtil.isEmpty(dto.getParentId())) {
+            dto.setParentId("0");
         }
         SysMenu sysMenu = new SysMenu();
         sysMenu.setParentId(dto.getParentId());
