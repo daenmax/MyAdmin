@@ -55,7 +55,7 @@ public class SysLogLoginController {
      * @return
      */
     @SaCheckPermission("monitor:logLogin:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

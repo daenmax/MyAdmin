@@ -83,7 +83,7 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody SysRoleUpdDto dto) {
         sysRoleService.editInfo(dto);
         return Result.ok();
@@ -109,7 +109,7 @@ public class SysRoleController {
      * @return
      */
     @SaCheckPermission("system:role:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

@@ -84,7 +84,7 @@ public class SysDictDetailController {
      * @return
      */
     @SaCheckPermission("system:dict:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody SysDictDetailUpdDto dto) {
         sysDictDetailService.editInfo(dto);
         return Result.ok();
@@ -97,7 +97,7 @@ public class SysDictDetailController {
      * @return
      */
     @SaCheckPermission("system:dict:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

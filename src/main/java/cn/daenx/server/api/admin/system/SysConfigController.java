@@ -71,7 +71,7 @@ public class SysConfigController {
      * @return
      */
     @SaCheckPermission("system:config:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody SysConfigUpdDto dto) {
         sysConfigService.editInfo(dto);
         return Result.ok();
@@ -97,7 +97,7 @@ public class SysConfigController {
      * @return
      */
     @SaCheckPermission("system:config:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

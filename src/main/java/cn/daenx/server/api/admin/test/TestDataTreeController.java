@@ -77,7 +77,7 @@ public class TestDataTreeController {
      */
     @Log(name = "测试树表数据-修改", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody TestDataTreeUpdDto dto) {
         testDataTreeService.editInfo(dto);
         return Result.ok();
@@ -91,7 +91,7 @@ public class TestDataTreeController {
      */
     @Log(name = "测试树表数据-删除", type = LogOperType.REMOVE, recordParams = true, recordResult = true)
     @SaCheckPermission("test:dataTree:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");

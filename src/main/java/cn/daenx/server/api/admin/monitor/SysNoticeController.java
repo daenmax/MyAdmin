@@ -72,7 +72,7 @@ public class SysNoticeController {
      * @return
      */
     @SaCheckPermission("monitor:notice:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody SysNoticeUpdDto dto) {
         sysNoticeService.editInfo(dto);
         return Result.ok();
@@ -85,7 +85,7 @@ public class SysNoticeController {
      * @return
      */
     @SaCheckPermission("monitor:notice:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

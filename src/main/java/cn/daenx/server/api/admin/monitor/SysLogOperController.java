@@ -55,7 +55,7 @@ public class SysLogOperController {
      * @return
      */
     @SaCheckPermission("monitor:logOper:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

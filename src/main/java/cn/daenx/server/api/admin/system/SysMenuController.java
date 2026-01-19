@@ -60,7 +60,7 @@ public class SysMenuController {
      * @return
      */
     @SaCheckPermission("system:menu:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody SysMenuUpdDto dto) {
         sysMenuService.editInfo(dto);
         return Result.ok();
@@ -86,7 +86,7 @@ public class SysMenuController {
      * @return
      */
     @SaCheckPermission("system:menu:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");

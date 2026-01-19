@@ -73,7 +73,7 @@ public class SysJobController {
      * @return
      */
     @SaCheckPermission("monitor:job:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody SysJobUpdDto dto) {
         sysJobService.editInfo(dto);
         return Result.ok();
@@ -99,7 +99,7 @@ public class SysJobController {
      * @return
      */
     @SaCheckPermission("monitor:job:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

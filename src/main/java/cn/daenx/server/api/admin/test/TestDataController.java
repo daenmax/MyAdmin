@@ -117,7 +117,7 @@ public class TestDataController {
      */
     @Log(name = "测试数据-修改", type = LogOperType.EDIT, recordParams = true, recordResult = true)
     @SaCheckPermission("test:data:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody TestDataUpdDto dto) {
         testDataService.editInfo(dto);
         return Result.ok();

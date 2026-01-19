@@ -70,7 +70,7 @@ public class SysJobLogController {
      * @return
      */
     @SaCheckPermission("monitor:jobLog:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestBody List<String> ids) {
         if (CollUtil.isEmpty(ids)) {
             throw new MyException("参数错误");

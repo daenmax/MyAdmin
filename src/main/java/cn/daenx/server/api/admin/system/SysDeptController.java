@@ -77,7 +77,7 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:dept:edit")
-    @GetMapping(value = "/edit")
+    @PostMapping(value = "/edit")
     public Result<Void> edit(@Validated @RequestBody SysDeptUpdDto dto) {
         sysDeptService.editInfo(dto);
         return Result.ok();
@@ -103,7 +103,7 @@ public class SysDeptController {
      * @return
      */
     @SaCheckPermission("system:dept:del")
-    @GetMapping(value = "/del")
+    @PostMapping(value = "/del")
     public Result<Void> del(@RequestParam(value = "id") String id) {
         if (StringUtils.isBlank(id)) {
             throw new MyException("参数错误");
