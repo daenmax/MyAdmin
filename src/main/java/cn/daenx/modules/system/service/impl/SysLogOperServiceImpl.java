@@ -26,7 +26,7 @@ public class SysLogOperServiceImpl extends ServiceImpl<SysLogOperMapper, SysLogO
     @Resource
     private SysLogOperMapper sysLogOperMapper;
 
-    @Async
+    @Async("CommonTaskExecutor")
     @EventListener
     public void saveLog(SysLogOperVo sysLogOperVo){
         SysLogOper sysLogOper = new SysLogOper();

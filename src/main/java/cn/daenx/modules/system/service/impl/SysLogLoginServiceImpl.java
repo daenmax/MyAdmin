@@ -37,7 +37,7 @@ public class SysLogLoginServiceImpl extends ServiceImpl<SysLogLoginMapper, SysLo
      * @param userAgent
      */
     @Override
-    @Async
+    @Async("CommonTaskExecutor")
     public void saveLogin(String userId, String userName, String status, String remark, String ip, UserAgent userAgent) {
         SysLogLogin sysLogLogin = new SysLogLogin();
         sysLogLogin.setUsername(userName);

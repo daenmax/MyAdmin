@@ -288,7 +288,7 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
      *
      * @param sysJob
      */
-    @Async
+    @Async("CommonTaskExecutor")
     @EventListener
     public void sendNotify(SysJobVo sysJob) {
         if (ObjectUtil.isEmpty(sysJob.getNotifyObjs())) {

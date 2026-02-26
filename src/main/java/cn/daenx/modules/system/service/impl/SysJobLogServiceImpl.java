@@ -26,7 +26,7 @@ public class SysJobLogServiceImpl extends ServiceImpl<SysJobLogMapper, SysJobLog
     @Resource
     private SysJobLogMapper sysJobLogMapper;
 
-    @Async
+    @Async("CommonTaskExecutor")
     @EventListener
     public void saveLog(SysJobLogVo sysJobLogVo){
         SysJobLog sysJobLog = new SysJobLog();
