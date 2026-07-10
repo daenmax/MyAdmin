@@ -49,6 +49,7 @@ public class Sm4Util {
      * @return
      */
     public static String encrypt(String content, String key, Boolean isBase64) {
+        //如果用ECB模式，那么不需要传iv
         SM4 sm4 = new SM4("CBC", "PKCS7Padding", key.getBytes(), key.substring(0, 16).getBytes());
         if (isBase64) {
             return sm4.encryptBase64(content);
@@ -66,6 +67,7 @@ public class Sm4Util {
      * @return
      */
     public static String decrypt(String content, String key) {
+        //如果用ECB模式，那么不需要传iv
         SM4 sm4 = new SM4("CBC", "PKCS7Padding", key.getBytes(), key.substring(0, 16).getBytes());
         String decryptStr = sm4.decryptStr(content, CharsetUtil.CHARSET_UTF_8);
         return decryptStr;
